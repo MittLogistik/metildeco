@@ -1,1 +1,380 @@
-[{"id":"dc835a41-dbfb-48bf-98ab-4c76a5d4ee47","bundle_slug":"performance-paketet","currency":"SEK","price":1099,"old_price":null,"created_at":"2026-08-14T14:40:08.775907+00:00","updated_at":"2026-08-14T14:40:08.775907+00:00"}, {"id":"452dd757-585e-43eb-bdb1-f38723870a27","bundle_slug":"performance-paketet","currency":"EUR","price":96.99000000000001,"old_price":null,"created_at":"2026-08-14T14:40:08.775907+00:00","updated_at":"2026-08-14T14:40:08.775907+00:00"}, {"id":"3da04e4b-bf15-440f-b1e8-b610cc23c329","bundle_slug":"performance-paketet","currency":"DKK","price":719,"old_price":null,"created_at":"2026-08-14T14:40:08.775907+00:00","updated_at":"2026-08-14T14:40:08.775907+00:00"}, {"id":"0fbf296c-e472-4a67-9a2a-5a75d5b2f5df","bundle_slug":"performance-paketet","currency":"NOK","price":1159,"old_price":null,"created_at":"2026-08-14T14:40:08.775907+00:00","updated_at":"2026-08-14T14:40:08.775907+00:00"}, {"id":"18e5ee41-7f5f-49f7-955d-370feba8dae0","bundle_slug":"performance-paketet","currency":"GBP","price":82.99000000000001,"old_price":null,"created_at":"2026-08-14T14:40:08.775907+00:00","updated_at":"2026-08-14T14:40:08.775907+00:00"}, {"id":"ba4ec067-d241-4ae6-bd7d-a32117099428","bundle_slug":"performance-paketet","currency":"USD","price":109,"old_price":null,"created_at":"2026-08-14T14:40:08.775907+00:00","updated_at":"2026-08-14T14:40:08.775907+00:00"}, {"id":"28428bbd-1d62-4abe-b99c-ada90efc5254","bundle_slug":"performance-paketet","currency":"PLN","price":409,"old_price":null,"created_at":"2026-08-14T14:40:08.775907+00:00","updated_at":"2026-08-14T14:40:08.775907+00:00"}, {"id":"51cc4aeb-909e-45e6-82c0-716ccc318f49","bundle_slug":"tongkat-ali-fadogia-duo","currency":"SEK","price":419,"old_price":498,"created_at":"2026-08-29T10:14:04.307572+00:00","updated_at":"2026-08-29T10:14:04.307572+00:00"}, {"id":"6703d919-a8f7-4690-ac98-5c8cd59e8470","bundle_slug":"tongkat-ali-fadogia-duo","currency":"EUR","price":36.99,"old_price":43.99,"created_at":"2026-08-29T10:14:04.307572+00:00","updated_at":"2026-08-29T10:14:04.307572+00:00"}, {"id":"95c0cf9b-7037-4599-9f41-107a98f72275","bundle_slug":"tongkat-ali-fadogia-duo","currency":"DKK","price":279,"old_price":329,"created_at":"2026-08-29T10:14:04.307572+00:00","updated_at":"2026-08-29T10:14:04.307572+00:00"}, {"id":"dcc1e800-76fa-461c-b577-806200dcabe2","bundle_slug":"tongkat-ali-fadogia-duo","currency":"NOK","price":439,"old_price":519,"created_at":"2026-08-29T10:14:04.307572+00:00","updated_at":"2026-08-29T10:14:04.307572+00:00"}, {"id":"06f41378-20a0-4755-8074-86c01fcbaab7","bundle_slug":"tongkat-ali-fadogia-duo","currency":"GBP","price":31.99,"old_price":37.99,"created_at":"2026-08-29T10:14:04.307572+00:00","updated_at":"2026-08-29T10:14:04.307572+00:00"}, {"id":"0cce3b11-8725-4e81-a4de-c940de8a8ca5","bundle_slug":"tongkat-ali-fadogia-duo","currency":"USD","price":43.99,"old_price":51.99,"created_at":"2026-08-29T10:14:04.307572+00:00","updated_at":"2026-08-29T10:14:04.307572+00:00"}, {"id":"fe358c3a-50f0-4773-b34b-c38ca7d1b4ee","bundle_slug":"tongkat-ali-fadogia-duo","currency":"PLN","price":159,"old_price":189,"created_at":"2026-08-29T10:14:04.307572+00:00","updated_at":"2026-08-29T10:14:04.307572+00:00"}, {"id":"0624a995-4516-4206-807c-55616bed749d","bundle_slug":"metilde-botanical-collection","currency":"SEK","price":1539,"old_price":1815,"created_at":"2026-08-29T10:14:18.144157+00:00","updated_at":"2026-08-29T10:14:18.144157+00:00"}, {"id":"4bb83745-36fb-4d99-9d12-c83994f32a16","bundle_slug":"metilde-botanical-collection","currency":"EUR","price":139,"old_price":159,"created_at":"2026-08-29T10:14:18.144157+00:00","updated_at":"2026-08-29T10:14:18.144157+00:00"}, {"id":"c1a1d339-61ed-4a50-8aee-6fcdc856a397","bundle_slug":"metilde-botanical-collection","currency":"DKK","price":1009,"old_price":1189,"created_at":"2026-08-29T10:14:18.144157+00:00","updated_at":"2026-08-29T10:14:18.144157+00:00"}, {"id":"2675ffab-e33b-445a-9158-5b5b011ba485","bundle_slug":"metilde-botanical-collection","currency":"NOK","price":1619,"old_price":1909,"created_at":"2026-08-29T10:14:18.144157+00:00","updated_at":"2026-08-29T10:14:18.144157+00:00"}, {"id":"b4b64e28-fc11-4671-8aa0-c801bd03edcd","bundle_slug":"metilde-botanical-collection","currency":"GBP","price":119,"old_price":139,"created_at":"2026-08-29T10:14:18.144157+00:00","updated_at":"2026-08-29T10:14:18.144157+00:00"}, {"id":"7140a3c1-ac6c-47e1-98cc-eb66187cb5da","bundle_slug":"metilde-botanical-collection","currency":"USD","price":159,"old_price":189,"created_at":"2026-08-29T10:14:18.144157+00:00","updated_at":"2026-08-29T10:14:18.144157+00:00"}, {"id":"8d20274b-f247-413f-8163-0f2e618ef875","bundle_slug":"metilde-botanical-collection","currency":"PLN","price":579,"old_price":679,"created_at":"2026-08-29T10:14:18.144157+00:00","updated_at":"2026-08-29T10:14:18.144157+00:00"}, {"id":"82c2395d-2623-41d1-87cf-65642a0aa203","bundle_slug":"tongkat-ali-discovery-trio","currency":"SEK","price":919,"old_price":1077,"created_at":"2026-08-29T10:14:36.155031+00:00","updated_at":"2026-08-29T10:14:36.155031+00:00"}, {"id":"b3b66c18-ca00-45a1-99d6-336a85a0c4c2","bundle_slug":"tongkat-ali-discovery-trio","currency":"EUR","price":80.99000000000001,"old_price":94.99000000000001,"created_at":"2026-08-29T10:14:36.155031+00:00","updated_at":"2026-08-29T10:14:36.155031+00:00"}, {"id":"aff02599-1785-42ba-992f-8a98d41432fb","bundle_slug":"tongkat-ali-discovery-trio","currency":"DKK","price":599,"old_price":709,"created_at":"2026-08-29T10:14:36.155031+00:00","updated_at":"2026-08-29T10:14:36.155031+00:00"}, {"id":"4f94d4c3-b52c-4c98-aa79-942d7807a69e","bundle_slug":"tongkat-ali-discovery-trio","currency":"NOK","price":969,"old_price":1129,"created_at":"2026-08-29T10:14:36.155031+00:00","updated_at":"2026-08-29T10:14:36.155031+00:00"}, {"id":"7f8d86d8-72cb-4e31-8030-a0fd962a8154","bundle_slug":"tongkat-ali-discovery-trio","currency":"GBP","price":69.99000000000001,"old_price":81.99000000000001,"created_at":"2026-08-29T10:14:36.155031+00:00","updated_at":"2026-08-29T10:14:36.155031+00:00"}, {"id":"4490be80-7463-4c9a-966d-e510a51faa35","bundle_slug":"tongkat-ali-discovery-trio","currency":"USD","price":95.99000000000001,"old_price":109,"created_at":"2026-08-29T10:14:36.155031+00:00","updated_at":"2026-08-29T10:14:36.155031+00:00"}, {"id":"d14f94ba-6ad7-4950-b1f6-07298a5e4c43","bundle_slug":"tongkat-ali-discovery-trio","currency":"PLN","price":349,"old_price":409,"created_at":"2026-08-29T10:14:36.155031+00:00","updated_at":"2026-08-29T10:14:36.155031+00:00"}, {"id":"28e8ccf4-bee6-4577-8a4c-841ab9bac6f6","bundle_slug":"tongkat-ali-variety-duo","currency":"SEK","price":409,"old_price":478,"created_at":"2026-08-29T10:15:09.306465+00:00","updated_at":"2026-08-29T10:15:09.306465+00:00"}, {"id":"5395ea02-23df-4cfa-99f1-42164f697aee","bundle_slug":"tongkat-ali-variety-duo","currency":"EUR","price":35.99,"old_price":41.99,"created_at":"2026-08-29T10:15:09.306465+00:00","updated_at":"2026-08-29T10:15:09.306465+00:00"}, {"id":"76818e9c-9796-46a7-b5f1-9498bc119e31","bundle_slug":"tongkat-ali-variety-duo","currency":"DKK","price":269,"old_price":309,"created_at":"2026-08-29T10:15:09.306465+00:00","updated_at":"2026-08-29T10:15:09.306465+00:00"}, {"id":"62d5b6f5-bcfa-42c8-82e6-47d00215e280","bundle_slug":"tongkat-ali-variety-duo","currency":"NOK","price":429,"old_price":499,"created_at":"2026-08-29T10:15:09.306465+00:00","updated_at":"2026-08-29T10:15:09.306465+00:00"}, {"id":"5f9300c9-60ca-4f0f-a42c-4bf19b4a5326","bundle_slug":"tongkat-ali-variety-duo","currency":"GBP","price":30.99,"old_price":35.99,"created_at":"2026-08-29T10:15:09.306465+00:00","updated_at":"2026-08-29T10:15:09.306465+00:00"}, {"id":"c10abf35-d485-41e6-96f8-6ebace560a8f","bundle_slug":"tongkat-ali-variety-duo","currency":"USD","price":42.99,"old_price":49.99,"created_at":"2026-08-29T10:15:09.306465+00:00","updated_at":"2026-08-29T10:15:09.306465+00:00"}, {"id":"930189c3-568a-42b6-aa17-e874f6b71fe3","bundle_slug":"tongkat-ali-variety-duo","currency":"PLN","price":149,"old_price":179,"created_at":"2026-08-29T10:15:09.306465+00:00","updated_at":"2026-08-29T10:15:09.306465+00:00"}, {"id":"f323ab16-2156-4396-a9e1-e5245499837e","bundle_slug":"tongkat-ali-extract-duo","currency":"SEK","price":709,"old_price":838,"created_at":"2026-08-29T10:15:32.33065+00:00","updated_at":"2026-08-29T10:15:32.33065+00:00"}, {"id":"9f85e646-c321-412e-9824-e15cf68311eb","bundle_slug":"tongkat-ali-extract-duo","currency":"EUR","price":62.99,"old_price":73.99000000000001,"created_at":"2026-08-29T10:15:32.33065+00:00","updated_at":"2026-08-29T10:15:32.33065+00:00"}, {"id":"0c28d8d4-742f-4b93-9d12-762ba7d17c5a","bundle_slug":"tongkat-ali-extract-duo","currency":"DKK","price":469,"old_price":549,"created_at":"2026-08-29T10:15:32.33065+00:00","updated_at":"2026-08-29T10:15:32.33065+00:00"}, {"id":"326f5216-a889-426e-b12c-7af6920609fb","bundle_slug":"tongkat-ali-extract-duo","currency":"NOK","price":749,"old_price":879,"created_at":"2026-08-29T10:15:32.33065+00:00","updated_at":"2026-08-29T10:15:32.33065+00:00"}, {"id":"0cd0a6cf-6d2b-426e-9347-9a9b2b9f1b5a","bundle_slug":"tongkat-ali-extract-duo","currency":"GBP","price":53.99,"old_price":62.99,"created_at":"2026-08-29T10:15:32.33065+00:00","updated_at":"2026-08-29T10:15:32.33065+00:00"}, {"id":"97321301-d5f2-4a1b-baa6-313ed25fafde","bundle_slug":"tongkat-ali-extract-duo","currency":"USD","price":73.99000000000001,"old_price":86.99000000000001,"created_at":"2026-08-29T10:15:32.33065+00:00","updated_at":"2026-08-29T10:15:32.33065+00:00"}, {"id":"cbf783d9-af8a-4ec8-b2af-b692f4d0b459","bundle_slug":"tongkat-ali-extract-duo","currency":"PLN","price":269,"old_price":319,"created_at":"2026-08-29T10:15:32.33065+00:00","updated_at":"2026-08-29T10:15:32.33065+00:00"}]
+[
+  {
+    "id": "dc835a41-dbfb-48bf-98ab-4c76a5d4ee47",
+    "bundle_slug": "performance-paketet",
+    "currency": "SEK",
+    "price": 629,
+    "old_price": 737,
+    "created_at": "2026-08-14T14:40:08.775907+00:00",
+    "updated_at": "2026-08-14T14:40:08.775907+00:00"
+  },
+  {
+    "id": "452dd757-585e-43eb-bdb1-f38723870a27",
+    "bundle_slug": "performance-paketet",
+    "currency": "EUR",
+    "price": 55.99,
+    "old_price": null,
+    "created_at": "2026-08-14T14:40:08.775907+00:00",
+    "updated_at": "2026-08-14T14:40:08.775907+00:00"
+  },
+  {
+    "id": "3da04e4b-bf15-440f-b1e8-b610cc23c329",
+    "bundle_slug": "performance-paketet",
+    "currency": "DKK",
+    "price": 409,
+    "old_price": null,
+    "created_at": "2026-08-14T14:40:08.775907+00:00",
+    "updated_at": "2026-08-14T14:40:08.775907+00:00"
+  },
+  {
+    "id": "0fbf296c-e472-4a67-9a2a-5a75d5b2f5df",
+    "bundle_slug": "performance-paketet",
+    "currency": "NOK",
+    "price": 659,
+    "old_price": null,
+    "created_at": "2026-08-14T14:40:08.775907+00:00",
+    "updated_at": "2026-08-14T14:40:08.775907+00:00"
+  },
+  {
+    "id": "18e5ee41-7f5f-49f7-955d-370feba8dae0",
+    "bundle_slug": "performance-paketet",
+    "currency": "GBP",
+    "price": 47.99,
+    "old_price": null,
+    "created_at": "2026-08-14T14:40:08.775907+00:00",
+    "updated_at": "2026-08-14T14:40:08.775907+00:00"
+  },
+  {
+    "id": "ba4ec067-d241-4ae6-bd7d-a32117099428",
+    "bundle_slug": "performance-paketet",
+    "currency": "USD",
+    "price": 59,
+    "old_price": null,
+    "created_at": "2026-08-14T14:40:08.775907+00:00",
+    "updated_at": "2026-08-14T14:40:08.775907+00:00"
+  },
+  {
+    "id": "28428bbd-1d62-4abe-b99c-ada90efc5254",
+    "bundle_slug": "performance-paketet",
+    "currency": "PLN",
+    "price": 239,
+    "old_price": null,
+    "created_at": "2026-08-14T14:40:08.775907+00:00",
+    "updated_at": "2026-08-14T14:40:08.775907+00:00"
+  },
+  {
+    "id": "51cc4aeb-909e-45e6-82c0-716ccc318f49",
+    "bundle_slug": "tongkat-ali-fadogia-duo",
+    "currency": "SEK",
+    "price": 419,
+    "old_price": 498,
+    "created_at": "2026-08-29T10:14:04.307572+00:00",
+    "updated_at": "2026-08-29T10:14:04.307572+00:00"
+  },
+  {
+    "id": "6703d919-a8f7-4690-ac98-5c8cd59e8470",
+    "bundle_slug": "tongkat-ali-fadogia-duo",
+    "currency": "EUR",
+    "price": 36.99,
+    "old_price": 43.99,
+    "created_at": "2026-08-29T10:14:04.307572+00:00",
+    "updated_at": "2026-08-29T10:14:04.307572+00:00"
+  },
+  {
+    "id": "95c0cf9b-7037-4599-9f41-107a98f72275",
+    "bundle_slug": "tongkat-ali-fadogia-duo",
+    "currency": "DKK",
+    "price": 279,
+    "old_price": 329,
+    "created_at": "2026-08-29T10:14:04.307572+00:00",
+    "updated_at": "2026-08-29T10:14:04.307572+00:00"
+  },
+  {
+    "id": "dcc1e800-76fa-461c-b577-806200dcabe2",
+    "bundle_slug": "tongkat-ali-fadogia-duo",
+    "currency": "NOK",
+    "price": 439,
+    "old_price": 519,
+    "created_at": "2026-08-29T10:14:04.307572+00:00",
+    "updated_at": "2026-08-29T10:14:04.307572+00:00"
+  },
+  {
+    "id": "06f41378-20a0-4755-8074-86c01fcbaab7",
+    "bundle_slug": "tongkat-ali-fadogia-duo",
+    "currency": "GBP",
+    "price": 31.99,
+    "old_price": 37.99,
+    "created_at": "2026-08-29T10:14:04.307572+00:00",
+    "updated_at": "2026-08-29T10:14:04.307572+00:00"
+  },
+  {
+    "id": "0cce3b11-8725-4e81-a4de-c940de8a8ca5",
+    "bundle_slug": "tongkat-ali-fadogia-duo",
+    "currency": "USD",
+    "price": 43.99,
+    "old_price": 51.99,
+    "created_at": "2026-08-29T10:14:04.307572+00:00",
+    "updated_at": "2026-08-29T10:14:04.307572+00:00"
+  },
+  {
+    "id": "fe358c3a-50f0-4773-b34b-c38ca7d1b4ee",
+    "bundle_slug": "tongkat-ali-fadogia-duo",
+    "currency": "PLN",
+    "price": 159,
+    "old_price": 189,
+    "created_at": "2026-08-29T10:14:04.307572+00:00",
+    "updated_at": "2026-08-29T10:14:04.307572+00:00"
+  },
+  {
+    "id": "0624a995-4516-4206-807c-55616bed749d",
+    "bundle_slug": "metilde-botanical-collection",
+    "currency": "SEK",
+    "price": 1139,
+    "old_price": 1336,
+    "created_at": "2026-08-29T10:14:18.144157+00:00",
+    "updated_at": "2026-08-29T10:14:18.144157+00:00"
+  },
+  {
+    "id": "4bb83745-36fb-4d99-9d12-c83994f32a16",
+    "bundle_slug": "metilde-botanical-collection",
+    "currency": "EUR",
+    "price": 102.99,
+    "old_price": 117.99,
+    "created_at": "2026-08-29T10:14:18.144157+00:00",
+    "updated_at": "2026-08-29T10:14:18.144157+00:00"
+  },
+  {
+    "id": "c1a1d339-61ed-4a50-8aee-6fcdc856a397",
+    "bundle_slug": "metilde-botanical-collection",
+    "currency": "DKK",
+    "price": 749,
+    "old_price": 879,
+    "created_at": "2026-08-29T10:14:18.144157+00:00",
+    "updated_at": "2026-08-29T10:14:18.144157+00:00"
+  },
+  {
+    "id": "2675ffab-e33b-445a-9158-5b5b011ba485",
+    "bundle_slug": "metilde-botanical-collection",
+    "currency": "NOK",
+    "price": 1199,
+    "old_price": 1409,
+    "created_at": "2026-08-29T10:14:18.144157+00:00",
+    "updated_at": "2026-08-29T10:14:18.144157+00:00"
+  },
+  {
+    "id": "b4b64e28-fc11-4671-8aa0-c801bd03edcd",
+    "bundle_slug": "metilde-botanical-collection",
+    "currency": "GBP",
+    "price": 88.99,
+    "old_price": 102.99,
+    "created_at": "2026-08-29T10:14:18.144157+00:00",
+    "updated_at": "2026-08-29T10:14:18.144157+00:00"
+  },
+  {
+    "id": "7140a3c1-ac6c-47e1-98cc-eb66187cb5da",
+    "bundle_slug": "metilde-botanical-collection",
+    "currency": "USD",
+    "price": 119,
+    "old_price": 139,
+    "created_at": "2026-08-29T10:14:18.144157+00:00",
+    "updated_at": "2026-08-29T10:14:18.144157+00:00"
+  },
+  {
+    "id": "8d20274b-f247-413f-8163-0f2e618ef875",
+    "bundle_slug": "metilde-botanical-collection",
+    "currency": "PLN",
+    "price": 429,
+    "old_price": 499,
+    "created_at": "2026-08-29T10:14:18.144157+00:00",
+    "updated_at": "2026-08-29T10:14:18.144157+00:00"
+  },
+  {
+    "id": "82c2395d-2623-41d1-87cf-65642a0aa203",
+    "bundle_slug": "tongkat-ali-discovery-trio",
+    "currency": "SEK",
+    "price": 919,
+    "old_price": 1077,
+    "created_at": "2026-08-29T10:14:36.155031+00:00",
+    "updated_at": "2026-08-29T10:14:36.155031+00:00"
+  },
+  {
+    "id": "b3b66c18-ca00-45a1-99d6-336a85a0c4c2",
+    "bundle_slug": "tongkat-ali-discovery-trio",
+    "currency": "EUR",
+    "price": 80.99000000000001,
+    "old_price": 94.99000000000001,
+    "created_at": "2026-08-29T10:14:36.155031+00:00",
+    "updated_at": "2026-08-29T10:14:36.155031+00:00"
+  },
+  {
+    "id": "aff02599-1785-42ba-992f-8a98d41432fb",
+    "bundle_slug": "tongkat-ali-discovery-trio",
+    "currency": "DKK",
+    "price": 599,
+    "old_price": 709,
+    "created_at": "2026-08-29T10:14:36.155031+00:00",
+    "updated_at": "2026-08-29T10:14:36.155031+00:00"
+  },
+  {
+    "id": "4f94d4c3-b52c-4c98-aa79-942d7807a69e",
+    "bundle_slug": "tongkat-ali-discovery-trio",
+    "currency": "NOK",
+    "price": 969,
+    "old_price": 1129,
+    "created_at": "2026-08-29T10:14:36.155031+00:00",
+    "updated_at": "2026-08-29T10:14:36.155031+00:00"
+  },
+  {
+    "id": "7f8d86d8-72cb-4e31-8030-a0fd962a8154",
+    "bundle_slug": "tongkat-ali-discovery-trio",
+    "currency": "GBP",
+    "price": 69.99000000000001,
+    "old_price": 81.99000000000001,
+    "created_at": "2026-08-29T10:14:36.155031+00:00",
+    "updated_at": "2026-08-29T10:14:36.155031+00:00"
+  },
+  {
+    "id": "4490be80-7463-4c9a-966d-e510a51faa35",
+    "bundle_slug": "tongkat-ali-discovery-trio",
+    "currency": "USD",
+    "price": 95.99000000000001,
+    "old_price": 109,
+    "created_at": "2026-08-29T10:14:36.155031+00:00",
+    "updated_at": "2026-08-29T10:14:36.155031+00:00"
+  },
+  {
+    "id": "d14f94ba-6ad7-4950-b1f6-07298a5e4c43",
+    "bundle_slug": "tongkat-ali-discovery-trio",
+    "currency": "PLN",
+    "price": 349,
+    "old_price": 409,
+    "created_at": "2026-08-29T10:14:36.155031+00:00",
+    "updated_at": "2026-08-29T10:14:36.155031+00:00"
+  },
+  {
+    "id": "28e8ccf4-bee6-4577-8a4c-841ab9bac6f6",
+    "bundle_slug": "tongkat-ali-variety-duo",
+    "currency": "SEK",
+    "price": 409,
+    "old_price": 478,
+    "created_at": "2026-08-29T10:15:09.306465+00:00",
+    "updated_at": "2026-08-29T10:15:09.306465+00:00"
+  },
+  {
+    "id": "5395ea02-23df-4cfa-99f1-42164f697aee",
+    "bundle_slug": "tongkat-ali-variety-duo",
+    "currency": "EUR",
+    "price": 35.99,
+    "old_price": 41.99,
+    "created_at": "2026-08-29T10:15:09.306465+00:00",
+    "updated_at": "2026-08-29T10:15:09.306465+00:00"
+  },
+  {
+    "id": "76818e9c-9796-46a7-b5f1-9498bc119e31",
+    "bundle_slug": "tongkat-ali-variety-duo",
+    "currency": "DKK",
+    "price": 269,
+    "old_price": 309,
+    "created_at": "2026-08-29T10:15:09.306465+00:00",
+    "updated_at": "2026-08-29T10:15:09.306465+00:00"
+  },
+  {
+    "id": "62d5b6f5-bcfa-42c8-82e6-47d00215e280",
+    "bundle_slug": "tongkat-ali-variety-duo",
+    "currency": "NOK",
+    "price": 429,
+    "old_price": 499,
+    "created_at": "2026-08-29T10:15:09.306465+00:00",
+    "updated_at": "2026-08-29T10:15:09.306465+00:00"
+  },
+  {
+    "id": "5f9300c9-60ca-4f0f-a42c-4bf19b4a5326",
+    "bundle_slug": "tongkat-ali-variety-duo",
+    "currency": "GBP",
+    "price": 30.99,
+    "old_price": 35.99,
+    "created_at": "2026-08-29T10:15:09.306465+00:00",
+    "updated_at": "2026-08-29T10:15:09.306465+00:00"
+  },
+  {
+    "id": "c10abf35-d485-41e6-96f8-6ebace560a8f",
+    "bundle_slug": "tongkat-ali-variety-duo",
+    "currency": "USD",
+    "price": 42.99,
+    "old_price": 49.99,
+    "created_at": "2026-08-29T10:15:09.306465+00:00",
+    "updated_at": "2026-08-29T10:15:09.306465+00:00"
+  },
+  {
+    "id": "930189c3-568a-42b6-aa17-e874f6b71fe3",
+    "bundle_slug": "tongkat-ali-variety-duo",
+    "currency": "PLN",
+    "price": 149,
+    "old_price": 179,
+    "created_at": "2026-08-29T10:15:09.306465+00:00",
+    "updated_at": "2026-08-29T10:15:09.306465+00:00"
+  },
+  {
+    "id": "f323ab16-2156-4396-a9e1-e5245499837e",
+    "bundle_slug": "tongkat-ali-extract-duo",
+    "currency": "SEK",
+    "price": 709,
+    "old_price": 838,
+    "created_at": "2026-08-29T10:15:32.33065+00:00",
+    "updated_at": "2026-08-29T10:15:32.33065+00:00"
+  },
+  {
+    "id": "9f85e646-c321-412e-9824-e15cf68311eb",
+    "bundle_slug": "tongkat-ali-extract-duo",
+    "currency": "EUR",
+    "price": 62.99,
+    "old_price": 73.99000000000001,
+    "created_at": "2026-08-29T10:15:32.33065+00:00",
+    "updated_at": "2026-08-29T10:15:32.33065+00:00"
+  },
+  {
+    "id": "0c28d8d4-742f-4b93-9d12-762ba7d17c5a",
+    "bundle_slug": "tongkat-ali-extract-duo",
+    "currency": "DKK",
+    "price": 469,
+    "old_price": 549,
+    "created_at": "2026-08-29T10:15:32.33065+00:00",
+    "updated_at": "2026-08-29T10:15:32.33065+00:00"
+  },
+  {
+    "id": "326f5216-a889-426e-b12c-7af6920609fb",
+    "bundle_slug": "tongkat-ali-extract-duo",
+    "currency": "NOK",
+    "price": 749,
+    "old_price": 879,
+    "created_at": "2026-08-29T10:15:32.33065+00:00",
+    "updated_at": "2026-08-29T10:15:32.33065+00:00"
+  },
+  {
+    "id": "0cd0a6cf-6d2b-426e-9347-9a9b2b9f1b5a",
+    "bundle_slug": "tongkat-ali-extract-duo",
+    "currency": "GBP",
+    "price": 53.99,
+    "old_price": 62.99,
+    "created_at": "2026-08-29T10:15:32.33065+00:00",
+    "updated_at": "2026-08-29T10:15:32.33065+00:00"
+  },
+  {
+    "id": "97321301-d5f2-4a1b-baa6-313ed25fafde",
+    "bundle_slug": "tongkat-ali-extract-duo",
+    "currency": "USD",
+    "price": 73.99000000000001,
+    "old_price": 86.99000000000001,
+    "created_at": "2026-08-29T10:15:32.33065+00:00",
+    "updated_at": "2026-08-29T10:15:32.33065+00:00"
+  },
+  {
+    "id": "cbf783d9-af8a-4ec8-b2af-b692f4d0b459",
+    "bundle_slug": "tongkat-ali-extract-duo",
+    "currency": "PLN",
+    "price": 269,
+    "old_price": 319,
+    "created_at": "2026-08-29T10:15:32.33065+00:00",
+    "updated_at": "2026-08-29T10:15:32.33065+00:00"
+  }
+]
