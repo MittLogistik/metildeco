@@ -27,7 +27,8 @@ const get = async (path, params = {}) => {
 };
 
 const [cmd = "status", arg] = process.argv.slice(2);
-const kr = (v) => `${Number(v ?? 0).toFixed(0)} kr`;
+let cur = "USD";
+const kr = (v) => `${Number(v ?? 0).toFixed(2)} ${cur}`;
 
 if (cmd === "status") {
   const d = (await get("debug_token", { input_token: token })).data;
@@ -36,13 +37,16 @@ if (cmd === "status") {
   const need = ["ads_management", "ads_read"].filter((s) => !d.scopes?.includes(s));
   if (need.length) console.log("SAKNAS:", need.join(", "));
   const a = await get(act, { fields: "name,currency,account_status,timezone_name,amount_spent" });
+  cur = a.currency;
   console.log("Annonskonto:", a.name, a.currency, "status", a.account_status, "tidszon", a.timezone_name, "spenderat totalt", kr(a.amount_spent / 100));
 } else if (cmd === "campaigns") {
+  cur = (await get(act, { fields: "currency" })).currency;
   const r = await get(`${act}/campaigns`, { fields: "name,status,effective_status,objective,daily_budget,created_time", limit: 100 });
   if (!r.data.length) console.log("Inga kampanjer.");
   for (const c of r.data) console.log(`${c.id}  ${c.effective_status.padEnd(10)}  ${c.objective.padEnd(16)}  ${c.daily_budget ? kr(c.daily_budget / 100) + "/dag" : "budget på annonsgrupp"}  ${c.name}`);
 } else if (cmd === "insights") {
   const days = Number(arg ?? 7);
+  cur = (await get(act, { fields: "currency" })).currency;
   const r = await get(`${act}/insights`, { level: "ad", date_preset: days <= 7 ? "last_7d" : days <= 14 ? "last_14d" : "last_30d", fields: "campaign_name,ad_name,impressions,clicks,spend,ctr,actions,action_values", limit: 500 });
   if (!r.data.length) console.log("Inga resultat senaste", days, "dagarna.");
   for (const i of r.data) {

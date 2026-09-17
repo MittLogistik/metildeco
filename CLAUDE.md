@@ -46,3 +46,5 @@ quiz, presentkort, spåra order, mitt konto, samarbeten/jobba hos oss, fler spr�
 - `npm run meta-ads status|campaigns|insights|pages` verifierar kopplingen från .env.local.
 - Allt som skapas via API:t skapas PAUSAT; aktivering är ett medvetet steg.
 - Ändringar av rättigheter i Meta (use cases, resurstilldelning, tokens) måste användaren göra själv – autoläget stoppar sådana klick.
+- Annonsmotorn: `src/lib/ads-engine.ts` (regler i `rules`, testkampanjer med prefix "Test · "), texter i `src/content/ad-copy.ts` (inga hälsopåståenden), adminvy `/admin/annonser`, daglig granskning `/api/cron/ads-review` (vercel.json, CRON_SECRET, ADS_AUTOPILOT). Beslut loggas i tabellen `ad_log`.
+- Meta-appen "Metilde Health" måste vara i live-läge för att annonser ska kunna skapas via API. Bilder laddas upp som bytes (url-uppladdning kräver behörighet appen saknar). Läs kampanjträdet med `listTree()` – ett anrop – annars slår Metas anropskvot till.

@@ -4,6 +4,10 @@ import "server-only";
  * Meta Marketing API – ett tunt lager för att läsa och styra annonser.
  * Kräver META_ADS_TOKEN (systemanvändare med ads_management + ads_read)
  * och META_AD_ACCOUNT_ID (siffrorna, utan "act_").
+ *
+ * OBS: annonskontot Metilde är i USD. Alla budgetar och belopp från API:t är i
+ * kontots valuta (minsta enhet, dvs. cent). Använd accountCurrency() och
+ * budgetUnits() i stället för att anta SEK.
  */
 
 const API = "https://graph.facebook.com/v21.0";
@@ -42,8 +46,8 @@ async function call<T = Json>(method: "GET" | "POST" | "DELETE", path: string, p
 }
 
 export type Campaign = { id: string; name: string; status: string; effective_status: string; objective: string; daily_budget?: string; created_time: string };
-export type AdSet = { id: string; name: string; status: string; effective_status: string; daily_budget?: string; campaign_id: string };
-export type Ad = { id: string; name: string; status: string; effective_status: string; adset_id: string; creative?: { id: string } };
+export type AdSet = { id: string; name: string; status: string; effective_status: string; daily_budget?: string; campaign_id: string; created_time: string };
+export type Ad = { id: string; name: string; status: string; effective_status: string; adset_id: string; created_time: string; creative?: { id: string; thumbnail_url?: string } };
 export type Insight = {
   campaign_id?: string;
   adset_id?: string;
@@ -65,16 +69,34 @@ export const listCampaigns = () =>
   call<Paged<Campaign>>("GET", `${adAccount()}/campaigns`, { fields: "id,name,status,effective_status,objective,daily_budget,created_time", limit: 100 }).then((r) => r.data);
 
 export const listAdSets = (campaignId: string) =>
-  call<Paged<AdSet>>("GET", `${campaignId}/adsets`, { fields: "id,name,status,effective_status,daily_budget,campaign_id", limit: 100 }).then((r) => r.data);
+  call<Paged<AdSet>>("GET", `${campaignId}/adsets`, { fields: "id,name,status,effective_status,daily_budget,campaign_id,created_time", limit: 100 }).then((r) => r.data);
 
 export const listAds = (adsetId: string) =>
-  call<Paged<Ad>>("GET", `${adsetId}/ads`, { fields: "id,name,status,effective_status,adset_id,creative", limit: 100 }).then((r) => r.data);
+  call<Paged<Ad>>("GET", `${adsetId}/ads`, { fields: "id,name,status,effective_status,adset_id,created_time,creative{id,thumbnail_url}", limit: 100 }).then((r) => r.data);
+
+/** Hela trädet kampanj → annonsgrupper → annonser i ett enda anrop (sparar Metas anropskvot). */
+export type AdTreeNode = Campaign & { adsets?: { data: (AdSet & { ads?: { data: Ad[] } })[] } };
+export const listTree = () =>
+  call<Paged<AdTreeNode>>("GET", `${adAccount()}/campaigns`, {
+    fields:
+      "id,name,status,effective_status,objective,daily_budget,created_time,adsets.limit(50){id,name,status,effective_status,daily_budget,campaign_id,created_time,ads.limit(50){id,name,status,effective_status,adset_id,created_time,creative{id,thumbnail_url}}}",
+    limit: 50,
+  }).then((r) => r.data);
 
 /** Resultat per annons för de senaste N dagarna. */
 export const adInsights = (objectId: string, days = 7, level: "campaign" | "adset" | "ad" = "ad") =>
   call<Paged<Insight>>("GET", `${objectId}/insights`, {
     level,
     date_preset: days <= 7 ? "last_7d" : days <= 14 ? "last_14d" : "last_30d",
+    fields: "campaign_id,adset_id,ad_id,ad_name,impressions,clicks,spend,ctr,cpc,actions,action_values,purchase_roas",
+    limit: 500,
+  }).then((r) => r.data);
+
+/** Resultat för ett datumintervall (YYYY-MM-DD), t.ex. sedan kampanjen skapades. */
+export const insightsRange = (objectId: string, since: string, until: string, level: "campaign" | "adset" | "ad" = "ad") =>
+  call<Paged<Insight>>("GET", `${objectId}/insights`, {
+    level,
+    time_range: { since, until },
     fields: "campaign_id,adset_id,ad_id,ad_name,impressions,clicks,spend,ctr,cpc,actions,action_values,purchase_roas",
     limit: 500,
   }).then((r) => r.data);
@@ -102,7 +124,18 @@ export const summarize = (i: Insight) => {
 
 export const setStatus = (objectId: string, status: "ACTIVE" | "PAUSED") => call("POST", objectId, { status });
 
-export const setDailyBudget = (adsetId: string, sek: number) => call("POST", adsetId, { daily_budget: Math.round(sek * 100) });
+/** Kontots valuta (t.ex. USD) – cachas per process. */
+let currencyCache: string | null = null;
+export const accountCurrency = async () => {
+  if (!currencyCache) currencyCache = (await call<{ currency: string }>("GET", adAccount(), { fields: "currency" })).currency;
+  return currencyCache;
+};
+
+/** Belopp i kontots valuta → API:ts minsta enhet (cent). */
+export const budgetUnits = (amount: number) => Math.round(amount * 100);
+
+/** Daglig budget i kontots valuta (USD för Metilde). */
+export const setDailyBudget = (adsetId: string, amount: number) => call("POST", adsetId, { daily_budget: budgetUnits(amount) });
 
 /** Kampanj med budget på annonsgruppsnivå, skapas pausad. */
 export const createCampaign = (name: string, objective: "OUTCOME_SALES" | "OUTCOME_TRAFFIC" = "OUTCOME_SALES") =>
@@ -112,12 +145,15 @@ export const createCampaign = (name: string, objective: "OUTCOME_SALES" | "OUTCO
     status: "PAUSED",
     special_ad_categories: [],
     buying_type: "AUCTION",
+    // Budget ligger på annonsgruppen; Meta kräver att delning anges uttryckligen
+    is_adset_budget_sharing_enabled: false,
   });
 
 export type AdSetSpec = {
   name: string;
   campaignId: string;
-  dailyBudgetSek: number;
+  /** Daglig budget i kontots valuta (USD). */
+  dailyBudget: number;
   pixelId: string;
   /** Ålder och land; Sverige som standard. */
   countries?: string[];
@@ -132,7 +168,7 @@ export const createAdSet = (s: AdSetSpec) =>
     name: s.name,
     campaign_id: s.campaignId,
     status: "PAUSED",
-    daily_budget: Math.round(s.dailyBudgetSek * 100),
+    daily_budget: budgetUnits(s.dailyBudget),
     billing_event: "IMPRESSIONS",
     optimization_goal: "OFFSITE_CONVERSIONS",
     bid_strategy: "LOWEST_COST_WITHOUT_CAP",
@@ -175,9 +211,15 @@ export const createCreative = (c: CreativeSpec) => {
 export const createAd = (name: string, adsetId: string, creativeId: string) =>
   call<{ id: string }>("POST", `${adAccount()}/ads`, { name, adset_id: adsetId, creative: { creative_id: creativeId }, status: "PAUSED" });
 
-/** Laddar upp en bild från en publik URL och returnerar image_hash. */
+/**
+ * Laddar upp en bild och returnerar image_hash. Bilden hämtas av oss och skickas som
+ * bytes: uppladdning via url-parametern kräver en app-behörighet vi inte har.
+ */
 export const uploadImage = async (url: string, name: string) => {
-  const res = await call<{ images: Record<string, { hash: string }> }>("POST", `${adAccount()}/adimages`, { url, name });
+  const img = await fetch(url);
+  if (!img.ok) throw new Error(`Kunde inte hämta bilden ${url} (${img.status})`);
+  const bytes = Buffer.from(await img.arrayBuffer()).toString("base64");
+  const res = await call<{ images: Record<string, { hash: string }> }>("POST", `${adAccount()}/adimages`, { bytes, name });
   const first = Object.values(res.images)[0];
   if (!first) throw new Error("Meta gav ingen image_hash tillbaka.");
   return first.hash;

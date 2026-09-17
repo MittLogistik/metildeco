@@ -1,0 +1,76 @@
+"use server";
+
+import { revalidatePath } from "next/cache";
+import { requireAdmin } from "@/lib/auth";
+import { buildTestCampaign, reviewAds } from "@/lib/ads-engine";
+import * as meta from "@/lib/meta-ads";
+import { supabaseAdmin, supabaseConfigured } from "@/lib/supabase";
+import type { ActionResult } from "../actions";
+
+const refresh = () => revalidatePath("/admin/annonser");
+
+const fail = (e: unknown): ActionResult => ({ ok: false, error: e instanceof Error ? e.message : "Något gick fel." });
+
+export async function createTestCampaign(formData: FormData): Promise<ActionResult> {
+  await requireAdmin();
+  const slug = String(formData.get("slug") ?? "");
+  const dailyBudget = Number(formData.get("daily_budget") ?? 0);
+  const adsCount = Number(formData.get("ads_count") ?? 10);
+  const mediaBase = String(formData.get("media_base") ?? "").trim() || undefined;
+  const linkBase = String(formData.get("link_base") ?? "").trim() || undefined;
+  if (!slug || !(dailyBudget >= 1)) return { ok: false, error: "Välj produkt och en daglig budget på minst 1." };
+  try {
+    const r = await buildTestCampaign({ slug, dailyBudget, adsCount, mediaBase, linkBase, source: "admin" });
+    refresh();
+    const notes = r.notes.length ? ` Anmärkningar: ${r.notes.join(" · ")}` : "";
+    return { ok: true, message: `Skapade kampanj ${r.campaignId} med ${r.ads.length} annonser (pausade).${notes}` };
+  } catch (e) {
+    return fail(e);
+  }
+}
+
+export async function setObjectStatus(formData: FormData): Promise<ActionResult> {
+  await requireAdmin();
+  const id = String(formData.get("id") ?? "");
+  const status = String(formData.get("status") ?? "");
+  const name = String(formData.get("name") ?? id);
+  if (!id || (status !== "ACTIVE" && status !== "PAUSED")) return { ok: false, error: "Ogiltigt." };
+  try {
+    await meta.setStatus(id, status);
+    if (supabaseConfigured())
+      await supabaseAdmin().from("ad_log").insert({ name, action: status === "ACTIVE" ? "activate" : "pause", reason: "Manuellt i admin", applied: true, source: "admin", ...(String(formData.get("level")) === "ad" ? { ad_id: id } : String(formData.get("level")) === "adset" ? { adset_id: id } : { campaign_id: id }) });
+    refresh();
+    return { ok: true, message: status === "ACTIVE" ? "Aktiverad." : "Pausad." };
+  } catch (e) {
+    return fail(e);
+  }
+}
+
+export async function setAdSetBudget(formData: FormData): Promise<ActionResult> {
+  await requireAdmin();
+  const id = String(formData.get("id") ?? "");
+  const budget = Number(formData.get("budget") ?? 0);
+  if (!id || !(budget >= 1)) return { ok: false, error: "Budget måste vara minst 1." };
+  try {
+    await meta.setDailyBudget(id, budget);
+    if (supabaseConfigured()) await supabaseAdmin().from("ad_log").insert({ adset_id: id, name: String(formData.get("name") ?? id), action: "budget", reason: `Manuellt i admin: ${budget}/dag`, applied: true, source: "admin" });
+    refresh();
+    return { ok: true, message: `Budget satt till ${budget}/dag.` };
+  } catch (e) {
+    return fail(e);
+  }
+}
+
+export async function runReview(formData: FormData): Promise<ActionResult> {
+  await requireAdmin();
+  const apply = String(formData.get("apply")) === "1";
+  try {
+    const decisions = await reviewAds({ apply, source: "admin" });
+    refresh();
+    const acted = decisions.filter((d) => d.action !== "keep");
+    if (acted.length === 0) return { ok: true, message: "Inga åtgärder behövs just nu." };
+    return { ok: true, message: `${apply ? "Utförde" : "Föreslår"} ${acted.length} åtgärder – se loggen nedan.` };
+  } catch (e) {
+    return fail(e);
+  }
+}
