@@ -204,7 +204,6 @@ export const createCreative = (c: CreativeSpec) => {
   return call<{ id: string }>("POST", `${adAccount()}/adcreatives`, {
     name: c.name,
     object_story_spec,
-    degrees_of_freedom_spec: { creative_features_spec: { standard_enhancements: { enroll_status: "OPT_OUT" } } },
   });
 };
 
