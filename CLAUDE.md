@@ -27,3 +27,8 @@ för att få full kontroll över SEO, structured data och Google Merchant Center
 ## Kvar att bygga
 Stripe-betalning i kassan, Supabase (ordrar, konton, prenumerationer, recensioner), Google/Meta-produktfeeds,
 quiz, presentkort, spåra order, mitt konto, samarbeten/jobba hos oss, fler språk.
+
+## Statistik och övergivna korgar
+- `/api/track` räknar sidvisningar, unika besökare per dag (hashad IP, `visitors_daily`) och korghändelser (`cart_events_hourly`). Inga cookies.
+- Övergivna korgar kommer från Stripes `checkout.session.expired` (sessionen har 24 h giltighet och återställningslänk). Kräver att händelsen är påslagen i Stripes webhook-destination.
+- Adminöversikten (`/admin`) visar ett diagram per mått – aldrig flera serier på samma axel.

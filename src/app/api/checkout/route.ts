@@ -40,6 +40,8 @@ export async function POST(request: Request) {
       phone_number_collection: { enabled: true },
       billing_address_collection: "auto",
       allow_promotion_codes: true,
+      expires_at: Math.floor(Date.now() / 1000) + 24 * 3600,
+      after_expiration: { recovery: { enabled: true, allow_promotion_codes: true } },
       success_url: `${origin}${routes.home}/tack?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${origin}${routes.checkout}`,
       metadata,

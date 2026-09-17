@@ -1,4 +1,5 @@
 import type Stripe from "stripe";
+import { saveAbandonedCart } from "@/lib/abandoned";
 import { saveOrderFromSession, saveRenewalFromInvoice } from "@/lib/orders";
 import { stripe } from "@/lib/stripe";
 
@@ -27,6 +28,13 @@ export async function POST(request: Request) {
       case "checkout.session.completed": {
         const result = await saveOrderFromSession(event.data.object.id);
         console.log("[stripe] order", result?.order.order_number ?? "(ej sparad)", result?.created ? "skapad" : "fanns redan");
+        break;
+      }
+      case "checkout.session.expired": {
+        // Hämta raderna så att korgens innehåll kan sparas
+        const full = await stripe().checkout.sessions.retrieve(event.data.object.id, { expand: ["line_items"] });
+        const saved = await saveAbandonedCart(full);
+        console.log("[stripe] övergiven korg", full.id, saved ? "sparad" : "utan e-post");
         break;
       }
       case "invoice.paid": {

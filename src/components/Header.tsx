@@ -53,7 +53,7 @@ export function Header() {
           </div>
 
           <Link href={routes.home} className="flex items-center gap-2.5" aria-label="Metilde – till startsidan">
-            <Image src="/logo-mark.png" alt="" width={32} height={32} className="h-8 w-8" priority />
+            <Image src="/logo-mark.png" alt="" width={44} height={32} className="h-8 w-auto" priority />
             <span className="font-display text-2xl font-medium tracking-tight">Metilde</span>
           </Link>
 

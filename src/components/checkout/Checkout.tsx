@@ -8,6 +8,7 @@ import { CartTotals } from "@/components/cart/CartTotals";
 import { formatPrice } from "@/lib/format";
 import { routes } from "@/lib/routes";
 import { company, site } from "@/lib/site";
+import { track } from "@/lib/track";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { LockIcon } from "@/components/icons";
 import { PaymentMethods, subscriptionPaymentIds } from "@/components/PaymentMethods";
@@ -40,6 +41,7 @@ export function Checkout() {
   const pay = async () => {
     setSubmitting(true);
     setError(null);
+    track("begin_checkout");
     try {
       const res = await fetch("/api/checkout", {
         method: "POST",

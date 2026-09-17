@@ -5,6 +5,7 @@ import { site } from "@/lib/site";
 import { tieredUnitPrice, type SlimProduct } from "@/lib/products";
 import type { SlimBundle } from "@/lib/bundles";
 import { cheapestSwedenRate, shippingCost } from "@/lib/shipping";
+import { track } from "@/lib/track";
 import { cartStore, type CartLine } from "./cartStore";
 import type { Plan } from "./types";
 
@@ -102,6 +103,7 @@ export function CartProvider({ catalog, children }: { catalog: CatalogSnapshot; 
       next[idx] = { ...next[idx]!, qty: next[idx]!.qty + line.qty };
       return next;
     });
+    track("add_to_cart");
     setOpen(true);
   }, []);
 

@@ -5,6 +5,7 @@ import { stripe } from "./stripe";
 import { supabaseAdmin, supabaseConfigured } from "./supabase";
 import { sendOrderConfirmation } from "./email";
 import { issueGiftCard } from "./giftcards";
+import { markRecovered } from "./abandoned";
 
 export type OrderRecord = {
   id: string;
@@ -190,6 +191,7 @@ export async function saveOrderFromSession(sessionId: string): Promise<{ order: 
   }
 
   await decrementStock(items, meta);
+  await markRecovered(order.email, order.id).catch(() => undefined);
   if (isGiftCard) {
     await issueGiftCard(session).catch((e: unknown) => console.error("[presentkort]", e instanceof Error ? e.message : e));
   } else {

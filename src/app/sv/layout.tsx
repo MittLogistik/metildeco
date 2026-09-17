@@ -2,6 +2,7 @@ import { CartProvider } from "@/components/cart/CartProvider";
 import { CartDrawer } from "@/components/cart/CartDrawer";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
+import { Analytics } from "@/components/Analytics";
 import { JsonLd } from "@/components/JsonLd";
 import { getCatalogSnapshot } from "@/lib/catalog";
 import { company, site } from "@/lib/site";
@@ -38,6 +39,7 @@ export default async function SwedishLayout({ children }: LayoutProps<"/sv">) {
   const catalog = await getCatalogSnapshot();
   return (
     <CartProvider catalog={catalog}>
+      <Analytics />
       <JsonLd data={organization} />
       <Header />
       <main className="flex-1">{children}</main>

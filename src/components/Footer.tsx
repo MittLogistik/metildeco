@@ -46,7 +46,7 @@ export function Footer() {
       <Container className="grid grid-cols-1 gap-12 py-14 sm:grid-cols-2 lg:grid-cols-[minmax(0,1.4fr)_repeat(3,minmax(0,1fr))]">
         <div>
           <Link href={routes.home} className="flex items-center gap-2.5">
-            <Image src="/logo-mark.png" alt="" width={32} height={32} className="h-8 w-8" />
+            <Image src="/logo-mark.png" alt="" width={44} height={32} className="h-8 w-auto" />
             <span className="font-display text-2xl font-medium tracking-tight">Metilde</span>
           </Link>
           <p className="mt-4 max-w-sm text-sm leading-relaxed text-muted">

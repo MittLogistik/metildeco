@@ -3,107 +3,169 @@ import { requireAdmin } from "@/lib/auth";
 import { getCatalog } from "@/lib/catalog";
 import { formatPrice } from "@/lib/format";
 import { site } from "@/lib/site";
+import { getStats, periods, type Env, type Period, type Series } from "@/lib/stats";
 import { supabaseAdmin } from "@/lib/supabase";
-import { Card, StatusBadge } from "./_components/fields";
-
-/** ISO-tidpunkt 30 dagar bakåt (utanför renderingen för renhetsregeln). */
-const thirtyDaysAgo = () => new Date(Date.now() - 30 * 864e5).toISOString();
+import { StatusBadge } from "./_components/fields";
+import { TrendChart } from "./_components/TrendChart";
 
 type OrderRow = { id: string; order_number: string; created_at: string; email: string | null; shipping_name: string | null; total: number; status: string; kind: string };
 
-export default async function AdminDashboard() {
+const fmtCount = (v: number) => new Intl.NumberFormat("sv-SE").format(Math.round(v));
+
+function StatCard({ s, env }: { s: Series; env?: Env }) {
+  return (
+    <section className="rounded-2xl border border-line bg-white p-5">
+      <div className="flex items-baseline justify-between gap-3">
+        <h2 className="text-sm text-muted">{s.label}</h2>
+        {env === "sandbox" && s.unit === "sek" ? <span className="rounded bg-sand px-1.5 text-[10px] uppercase text-muted">test</span> : null}
+      </div>
+      <p className="mt-1 font-display text-3xl font-medium tabular-nums">{s.unit === "sek" ? formatPrice(Math.round(s.total)) : fmtCount(s.total)}</p>
+      <div className="mt-3">
+        <TrendChart points={s.points} unit={s.unit} height={110} />
+      </div>
+    </section>
+  );
+}
+
+export default async function AdminDashboard({ searchParams }: PageProps<"/admin">) {
   await requireAdmin();
+  const sp = await searchParams;
+  const period = (periods.find((p) => p.id === sp.period)?.id ?? "30") as Period;
+  const env: Env = sp.env === "test" ? "sandbox" : "live";
+  const stats = await getStats(period, env);
   const db = supabaseAdmin();
-  const since = thirtyDaysAgo();
-  const [latest, month, catalog] = await Promise.all([
-    db.from("orders").select("id,order_number,created_at,email,shipping_name,total,status,kind").order("created_at", { ascending: false }).limit(8),
-    db.from("orders").select("total,status").gte("created_at", since).not("status", "in", "(cancelled,refunded)"),
+  const [latest, catalog] = await Promise.all([
+    db.from("orders").select("id,order_number,created_at,email,shipping_name,total,status,kind").eq("environment", env).order("created_at", { ascending: false }).limit(6),
     getCatalog(),
   ]);
   const orders = (latest.data ?? []) as OrderRow[];
-  const monthRows = (month.data ?? []) as { total: number; status: string }[];
-  const revenue = monthRows.reduce((s, o) => s + Number(o.total), 0);
-  const toPack = monthRows.filter((o) => o.status === "paid").length;
   const lowStock = catalog.allProducts.filter((p) => p.isActive && p.trackStock && p.stock <= 10).sort((a, b) => a.stock - b.stock);
+  const href = (p: Period, e: Env) => `/admin?period=${p}${e === "sandbox" ? "&env=test" : ""}`;
+  const today = new Date().toLocaleDateString("sv-SE", { weekday: "long", day: "numeric", month: "long" });
 
   return (
     <div className="space-y-8">
-      <h1 className="font-display text-3xl font-medium">Översikt</h1>
-      <div className="grid gap-4 sm:grid-cols-3">
-        <Card>
-          <p className="text-xs uppercase tracking-wider text-muted">Försäljning 30 dagar</p>
-          <p className="mt-1 font-display text-2xl font-medium">{formatPrice(revenue)}</p>
-          <p className="text-xs text-muted">{monthRows.length} ordrar</p>
-        </Card>
-        <Card>
-          <p className="text-xs uppercase tracking-wider text-muted">Att packa</p>
-          <p className="mt-1 font-display text-2xl font-medium">{toPack}</p>
-          <p className="text-xs text-muted">betalda ordrar som inte skickats</p>
-        </Card>
-        <Card>
-          <p className="text-xs uppercase tracking-wider text-muted">Lågt lager</p>
-          <p className="mt-1 font-display text-2xl font-medium">{lowStock.length}</p>
-          <p className="text-xs text-muted">aktiva produkter med ≤ 10 i lager</p>
-        </Card>
+      <div className="flex flex-wrap items-end justify-between gap-4">
+        <div>
+          <h1 className="font-display text-3xl font-medium">Översikt</h1>
+          <p className="mt-1 text-sm text-muted">Så går butiken just nu – {today}.</p>
+        </div>
+        <div className="flex flex-wrap gap-2">
+          <nav className="inline-flex rounded-full border border-line bg-white p-1" aria-label="Period">
+            {periods.map((p) => (
+              <Link key={p.id} href={href(p.id, env)} className={`rounded-full px-3 py-1.5 text-sm ${period === p.id ? "bg-foreground text-white" : "text-muted hover:text-foreground"}`}>
+                {p.label}
+              </Link>
+            ))}
+          </nav>
+          <nav className="inline-flex rounded-full border border-line bg-white p-1" aria-label="Miljö">
+            <Link href={href(period, "live")} className={`rounded-full px-3 py-1.5 text-sm ${env === "live" ? "bg-foreground text-white" : "text-muted hover:text-foreground"}`}>
+              Skarpt
+            </Link>
+            <Link href={href(period, "sandbox")} className={`rounded-full px-3 py-1.5 text-sm ${env === "sandbox" ? "bg-foreground text-white" : "text-muted hover:text-foreground"}`}>
+              Testdata
+            </Link>
+          </nav>
+        </div>
       </div>
 
-      <Card title="Senaste ordrarna">
-        {orders.length === 0 ? (
-          <p className="text-sm text-muted">Inga ordrar ännu.</p>
-        ) : (
-          <table className="w-full text-sm">
-            <thead className="text-left text-xs uppercase tracking-wider text-muted">
-              <tr>
-                <th className="py-2">Order</th>
-                <th className="py-2">Datum</th>
-                <th className="py-2">Kund</th>
-                <th className="py-2 text-right">Summa</th>
-                <th className="py-2">Status</th>
-              </tr>
-            </thead>
-            <tbody>
+      <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+        <div className="rounded-2xl border border-line bg-white p-4">
+          <p className="text-xs text-muted">Konvertering</p>
+          <p className="mt-1 font-display text-2xl font-medium tabular-nums">{stats.conversion.toFixed(1).replace(".", ",")} %</p>
+          <p className="text-xs text-muted">ordrar per besökare</p>
+        </div>
+        <div className="rounded-2xl border border-line bg-white p-4">
+          <p className="text-xs text-muted">Snittorder</p>
+          <p className="mt-1 font-display text-2xl font-medium tabular-nums">{stats.orders.total ? formatPrice(Math.round(stats.revenue.total / stats.orders.total)) : "–"}</p>
+          <p className="text-xs text-muted">intäkt per order</p>
+        </div>
+        <Link href="/admin/korgar" className="rounded-2xl border border-line bg-white p-4 transition-colors hover:border-primary">
+          <p className="text-xs text-muted">Övergivna korgar</p>
+          <p className="mt-1 font-display text-2xl font-medium tabular-nums">{stats.abandonedOpen}</p>
+          <p className="text-xs text-muted">{stats.abandonedWithEmail} med e-post att följa upp</p>
+        </Link>
+        <div className="rounded-2xl border border-line bg-white p-4">
+          <p className="text-xs text-muted">Marginal</p>
+          <p className="mt-1 font-display text-2xl font-medium tabular-nums">
+            {stats.revenue.total ? `${Math.round((stats.netProfit.total / (stats.revenue.total / 1.12)) * 100)} %` : "–"}
+          </p>
+          <p className="text-xs text-muted">netto av intäkt exkl. moms</p>
+        </div>
+      </div>
+
+      <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+        <StatCard s={stats.visitors} />
+        <StatCard s={stats.addToCart} />
+        <StatCard s={stats.beginCheckout} />
+        <StatCard s={stats.orders} env={env} />
+        <StatCard s={stats.revenue} env={env} />
+        <StatCard s={stats.netProfit} env={env} />
+      </div>
+      <p className="text-xs text-muted">
+        Nettovinst = intäkt exkl. 12 % moms − inköpspris − fraktkostnad − {stats.handlingFee} kr hantering per order.
+        {stats.missingPurchasePrice > 0 ? (
+          <>
+            {" "}
+            <Link href="/admin/produkter" className="underline">
+              {stats.missingPurchasePrice} produkter saknar inköpspris
+            </Link>
+            , så nettot är för högt tills de fylls i.
+          </>
+        ) : null}
+      </p>
+
+      <div className="grid gap-4 lg:grid-cols-[minmax(0,3fr)_minmax(0,2fr)]">
+        <section className="rounded-2xl border border-line bg-white p-5">
+          <div className="flex items-center justify-between">
+            <h2 className="font-display text-lg font-medium">Senaste ordrarna</h2>
+            <Link href="/admin/ordrar" className="text-sm underline underline-offset-2">
+              Alla ordrar
+            </Link>
+          </div>
+          {orders.length === 0 ? (
+            <p className="mt-3 text-sm text-muted">Inga {env === "sandbox" ? "test" : "skarpa "}ordrar ännu.</p>
+          ) : (
+            <ul className="mt-3 divide-y divide-line text-sm">
               {orders.map((o) => (
-                <tr key={o.id} className="border-t border-line">
-                  <td className="py-2">
+                <li key={o.id} className="flex items-center justify-between gap-3 py-2.5">
+                  <div className="min-w-0">
                     <Link href={`/admin/ordrar/${o.id}`} className="font-medium hover:underline">
                       {o.order_number}
                     </Link>
-                    {o.kind === "renewal" ? <span className="ml-1 text-xs text-muted">förnyelse</span> : null}
-                  </td>
-                  <td className="py-2 text-muted">{new Date(o.created_at).toLocaleString("sv-SE", { dateStyle: "short", timeStyle: "short" })}</td>
-                  <td className="py-2">{o.shipping_name ?? o.email}</td>
-                  <td className="py-2 text-right tabular-nums">{formatPrice(Number(o.total))}</td>
-                  <td className="py-2">
+                    <span className="ml-2 text-muted">{o.shipping_name ?? o.email}</span>
+                    <span className="block text-xs text-muted">{new Date(o.created_at).toLocaleString("sv-SE", { dateStyle: "short", timeStyle: "short" })}</span>
+                  </div>
+                  <div className="flex shrink-0 items-center gap-3">
+                    <span className="tabular-nums">{formatPrice(Number(o.total))}</span>
                     <StatusBadge status={o.status} />
-                  </td>
-                </tr>
+                  </div>
+                </li>
               ))}
-            </tbody>
-          </table>
-        )}
-      </Card>
-
-      <Card title="Produktfeeds">
-        <p className="text-sm text-muted">Google Merchant Center hämtar feeden från den här adressen. Lägg in den under Produkter, Datakällor, Lägg till datakälla, Schemalagd hämtning.</p>
-        <code className="mt-2 block rounded-lg bg-sand px-3 py-2 text-sm">{site.url}/feeds/google.xml</code>
-      </Card>
-
-      <Card title="Lågt lager">
-        {lowStock.length === 0 ? (
-          <p className="text-sm text-muted">Alla aktiva produkter har mer än 10 i lager.</p>
-        ) : (
-          <ul className="divide-y divide-line text-sm">
-            {lowStock.map((p) => (
-              <li key={p.slug} className="flex items-center justify-between py-2">
-                <Link href={`/admin/produkter/${p.slug}`} className="hover:underline">
-                  {p.name}
-                </Link>
-                <span className={`tabular-nums ${p.stock === 0 ? "font-semibold text-danger" : ""}`}>{p.stock} st</span>
-              </li>
-            ))}
-          </ul>
-        )}
-      </Card>
+            </ul>
+          )}
+        </section>
+        <section className="rounded-2xl border border-line bg-white p-5">
+          <h2 className="font-display text-lg font-medium">Lågt lager</h2>
+          {lowStock.length === 0 ? (
+            <p className="mt-3 text-sm text-muted">Alla aktiva produkter har mer än 10 i lager.</p>
+          ) : (
+            <ul className="mt-3 divide-y divide-line text-sm">
+              {lowStock.map((p) => (
+                <li key={p.slug} className="flex items-center justify-between py-2.5">
+                  <Link href={`/admin/produkter/${p.slug}`} className="hover:underline">
+                    {p.name}
+                  </Link>
+                  <span className={`tabular-nums ${p.stock === 0 ? "font-semibold text-danger" : ""}`}>{p.stock} st</span>
+                </li>
+              ))}
+            </ul>
+          )}
+          <h2 className="mt-6 font-display text-lg font-medium">Produktfeed</h2>
+          <p className="mt-1 text-xs text-muted">Adressen till Google Merchant Center (schemalagd hämtning).</p>
+          <code className="mt-2 block break-all rounded-lg bg-sand px-3 py-2 text-xs">{site.url}/feeds/google.xml</code>
+        </section>
+      </div>
     </div>
   );
 }

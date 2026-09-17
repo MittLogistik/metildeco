@@ -328,3 +328,13 @@ export async function changePassword(formData: FormData): Promise<ActionResult> 
   if (error) return { ok: false, error: error.message };
   return { ok: true, message: "Lösenordet är bytt." };
 }
+
+/** Markerar en övergiven korg som hanterad (t.ex. efter manuellt mejl). */
+export async function markCartHandled(formData: FormData): Promise<ActionResult> {
+  await requireAdmin();
+  const id = str(formData, "id", 60);
+  const res = await supabaseAdmin().from("abandoned_carts").update({ status: "handled" }).eq("id", id);
+  if (res.error) return { ok: false, error: res.error.message };
+  revalidatePath("/admin", "layout");
+  return { ok: true };
+}
