@@ -1,13 +1,12 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { formatPrice } from "@/lib/format";
-import { saveOrderFromSession } from "@/lib/orders";
+import { metaIdsFor, saveOrderFromSession } from "@/lib/orders";
 import { routes } from "@/lib/routes";
 import { company } from "@/lib/site";
 import { stripe, stripeConfigured } from "@/lib/stripe";
 import { ClearCart } from "@/components/checkout/ClearCart";
 import { MetaPurchase } from "@/components/consent/MetaEvents";
-import { metaContentId } from "@/lib/consent";
 import { CheckIcon } from "@/components/icons";
 import { ButtonLink, Container } from "@/components/ui";
 
@@ -68,7 +67,7 @@ export default async function ThankYouPage({ searchParams }: PageProps<"/sv/tack
   let metaIds: string[] = [];
   try {
     const cartMeta = JSON.parse(session.metadata?.cart ?? "[]") as { k?: string; s?: string }[];
-    metaIds = cartMeta.filter((m) => m.s).map((m) => metaContentId(m.k === "bundle" ? "bundle" : "product", m.s!));
+    metaIds = await metaIdsFor(cartMeta.filter((m) => m.s).map((m) => ({ k: m.k === "bundle" ? ("bundle" as const) : ("product" as const), s: m.s! })));
   } catch {
     metaIds = saved?.items.map((i) => i.product_slug) ?? [];
   }

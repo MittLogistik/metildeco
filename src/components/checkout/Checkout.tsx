@@ -44,7 +44,7 @@ export function Checkout() {
     setSubmitting(true);
     setError(null);
     track("begin_checkout");
-    metaTrack("InitiateCheckout", { value: cart.subtotal, currency: "SEK", num_items: cart.count, content_ids: cart.lines.map((l) => metaContentId(l.kind, l.slug)), content_type: "product" });
+    metaTrack("InitiateCheckout", { value: cart.subtotal, currency: "SEK", num_items: cart.count, content_ids: cart.resolved.map((l) => metaContentId(l.kind, l.slug, l.product?.sku ?? l.bundle?.sku)), content_type: "product" });
     try {
       const res = await fetch("/api/checkout", {
         method: "POST",

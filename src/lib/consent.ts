@@ -22,5 +22,9 @@ export const hasMarketingConsent = () => readConsent() === "all";
 /** Slumpat event-id som delas mellan pixel och Conversions API för avduplicering. */
 export const eventId = () => (typeof crypto !== "undefined" && "randomUUID" in crypto ? crypto.randomUUID() : `${Date.now()}-${Math.random().toString(36).slice(2)}`);
 
-/** Produkt-id i Meta-katalogen. Måste vara samma i feeden som i pixel-händelserna. */
-export const metaContentId = (kind: "product" | "bundle", slug: string) => (kind === "bundle" ? `paket-${slug}` : slug);
+/**
+ * Produkt-id i Meta-katalogen. Måste vara samma i feeden som i pixel-händelserna.
+ * Artikelnumret (t.ex. MET-TKA-001) i första hand – det var id:t i den gamla butikens
+ * feed, så katalogens historik behålls. Slug som reserv.
+ */
+export const metaContentId = (kind: "product" | "bundle", slug: string, sku?: string | null) => sku || (kind === "bundle" ? `paket-${slug}` : slug);

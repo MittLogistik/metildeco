@@ -119,12 +119,13 @@ export function buildBundles(
 /** Ett paket är köpbart när alla ingående produkter finns i lager. */
 export const bundleInStock = (b: Bundle): boolean => b.items.every((i) => !i.product.trackStock || i.product.stock >= i.qty);
 
-export type SlimBundle = Pick<Bundle, "slug" | "name" | "price" | "value" | "discount" | "images" | "freeShipping"> & {
+export type SlimBundle = Pick<Bundle, "slug" | "sku" | "name" | "price" | "value" | "discount" | "images" | "freeShipping"> & {
   items: { slug: string; qty: number }[];
 };
 
 export const slimBundle = (b: Bundle): SlimBundle => ({
   slug: b.slug,
+  sku: b.sku,
   name: b.name,
   price: b.price,
   value: b.value,

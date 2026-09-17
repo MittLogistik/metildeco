@@ -195,11 +195,12 @@ export const aggregateRating = (list: Product[]) => {
 /** Så mycket av en produkt som behövs i varukorg och kassa (skickas till klienten). */
 export type SlimProduct = Pick<
   Product,
-  "slug" | "name" | "price" | "images" | "bg" | "tieredPricing" | "tier2Discount" | "tier3Discount" | "trackStock" | "stock" | "category"
+  "slug" | "sku" | "name" | "price" | "images" | "bg" | "tieredPricing" | "tier2Discount" | "tier3Discount" | "trackStock" | "stock" | "category"
 >;
 
 export const slimProduct = (p: Product): SlimProduct => ({
   slug: p.slug,
+  sku: p.sku,
   name: p.name,
   price: p.price,
   images: p.images.slice(0, 1),

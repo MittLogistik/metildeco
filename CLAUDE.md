@@ -36,5 +36,7 @@ quiz, presentkort, spåra order, mitt konto, samarbeten/jobba hos oss, fler spr�
 ## Meta (pixel, Conversions API, katalogfeed)
 - Pixeln laddas bara efter cookiesamtycke "all" (`src/components/consent/`, cookie `metilde_consent`). Utan `NEXT_PUBLIC_META_PIXEL_ID` är allt avstängt.
 - Varje händelse skickas både via pixeln och `/api/meta` → Conversions API med samma `event_id` (avduplicering). Purchase skickas från servern i `saveOrderFromSession` med `event_id = Stripe-sessionens id`, och från tacksidan med samma id. Serverns Purchase skickas bara om `metadata.consent === "all"` (sätts i `/api/checkout`).
-- Katalog-id (`metaContentId` i `src/lib/consent.ts`) = produktslug, `paket-<slug>` för paket. Feeden `/feeds/meta.xml` använder samma id, så content_ids matchar katalogen.
+- Katalog-id (`metaContentId` i `src/lib/consent.ts`) = artikelnummer (MET-TKA-001), samma som gamla butikens feed och som Google-feeden; slug som reserv. Feeden `/feeds/meta.xml` och alla content_ids använder samma id.
+- Metas katalog "Metilde Health Sverige" (id 1616122259871032) hämtar feeden varje timme från gamla sajten. Vid lansering byts adressen till `https://metilde.com/feeds/meta.xml` under Datakällor → Scheman (både uppdaterings- och ersättningsschemat).
+- Pixeln 1606920894391393 har en Conversions API Gateway kopplad (openbridge, on.aws). Den och vår egen CAPI skickar samma event_id, så Meta avduplicerar. Pixeln skickar inget från headless Chrome, testa i ett riktigt fönster.
 - `META_TEST_EVENT_CODE` sätts bara tillfälligt vid test i Events Manager → Testhändelser.

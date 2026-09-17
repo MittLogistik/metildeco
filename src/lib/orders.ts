@@ -41,6 +41,10 @@ export type OrderItemRecord = {
 
 type CartMeta = { k: "product" | "bundle"; s: string; q: number; p: "once" | "sub"; i: number | null };
 
+/** Meta-katalogens id per korgrad (artikelnummer i första hand). */
+export const metaIdsFor = (meta: Pick<CartMeta, "k" | "s">[]): Promise<string[]> =>
+  Promise.all(meta.map(async (m) => (m.k === "bundle" ? metaContentId("bundle", m.s, (await getBundle(m.s))?.sku) : metaContentId("product", m.s, (await getProduct(m.s))?.sku))));
+
 const environment = () => (process.env.STRIPE_SECRET_KEY?.startsWith("sk_live") ? "live" : "sandbox");
 const kr = (öre: number | null | undefined) => Math.round(öre ?? 0) / 100;
 
@@ -210,12 +214,13 @@ export async function saveOrderFromSession(sessionId: string): Promise<{ order: 
       fbc: session.metadata?.fbc || null,
       externalId: typeof session.customer === "string" ? session.customer : (session.customer?.id ?? null),
     };
+    const ids = await metaIdsFor(meta);
     const custom = {
       value: kr(session.amount_total),
       currency: "SEK",
       content_type: "product",
-      content_ids: meta.map((m) => metaContentId(m.k === "bundle" ? "bundle" : "product", m.s)),
-      contents: items.map((i, idx) => ({ id: metaContentId(meta[idx]?.k === "bundle" ? "bundle" : "product", i.product_slug), quantity: i.qty, item_price: i.unit_price })),
+      content_ids: ids,
+      contents: items.map((i, idx) => ({ id: ids[idx] ?? i.product_slug, quantity: i.qty, item_price: i.unit_price })),
       num_items: items.reduce((s, i) => s + i.qty, 0),
       order_id: order.order_number,
     };

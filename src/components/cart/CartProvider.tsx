@@ -108,7 +108,7 @@ export function CartProvider({ catalog, children }: { catalog: CatalogSnapshot; 
     track("add_to_cart");
     const resolved = resolve(line, catalog);
     metaTrack("AddToCart", {
-      content_ids: [metaContentId(line.kind, line.slug)],
+      content_ids: [metaContentId(line.kind, line.slug, resolved?.product?.sku ?? resolved?.bundle?.sku)],
       content_name: resolved?.name,
       content_type: "product",
       value: resolved ? resolved.unitPrice * line.qty : undefined,

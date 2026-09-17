@@ -104,8 +104,8 @@ ${items.join("\n")}
 /**
  * Produktfeed för Meta (Facebook/Instagram-katalog). Samma RSS-format med g:-attribut
  * som Google, men Meta kräver in stock/out of stock och egen kategori-taxonomi.
- * g:id måste matcha content_ids i pixel-händelserna: vi använder produktens slug,
- * eftersom det är slugen som skickas i AddToCart/Purchase.
+ * g:id måste matcha content_ids i pixel-händelserna (metaContentId): artikelnummer,
+ * annars slug. Samma id som i Google-feeden.
  */
 const META_CATEGORY = "health & beauty > health care > vitamins & supplements";
 
@@ -113,7 +113,7 @@ const metaProductItem = (p: Product): string => {
   const images = imagesFor(p).map(abs);
   const onSale = p.oldPrice !== null && p.oldPrice > p.price;
   return `<item>
-${tag("g:id", metaContentId("product", p.slug))}
+${tag("g:id", metaContentId("product", p.slug, p.sku))}
 ${tag("title", clip(p.name, 150))}
 ${tag("description", clip(describe(p), 9999))}
 ${tag("link", abs(routes.product(p.slug)))}
@@ -136,7 +136,7 @@ ${p.variant ? tag("g:item_group_id", p.variant.group) : ""}
 const metaBundleItem = (b: Bundle): string => {
   const images = b.images.map(abs);
   return `<item>
-${tag("g:id", metaContentId("bundle", b.slug))}
+${tag("g:id", metaContentId("bundle", b.slug, b.sku))}
 ${tag("title", clip(b.name, 150))}
 ${tag("description", clip([b.short, ...b.description, `Innehåller: ${b.items.map((i) => `${i.qty} × ${i.product.name}`).join(", ")}.`].join("\n\n"), 9999))}
 ${tag("link", abs(routes.bundle(b.slug)))}
