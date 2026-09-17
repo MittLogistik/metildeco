@@ -5,6 +5,7 @@ import { company, site } from "@/lib/site";
 import { Container } from "@/components/ui";
 import { MailIcon, PhoneIcon, PinIcon } from "@/components/icons";
 import { PaymentMethods } from "@/components/PaymentMethods";
+import { CookieSettingsLink } from "@/components/consent/CookieBanner";
 
 const columns = [
   {
@@ -112,6 +113,9 @@ export function Footer() {
               <Link href={routes.cookies} className="hover:text-foreground">
                 Cookies
               </Link>
+            </li>
+            <li>
+              <CookieSettingsLink className="hover:text-foreground" />
             </li>
             <li>
               <a href={site.social.facebook} rel="noopener" target="_blank" className="hover:text-foreground">

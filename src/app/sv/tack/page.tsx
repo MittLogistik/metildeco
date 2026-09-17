@@ -6,6 +6,8 @@ import { routes } from "@/lib/routes";
 import { company } from "@/lib/site";
 import { stripe, stripeConfigured } from "@/lib/stripe";
 import { ClearCart } from "@/components/checkout/ClearCart";
+import { MetaPurchase } from "@/components/consent/MetaEvents";
+import { metaContentId } from "@/lib/consent";
 import { CheckIcon } from "@/components/icons";
 import { ButtonLink, Container } from "@/components/ui";
 
@@ -63,10 +65,18 @@ export default async function ThankYouPage({ searchParams }: PageProps<"/sv/tack
   const shipping = saved ? saved.order.shipping : (session.shipping_cost?.amount_total ?? 0) / 100;
   const discount = saved ? saved.order.discount : (session.total_details?.amount_discount ?? 0) / 100;
   const total = saved ? saved.order.total : (session.amount_total ?? 0) / 100;
+  let metaIds: string[] = [];
+  try {
+    const cartMeta = JSON.parse(session.metadata?.cart ?? "[]") as { k?: string; s?: string }[];
+    metaIds = cartMeta.filter((m) => m.s).map((m) => metaContentId(m.k === "bundle" ? "bundle" : "product", m.s!));
+  } catch {
+    metaIds = saved?.items.map((i) => i.product_slug) ?? [];
+  }
 
   return (
     <Container className="py-12 sm:py-16">
       <ClearCart />
+      {saved ? <MetaPurchase sessionId={session.id} value={saved.order.total} ids={metaIds} /> : null}
       <div className="mx-auto max-w-2xl">
         <span className="inline-flex h-14 w-14 items-center justify-center rounded-full bg-primary-soft text-primary">
           <CheckIcon size={28} />

@@ -14,6 +14,7 @@ import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { ProductBuyBox } from "@/components/cart/AddToCart";
 import { CheckIcon, FlaskIcon, LeafIcon, ShieldIcon } from "@/components/icons";
 import { JsonLd } from "@/components/JsonLd";
+import { MetaViewContent } from "@/components/consent/MetaEvents";
 import { Newsletter } from "@/components/Newsletter";
 import { PaymentMethods } from "@/components/PaymentMethods";
 import { ProductCard } from "@/components/ProductCard";
@@ -115,6 +116,7 @@ export default async function ProductPage({ params }: PageProps<"/sv/produkt/[sl
   return (
     <>
       <JsonLd data={jsonLd} />
+      <MetaViewContent id={product.slug} name={product.name} price={product.price} category={product.category} />
       <Container className="py-6 sm:py-10">
         <Breadcrumbs
           items={[

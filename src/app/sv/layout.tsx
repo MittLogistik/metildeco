@@ -3,6 +3,8 @@ import { CartDrawer } from "@/components/cart/CartDrawer";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Analytics } from "@/components/Analytics";
+import { CookieBanner } from "@/components/consent/CookieBanner";
+import { MetaPixel } from "@/components/consent/MetaPixel";
 import { JsonLd } from "@/components/JsonLd";
 import { getCatalogSnapshot } from "@/lib/catalog";
 import { company, site } from "@/lib/site";
@@ -45,6 +47,8 @@ export default async function SwedishLayout({ children }: LayoutProps<"/sv">) {
       <main className="flex-1">{children}</main>
       <Footer />
       <CartDrawer />
+      <CookieBanner />
+      <MetaPixel />
     </CartProvider>
   );
 }

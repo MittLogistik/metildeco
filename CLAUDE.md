@@ -32,3 +32,9 @@ quiz, presentkort, spåra order, mitt konto, samarbeten/jobba hos oss, fler spr�
 - `/api/track` räknar sidvisningar, unika besökare per dag (hashad IP, `visitors_daily`) och korghändelser (`cart_events_hourly`). Inga cookies.
 - Övergivna korgar kommer från Stripes `checkout.session.expired` (sessionen har 24 h giltighet och återställningslänk). Kräver att händelsen är påslagen i Stripes webhook-destination.
 - Adminöversikten (`/admin`) visar ett diagram per mått – aldrig flera serier på samma axel.
+
+## Meta (pixel, Conversions API, katalogfeed)
+- Pixeln laddas bara efter cookiesamtycke "all" (`src/components/consent/`, cookie `metilde_consent`). Utan `NEXT_PUBLIC_META_PIXEL_ID` är allt avstängt.
+- Varje händelse skickas både via pixeln och `/api/meta` → Conversions API med samma `event_id` (avduplicering). Purchase skickas från servern i `saveOrderFromSession` med `event_id = Stripe-sessionens id`, och från tacksidan med samma id. Serverns Purchase skickas bara om `metadata.consent === "all"` (sätts i `/api/checkout`).
+- Katalog-id (`metaContentId` i `src/lib/consent.ts`) = produktslug, `paket-<slug>` för paket. Feeden `/feeds/meta.xml` använder samma id, så content_ids matchar katalogen.
+- `META_TEST_EVENT_CODE` sätts bara tillfälligt vid test i Events Manager → Testhändelser.

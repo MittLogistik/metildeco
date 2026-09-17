@@ -6,6 +6,8 @@ import { supabaseAdmin, supabaseConfigured } from "./supabase";
 import { sendOrderConfirmation } from "./email";
 import { issueGiftCard } from "./giftcards";
 import { markRecovered } from "./abandoned";
+import { sendMetaEvents } from "./meta";
+import { metaContentId } from "./consent";
 
 export type OrderRecord = {
   id: string;
@@ -192,6 +194,37 @@ export async function saveOrderFromSession(sessionId: string): Promise<{ order: 
 
   await decrementStock(items, meta);
   await markRecovered(order.email, order.id).catch(() => undefined);
+  if (session.metadata?.consent === "all") {
+    const [firstName, ...rest] = (shippingDetails?.name ?? customer?.name ?? "").split(" ");
+    await sendMetaEvents([
+      {
+        name: "Purchase",
+        eventId: session.id,
+        url: `${process.env.NEXT_PUBLIC_SITE_URL ?? "https://metilde.com"}/sv/tack`,
+        user: {
+          email: customer?.email,
+          phone: customer?.phone,
+          firstName,
+          lastName: rest.join(" ") || null,
+          zip: addr?.postal_code,
+          city: addr?.city,
+          country: addr?.country,
+          fbp: session.metadata?.fbp || null,
+          fbc: session.metadata?.fbc || null,
+          externalId: typeof session.customer === "string" ? session.customer : (session.customer?.id ?? null),
+        },
+        custom: {
+          value: kr(session.amount_total),
+          currency: "SEK",
+          content_type: "product",
+          content_ids: meta.map((m) => metaContentId(m.k === "bundle" ? "bundle" : "product", m.s)),
+          contents: items.map((i, idx) => ({ id: metaContentId(meta[idx]?.k === "bundle" ? "bundle" : "product", i.product_slug), quantity: i.qty, item_price: i.unit_price })),
+          num_items: items.reduce((s, i) => s + i.qty, 0),
+          order_id: order.order_number,
+        },
+      },
+    ]).catch((e: unknown) => console.error("[meta]", e instanceof Error ? e.message : e));
+  }
   if (isGiftCard) {
     await issueGiftCard(session).catch((e: unknown) => console.error("[presentkort]", e instanceof Error ? e.message : e));
   } else {

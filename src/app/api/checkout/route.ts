@@ -3,6 +3,7 @@ import { buildLineItems, buildShippingOptions, parseCheckoutRequest, priceLines,
 import { routes } from "@/lib/routes";
 import { cheapestSwedenRate, shippingCost } from "@/lib/shipping";
 import { stripe, stripeConfigured } from "@/lib/stripe";
+import { CONSENT_COOKIE } from "@/lib/consent";
 
 /**
  * Skapar en Stripe Checkout-session. Priser och lagerstatus kontrolleras på servern.
@@ -27,7 +28,13 @@ export async function POST(request: Request) {
     const priced = await priceLines(payload.lines);
     const hasSub = priced.some((l) => l.plan === "sub");
     const lineItems = buildLineItems(priced, origin);
+    const consent = request.headers.get("cookie")?.match(new RegExp(`(?:^|; )${CONSENT_COOKIE}=(necessary|all)`))?.[1] ?? "necessary";
+    const fbp = request.headers.get("cookie")?.match(/(?:^|; )_fbp=([^;]+)/)?.[1] ?? "";
+    const fbc = request.headers.get("cookie")?.match(/(?:^|; )_fbc=([^;]+)/)?.[1] ?? "";
     const metadata = {
+      consent,
+      fbp: fbp.slice(0, 100),
+      fbc: fbc.slice(0, 200),
       cart: JSON.stringify(priced.map((l) => ({ k: l.kind, s: l.slug, q: l.qty, p: l.plan, i: l.intervalDays ?? null }))).slice(0, 500),
     };
 

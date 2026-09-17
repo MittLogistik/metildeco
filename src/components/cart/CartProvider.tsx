@@ -6,6 +6,8 @@ import { tieredUnitPrice, type SlimProduct } from "@/lib/products";
 import type { SlimBundle } from "@/lib/bundles";
 import { cheapestSwedenRate, shippingCost } from "@/lib/shipping";
 import { track } from "@/lib/track";
+import { metaTrack } from "@/components/consent/MetaPixel";
+import { metaContentId } from "@/lib/consent";
 import { cartStore, type CartLine } from "./cartStore";
 import type { Plan } from "./types";
 
@@ -104,8 +106,16 @@ export function CartProvider({ catalog, children }: { catalog: CatalogSnapshot; 
       return next;
     });
     track("add_to_cart");
+    const resolved = resolve(line, catalog);
+    metaTrack("AddToCart", {
+      content_ids: [metaContentId(line.kind, line.slug)],
+      content_name: resolved?.name,
+      content_type: "product",
+      value: resolved ? resolved.unitPrice * line.qty : undefined,
+      currency: "SEK",
+    });
     setOpen(true);
-  }, []);
+  }, [catalog]);
 
   const addProduct = useCallback(
     (slug: string, qty = 1, plan: Plan = "once", intervalDays: 30 | 60 | 90 = 30) =>
