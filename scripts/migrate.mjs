@@ -15,7 +15,21 @@ if (!url || url.includes("[YOUR-PASSWORD]")) {
 const dir = join(process.cwd(), "supabase", "migrations");
 const files = readdirSync(dir).filter((f) => f.endsWith(".sql")).sort();
 
-const client = new pg.Client({ connectionString: url, ssl: { rejectUnauthorized: false } });
+// Lösenordet kan innehålla tecken som inte är giltiga i en URL, så strängen tolkas manuellt.
+const m = url.match(/^postgres(?:ql)?:\/\/([^:]+):(.*)@([^@:/]+):(\d+)\/(.+)$/);
+if (!m) {
+  console.error("SUPABASE_DB_URL har oväntat format. Förväntat: postgresql://användare:lösenord@värd:port/databas");
+  process.exit(1);
+}
+const [, user, password, host, port, database] = m;
+const client = new pg.Client({
+  user,
+  password: decodeURIComponent(password),
+  host,
+  port: Number(port),
+  database,
+  ssl: { rejectUnauthorized: false },
+});
 await client.connect();
 await client.query(
   "CREATE TABLE IF NOT EXISTS public._migrations (name text PRIMARY KEY, applied_at timestamptz NOT NULL DEFAULT now())",

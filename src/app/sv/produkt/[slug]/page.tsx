@@ -71,7 +71,7 @@ export default async function ProductPage({ params }: PageProps<"/sv/produkt/[sl
     brand: { "@type": "Brand", name: product.brand },
     category: product.category,
     url,
-    ...(product.reviews > 0
+    ...(site.showRatings && product.reviews > 0
       ? {
           aggregateRating: {
             "@type": "AggregateRating",
@@ -134,7 +134,7 @@ export default async function ProductPage({ params }: PageProps<"/sv/produkt/[sl
               ) : null}
             </div>
             <h1 className="mt-3 font-display text-3xl font-medium leading-tight tracking-tight sm:text-4xl">{product.name}</h1>
-            {product.reviews > 0 ? (
+            {site.showRatings && product.reviews > 0 ? (
               <div className="mt-3">
                 <Stars rating={product.rating} count={product.reviews} size={15} />
               </div>

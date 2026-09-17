@@ -24,6 +24,12 @@ export const site = {
   campaign: null as { label: string; href: string } | null,
   /** Kundantal visas inte förrän det går att styrka. */
   showCustomerCount: false,
+  /**
+   * Betyg och stjärnor. Exportens betyg (5,0 med 3 omdömen per produkt) kom från
+   * genererade testomdömen i gamla butiken, inte från riktiga kunder. Stjärnor
+   * visas först när riktiga omdömen finns i tabellen product_reviews.
+   */
+  showRatings: false,
 };
 
 /** Företagsuppgifter – visas i sidfot, kontakt, villkor och structured data. */

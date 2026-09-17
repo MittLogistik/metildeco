@@ -3,6 +3,7 @@ import Link from "next/link";
 import { formatPrice, percentOff } from "@/lib/format";
 import { isInStock, primaryImage, type Product } from "@/lib/products";
 import { routes } from "@/lib/routes";
+import { site } from "@/lib/site";
 import { Badge } from "@/components/ui";
 import { Stars } from "@/components/Stars";
 import { QuickAddButton } from "@/components/cart/AddToCart";
@@ -49,7 +50,7 @@ export function ProductCard({ product, priority = false }: { product: Product; p
             {product.name}
           </Link>
         </h3>
-        {product.reviews > 0 ? (
+        {site.showRatings && product.reviews > 0 ? (
           <div className="mt-1.5">
             <Stars rating={product.rating} count={product.reviews} size={13} />
           </div>

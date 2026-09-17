@@ -26,7 +26,7 @@ export default function HomePage() {
   const hero = getProduct("tongkat-ali-elite") ?? products[0]!;
   const inStock = products.filter(isInStock);
   const featured = [...inStock, ...products.filter((p) => !isInStock(p))].slice(0, 8);
-  const rating = aggregateRating();
+  const rating = site.showRatings ? aggregateRating() : null;
   const latest = articles.slice(0, 3);
 
   return (

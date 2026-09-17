@@ -55,19 +55,6 @@ INSERT INTO public.integration_settings (key, value)
 VALUES ('cron_secret', jsonb_build_object('token', encode(gen_random_bytes(32), 'hex')))
 ON CONFLICT (key) DO NOTHING;
 
-DO $$
-DECLARE tok text;
-BEGIN
-  SELECT value ->> 'token' INTO tok FROM public.integration_settings WHERE key = 'cron_secret';
-  PERFORM cron.alter_job(
-    1,
-    command := format($cmd$
-  SELECT net.http_post(
-    url := 'https://project--b3889445-6450-428e-8548-7149d5ad1ab1.lovable.app/api/public/hooks/abandoned-carts',
-    headers := %L::jsonb,
-    body := '{}'::jsonb
-  );
-$cmd$, jsonb_build_object('Content-Type', 'application/json', 'x-cron-secret', tok)::text)
-  );
+
 -- Cron-jobbet för övergivna varukorgar (pg_cron + net.http_post mot Lovable) är borttaget.
 -- Ersätts av ett schemalagt jobb i Next.js/Vercel.
