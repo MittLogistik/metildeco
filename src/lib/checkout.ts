@@ -1,6 +1,7 @@
 /**
  * Kassalogik som delas av API:t och kassasidan.
  * Priser räknas alltid om på servern utifrån katalogen – klienten skickar bara slug, antal och plan.
+ * Adress, telefon och fraktval samlas in av Stripe Checkout.
  */
 import type Stripe from "stripe";
 import { getBundle } from "./bundles";
@@ -19,21 +20,9 @@ export type CheckoutLine = {
   intervalDays?: SubInterval;
 };
 
-export type CheckoutCustomer = {
-  email: string;
-  firstName: string;
-  lastName: string;
-  phone: string;
-  address: string;
-  zip: string;
-  city: string;
-  country: string;
-};
-
 export type CheckoutRequest = {
   lines: CheckoutLine[];
-  customer: CheckoutCustomer;
-  shippingMethod: string;
+  email: string | null;
 };
 
 export type PricedLine = CheckoutLine & {
@@ -63,31 +52,8 @@ export function parseCheckoutRequest(body: unknown): CheckoutRequest {
     };
   });
   if (lines.length === 0) throw new Error("Varukorgen är tom.");
-
-  const c = (b.customer ?? {}) as Record<string, unknown>;
-  const customer: CheckoutCustomer = {
-    email: clean(c.email, 200).toLowerCase(),
-    firstName: clean(c.firstName, 80),
-    lastName: clean(c.lastName, 80),
-    phone: clean(c.phone, 40),
-    address: clean(c.address, 200),
-    zip: clean(c.zip, 20),
-    city: clean(c.city, 80),
-    country: clean(c.country, 2).toUpperCase() || "SE",
-  };
-  if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(customer.email)) throw new Error("Ange en giltig e-postadress.");
-  for (const [k, label] of [
-    ["firstName", "förnamn"],
-    ["lastName", "efternamn"],
-    ["address", "adress"],
-    ["zip", "postnummer"],
-    ["city", "ort"],
-  ] as const) {
-    if (!customer[k]) throw new Error(`Fyll i ${label}.`);
-  }
-  if (customer.country !== "SE") throw new Error("Just nu levererar vi bara inom Sverige.");
-
-  return { lines, customer, shippingMethod: clean(b.shippingMethod, 40) };
+  const email = clean(b.email, 200).toLowerCase();
+  return { lines, email: /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email) ? email : null };
 }
 
 /** Sätter pris på varje rad utifrån katalogen. Okända eller slutsålda varor ger fel. */
@@ -98,7 +64,14 @@ export function priceLines(lines: CheckoutLine[]): PricedLine[] {
       if (!bundle) throw new Error("Ett paket i varukorgen finns inte längre.");
       const soldOut = bundle.items.some((i) => i.product.trackStock && i.product.stock < i.qty * line.qty);
       if (soldOut) throw new Error(`${bundle.name} är tillfälligt slut.`);
-      return { ...line, plan: "once", name: bundle.name, unitPrice: bundle.price, image: bundle.images[0] ?? null, freeShipping: bundle.freeShipping };
+      return {
+        ...line,
+        plan: "once",
+        name: bundle.name,
+        unitPrice: bundle.price,
+        image: bundle.images[0] ?? null,
+        freeShipping: bundle.freeShipping,
+      };
     }
     const product = getProduct(line.slug);
     if (!product) throw new Error("En produkt i varukorgen finns inte längre.");
@@ -113,16 +86,7 @@ export function priceLines(lines: CheckoutLine[]): PricedLine[] {
   });
 }
 
-export type Totals = { subtotal: number; shipping: number; total: number; shippingLabel: string };
-
-export function computeTotals(priced: PricedLine[], shippingMethod: string): Totals {
-  const subtotal = priced.reduce((s, l) => s + l.unitPrice * l.qty, 0);
-  const rates = ratesForZone("se");
-  const rate = rates.find((r) => r.method === shippingMethod) ?? rates[0]!;
-  const allFree = priced.every((l) => l.freeShipping);
-  const shipping = allFree ? 0 : shippingCost(rate, subtotal);
-  return { subtotal, shipping, total: subtotal + shipping, shippingLabel: rate.label };
-}
+export const subtotalOf = (priced: PricedLine[]) => priced.reduce((s, l) => s + l.unitPrice * l.qty, 0);
 
 const sek = (amount: number) => Math.round(amount * 100);
 
@@ -142,4 +106,42 @@ export function buildLineItems(priced: PricedLine[], origin: string): Stripe.Che
       ...(l.plan === "sub" ? { recurring: { interval: "day" as const, interval_count: l.intervalDays ?? 30 } } : {}),
     },
   }));
+}
+
+/**
+ * Fraktalternativ för Sverige som Stripe visar i kassan. Är alla rader fraktfria
+ * (prenumerationer, paket) blir det ett enda kostnadsfritt alternativ.
+ */
+export function buildShippingOptions(priced: PricedLine[]): Stripe.Checkout.SessionCreateParams.ShippingOption[] {
+  const subtotal = subtotalOf(priced);
+  const allFree = priced.every((l) => l.freeShipping);
+  const rates = ratesForZone("se");
+  const estimate = {
+    minimum: { unit: "business_day" as const, value: 1 },
+    maximum: { unit: "business_day" as const, value: 3 },
+  };
+  if (allFree) {
+    return [
+      {
+        shipping_rate_data: {
+          type: "fixed_amount",
+          display_name: "Fri frakt – spårbart brev",
+          fixed_amount: { amount: 0, currency: "sek" },
+          delivery_estimate: estimate,
+        },
+      },
+    ];
+  }
+  return rates.map((r) => {
+    const cost = shippingCost(r, subtotal);
+    return {
+      shipping_rate_data: {
+        type: "fixed_amount",
+        display_name: cost === 0 ? `${r.label} – fri frakt` : r.label,
+        fixed_amount: { amount: sek(cost), currency: "sek" },
+        delivery_estimate: estimate,
+        metadata: { method: r.method },
+      },
+    };
+  });
 }

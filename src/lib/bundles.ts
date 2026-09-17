@@ -39,20 +39,36 @@ for (const row of bundlePricesJson as RawPrice[]) {
   if (row.currency === "SEK") sek.set(row.bundle_slug, row);
 }
 
+const warn = (msg: string) => {
+  if (process.env.NODE_ENV !== "test") console.warn(`[paket] ${msg}`);
+};
+
+/**
+ * Ett paket visas bara om alla ingående produkter är aktiva och paketpriset
+ * är lägre än delarna – annars skulle vi lova en besparing som inte finns.
+ */
 const build = (row: RawBundle): Bundle | null => {
-  const items: BundleItem[] = (componentsJson as RawComponent[])
+  const components = (componentsJson as RawComponent[])
     .filter((c) => c.bundle_slug === row.slug)
-    .sort((a, b) => a.sort_order - b.sort_order)
-    .map((c) => {
-      const product = getProduct(c.product_slug);
-      return product ? { product, qty: c.qty, blurb: c.blurb ?? null } : null;
-    })
-    .filter((x): x is BundleItem => x !== null);
+    .sort((a, b) => a.sort_order - b.sort_order);
+  const items: BundleItem[] = [];
+  for (const c of components) {
+    const product = getProduct(c.product_slug);
+    if (!product) {
+      warn(`${row.slug} döljs: ingående produkt "${c.product_slug}" är inaktiv eller saknas.`);
+      return null;
+    }
+    items.push({ product, qty: c.qty, blurb: c.blurb ?? null });
+  }
   if (items.length === 0) return null;
 
   const priceRow = sek.get(row.slug);
   const price = priceRow ? Number(priceRow.price) : Number(row.price);
   const value = items.reduce((s, i) => s + i.product.price * i.qty, 0);
+  if (price >= value) {
+    warn(`${row.slug} döljs: paketpriset ${price} kr är inte lägre än delarna (${value} kr). Sätt ett nytt pris i data/bundle_prices.json.`);
+    return null;
+  }
   const images =
     row.images.length > 0 ? row.images.map(mediaUrl) : items.map((i) => primaryImage(i.product));
 

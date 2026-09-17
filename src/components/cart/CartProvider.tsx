@@ -39,6 +39,8 @@ type CartState = {
   addProduct: (slug: string, qty?: number, plan?: Plan, intervalDays?: 30 | 60 | 90) => void;
   addBundle: (slug: string, qty?: number) => void;
   setQty: (key: string, qty: number) => void;
+  /** Byter köpplan för en produktrad (engångsköp ↔ prenumeration) och behåller antalet. */
+  setPlan: (key: string, plan: Plan, intervalDays?: 30 | 60 | 90) => void;
   remove: (key: string) => void;
   clear: () => void;
 };
@@ -119,6 +121,23 @@ export function CartProvider({ children }: { children: ReactNode }) {
       qty <= 0 ? prev.filter((l) => l.key !== key) : prev.map((l) => (l.key === key ? { ...l, qty } : l)),
     );
   }, []);
+  const setPlan = useCallback((key: string, plan: Plan, intervalDays: 30 | 60 | 90 = 30) => {
+    cartStore.update((prev) => {
+      const line = prev.find((l) => l.key === key);
+      if (!line || line.kind !== "product") return prev;
+      const next: CartLine =
+        plan === "sub"
+          ? { key: `product:${line.slug}:sub:${intervalDays}`, kind: "product", slug: line.slug, qty: line.qty, plan, intervalDays }
+          : { key: `product:${line.slug}:once`, kind: "product", slug: line.slug, qty: line.qty, plan };
+      if (next.key === key) return prev;
+      const rest = prev.filter((l) => l.key !== key);
+      const existing = rest.find((l) => l.key === next.key);
+      // Finns samma produkt redan med den nya planen slås antalet ihop, annars byts raden på plats.
+      return existing
+        ? rest.map((l) => (l.key === next.key ? { ...l, qty: l.qty + next.qty } : l))
+        : prev.map((l) => (l.key === key ? next : l));
+    });
+  }, []);
   const remove = useCallback((key: string) => cartStore.update((prev) => prev.filter((l) => l.key !== key)), []);
   const clear = useCallback(() => cartStore.set([]), []);
 
@@ -145,10 +164,11 @@ export function CartProvider({ children }: { children: ReactNode }) {
       addProduct,
       addBundle,
       setQty,
+      setPlan,
       remove,
       clear,
     };
-  }, [lines, isOpen, addProduct, addBundle, setQty, remove, clear]);
+  }, [lines, isOpen, addProduct, addBundle, setQty, setPlan, remove, clear]);
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
 }
