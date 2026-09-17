@@ -28,4 +28,8 @@ export const routes = {
   trackOrder: `${L}/spara-order`,
   account: `${L}/mitt-konto`,
   giftCard: `${L}/presentkort`,
+  quiz: `${L}/quiz`,
+  partners: `${L}/samarbeten`,
+  careers: `${L}/jobba-hos-oss`,
+  tongkat: `${L}/tongkat-ali`,
 } as const;

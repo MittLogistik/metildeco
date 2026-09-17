@@ -124,7 +124,7 @@ export function ProductBuyBox({ product, inStock }: { product: Product; inStock:
             <PlusIcon size={16} />
           </button>
         </div>
-        <Button size="lg" className="flex-1" onClick={add} disabled={!inStock}>
+        <Button size="lg" className="w-full sm:flex-1" onClick={add} disabled={!inStock}>
           {!inStock ? (
             "Slutsåld"
           ) : added ? (

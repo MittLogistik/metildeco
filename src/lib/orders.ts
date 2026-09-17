@@ -4,6 +4,7 @@ import { getBundle, getProduct } from "./catalog";
 import { stripe } from "./stripe";
 import { supabaseAdmin, supabaseConfigured } from "./supabase";
 import { sendOrderConfirmation } from "./email";
+import { issueGiftCard } from "./giftcards";
 
 export type OrderRecord = {
   id: string;
@@ -83,7 +84,10 @@ export async function saveOrderFromSession(sessionId: string): Promise<{ order: 
   const paid = session.payment_status === "paid" || session.status === "complete";
   if (!paid) return null;
 
-  const meta = parseCart(session.metadata?.cart);
+  const isGiftCard = session.metadata?.kind === "giftcard";
+  const meta = isGiftCard
+    ? [{ k: "product" as const, s: "presentkort", q: 1, p: "once" as const, i: null }]
+    : parseCart(session.metadata?.cart);
   const lines = session.line_items?.data ?? [];
   const isSub = session.mode === "subscription";
   const customer = session.customer_details;
@@ -143,7 +147,7 @@ export async function saveOrderFromSession(sessionId: string): Promise<{ order: 
       stripe_customer_id: typeof session.customer === "string" ? session.customer : (session.customer?.id ?? null),
       stripe_subscription_id: subscription?.id ?? null,
       environment: environment(),
-      kind: "checkout",
+      kind: isGiftCard ? "giftcard" : "checkout",
       locale: "sv",
       discount_code: session.discounts?.[0]?.promotion_code ? String(session.discounts[0].promotion_code) : null,
     })
@@ -186,7 +190,11 @@ export async function saveOrderFromSession(sessionId: string): Promise<{ order: 
   }
 
   await decrementStock(items, meta);
-  await sendOrderConfirmation(order, items).catch((e: unknown) => console.error("[email]", e instanceof Error ? e.message : e));
+  if (isGiftCard) {
+    await issueGiftCard(session).catch((e: unknown) => console.error("[presentkort]", e instanceof Error ? e.message : e));
+  } else {
+    await sendOrderConfirmation(order, items).catch((e: unknown) => console.error("[email]", e instanceof Error ? e.message : e));
+  }
   return { order, items, created: true };
 }
 

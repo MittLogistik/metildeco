@@ -15,13 +15,6 @@ const nextConfig: NextConfig = {
     return [
       // Gamla adresser från förra butiken – behåll länkkraft och undvik 404 vid domänbytet
       { source: "/sv/products", destination: "/sv/produkter", permanent: true },
-      { source: "/sv/quiz", destination: "/sv/mal", permanent: false },
-      { source: "/sv/tongkat-ali", destination: "/sv/produkter?kategori=Tongkat%20Ali", permanent: false },
-      { source: "/sv/presentkort", destination: "/sv/produkter", permanent: false },
-      { source: "/sv/spara-order", destination: "/sv/kontakt", permanent: false },
-      { source: "/sv/mitt-konto", destination: "/sv/kontakt", permanent: false },
-      { source: "/sv/samarbeten", destination: "/sv/kontakt", permanent: false },
-      { source: "/sv/jobba-hos-oss", destination: "/sv/var-historia", permanent: false },
       // Övriga språk aktiveras ett i taget – tills dess svenska (tillfällig omdirigering)
       ...pendingLocales.flatMap((l) => [
         { source: `/${l}`, destination: "/sv", permanent: false },

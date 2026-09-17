@@ -76,6 +76,9 @@ export function Header() {
             <Link href={routes.contact} className="hidden rounded-full px-3 py-2 text-sm font-medium hover:bg-sand lg:inline-block">
               Kundservice
             </Link>
+            <Link href={routes.account} className="hidden rounded-full px-3 py-2 text-sm font-medium hover:bg-sand lg:inline-block">
+              Mitt konto
+            </Link>
             <button
               type="button"
               onClick={cart.open}
@@ -100,8 +103,11 @@ export function Header() {
                   {item.label}
                 </Link>
               ))}
-              <Link href={routes.contact} className="py-3.5 text-base font-medium">
+              <Link href={routes.contact} className="border-b border-line py-3.5 text-base font-medium">
                 Kundservice
+              </Link>
+              <Link href={routes.account} className="py-3.5 text-base font-medium">
+                Mitt konto
               </Link>
             </Container>
           </nav>

@@ -49,7 +49,7 @@ export function Newsletter() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="Din e-postadress"
-              className="h-13 flex-1 rounded-full border border-white/20 bg-white/10 px-5 text-base text-white placeholder:text-white/50 focus:bg-white/15 focus:outline-none"
+              className="h-13 w-full sm:flex-1 rounded-full border border-white/20 bg-white/10 px-5 text-base text-white placeholder:text-white/50 focus:bg-white/15 focus:outline-none"
             />
             <Button type="submit" size="lg" variant="white">
               Prenumerera

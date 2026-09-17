@@ -23,7 +23,9 @@ export async function proxy(request: NextRequest) {
   });
 
   const { data } = await supabase.auth.getUser();
-  const isLogin = request.nextUrl.pathname === "/admin/login";
+  const path = request.nextUrl.pathname;
+  if (!path.startsWith("/admin")) return response; // kundsidor: bara sessionsförnyelse
+  const isLogin = path === "/admin/login";
   if (!data.user && !isLogin) {
     const login = request.nextUrl.clone();
     login.pathname = "/admin/login";
@@ -39,5 +41,5 @@ export async function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/admin/:path*"],
+  matcher: ["/admin/:path*", "/sv/mitt-konto/:path*", "/sv/mitt-konto"],
 };

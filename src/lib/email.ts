@@ -79,3 +79,33 @@ Frågor? Svara på det här mejlet eller ring ${company.phone}.`;
 
   await sendEmail(order.email, subject, html, text);
 }
+
+/** Presentkortsmejl – till köparen och, om angivet, mottagaren. */
+export async function sendGiftCardEmail(
+  to: string,
+  code: string,
+  amount: number,
+  expires: Date,
+  opts: { recipientCopy: boolean; fromName: string | null; message: string | null },
+) {
+  const subject = opts.recipientCopy ? `Du har fått ett presentkort på ${formatPrice(amount)} hos Metilde` : `Ditt presentkort på ${formatPrice(amount)}`;
+  const intro = opts.recipientCopy
+    ? `${opts.fromName ? esc(opts.fromName) : "Någon"} har skickat dig ett presentkort hos Metilde.`
+    : "Tack för ditt köp! Här är ditt presentkort.";
+  const validTo = expires.toLocaleDateString("sv-SE", { dateStyle: "long" });
+  const html = `<!doctype html><html lang="sv"><body style="margin:0;background:#f7f5f0;font-family:Helvetica,Arial,sans-serif;color:#222">
+<div style="max-width:560px;margin:0 auto;padding:32px 20px">
+  <p style="font-size:22px;font-weight:600;margin:0 0 24px">Metilde</p>
+  <div style="background:#fff;border-radius:16px;padding:28px">
+    <h1 style="font-size:22px;margin:0 0 8px">Presentkort ${formatPrice(amount)}</h1>
+    <p style="margin:0 0 20px;color:#555">${intro}</p>
+    ${opts.message ? `<p style="margin:0 0 20px;padding:14px;background:#f7f5f0;border-radius:12px;font-style:italic">“${esc(opts.message)}”</p>` : ""}
+    <p style="margin:0;font-size:13px;color:#555">Din kod</p>
+    <p style="margin:4px 0 16px;font-size:26px;font-weight:700;letter-spacing:2px;font-family:monospace">${code}</p>
+    <p style="margin:0;font-size:14px;color:#555">Skriv in koden i fältet <strong>Lägg till kod</strong> i betalsteget på <a href="${site.url}${routes.products}" style="color:#2f5445">metilde.com</a>. Gäller hela sortimentet, även prenumerationer, till och med ${validTo}. Presentkortet kan inte lösas in mot kontanter.</p>
+  </div>
+  <p style="font-size:12px;color:#888;margin:24px 0 0;line-height:1.6">${company.legalName} · Org.nr ${company.orgNumber} · ${company.address}<br>Frågor? Svara på det här mejlet.</p>
+</div></body></html>`;
+  const text = `${subject}\n\n${intro}\n${opts.message ? `\n"${opts.message}"\n` : ""}\nKod: ${code}\nSkriv in koden i betalsteget på metilde.com. Gäller till och med ${validTo}.\n\n${company.legalName} · ${company.address}`;
+  await sendEmail(to, subject, html, text);
+}

@@ -42,6 +42,7 @@ export default async function ThankYouPage({ searchParams }: PageProps<"/sv/tack
   const paid = session.payment_status === "paid" || session.status === "complete";
   const email = session.customer_details?.email ?? "";
   const isSub = session.mode === "subscription";
+  const isGiftCard = session.metadata?.kind === "giftcard";
 
   if (!paid) {
     return (
@@ -70,10 +71,11 @@ export default async function ThankYouPage({ searchParams }: PageProps<"/sv/tack
         <span className="inline-flex h-14 w-14 items-center justify-center rounded-full bg-primary-soft text-primary">
           <CheckIcon size={28} />
         </span>
-        <h1 className="mt-5 font-display text-4xl font-medium tracking-tight">Tack för din beställning!</h1>
+        <h1 className="mt-5 font-display text-4xl font-medium tracking-tight">{isGiftCard ? "Tack – presentkortet är på väg!" : "Tack för din beställning!"}</h1>
         <p className="mt-3 text-lg text-muted">
-          Vi har tagit emot din {isSub ? "prenumeration" : "order"} och skickar en bekräftelse till <strong className="text-foreground">{email}</strong>.
-          Ordrar lagda före kl. 12 på vardagar skickas samma dag.
+          {isGiftCard
+            ? <>Presentkortskoden skickas inom några minuter till <strong className="text-foreground">{email}</strong>{session.metadata?.gift_recipient ? <> och till <strong className="text-foreground">{session.metadata.gift_recipient}</strong></> : null}. Koden skrivs in i betalsteget och gäller i ett år.</>
+            : <>Vi har tagit emot din {isSub ? "prenumeration" : "order"} och skickar en bekräftelse till <strong className="text-foreground">{email}</strong>. Ordrar lagda före kl. 12 på vardagar skickas samma dag.</>}
         </p>
 
         <section className="mt-10 rounded-card border border-line p-6">
@@ -109,12 +111,15 @@ export default async function ThankYouPage({ searchParams }: PageProps<"/sv/tack
 
         {isSub ? (
           <p className="mt-6 rounded-2xl bg-sand-soft p-5 text-sm text-muted">
-            Din prenumeration förnyas automatiskt med det intervall du valt. Du kan pausa eller avsluta när du vill genom att
-            mejla{" "}
+            Din prenumeration förnyas automatiskt med det intervall du valt. Pausa, återuppta eller avsluta när du vill under{" "}
+            <Link href={routes.account} className="underline">
+              Mitt konto
+            </Link>
+            , eller mejla{" "}
             <a href={`mailto:${company.email}`} className="underline">
               {company.email}
             </a>
-            . Mitt konto med självservice kommer inom kort.
+            .
           </p>
         ) : null}
 
