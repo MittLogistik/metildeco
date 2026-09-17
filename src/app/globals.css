@@ -1,26 +1,126 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@theme {
+  /* Färger – lugn, nordisk palett med djupgrön primärfärg och sandtoner */
+  --color-background: oklch(100% 0 0);
+  --color-foreground: oklch(24% 0.02 45);
+  --color-muted: oklch(53% 0.02 50);
+  --color-muted-soft: oklch(70% 0.015 50);
+  --color-line: oklch(91.2% 0.008 70);
+  --color-sand: oklch(95.5% 0.014 68);
+  --color-sand-soft: oklch(97.7% 0.008 70);
+  --color-sand-deep: oklch(92% 0.02 68);
+  --color-primary: oklch(32.2% 0.04 166.7);
+  --color-primary-hover: oklch(28% 0.04 166.7);
+  --color-primary-soft: oklch(94% 0.02 166.7);
+  --color-primary-fg: oklch(99.5% 0.004 70);
+  --color-accent: oklch(62% 0.12 60);
+  --color-accent-soft: oklch(95% 0.03 60);
+  --color-success: oklch(55% 0.13 150);
+  --color-danger: oklch(57.7% 0.245 27.325);
+  --color-star: oklch(78% 0.16 80);
+
+  --font-display: var(--font-outfit), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-figtree), ui-sans-serif, system-ui, sans-serif;
+
+  --radius-card: 1.25rem;
+  --shadow-card: 0 1px 2px oklch(0% 0 0 / 0.04), 0 8px 24px -12px oklch(0% 0 0 / 0.12);
+  --shadow-float: 0 20px 50px -20px oklch(0% 0 0 / 0.25);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-background);
+  color: var(--color-foreground);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+h1, h2, h3, h4, .font-display {
+  font-family: var(--font-display);
+}
+
+/* Fokusstil som syns vid tangentbordsnavigering men inte vid musklick */
+:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* Details/summary utan standardmarkör */
+details > summary {
+  list-style: none;
+}
+details > summary::-webkit-details-marker {
+  display: none;
+}
+
+/* Dölj scrollbar i horisontella listor */
+.scrollbar-none {
+  scrollbar-width: none;
+}
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+
+/* Löpande text för artiklar och juridiska sidor */
+.prose-metilde {
+  font-size: 1.0625rem;
+  line-height: 1.75;
+  color: var(--color-foreground);
+}
+.prose-metilde p + p { margin-top: 1.1em; }
+.prose-metilde h2 {
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  line-height: 1.25;
+  margin-top: 2.4em;
+  margin-bottom: 0.7em;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+}
+.prose-metilde h3 {
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  margin-top: 1.8em;
+  margin-bottom: 0.5em;
+  font-weight: 500;
+}
+.prose-metilde ul {
+  margin: 1em 0;
+  padding-left: 1.25em;
+  list-style: disc;
+}
+.prose-metilde li + li { margin-top: 0.4em; }
+.prose-metilde blockquote {
+  margin: 1.6em 0;
+  padding: 1.2em 1.4em;
+  border-left: 3px solid var(--color-primary);
+  background: var(--color-sand-soft);
+  border-radius: 0 1rem 1rem 0;
+  font-style: italic;
+}
+.prose-metilde table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.4em 0;
+  font-size: 0.95rem;
+}
+.prose-metilde th, .prose-metilde td {
+  text-align: left;
+  vertical-align: top;
+  padding: 0.7em 0.8em;
+  border-bottom: 1px solid var(--color-line);
+}
+.prose-metilde th {
+  font-weight: 600;
+  background: var(--color-sand-soft);
+}
+.prose-metilde a {
+  text-decoration: underline;
+  text-underline-offset: 3px;
 }
