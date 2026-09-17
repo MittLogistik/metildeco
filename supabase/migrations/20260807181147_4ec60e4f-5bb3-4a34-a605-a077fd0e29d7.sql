@@ -1,0 +1,1 @@
+REVOKE ALL ON FUNCTION public.mark_review_verified() FROM PUBLIC, anon, authenticated;

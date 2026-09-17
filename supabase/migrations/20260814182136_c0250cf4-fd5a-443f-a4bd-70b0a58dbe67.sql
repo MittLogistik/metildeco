@@ -1,0 +1,2 @@
+UPDATE public.ui_translations SET value = 'Betala med kort eller Klarna. Kvitto och orderöversikt finns i Mitt konto.' WHERE key='subscription.benefit6Text' AND locale='sv';
+UPDATE public.ui_translations SET value = 'Pay by card or Klarna. Receipts and order history are available in My Account.' WHERE key='subscription.benefit6Text' AND locale='en';

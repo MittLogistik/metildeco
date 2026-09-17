@@ -1,0 +1,1 @@
+ALTER TABLE public.shipping_rates ADD COLUMN IF NOT EXISTS cost numeric NOT NULL DEFAULT 0;

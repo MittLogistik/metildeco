@@ -1,0 +1,1 @@
+UPDATE public.ui_translations SET value = replace(value, 'Metilde AB', 'Nordic Wave LLC') WHERE value LIKE '%Metilde AB%';
