@@ -1,14 +1,15 @@
 "use client";
 
-import Script from "next/script";
 import { usePathname } from "next/navigation";
 import { useEffect, useSyncExternalStore } from "react";
 import { eventId, readConsent, type Consent } from "@/lib/consent";
 
+type Fbq = ((...args: unknown[]) => void) & { callMethod?: (...args: unknown[]) => void; queue: unknown[][]; push: unknown; loaded: boolean; version: string };
+
 declare global {
   interface Window {
-    fbq?: (...args: unknown[]) => void;
-    _fbq?: unknown;
+    fbq?: Fbq;
+    _fbq?: Fbq;
   }
 }
 
@@ -21,24 +22,54 @@ const subscribe = (cb: () => void) => {
 };
 
 /**
- * Skickar en Meta-händelse via pixeln och Conversions API med samma event-id.
- * Gör ingenting utan marknadsföringssamtycke.
+ * Skapar fbq-kön och laddar fbevents.js första gången (samma som Metas snippet).
+ * Anrop före laddning köas, så inget PageView går förlorat.
  */
-export function metaTrack(name: "ViewContent" | "AddToCart" | "InitiateCheckout" | "Purchase" | "Subscribe", params: Record<string, unknown> = {}, id?: string) {
-  if (!PIXEL_ID || readConsent() !== "all") return;
-  const eid = id ?? eventId();
+function ensurePixel(): Fbq | null {
+  if (typeof window === "undefined" || !PIXEL_ID) return null;
+  if (window.fbq) return window.fbq;
+  const n = function (...args: unknown[]) {
+    if (n.callMethod) n.callMethod(...args);
+    else n.queue.push(args);
+  } as Fbq;
+  n.queue = [];
+  n.push = n;
+  n.loaded = true;
+  n.version = "2.0";
+  window.fbq = n;
+  if (!window._fbq) window._fbq = n;
+  const s = document.createElement("script");
+  s.async = true;
+  s.src = "https://connect.facebook.net/en_US/fbevents.js";
+  document.head.appendChild(s);
+  n("init", PIXEL_ID);
+  return n;
+}
+
+const post = (body: string) => {
   try {
-    window.fbq?.("track", name, params, { eventID: eid });
-  } catch {
-    /* pixel kan vara blockerad */
-  }
-  try {
-    const body = JSON.stringify({ name, params, eventId: eid, url: location.href });
     if (navigator.sendBeacon) navigator.sendBeacon("/api/meta", new Blob([body], { type: "application/json" }));
     else void fetch("/api/meta", { method: "POST", headers: { "Content-Type": "application/json" }, body, keepalive: true });
   } catch {
     /* ignorera */
   }
+};
+
+/**
+ * Skickar en Meta-händelse via pixeln och Conversions API med samma event-id.
+ * Gör ingenting utan marknadsföringssamtycke.
+ */
+export function metaTrack(name: "PageView" | "ViewContent" | "AddToCart" | "InitiateCheckout" | "Purchase" | "Subscribe", params: Record<string, unknown> = {}, id?: string) {
+  if (readConsent() !== "all") return;
+  const fbq = ensurePixel();
+  if (!fbq) return;
+  const eid = id ?? eventId();
+  try {
+    fbq("track", name, params, { eventID: eid });
+  } catch {
+    /* pixel kan vara blockerad */
+  }
+  post(JSON.stringify({ name, params, eventId: eid, url: location.href }));
 }
 
 /** Laddar Meta Pixel efter samtycke och skickar PageView vid varje sidbyte. */
@@ -48,17 +79,9 @@ export function MetaPixel() {
   const enabled = Boolean(PIXEL_ID) && consent === "all";
 
   useEffect(() => {
-    if (!enabled || !window.fbq) return;
-    const eid = eventId();
-    window.fbq("track", "PageView", {}, { eventID: eid });
-    const body = JSON.stringify({ name: "PageView", params: {}, eventId: eid, url: location.href });
-    void fetch("/api/meta", { method: "POST", headers: { "Content-Type": "application/json" }, body, keepalive: true }).catch(() => undefined);
+    if (!enabled) return;
+    metaTrack("PageView");
   }, [enabled, pathname]);
 
-  if (!enabled) return null;
-  return (
-    <Script id="meta-pixel" strategy="afterInteractive">
-      {`!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');fbq('init','${PIXEL_ID}');`}
-    </Script>
-  );
+  return null;
 }
