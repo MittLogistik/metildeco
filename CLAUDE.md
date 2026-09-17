@@ -40,3 +40,9 @@ quiz, presentkort, spåra order, mitt konto, samarbeten/jobba hos oss, fler spr�
 - Metas katalog "Metilde Health Sverige" (id 1616122259871032) hämtar feeden varje timme från gamla sajten. Vid lansering byts adressen till `https://metilde.com/feeds/meta.xml` under Datakällor → Scheman (både uppdaterings- och ersättningsschemat).
 - Pixeln 1606920894391393 har en Conversions API Gateway kopplad (openbridge, on.aws). Den och vår egen CAPI skickar samma event_id, så Meta avduplicerar. Pixeln skickar inget från headless Chrome, testa i ett riktigt fönster.
 - `META_TEST_EVENT_CODE` sätts bara tillfälligt vid test i Events Manager → Testhändelser.
+
+## Meta Marketing API (annonser)
+- `src/lib/meta-ads.ts` – klient för kampanjer/annonsgrupper/annonser/insikter. Kräver `META_ADS_TOKEN` (systemanvändare "Conversions API System User" i portföljen Nordicsauna, token genererad via appen "Metilde Health" 1575304117393916 med ads_management + ads_read m.fl.) och `META_AD_ACCOUNT_ID` (928861056362107). Sidan som annonserar: `META_PAGE_ID`.
+- `npm run meta-ads status|campaigns|insights|pages` verifierar kopplingen från .env.local.
+- Allt som skapas via API:t skapas PAUSAT; aktivering är ett medvetet steg.
+- Ändringar av rättigheter i Meta (use cases, resurstilldelning, tokens) måste användaren göra själv – autoläget stoppar sådana klick.

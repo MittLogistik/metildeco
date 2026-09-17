@@ -10,7 +10,8 @@
     "typecheck": "tsc --noEmit",
     "shots": "node scripts/screenshot.mjs",
     "overflow": "node scripts/overflow.mjs",
-    "migrate": "node --env-file=.env.local scripts/migrate.mjs"
+    "migrate": "node --env-file=.env.local scripts/migrate.mjs",
+    "meta-ads": "node scripts/meta-ads.mjs"
   },
   "dependencies": {
     "@supabase/ssr": "^0.12.7",
