@@ -3,9 +3,31 @@
  * Allt som är "påståenden" (betyg, antal kunder, kampanjer) styrs härifrån,
  * så att sajten aldrig visar något som inte går att belägga.
  */
+/**
+ * Sajtens publika adress. NEXT_PUBLIC_SITE_URL i första hand; på Vercel används
+ * annars projektets egen adress, och lokalt/produktion faller vi tillbaka på metilde.com.
+ */
+const resolveSiteUrl = (): string => {
+  const candidates = [
+    process.env.NEXT_PUBLIC_SITE_URL,
+    process.env.VERCEL_PROJECT_PRODUCTION_URL && `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`,
+    process.env.VERCEL_URL && `https://${process.env.VERCEL_URL}`,
+    "https://metilde.com",
+  ];
+  for (const c of candidates) {
+    if (!c) continue;
+    try {
+      return new URL(c).origin;
+    } catch {
+      /* ogiltigt värde – prova nästa */
+    }
+  }
+  return "https://metilde.com";
+};
+
 export const site = {
   name: "Metilde",
-  url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://metilde.com",
+  url: resolveSiteUrl(),
   locale: "sv",
   currency: "SEK",
   /** Gräns för fri frakt i Sverige (SEK). Samma värde som shipping_rates för zon "se". */
