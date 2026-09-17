@@ -2,6 +2,7 @@ import Link from "next/link";
 import { requireAdmin } from "@/lib/auth";
 import { getCatalog } from "@/lib/catalog";
 import { formatPrice } from "@/lib/format";
+import { site } from "@/lib/site";
 import { supabaseAdmin } from "@/lib/supabase";
 import { Card, StatusBadge } from "./_components/fields";
 
@@ -80,6 +81,11 @@ export default async function AdminDashboard() {
             </tbody>
           </table>
         )}
+      </Card>
+
+      <Card title="Produktfeeds">
+        <p className="text-sm text-muted">Google Merchant Center hämtar feeden från den här adressen. Lägg in den under Produkter, Datakällor, Lägg till datakälla, Schemalagd hämtning.</p>
+        <code className="mt-2 block rounded-lg bg-sand px-3 py-2 text-sm">{site.url}/feeds/google.xml</code>
       </Card>
 
       <Card title="Lågt lager">

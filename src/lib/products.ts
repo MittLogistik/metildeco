@@ -51,6 +51,8 @@ export type Product = {
   customsCode: string | null;
   countryOfOrigin: string | null;
   weightGrams: number | null;
+  /** Kanaler produkten inte ska med i: "google" | "meta" | "addrevenue". */
+  feedExclusions: string[];
   createdAt: string;
   updatedAt: string;
 };
@@ -94,6 +96,7 @@ export type ProductRow = {
   customs_code?: string | null;
   country_of_origin?: string | null;
   weight_grams?: number | null;
+  feed_exclusions?: string[] | null;
 };
 
 /** Bygger en produkt av en databasrad plus (valfritt) SEK-pris från product_prices. */
@@ -137,6 +140,7 @@ export const productFromRow = (r: ProductRow, sekPrice?: { price: number | strin
     customsCode: r.customs_code ?? null,
     countryOfOrigin: r.country_of_origin ?? null,
     weightGrams: r.weight_grams ?? null,
+    feedExclusions: r.feed_exclusions ?? [],
     createdAt: r.created_at,
     updatedAt: r.updated_at,
   };

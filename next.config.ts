@@ -1,5 +1,8 @@
 import type { NextConfig } from "next";
 
+/** Språk som fanns i gamla butiken men inte är byggda ännu – skickas tills vidare till svenska. */
+const pendingLocales = ["en", "fi", "da", "no", "de", "nl", "it", "fr", "es", "pl"];
+
 const nextConfig: NextConfig = {
   images: {
     formats: ["image/avif", "image/webp"],
@@ -10,8 +13,20 @@ const nextConfig: NextConfig = {
   },
   async redirects() {
     return [
-      // Gamla sökvägar från förra butiken – behåll länkkraft och feeds
+      // Gamla adresser från förra butiken – behåll länkkraft och undvik 404 vid domänbytet
       { source: "/sv/products", destination: "/sv/produkter", permanent: true },
+      { source: "/sv/quiz", destination: "/sv/mal", permanent: false },
+      { source: "/sv/tongkat-ali", destination: "/sv/produkter?kategori=Tongkat%20Ali", permanent: false },
+      { source: "/sv/presentkort", destination: "/sv/produkter", permanent: false },
+      { source: "/sv/spara-order", destination: "/sv/kontakt", permanent: false },
+      { source: "/sv/mitt-konto", destination: "/sv/kontakt", permanent: false },
+      { source: "/sv/samarbeten", destination: "/sv/kontakt", permanent: false },
+      { source: "/sv/jobba-hos-oss", destination: "/sv/var-historia", permanent: false },
+      // Övriga språk aktiveras ett i taget – tills dess svenska (tillfällig omdirigering)
+      ...pendingLocales.flatMap((l) => [
+        { source: `/${l}`, destination: "/sv", permanent: false },
+        { source: `/${l}/:path*`, destination: "/sv", permanent: false },
+      ]),
     ];
   },
 };
