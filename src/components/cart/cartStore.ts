@@ -12,6 +12,8 @@ export type CartLine = {
   slug: string;
   qty: number;
   plan: Plan;
+  /** Dagar mellan leveranser för prenumeration (30, 60 eller 90). */
+  intervalDays?: 30 | 60 | 90;
 };
 
 const STORAGE_KEY = "metilde_cart";

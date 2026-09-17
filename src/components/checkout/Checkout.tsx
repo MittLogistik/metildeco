@@ -16,16 +16,20 @@ const field =
   "h-12 w-full rounded-xl border border-line bg-white px-3.5 text-base placeholder:text-muted-soft focus:border-primary focus:outline-none";
 
 /**
- * Kassa – kontaktuppgifter, leveransadress, fraktsätt och ordersammanfattning.
- * Betalning (Stripe) kopplas på i nästa steg; tills dess visas en tydlig notis.
+ * Kassa – kontaktuppgifter, leveransadress och fraktsätt. Betalningen sker hos
+ * Stripe Checkout (kort, Apple Pay, Google Pay); priserna räknas om på servern.
  */
 export function Checkout() {
   const cart = useCart();
   const [method, setMethod] = useState(swedenRates[0]?.method ?? "");
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
   const rate = swedenRates.find((r) => r.method === method) ?? swedenRates[0]!;
   const allFree = cart.resolved.length > 0 && cart.resolved.every((l) => l.freeShipping);
   const shipping = allFree ? 0 : shippingCost(rate, cart.subtotal);
   const total = cart.subtotal + shipping;
+  const hasSub = cart.resolved.some((l) => l.plan === "sub");
 
   if (cart.resolved.length === 0) {
     return (
@@ -39,6 +43,38 @@ export function Checkout() {
     );
   }
 
+  const submit = async (form: HTMLFormElement) => {
+    setSubmitting(true);
+    setError(null);
+    const f = new FormData(form);
+    try {
+      const res = await fetch("/api/checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          lines: cart.lines.map((l) => ({ kind: l.kind, slug: l.slug, qty: l.qty, plan: l.plan, intervalDays: l.intervalDays })),
+          customer: {
+            email: f.get("email"),
+            firstName: f.get("firstName"),
+            lastName: f.get("lastName"),
+            phone: f.get("phone"),
+            address: f.get("address"),
+            zip: f.get("zip"),
+            city: f.get("city"),
+            country: f.get("country"),
+          },
+          shippingMethod: method,
+        }),
+      });
+      const data = (await res.json()) as { url?: string; error?: string };
+      if (!res.ok || !data.url) throw new Error(data.error ?? "Kunde inte starta betalningen.");
+      window.location.assign(data.url);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Något gick fel. Försök igen.");
+      setSubmitting(false);
+    }
+  };
+
   return (
     <Container className="py-8 sm:py-12">
       <Breadcrumbs items={[{ label: "Kassa" }]} />
@@ -49,7 +85,7 @@ export function Checkout() {
           className="space-y-10"
           onSubmit={(e) => {
             e.preventDefault();
-            window.alert("Betalning aktiveras i nästa steg av bygget. Ordern är inte skickad.");
+            void submit(e.currentTarget);
           }}
         >
           <section>
@@ -70,6 +106,7 @@ export function Checkout() {
               <label className="text-sm sm:col-span-2">
                 <span className="mb-1.5 block font-medium">Telefon</span>
                 <input name="phone" type="tel" required autoComplete="tel" inputMode="tel" className={field} />
+                <span className="mt-1.5 block text-xs text-muted">Används bara för leveransavisering.</span>
               </label>
             </div>
           </section>
@@ -102,7 +139,9 @@ export function Checkout() {
           <section>
             <h2 className="font-display text-xl font-medium">3. Fraktsätt</h2>
             {allFree ? (
-              <p className="mt-3 rounded-xl bg-primary-soft p-4 text-sm">Din order innehåller bara prenumerationer eller paket med fri frakt – ingen fraktkostnad tillkommer.</p>
+              <p className="mt-3 rounded-xl bg-primary-soft p-4 text-sm">
+                Din order innehåller bara prenumerationer eller paket med fri frakt – ingen fraktkostnad tillkommer.
+              </p>
             ) : (
               <ul className="mt-4 space-y-2">
                 {swedenRates.map((r) => {
@@ -127,14 +166,21 @@ export function Checkout() {
 
           <section>
             <h2 className="font-display text-xl font-medium">4. Betalning</h2>
-            <div className="mt-4 rounded-xl border border-dashed border-line p-5 text-sm text-muted">
-              <p className="flex items-center gap-2 font-medium text-foreground">
-                <LockIcon size={16} /> Säker betalning med kort, Apple Pay och Google Pay
+            <p className="mt-3 flex items-center gap-2 text-sm text-muted">
+              <LockIcon size={16} /> Du slutför betalningen på nästa sida hos Stripe – kort, Apple Pay eller Google Pay.
+            </p>
+            {hasSub ? (
+              <p className="mt-3 rounded-xl bg-sand-soft p-4 text-sm text-muted">
+                Prenumerationen dras automatiskt med det intervall du valt och kan avslutas när som helst utan bindningstid.
               </p>
-              <p className="mt-2">Betalningen kopplas på i nästa steg av bygget (Stripe). Kassan är just nu en förhandsvisning av flödet.</p>
-            </div>
-            <Button type="submit" size="lg" className="mt-6 w-full">
-              Slutför köp · {formatPrice(total)}
+            ) : null}
+            {error ? (
+              <p role="alert" className="mt-4 rounded-xl border border-danger/30 bg-danger/5 p-4 text-sm text-danger">
+                {error}
+              </p>
+            ) : null}
+            <Button type="submit" size="lg" className="mt-6 w-full" disabled={submitting}>
+              {submitting ? "Förbereder säker betalning …" : `Till betalning · ${formatPrice(total)}`}
             </Button>
             <p className="mt-3 text-xs text-muted">
               Genom att slutföra köpet godkänner du våra{" "}
@@ -160,7 +206,9 @@ export function Checkout() {
                 </span>
                 <span className="min-w-0 flex-1">
                   <span className="line-clamp-2 text-sm font-medium">{line.name}</span>
-                  <span className="block text-xs text-muted">{line.plan === "sub" ? "Prenumeration – var 30:e dag" : "Engångsköp"}</span>
+                  <span className="block text-xs text-muted">
+                    {line.plan === "sub" ? `Prenumeration – var ${line.intervalDays ?? 30}:e dag` : "Engångsköp"}
+                  </span>
                   <span className="mt-1.5 inline-flex items-center rounded-full border border-line bg-white">
                     <button type="button" aria-label="Minska antal" onClick={() => cart.setQty(line.key, line.qty - 1)} className="p-1.5">
                       <MinusIcon size={12} />
@@ -194,7 +242,7 @@ export function Checkout() {
               <dt>Att betala</dt>
               <dd className="tabular-nums">{formatPrice(total)}</dd>
             </div>
-            <p className="text-xs text-muted">Inkl. 12 % moms. Priser i SEK.</p>
+            <p className="text-xs text-muted">Inkl. moms. Priser i SEK. Rabattkod anges i betalsteget.</p>
           </dl>
         </aside>
       </div>

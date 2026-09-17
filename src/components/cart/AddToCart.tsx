@@ -12,6 +12,7 @@ import { CheckIcon, MinusIcon, PlusIcon } from "@/components/icons";
 export function ProductBuyBox({ product, inStock }: { product: Product; inStock: boolean }) {
   const cart = useCart();
   const [plan, setPlan] = useState<Plan>("once");
+  const [interval, setInterval] = useState<30 | 60 | 90>(30);
   const [qty, setQty] = useState(1);
   const [added, setAdded] = useState(false);
 
@@ -22,7 +23,7 @@ export function ProductBuyBox({ product, inStock }: { product: Product; inStock:
   const perPack = unitCount(product);
 
   const add = () => {
-    cart.addProduct(product.slug, qty, plan);
+    cart.addProduct(product.slug, qty, plan, interval);
     setAdded(true);
     setTimeout(() => setAdded(false), 1800);
   };
@@ -43,10 +44,33 @@ export function ProductBuyBox({ product, inStock }: { product: Product; inStock:
           onClick={() => setPlan("sub")}
           title={`Prenumerera – spara ${site.subscriptionDiscount} %`}
           price={formatPrice(subPrice)}
-          note="Fri frakt, var 30:e dag, avsluta när du vill"
+          note="Fri frakt, valfritt intervall, avsluta när du vill"
           highlight
         />
       </fieldset>
+
+      {plan === "sub" ? (
+        <div>
+          <p className="mb-2 text-sm font-medium">
+            Leverans <span className="font-normal text-muted">– hur ofta vill du ha din leverans?</span>
+          </p>
+          <div className="grid grid-cols-3 gap-2">
+            {([30, 60, 90] as const).map((d) => (
+              <button
+                key={d}
+                type="button"
+                onClick={() => setInterval(d)}
+                aria-pressed={interval === d}
+                className={`rounded-2xl border p-3 text-center text-sm transition-colors ${
+                  interval === d ? "border-primary bg-primary-soft font-semibold" : "border-line hover:border-foreground/40"
+                }`}
+              >
+                Var {d}:e dag
+              </button>
+            ))}
+          </div>
+        </div>
+      ) : null}
 
       {product.tieredPricing && plan === "once" ? (
         <div>

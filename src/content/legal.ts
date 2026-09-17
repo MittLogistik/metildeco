@@ -183,8 +183,8 @@ const terms: LegalDoc = {
       type: "ul",
       items: [
         "Prenumeration ger 15 % rabatt på ordinarie pris och levereras med det intervall du väljer.",
-        "Betalningen dras samma dag som ordern skickas. Du får en påminnelse via e-post tre dagar innan.",
-        "Du kan pausa, ändra intervall eller avsluta när som helst under Mitt konto, fram till dagen före utskick. Ändringar som görs senare gäller från nästa leverans.",
+        "Första leveransen betalas direkt vid köpet. Därefter dras betalningen automatiskt vid varje förnyelse, och leveransen skickas samma dag.",
+        "Du kan pausa, ändra intervall eller avsluta när som helst fram till dagen före nästa förnyelse, via Mitt konto eller genom att mejla kundservice. Ändringar som görs senare gäller från nästa leverans.",
         "Prenumerationen löper tills du avslutar den. Ingen bindningstid och ingen avgift för att avsluta.",
       ],
     },

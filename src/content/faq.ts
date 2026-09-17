@@ -77,7 +77,7 @@ export const faqGroups: FaqGroup[] = [
       },
       {
         q: "När dras pengarna?",
-        a: "Samma dag som ordern skickas. Du får en påminnelse via e-post tre dagar innan.",
+        a: "Första leveransen betalas direkt vid köpet. Därefter dras betalningen automatiskt vid varje förnyelse, samma dag som leveransen skickas.",
       },
       {
         q: "Hur pausar eller avslutar jag min prenumeration?",

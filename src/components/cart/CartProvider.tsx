@@ -36,7 +36,7 @@ type CartState = {
   isOpen: boolean;
   open: () => void;
   close: () => void;
-  addProduct: (slug: string, qty?: number, plan?: Plan) => void;
+  addProduct: (slug: string, qty?: number, plan?: Plan, intervalDays?: 30 | 60 | 90) => void;
   addBundle: (slug: string, qty?: number) => void;
   setQty: (key: string, qty: number) => void;
   remove: (key: string) => void;
@@ -102,8 +102,12 @@ export function CartProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const addProduct = useCallback(
-    (slug: string, qty = 1, plan: Plan = "once") =>
-      upsert({ key: `product:${slug}:${plan}`, kind: "product", slug, qty, plan }),
+    (slug: string, qty = 1, plan: Plan = "once", intervalDays: 30 | 60 | 90 = 30) =>
+      upsert(
+        plan === "sub"
+          ? { key: `product:${slug}:sub:${intervalDays}`, kind: "product", slug, qty, plan, intervalDays }
+          : { key: `product:${slug}:once`, kind: "product", slug, qty, plan },
+      ),
     [upsert],
   );
   const addBundle = useCallback(

@@ -90,7 +90,7 @@ export function CartDrawer() {
                       {line.name}
                     </Link>
                     <p className="mt-0.5 text-xs text-muted">
-                      {line.plan === "sub" ? "Prenumeration – var 30:e dag" : "Engångsköp"}
+                      {line.plan === "sub" ? `Prenumeration – var ${line.intervalDays ?? 30}:e dag` : "Engångsköp"}
                     </p>
                     {line.discountLabel ? (
                       <span className="mt-1 inline-block rounded-full bg-primary-soft px-2 py-0.5 text-[11px] font-semibold text-primary">

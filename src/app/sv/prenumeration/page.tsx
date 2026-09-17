@@ -19,7 +19,7 @@ export const metadata: Metadata = {
 const steps = [
   ["Välj produkt", "Välj de extrakt du använder regelbundet och klicka i Prenumerera på produktsidan."],
   ["Välj intervall", "Leverans var 30:e, 60:e eller 90:e dag – anpassa efter hur snabbt din förpackning tar slut."],
-  ["Få hem den automatiskt", "Vi påminner dig tre dagar innan varje leverans. Alltid fri frakt, oavsett ordervärde."],
+  ["Få hem den automatiskt", "Du får kvitto via e-post vid varje leverans. Alltid fri frakt, oavsett ordervärde."],
   ["Ändra eller avsluta", "Pausa, byt intervall, hoppa över en leverans eller avsluta – helt utan bindningstid."],
 ];
 
@@ -36,7 +36,7 @@ const faq = [
   { q: "Hur avslutar jag min prenumeration?", a: "Logga in på Mitt konto, gå till Prenumerationer och välj Avsluta. Det gäller direkt och du kan alltid starta om senare. Du kan även höra av dig till kundservice så hjälper vi dig." },
   { q: "Kan jag ändra leveransintervall eller adress?", a: "Ja. Under Mitt konto kan du ändra intervall, adress, betalsätt och antal fram till dagen innan nästa leverans." },
   { q: "Kan jag ha flera produkter i samma prenumeration?", a: "Ja, dina prenumerationer samlas i samma leverans när intervallen matchar – då får du allt i ett paket." },
-  { q: "När dras pengarna?", a: "Betalningen sker samma dag som ordern skickas. Du får en påminnelse via e-post tre dagar innan." },
+  { q: "När dras pengarna?", a: "Första leveransen betalas direkt vid köpet. Därefter dras betalningen automatiskt vid varje förnyelse, samma dag som leveransen skickas." },
 ];
 
 export default function SubscriptionPage() {
