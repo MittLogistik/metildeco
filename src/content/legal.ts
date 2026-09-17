@@ -167,7 +167,7 @@ const terms: LegalDoc = {
       type: "ul",
       items: [
         "Alla priser visas i svenska kronor (SEK) och inkluderar moms. Totalsumman inklusive frakt visas innan du bekräftar ordern.",
-        "Betalsätt som accepteras: Visa, Mastercard, American Express, Apple Pay och Google Pay.",
+        "Betalsätt som accepteras: Swish, Klarna, Visa, Mastercard, American Express, Apple Pay och Google Pay. Prenumerationer kan inte betalas med Swish.",
         "Vid engångsköp dras betalningen när ordern läggs.",
         "Tull tillkommer inte inom EU. Leveranser utanför EU kan medföra lokala avgifter som betalas av mottagaren.",
       ],

@@ -10,6 +10,7 @@ import { routes } from "@/lib/routes";
 import { company, site } from "@/lib/site";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { LockIcon } from "@/components/icons";
+import { PaymentMethods, subscriptionPaymentIds } from "@/components/PaymentMethods";
 import { TrustBar } from "@/components/TrustBar";
 import { Button, ButtonLink, Container } from "@/components/ui";
 
@@ -110,10 +111,14 @@ export function Checkout() {
           </Button>
           <p className="mt-3 flex items-start gap-2 text-xs text-muted">
             <LockIcon size={14} className="mt-0.5 shrink-0" />
-            <span>
-              Adress, fraktsätt och betalning fylls i på nästa sida hos Stripe. {hasSub ? "Prenumerationer betalas med kort, Klarna, Apple Pay eller Google Pay." : "Betala med Swish, kort, Klarna, Apple Pay eller Google Pay."}
-            </span>
+            <span>Adress, fraktsätt och betalning fylls i på nästa sida hos Stripe.</span>
           </p>
+          <PaymentMethods
+            size="sm"
+            className="mt-3"
+            only={hasSub ? subscriptionPaymentIds : undefined}
+            label={hasSub ? "Prenumerationer betalas med" : "Betala med"}
+          />
           <p className="mt-3 text-xs text-muted">
             Genom att slutföra köpet godkänner du våra{" "}
             <Link href={routes.terms} className="underline">

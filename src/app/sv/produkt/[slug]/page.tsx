@@ -14,6 +14,7 @@ import { ProductBuyBox } from "@/components/cart/AddToCart";
 import { CheckIcon, FlaskIcon, LeafIcon, ShieldIcon } from "@/components/icons";
 import { JsonLd } from "@/components/JsonLd";
 import { Newsletter } from "@/components/Newsletter";
+import { PaymentMethods } from "@/components/PaymentMethods";
 import { ProductCard } from "@/components/ProductCard";
 import { ProductGallery, type Media } from "@/components/ProductGallery";
 import { Stars } from "@/components/Stars";
@@ -180,6 +181,7 @@ export default async function ProductPage({ params }: PageProps<"/sv/produkt/[sl
             <div className="mt-8 border-t border-line pt-6">
               <TrustBar compact />
             </div>
+            <PaymentMethods size="sm" className="mt-6" label="Trygg betalning med" />
           </div>
         </div>
 

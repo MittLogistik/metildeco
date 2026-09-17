@@ -4,6 +4,7 @@ import { routes } from "@/lib/routes";
 import { company, site } from "@/lib/site";
 import { Container } from "@/components/ui";
 import { MailIcon, PhoneIcon, PinIcon } from "@/components/icons";
+import { PaymentMethods } from "@/components/PaymentMethods";
 
 const columns = [
   {
@@ -37,8 +38,6 @@ const columns = [
     ],
   },
 ];
-
-const payments = ["Visa", "Mastercard", "Amex", "Apple Pay", "Google Pay"];
 
 export function Footer() {
   const year = new Date().getFullYear();
@@ -97,13 +96,7 @@ export function Footer() {
           <p>
             © {year} {company.legalName} · Org.nr {company.orgNumber} · Alla rättigheter förbehållna.
           </p>
-          <ul className="flex flex-wrap gap-2" aria-label="Betalsätt">
-            {payments.map((p) => (
-              <li key={p} className="rounded-md border border-line bg-white px-2 py-1 font-medium text-foreground/80">
-                {p}
-              </li>
-            ))}
-          </ul>
+          <PaymentMethods size="sm" />
           <ul className="flex flex-wrap gap-4">
             <li>
               <Link href={routes.privacy} className="hover:text-foreground">

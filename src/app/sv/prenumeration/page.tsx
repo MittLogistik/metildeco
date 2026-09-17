@@ -29,7 +29,7 @@ const benefits = [
   ["Ingen bindningstid", "Avsluta när du vill. Inga avgifter, ingen uppsägningstid."],
   ["Pausa vid behov", "Åker du bort eller har en förpackning kvar? Skjut upp leveransen eller pausa i upp till 3 månader."],
   ["Prisgaranti", "Ditt pris ligger fast under hela prenumerationen. Vi meddelar alltid i förväg vid ändring."],
-  ["Trygg betalning", "Betala tryggt med kort, Apple Pay eller Google Pay. Kvitto och orderöversikt via e-post."],
+  ["Trygg betalning", "Betala tryggt med kort, Klarna, Apple Pay eller Google Pay. Kvitto via e-post vid varje leverans."],
 ];
 
 const faq = [

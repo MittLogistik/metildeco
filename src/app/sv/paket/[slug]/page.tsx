@@ -12,6 +12,7 @@ import { BundleCard } from "@/components/BundleCard";
 import { BundleBuyButton } from "@/components/cart/AddToCart";
 import { CheckIcon } from "@/components/icons";
 import { JsonLd } from "@/components/JsonLd";
+import { PaymentMethods } from "@/components/PaymentMethods";
 import { ProductGallery } from "@/components/ProductGallery";
 import { TrustBar } from "@/components/TrustBar";
 import { Container, Eyebrow } from "@/components/ui";
@@ -120,6 +121,7 @@ export default async function BundlePage({ params }: PageProps<"/sv/paket/[slug]
             <div className="mt-8 border-t border-line pt-6">
               <TrustBar compact />
             </div>
+            <PaymentMethods size="sm" className="mt-6" label="Trygg betalning med" />
           </div>
         </div>
 
