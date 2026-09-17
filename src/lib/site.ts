@@ -30,7 +30,8 @@ export const site = {
   url: resolveSiteUrl(),
   /** Bara den riktiga domänen får indexeras – testadresser på vercel.app ska inte hamna i Google. */
   get indexable() {
-    return /(^|.)metilde.com$/.test(new URL(this.url).hostname);
+    const host = new URL(this.url).hostname;
+    return host === "metilde.com" || host.endsWith(".metilde.com");
   },
   locale: "sv",
   currency: "SEK",
