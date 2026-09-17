@@ -43,7 +43,7 @@ export function SectionHeading({
   );
 }
 
-type Variant = "primary" | "secondary" | "ghost" | "outline";
+type Variant = "primary" | "secondary" | "ghost" | "outline" | "white";
 type Size = "sm" | "md" | "lg";
 
 const base =
@@ -53,6 +53,7 @@ const variants: Record<Variant, string> = {
   secondary: "bg-sand text-foreground hover:bg-sand-deep",
   outline: "border border-foreground/20 text-foreground hover:border-foreground/50 bg-white",
   ghost: "text-foreground hover:bg-sand",
+  white: "bg-white text-primary hover:bg-sand",
 };
 const sizes: Record<Size, string> = {
   sm: "h-9 px-4 text-sm",

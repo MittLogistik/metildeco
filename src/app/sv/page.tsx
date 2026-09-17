@@ -184,7 +184,7 @@ export default async function HomePage() {
               Vi anger alltid latinskt namn, växtdel, extraktstyrka och mängd per kapsel. Inga fyllnadsmedel, inga
               flytmedel, inga färgämnen – och batchnumret på förpackningen hör ihop med ett specifikt analysprotokoll.
             </p>
-            <ButtonLink href={routes.quality} className="mt-8 bg-white text-primary hover:bg-sand">
+            <ButtonLink href={routes.quality} variant="white" className="mt-8">
               Läs om vår kvalitetsgaranti
             </ButtonLink>
           </div>

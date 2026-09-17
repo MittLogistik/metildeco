@@ -16,7 +16,7 @@ export function BundleCard({ bundle }: { bundle: Bundle }) {
             alt={bundle.name}
             fill
             sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
-            className={`object-contain p-4 transition-transform duration-500 group-hover:scale-[1.04] ${inStock ? "" : "opacity-60"}`}
+            className={`object-cover transition-transform duration-500 group-hover:scale-[1.04] ${inStock ? "" : "opacity-60"}`}
           />
           <div className="absolute left-3 top-3 flex gap-1.5">
             {!inStock ? <Badge tone="danger">Tillfälligt slut</Badge> : bundle.discount > 0 ? <Badge tone="primary">Spara {bundle.discount} %</Badge> : null}

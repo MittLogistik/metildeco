@@ -32,8 +32,8 @@ export function PaymentMethods({
   const h = size === "sm" ? "h-6" : "h-8";
   return (
     <div className={className}>
-      {label ? <p className="mb-2 text-xs text-muted">{label}</p> : null}
-      <ul className="flex flex-wrap items-center gap-2" aria-label="Betalsätt vi tar emot">
+      {label ? <p className="mb-2 text-center text-xs text-muted">{label}</p> : null}
+      <ul className="flex flex-wrap items-center justify-center gap-2" aria-label="Betalsätt vi tar emot">
         {list.map((m) => (
           <li
             key={m.id}

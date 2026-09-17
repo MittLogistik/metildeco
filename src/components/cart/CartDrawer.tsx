@@ -9,6 +9,7 @@ import { formatPrice } from "@/lib/format";
 import { routes } from "@/lib/routes";
 import { buttonClass } from "@/components/ui";
 import { CloseIcon } from "@/components/icons";
+import { PaymentMethods, subscriptionPaymentIds } from "@/components/PaymentMethods";
 
 export function CartDrawer() {
   const cart = useCart();
@@ -85,6 +86,7 @@ export function CartDrawer() {
               <button type="button" onClick={cart.close} className="mt-2 w-full py-2 text-sm text-muted hover:text-foreground">
                 Fortsätt handla
               </button>
+              <PaymentMethods size="sm" className="mt-2" only={cart.resolved.some((l) => l.plan === "sub") ? subscriptionPaymentIds : undefined} />
             </footer>
           </>
         )}

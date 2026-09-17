@@ -51,7 +51,7 @@ export function Newsletter() {
               placeholder="Din e-postadress"
               className="h-13 flex-1 rounded-full border border-white/20 bg-white/10 px-5 text-base text-white placeholder:text-white/50 focus:bg-white/15 focus:outline-none"
             />
-            <Button type="submit" size="lg" className="bg-white text-primary hover:bg-sand">
+            <Button type="submit" size="lg" variant="white">
               Prenumerera
             </Button>
             <p className="text-xs text-primary-fg/60 sm:hidden">

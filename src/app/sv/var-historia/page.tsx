@@ -121,7 +121,7 @@ export default function StoryPage() {
             rena, botaniska kosttillskott. Det gör vi genom att vara ärliga, hålla hög kvalitet och lyssna på våra kunder.
           </p>
           <div className="mt-6 flex flex-wrap gap-3">
-            <ButtonLink href={routes.products} className="bg-white text-primary hover:bg-sand">
+            <ButtonLink href={routes.products} variant="white">
               Upptäck produkterna
             </ButtonLink>
             <ButtonLink href={routes.subscription} variant="ghost" className="text-primary-fg hover:bg-white/10">

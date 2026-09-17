@@ -42,7 +42,7 @@ const columns = [
 export function Footer() {
   const year = new Date().getFullYear();
   return (
-    <footer className="mt-20 border-t border-line bg-sand-soft">
+    <footer className="border-t border-line bg-sand-soft">
       <Container className="grid grid-cols-1 gap-12 py-14 sm:grid-cols-2 lg:grid-cols-[minmax(0,1.4fr)_repeat(3,minmax(0,1fr))]">
         <div>
           <Link href={routes.home} className="flex items-center gap-2.5">
