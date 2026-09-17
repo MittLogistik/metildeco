@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { formatPrice } from "@/lib/format";
+import { saveOrderFromSession } from "@/lib/orders";
 import { routes } from "@/lib/routes";
 import { company } from "@/lib/site";
 import { stripe, stripeConfigured } from "@/lib/stripe";
@@ -29,11 +30,17 @@ export default async function ThankYouPage({ searchParams }: PageProps<"/sv/tack
     );
   }
 
-  const session = await stripe().checkout.sessions.retrieve(id, { expand: ["line_items", "subscription"] });
+  // Sparar ordern om webhooken inte redan gjort det (idempotent), och hämtar den annars.
+  let saved: Awaited<ReturnType<typeof saveOrderFromSession>> = null;
+  try {
+    saved = await saveOrderFromSession(id);
+  } catch (e) {
+    console.error("[tack] kunde inte spara ordern", e instanceof Error ? e.message : e);
+  }
+
+  const session = await stripe().checkout.sessions.retrieve(id, { expand: ["line_items"] });
   const paid = session.payment_status === "paid" || session.status === "complete";
-  const lines = session.line_items?.data ?? [];
   const email = session.customer_details?.email ?? "";
-  const reference = session.id.replace("cs_test_", "").replace("cs_live_", "").slice(-8).toUpperCase();
   const isSub = session.mode === "subscription";
 
   if (!paid) {
@@ -47,6 +54,14 @@ export default async function ThankYouPage({ searchParams }: PageProps<"/sv/tack
       </Container>
     );
   }
+
+  const orderNumber = saved?.order.order_number ?? session.id.replace(/^cs_(test|live)_/, "").slice(-8).toUpperCase();
+  const lines = saved
+    ? saved.items.map((i) => ({ key: i.product_slug + i.plan, label: `${i.qty} × ${i.name}${i.plan.startsWith("sub") ? " (prenumeration)" : ""}`, total: i.line_total }))
+    : (session.line_items?.data ?? []).map((l) => ({ key: l.id, label: `${l.quantity} × ${l.description}`, total: (l.amount_total ?? 0) / 100 }));
+  const shipping = saved ? saved.order.shipping : (session.shipping_cost?.amount_total ?? 0) / 100;
+  const discount = saved ? saved.order.discount : (session.total_details?.amount_discount ?? 0) / 100;
+  const total = saved ? saved.order.total : (session.amount_total ?? 0) / 100;
 
   return (
     <Container className="py-12 sm:py-16">
@@ -63,35 +78,31 @@ export default async function ThankYouPage({ searchParams }: PageProps<"/sv/tack
 
         <section className="mt-10 rounded-card border border-line p-6">
           <div className="flex items-center justify-between text-sm">
-            <span className="text-muted">Orderreferens</span>
-            <span className="font-mono font-medium">{reference}</span>
+            <span className="text-muted">Ordernummer</span>
+            <span className="font-mono font-medium">{orderNumber}</span>
           </div>
           <ul className="mt-4 divide-y divide-line border-t border-line">
             {lines.map((l) => (
-              <li key={l.id} className="flex justify-between gap-4 py-3 text-sm">
-                <span>
-                  {l.quantity} × {l.description}
-                </span>
-                <span className="tabular-nums">{formatPrice((l.amount_total ?? 0) / 100)}</span>
+              <li key={l.key} className="flex justify-between gap-4 py-3 text-sm">
+                <span>{l.label}</span>
+                <span className="tabular-nums">{formatPrice(l.total)}</span>
               </li>
             ))}
           </ul>
           <dl className="mt-3 space-y-1 border-t border-line pt-3 text-sm">
-            {session.total_details?.amount_discount ? (
+            {discount > 0 ? (
               <div className="flex justify-between text-success">
                 <dt>Rabatt</dt>
-                <dd className="tabular-nums">−{formatPrice(session.total_details.amount_discount / 100)}</dd>
+                <dd className="tabular-nums">−{formatPrice(discount)}</dd>
               </div>
             ) : null}
-            {session.shipping_cost ? (
-              <div className="flex justify-between">
-                <dt className="text-muted">Frakt</dt>
-                <dd className="tabular-nums">{session.shipping_cost.amount_total === 0 ? "Fri" : formatPrice(session.shipping_cost.amount_total / 100)}</dd>
-              </div>
-            ) : null}
+            <div className="flex justify-between">
+              <dt className="text-muted">Frakt</dt>
+              <dd className="tabular-nums">{shipping === 0 ? "Fri" : formatPrice(shipping)}</dd>
+            </div>
             <div className="flex justify-between text-base font-semibold">
               <dt>Betalt</dt>
-              <dd className="tabular-nums">{formatPrice((session.amount_total ?? 0) / 100)}</dd>
+              <dd className="tabular-nums">{formatPrice(total)}</dd>
             </div>
           </dl>
         </section>

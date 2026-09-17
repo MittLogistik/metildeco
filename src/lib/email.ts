@@ -1,0 +1,81 @@
+import "server-only";
+import { formatPrice } from "./format";
+import { routes } from "./routes";
+import { company, site } from "./site";
+import type { OrderItemRecord, OrderRecord } from "./orders";
+
+const from = () => process.env.RESEND_FROM ?? `Metilde <${company.email}>`;
+
+export const emailConfigured = () => {
+  const key = process.env.RESEND_API_KEY;
+  return Boolean(key && key.startsWith("re_") && !key.endsWith("..."));
+};
+
+/** Skickar e-post via Resend. Saknas nyckel loggas mejlet bara. */
+export async function sendEmail(to: string, subject: string, html: string, text: string) {
+  if (!emailConfigured()) {
+    console.log(`[email] (ej skickat – RESEND_API_KEY saknas) till ${to}: ${subject}`);
+    return;
+  }
+  const res = await fetch("https://api.resend.com/emails", {
+    method: "POST",
+    headers: { Authorization: `Bearer ${process.env.RESEND_API_KEY}`, "Content-Type": "application/json" },
+    body: JSON.stringify({ from: from(), to: [to], reply_to: company.email, subject, html, text }),
+  });
+  if (!res.ok) throw new Error(`Resend svarade ${res.status}: ${await res.text()}`);
+}
+
+const esc = (s: string) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+
+/** Orderbekräftelse på svenska. */
+export async function sendOrderConfirmation(order: OrderRecord, items: OrderItemRecord[]) {
+  if (!order.email) return;
+  const isRenewal = order.kind === "renewal";
+  const subject = isRenewal
+    ? `Din prenumerationsleverans ${order.order_number} är på väg`
+    : `Tack för din beställning ${order.order_number}`;
+
+  const rowsHtml = items
+    .map(
+      (i) =>
+        `<tr><td style="padding:8px 0;border-bottom:1px solid #eee">${i.qty} × ${esc(i.name)}${i.plan.startsWith("sub") ? ' <span style="color:#666">(prenumeration)</span>' : ""}</td><td style="padding:8px 0;border-bottom:1px solid #eee;text-align:right;white-space:nowrap">${formatPrice(i.line_total)}</td></tr>`,
+    )
+    .join("");
+  const rowsText = items.map((i) => `${i.qty} × ${i.name} – ${formatPrice(i.line_total)}`).join("\n");
+
+  const address = [order.shipping_name, order.shipping_address, `${order.shipping_postal_code ?? ""} ${order.shipping_city ?? ""}`.trim()]
+    .filter(Boolean)
+    .join("<br>");
+
+  const html = `<!doctype html><html lang="sv"><body style="margin:0;background:#f7f5f0;font-family:Helvetica,Arial,sans-serif;color:#222">
+<div style="max-width:560px;margin:0 auto;padding:32px 20px">
+  <p style="font-size:22px;font-weight:600;margin:0 0 24px">Metilde</p>
+  <div style="background:#fff;border-radius:16px;padding:28px">
+    <h1 style="font-size:22px;margin:0 0 8px">${isRenewal ? "Din leverans är på väg" : "Tack för din beställning!"}</h1>
+    <p style="margin:0 0 20px;color:#555">Ordernummer <strong style="color:#222">${order.order_number}</strong>. ${
+      isRenewal ? "Din prenumeration har förnyats och paketet packas nu." : "Vi har tagit emot din betalning. Ordrar lagda före kl. 12 på vardagar skickas samma dag."
+    }</p>
+    <table style="width:100%;border-collapse:collapse;font-size:15px">${rowsHtml}
+      ${order.discount > 0 ? `<tr><td style="padding:8px 0;color:#2a7a4b">Rabatt</td><td style="padding:8px 0;text-align:right;color:#2a7a4b">−${formatPrice(order.discount)}</td></tr>` : ""}
+      <tr><td style="padding:8px 0;color:#555">Frakt${order.shipping_method ? ` – ${esc(order.shipping_method)}` : ""}</td><td style="padding:8px 0;text-align:right">${order.shipping === 0 ? "Fri" : formatPrice(order.shipping)}</td></tr>
+      <tr><td style="padding:12px 0;font-weight:600;border-top:2px solid #222">Totalt</td><td style="padding:12px 0;text-align:right;font-weight:600;border-top:2px solid #222">${formatPrice(order.total)}</td></tr>
+    </table>
+    ${address ? `<p style="margin:20px 0 0;font-size:14px;color:#555"><strong style="color:#222">Levereras till</strong><br>${address}</p>` : ""}
+    <p style="margin:20px 0 0;font-size:14px;color:#555">Du får ett mejl med spårningslänk när paketet lämnar oss. Ångerrätt 30 dagar på oöppnade produkter, läs mer på <a href="${site.url}${routes.returns}" style="color:#2f5445">våra retursidor</a>.</p>
+  </div>
+  <p style="font-size:12px;color:#888;margin:24px 0 0;line-height:1.6">${company.legalName} · Org.nr ${company.orgNumber} · ${company.address}<br>
+  Frågor? Svara på det här mejlet eller ring ${company.phone} (${company.hours}).</p>
+</div></body></html>`;
+
+  const text = `${isRenewal ? "Din leverans är på väg" : "Tack för din beställning!"}
+Ordernummer ${order.order_number}
+
+${rowsText}
+Frakt: ${order.shipping === 0 ? "Fri" : formatPrice(order.shipping)}
+Totalt: ${formatPrice(order.total)}
+
+${company.legalName} · Org.nr ${company.orgNumber} · ${company.address}
+Frågor? Svara på det här mejlet eller ring ${company.phone}.`;
+
+  await sendEmail(order.email, subject, html, text);
+}

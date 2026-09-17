@@ -1,0 +1,291 @@
+import "server-only";
+import type Stripe from "stripe";
+import { getBundle } from "./bundles";
+import { getProduct } from "./products";
+import { stripe } from "./stripe";
+import { supabaseAdmin, supabaseConfigured } from "./supabase";
+import { sendOrderConfirmation } from "./email";
+
+export type OrderRecord = {
+  id: string;
+  order_number: string;
+  email: string | null;
+  status: string;
+  currency: string;
+  subtotal: number;
+  discount: number;
+  shipping: number;
+  total: number;
+  has_subscription: boolean;
+  shipping_name: string | null;
+  shipping_address: string | null;
+  shipping_postal_code: string | null;
+  shipping_city: string | null;
+  shipping_country: string | null;
+  shipping_method: string | null;
+  kind: string;
+  created_at: string;
+};
+
+export type OrderItemRecord = {
+  product_slug: string;
+  name: string;
+  qty: number;
+  plan: string;
+  unit_price: number;
+  line_total: number;
+};
+
+type CartMeta = { k: "product" | "bundle"; s: string; q: number; p: "once" | "sub"; i: number | null };
+
+const environment = () => (process.env.STRIPE_SECRET_KEY?.startsWith("sk_live") ? "live" : "sandbox");
+const kr = (öre: number | null | undefined) => Math.round(öre ?? 0) / 100;
+
+const parseCart = (raw: string | undefined): CartMeta[] => {
+  try {
+    const v = raw ? (JSON.parse(raw) as unknown) : [];
+    return Array.isArray(v) ? (v as CartMeta[]) : [];
+  } catch {
+    return [];
+  }
+};
+
+/** Minskar lagersaldot för produkter och paketens ingående produkter. */
+async function decrementStock(items: OrderItemRecord[], meta: CartMeta[]) {
+  const db = supabaseAdmin();
+  for (const item of items) {
+    const m = meta.find((x) => x.s === item.product_slug);
+    if (m?.k === "bundle") {
+      const bundle = getBundle(item.product_slug);
+      for (const c of bundle?.items ?? []) {
+        await db.rpc("decrement_stock", { _slug: c.product.slug, _qty: c.qty * item.qty });
+      }
+    } else if (getProduct(item.product_slug)) {
+      await db.rpc("decrement_stock", { _slug: item.product_slug, _qty: item.qty });
+    }
+  }
+}
+
+/**
+ * Sparar en betald Checkout-session som order. Idempotent: samma session ger samma order.
+ * Anropas både från webhooken och från tacksidan, så att ordern finns även om webhooken dröjer.
+ */
+export async function saveOrderFromSession(sessionId: string): Promise<{ order: OrderRecord; items: OrderItemRecord[]; created: boolean } | null> {
+  if (!supabaseConfigured()) return null;
+  const db = supabaseAdmin();
+
+  const existing = await db.from("orders").select("*").eq("stripe_session_id", sessionId).maybeSingle();
+  if (existing.data) {
+    const items = await db.from("order_items").select("product_slug,name,qty,plan,unit_price,line_total").eq("order_id", existing.data.id);
+    return { order: existing.data as OrderRecord, items: (items.data ?? []) as OrderItemRecord[], created: false };
+  }
+
+  const session = await stripe().checkout.sessions.retrieve(sessionId, { expand: ["line_items", "subscription", "payment_intent", "shipping_cost.shipping_rate"] });
+  const paid = session.payment_status === "paid" || session.status === "complete";
+  if (!paid) return null;
+
+  const meta = parseCart(session.metadata?.cart);
+  const lines = session.line_items?.data ?? [];
+  const isSub = session.mode === "subscription";
+  const customer = session.customer_details;
+  const shippingDetails = session.collected_information?.shipping_details ?? null;
+  const addr = shippingDetails?.address ?? customer?.address ?? null;
+
+  const items: OrderItemRecord[] = [];
+  let shippingLine = 0;
+  lines.forEach((li, idx) => {
+    const m = meta[idx];
+    const name = li.description ?? "";
+    if (!m) {
+      // Fraktraden i subscription-läget ligger sist utan motsvarighet i korgen
+      if (name.startsWith("Frakt")) shippingLine += kr(li.amount_total);
+      return;
+    }
+    const qty = li.quantity ?? m.q;
+    items.push({
+      product_slug: m.s,
+      name: name.replace(/ – prenumeration var \d+:e dag$/, ""),
+      qty,
+      plan: m.p === "sub" ? `sub:${m.i ?? 30}` : "once",
+      unit_price: kr(li.amount_subtotal) / qty,
+      line_total: kr(li.amount_total),
+    });
+  });
+
+  const shipping = session.shipping_cost ? kr(session.shipping_cost.amount_total) : shippingLine;
+  const subtotal = items.reduce((s, i) => s + i.line_total, 0);
+  const discount = kr(session.total_details?.amount_discount);
+  const subscription = typeof session.subscription === "object" ? session.subscription : null;
+  const paymentIntent = typeof session.payment_intent === "object" ? session.payment_intent : null;
+  const shippingRate = session.shipping_cost?.shipping_rate;
+  const shippingMethod =
+    (typeof shippingRate === "object" && shippingRate ? shippingRate.display_name : null) ?? (isSub ? "Fri frakt – spårbart brev" : null);
+
+  const inserted = await db
+    .from("orders")
+    .insert({
+      email: customer?.email ?? null,
+      phone: customer?.phone ?? null,
+      status: "paid",
+      currency: (session.currency ?? "sek").toUpperCase(),
+      subtotal,
+      discount,
+      shipping,
+      total: kr(session.amount_total),
+      has_subscription: isSub,
+      shipping_name: shippingDetails?.name ?? customer?.name ?? null,
+      shipping_address: [addr?.line1, addr?.line2].filter(Boolean).join(", ") || null,
+      shipping_postal_code: addr?.postal_code ?? null,
+      shipping_city: addr?.city ?? null,
+      shipping_country: addr?.country ?? null,
+      shipping_method: shippingMethod,
+      stripe_session_id: session.id,
+      stripe_payment_intent: paymentIntent?.id ?? (typeof session.payment_intent === "string" ? session.payment_intent : null),
+      stripe_customer_id: typeof session.customer === "string" ? session.customer : (session.customer?.id ?? null),
+      stripe_subscription_id: subscription?.id ?? null,
+      environment: environment(),
+      kind: "checkout",
+      locale: "sv",
+      discount_code: session.discounts?.[0]?.promotion_code ? String(session.discounts[0].promotion_code) : null,
+    })
+    .select("*")
+    .single();
+
+  if (inserted.error) {
+    // Kapplöpning: webhook och tacksida samtidigt – den andra hittar ordern nu
+    if (inserted.error.code === "23505") return saveOrderFromSession(sessionId);
+    throw new Error(inserted.error.message);
+  }
+  const order = inserted.data as OrderRecord;
+
+  if (items.length) {
+    const rows = items.map((i) => ({ ...i, order_id: order.id }));
+    const res = await db.from("order_items").insert(rows);
+    if (res.error) throw new Error(res.error.message);
+  }
+
+  if (subscription) {
+    const firstSub = items.find((i) => i.plan.startsWith("sub"));
+    await db.from("subscriptions").upsert(
+      {
+        stripe_subscription_id: subscription.id,
+        stripe_customer_id: typeof subscription.customer === "string" ? subscription.customer : subscription.customer.id,
+        product_slug: firstSub?.product_slug ?? null,
+        status: subscription.status,
+        quantity: firstSub?.qty ?? 1,
+        amount: firstSub ? firstSub.unit_price : null,
+        currency: (subscription.currency ?? "sek").toUpperCase(),
+        current_period_start: periodStart(subscription),
+        current_period_end: periodEnd(subscription),
+        next_shipment_at: periodEnd(subscription),
+        cancel_at_period_end: subscription.cancel_at_period_end,
+        environment: environment(),
+        email: customer?.email ?? null,
+      },
+      { onConflict: "stripe_subscription_id" },
+    );
+  }
+
+  await decrementStock(items, meta);
+  await sendOrderConfirmation(order, items).catch((e: unknown) => console.error("[email]", e instanceof Error ? e.message : e));
+  return { order, items, created: true };
+}
+
+const periodStart = (s: Stripe.Subscription) => {
+  const item = s.items.data[0];
+  return item ? new Date(item.current_period_start * 1000).toISOString() : null;
+};
+const periodEnd = (s: Stripe.Subscription) => {
+  const item = s.items.data[0];
+  return item ? new Date(item.current_period_end * 1000).toISOString() : null;
+};
+
+/**
+ * Förnyelse av prenumeration (invoice.paid med billing_reason subscription_cycle).
+ * Skapar en ny order MS-xxxx utifrån prenumerationsraden i databasen.
+ */
+export async function saveRenewalFromInvoice(invoice: Stripe.Invoice): Promise<OrderRecord | null> {
+  if (!supabaseConfigured()) return null;
+  if (invoice.billing_reason !== "subscription_cycle") return null;
+  const db = supabaseAdmin();
+
+  const dup = await db.from("orders").select("*").eq("stripe_invoice_id", invoice.id).maybeSingle();
+  if (dup.data) return dup.data as OrderRecord;
+
+  const subId =
+    typeof invoice.parent?.subscription_details?.subscription === "string"
+      ? invoice.parent.subscription_details.subscription
+      : (invoice.parent?.subscription_details?.subscription?.id ?? null);
+  const sub = subId ? await db.from("subscriptions").select("*").eq("stripe_subscription_id", subId).maybeSingle() : null;
+  const previous = subId
+    ? await db.from("orders").select("*").eq("stripe_subscription_id", subId).order("created_at", { ascending: true }).limit(1).maybeSingle()
+    : null;
+  const prev = previous?.data as OrderRecord | undefined;
+
+  const items: OrderItemRecord[] = [];
+  for (const li of invoice.lines.data) {
+    const slug = li.pricing?.price_details?.product ? await productSlugFromStripeProduct(li.pricing.price_details.product) : (sub?.data?.product_slug ?? null);
+    if (!slug) continue;
+    const qty = li.quantity ?? 1;
+    items.push({
+      product_slug: slug,
+      name: (li.description ?? slug).replace(/^\d+ × /, "").replace(/ – prenumeration var \d+:e dag.*$/, ""),
+      qty,
+      plan: "sub",
+      unit_price: kr(li.amount) / qty,
+      line_total: kr(li.amount),
+    });
+  }
+
+  const inserted = await db
+    .from("orders")
+    .insert({
+      email: invoice.customer_email ?? prev?.email ?? null,
+      status: "paid",
+      currency: invoice.currency.toUpperCase(),
+      subtotal: items.reduce((s, i) => s + i.line_total, 0),
+      discount: 0,
+      shipping: 0,
+      total: kr(invoice.amount_paid),
+      has_subscription: true,
+      shipping_name: prev?.shipping_name ?? invoice.customer_name ?? null,
+      shipping_address: prev?.shipping_address ?? null,
+      shipping_postal_code: prev?.shipping_postal_code ?? null,
+      shipping_city: prev?.shipping_city ?? null,
+      shipping_country: prev?.shipping_country ?? null,
+      shipping_method: "Fri frakt – spårbart brev",
+      stripe_invoice_id: invoice.id,
+      stripe_subscription_id: subId,
+      stripe_customer_id: typeof invoice.customer === "string" ? invoice.customer : (invoice.customer?.id ?? null),
+      environment: environment(),
+      kind: "renewal",
+      locale: "sv",
+    })
+    .select("*")
+    .single();
+  if (inserted.error) throw new Error(inserted.error.message);
+  const order = inserted.data as OrderRecord;
+  if (items.length) await db.from("order_items").insert(items.map((i) => ({ ...i, order_id: order.id })));
+  await decrementStock(items, items.map((i) => ({ k: "product", s: i.product_slug, q: i.qty, p: "sub", i: null })));
+  await sendOrderConfirmation(order, items).catch((e: unknown) => console.error("[email]", e instanceof Error ? e.message : e));
+  return order;
+}
+
+async function productSlugFromStripeProduct(productId: string): Promise<string | null> {
+  try {
+    const p = await stripe().products.retrieve(productId);
+    return p.metadata?.slug ?? null;
+  } catch {
+    return null;
+  }
+}
+
+/** Hämtar en order med rader – används av tacksidan. */
+export async function getOrderBySession(sessionId: string) {
+  if (!supabaseConfigured()) return null;
+  const db = supabaseAdmin();
+  const o = await db.from("orders").select("*").eq("stripe_session_id", sessionId).maybeSingle();
+  if (!o.data) return null;
+  const items = await db.from("order_items").select("product_slug,name,qty,plan,unit_price,line_total").eq("order_id", o.data.id);
+  return { order: o.data as OrderRecord, items: (items.data ?? []) as OrderItemRecord[] };
+}

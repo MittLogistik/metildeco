@@ -1,9 +1,11 @@
 import type Stripe from "stripe";
+import { saveOrderFromSession, saveRenewalFromInvoice } from "@/lib/orders";
 import { stripe } from "@/lib/stripe";
 
 /**
  * Tar emot händelser från Stripe. Signaturen verifieras med STRIPE_WEBHOOK_SECRET.
- * Just nu loggas bara händelserna – ordersparning i databasen kopplas på i nästa steg.
+ * checkout.session.completed → order sparas i databasen och kunden får bekräftelse.
+ * invoice.paid (förnyelse)   → ny order för prenumerationsleveransen.
  */
 export async function POST(request: Request) {
   const secret = process.env.STRIPE_WEBHOOK_SECRET;
@@ -20,19 +22,25 @@ export async function POST(request: Request) {
     return Response.json({ error: e instanceof Error ? e.message : "Ogiltig signatur." }, { status: 400 });
   }
 
-  switch (event.type) {
-    case "checkout.session.completed": {
-      const session = event.data.object;
-      console.log("[stripe] betalning klar", session.id, session.customer_details?.email, session.amount_total);
-      break;
+  try {
+    switch (event.type) {
+      case "checkout.session.completed": {
+        const result = await saveOrderFromSession(event.data.object.id);
+        console.log("[stripe] order", result?.order.order_number ?? "(ej sparad)", result?.created ? "skapad" : "fanns redan");
+        break;
+      }
+      case "invoice.paid": {
+        const order = await saveRenewalFromInvoice(event.data.object);
+        if (order) console.log("[stripe] förnyelse", order.order_number);
+        break;
+      }
+      default:
+        break;
     }
-    case "invoice.paid": {
-      const invoice = event.data.object;
-      console.log("[stripe] prenumeration förnyad", invoice.id, invoice.customer_email);
-      break;
-    }
-    default:
-      break;
+  } catch (e) {
+    // 500 gör att Stripe försöker igen senare
+    console.error("[stripe webhook]", e instanceof Error ? e.message : e);
+    return Response.json({ error: "Kunde inte behandla händelsen." }, { status: 500 });
   }
   return Response.json({ received: true });
 }
