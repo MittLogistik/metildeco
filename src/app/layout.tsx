@@ -31,6 +31,7 @@ export const metadata: Metadata = {
     locale: "sv_SE",
   },
   robots: site.indexable ? { index: true, follow: true } : { index: false, follow: false },
+  other: { "facebook-domain-verification": "6mbl1dqomix8d4ri5ufmx9lqoau62k" },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

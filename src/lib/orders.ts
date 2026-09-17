@@ -196,33 +196,35 @@ export async function saveOrderFromSession(sessionId: string): Promise<{ order: 
   await markRecovered(order.email, order.id).catch(() => undefined);
   if (session.metadata?.consent === "all") {
     const [firstName, ...rest] = (shippingDetails?.name ?? customer?.name ?? "").split(" ");
+    const subInterval = items.find((i) => i.plan.startsWith("sub"))?.plan.split(":")[1] ?? null;
+    const url = `${process.env.NEXT_PUBLIC_SITE_URL ?? "https://metilde.com"}/sv/tack`;
+    const user = {
+      email: customer?.email,
+      phone: customer?.phone,
+      firstName,
+      lastName: rest.join(" ") || null,
+      zip: addr?.postal_code,
+      city: addr?.city,
+      country: addr?.country,
+      fbp: session.metadata?.fbp || null,
+      fbc: session.metadata?.fbc || null,
+      externalId: typeof session.customer === "string" ? session.customer : (session.customer?.id ?? null),
+    };
+    const custom = {
+      value: kr(session.amount_total),
+      currency: "SEK",
+      content_type: "product",
+      content_ids: meta.map((m) => metaContentId(m.k === "bundle" ? "bundle" : "product", m.s)),
+      contents: items.map((i, idx) => ({ id: metaContentId(meta[idx]?.k === "bundle" ? "bundle" : "product", i.product_slug), quantity: i.qty, item_price: i.unit_price })),
+      num_items: items.reduce((s, i) => s + i.qty, 0),
+      order_id: order.order_number,
+    };
+    // Subscribe skickas utöver Purchase vid prenumeration. predicted_ltv = sex leveranser är ett försiktigt antagande tills vi har egen data.
     await sendMetaEvents([
-      {
-        name: "Purchase",
-        eventId: session.id,
-        url: `${process.env.NEXT_PUBLIC_SITE_URL ?? "https://metilde.com"}/sv/tack`,
-        user: {
-          email: customer?.email,
-          phone: customer?.phone,
-          firstName,
-          lastName: rest.join(" ") || null,
-          zip: addr?.postal_code,
-          city: addr?.city,
-          country: addr?.country,
-          fbp: session.metadata?.fbp || null,
-          fbc: session.metadata?.fbc || null,
-          externalId: typeof session.customer === "string" ? session.customer : (session.customer?.id ?? null),
-        },
-        custom: {
-          value: kr(session.amount_total),
-          currency: "SEK",
-          content_type: "product",
-          content_ids: meta.map((m) => metaContentId(m.k === "bundle" ? "bundle" : "product", m.s)),
-          contents: items.map((i, idx) => ({ id: metaContentId(meta[idx]?.k === "bundle" ? "bundle" : "product", i.product_slug), quantity: i.qty, item_price: i.unit_price })),
-          num_items: items.reduce((s, i) => s + i.qty, 0),
-          order_id: order.order_number,
-        },
-      },
+      { name: "Purchase", eventId: session.id, url, user, custom },
+      ...(isSub
+        ? [{ name: "Subscribe" as const, eventId: `${session.id}_sub`, url, user, custom: { ...custom, subscription_interval: subInterval ? `${subInterval}d` : undefined, predicted_ltv: Math.round(custom.value * 6) } }]
+        : []),
     ]).catch((e: unknown) => console.error("[meta]", e instanceof Error ? e.message : e));
   }
   if (isGiftCard) {

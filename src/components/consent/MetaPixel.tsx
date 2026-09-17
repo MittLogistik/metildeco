@@ -12,7 +12,8 @@ declare global {
   }
 }
 
-const PIXEL_ID = process.env.NEXT_PUBLIC_META_PIXEL_ID;
+/** Publikt pixel-ID. Miljövariabeln kan skriva över, t.ex. för en testpixel. */
+const PIXEL_ID = process.env.NEXT_PUBLIC_META_PIXEL_ID || "1606920894391393";
 
 const subscribe = (cb: () => void) => {
   window.addEventListener("metilde:consent", cb);
@@ -23,7 +24,7 @@ const subscribe = (cb: () => void) => {
  * Skickar en Meta-händelse via pixeln och Conversions API med samma event-id.
  * Gör ingenting utan marknadsföringssamtycke.
  */
-export function metaTrack(name: "ViewContent" | "AddToCart" | "InitiateCheckout" | "Purchase", params: Record<string, unknown> = {}, id?: string) {
+export function metaTrack(name: "ViewContent" | "AddToCart" | "InitiateCheckout" | "Purchase" | "Subscribe", params: Record<string, unknown> = {}, id?: string) {
   if (!PIXEL_ID || readConsent() !== "all") return;
   const eid = id ?? eventId();
   try {

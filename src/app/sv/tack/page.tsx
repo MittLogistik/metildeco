@@ -76,7 +76,7 @@ export default async function ThankYouPage({ searchParams }: PageProps<"/sv/tack
   return (
     <Container className="py-12 sm:py-16">
       <ClearCart />
-      {saved ? <MetaPurchase sessionId={session.id} value={saved.order.total} ids={metaIds} /> : null}
+      {saved ? <MetaPurchase sessionId={session.id} value={saved.order.total} ids={metaIds} subscription={saved.order.has_subscription} /> : null}
       <div className="mx-auto max-w-2xl">
         <span className="inline-flex h-14 w-14 items-center justify-center rounded-full bg-primary-soft text-primary">
           <CheckIcon size={28} />

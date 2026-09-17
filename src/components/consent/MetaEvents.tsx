@@ -12,9 +12,10 @@ export function MetaViewContent({ id, name, price, category }: { id: string; nam
 }
 
 /** Purchase från tacksidan – samma event-id (Stripe-sessionen) som serverhändelsen. */
-export function MetaPurchase({ sessionId, value, ids }: { sessionId: string; value: number; ids: string[] }) {
+export function MetaPurchase({ sessionId, value, ids, subscription }: { sessionId: string; value: number; ids: string[]; subscription: boolean }) {
   useEffect(() => {
     metaTrack("Purchase", { value, currency: "SEK", content_ids: ids, content_type: "product" }, sessionId);
-  }, [sessionId, value, ids]);
+    if (subscription) metaTrack("Subscribe", { value, currency: "SEK", content_ids: ids, content_type: "product" }, `${sessionId}_sub`);
+  }, [sessionId, value, ids, subscription]);
   return null;
 }

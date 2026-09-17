@@ -5,7 +5,10 @@ import { createHash } from "node:crypto";
  * Meta Conversions API. Händelser skickas från servern med samma event_id som
  * pixeln använder i webbläsaren, så att Meta räknar dem en gång.
  */
-export const metaConfigured = () => Boolean(process.env.NEXT_PUBLIC_META_PIXEL_ID && process.env.META_CAPI_TOKEN && !process.env.META_CAPI_TOKEN.endsWith("..."));
+/** Publikt pixel-ID; samma reserv som i klienten. */
+export const META_PIXEL_ID = process.env.NEXT_PUBLIC_META_PIXEL_ID || process.env.META_PIXEL_ID || "1606920894391393";
+const token = () => process.env.META_CAPI_TOKEN || process.env.META_ACCESS_TOKEN || "";
+export const metaConfigured = () => Boolean(META_PIXEL_ID && token() && !token().endsWith("..."));
 
 const sha = (v: string | null | undefined) => (v ? createHash("sha256").update(v.trim().toLowerCase()).digest("hex") : undefined);
 
@@ -25,7 +28,7 @@ export type MetaUser = {
 };
 
 export type MetaEvent = {
-  name: "PageView" | "ViewContent" | "AddToCart" | "InitiateCheckout" | "Purchase" | "Lead";
+  name: "PageView" | "ViewContent" | "AddToCart" | "InitiateCheckout" | "Purchase" | "Subscribe" | "Lead";
   eventId: string;
   url?: string | null;
   time?: number;
@@ -43,8 +46,7 @@ const normalizePhone = (p: string) => {
 
 export async function sendMetaEvents(events: MetaEvent[]): Promise<void> {
   if (!metaConfigured() || events.length === 0) return;
-  const pixel = process.env.NEXT_PUBLIC_META_PIXEL_ID!;
-  const token = process.env.META_CAPI_TOKEN!;
+  const pixel = META_PIXEL_ID;
   const body = {
     data: events.map((e) => ({
       event_name: e.name,
@@ -70,7 +72,7 @@ export async function sendMetaEvents(events: MetaEvent[]): Promise<void> {
     })),
     ...(process.env.META_TEST_EVENT_CODE ? { test_event_code: process.env.META_TEST_EVENT_CODE } : {}),
   };
-  const res = await fetch(`https://graph.facebook.com/v21.0/${pixel}/events?access_token=${encodeURIComponent(token)}`, {
+  const res = await fetch(`https://graph.facebook.com/v21.0/${pixel}/events?access_token=${encodeURIComponent(token())}`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(body),
