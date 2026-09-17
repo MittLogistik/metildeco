@@ -28,6 +28,10 @@ const resolveSiteUrl = (): string => {
 export const site = {
   name: "Metilde",
   url: resolveSiteUrl(),
+  /** Bara den riktiga domänen får indexeras – testadresser på vercel.app ska inte hamna i Google. */
+  get indexable() {
+    return /(^|.)metilde.com$/.test(new URL(this.url).hostname);
+  },
   locale: "sv",
   currency: "SEK",
   /** Gräns för fri frakt i Sverige (SEK). Samma värde som shipping_rates för zon "se". */

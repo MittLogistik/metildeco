@@ -30,7 +30,7 @@ export const metadata: Metadata = {
     type: "website",
     locale: "sv_SE",
   },
-  robots: { index: true, follow: true },
+  robots: site.indexable ? { index: true, follow: true } : { index: false, follow: false },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
