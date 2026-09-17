@@ -6,6 +6,7 @@ const nextConfig: NextConfig = {
     deviceSizes: [360, 640, 828, 1080, 1200, 1600],
     imageSizes: [56, 64, 80, 128, 256],
     qualities: [70, 80],
+    remotePatterns: [{ protocol: "https", hostname: "*.supabase.co", pathname: "/storage/v1/object/public/**" }],
   },
   async redirects() {
     return [
