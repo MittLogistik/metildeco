@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { articles } from "@/lib/articles";
-import { bundles } from "@/lib/bundles";
-import { aggregateRating, categories, getProduct, isInStock, products } from "@/lib/products";
+import { getCatalog } from "@/lib/catalog";
+import { aggregateRating, categoriesOf, isInStock } from "@/lib/products";
 import { routes } from "@/lib/routes";
 import { site } from "@/lib/site";
 import { goalProductCount, goals } from "@/content/goals";
@@ -22,11 +22,13 @@ export const metadata: Metadata = {
   alternates: { canonical: `${site.url}/sv` },
 };
 
-export default function HomePage() {
-  const hero = getProduct("tongkat-ali-elite") ?? products[0]!;
+export default async function HomePage() {
+  const { products, bundles } = await getCatalog();
+  const categories = categoriesOf(products);
+  const hero = products.find((p) => p.slug === "tongkat-ali-elite") ?? products[0]!;
   const inStock = products.filter(isInStock);
   const featured = [...inStock, ...products.filter((p) => !isInStock(p))].slice(0, 8);
-  const rating = site.showRatings ? aggregateRating() : null;
+  const rating = site.showRatings ? aggregateRating(products) : null;
   const latest = articles.slice(0, 3);
 
   return (
@@ -212,7 +214,7 @@ export default function HomePage() {
           />
           <ul className="mt-10 grid grid-cols-2 gap-3 sm:grid-cols-4">
             {goals.map((g) => {
-              const n = goalProductCount(g.id);
+              const n = goalProductCount(g.id, products);
               return (
                 <li key={g.id}>
                   <Link

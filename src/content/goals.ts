@@ -1,7 +1,7 @@
 /**
  * "Handla efter mål" – en sorteringshjälp i sortimentet, inga hälsopåståenden.
  */
-import { products, type Product } from "@/lib/products";
+import type { Product } from "@/lib/products";
 
 export type GoalId =
   | "energy"
@@ -65,7 +65,7 @@ export const matchScore = (slug: string, selected: GoalId[]) =>
   selected.length === 0 ? 0 : goalsFor(slug).filter((g) => selected.includes(g)).length;
 
 /** Produkter sorterade efter hur väl de matchar valda mål. */
-export function productsByGoals(selected: GoalId[], list: Product[] = products): Product[] {
+export function productsByGoals(selected: GoalId[], list: Product[]): Product[] {
   if (selected.length === 0) return list;
   return list
     .map((p) => ({ p, score: matchScore(p.slug, selected) }))
@@ -74,5 +74,5 @@ export function productsByGoals(selected: GoalId[], list: Product[] = products):
     .map((x) => x.p);
 }
 
-export const goalProductCount = (id: GoalId, list: Product[] = products) =>
+export const goalProductCount = (id: GoalId, list: Product[]) =>
   list.filter((p) => goalsFor(p.slug).includes(id)).length;

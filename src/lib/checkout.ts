@@ -4,8 +4,8 @@
  * Adress, telefon och fraktval samlas in av Stripe Checkout.
  */
 import type Stripe from "stripe";
-import { getBundle } from "./bundles";
-import { getProduct, isInStock, tieredUnitPrice } from "./products";
+import { getBundle, getProduct } from "./catalog";
+import { isInStock, tieredUnitPrice } from "./products";
 import { ratesForZone, shippingCost } from "./shipping";
 import { site } from "./site";
 
@@ -57,23 +57,25 @@ export function parseCheckoutRequest(body: unknown): CheckoutRequest {
 }
 
 /** Sätter pris på varje rad utifrån katalogen. Okända eller slutsålda varor ger fel. */
-export function priceLines(lines: CheckoutLine[]): PricedLine[] {
-  return lines.map((line) => {
+export async function priceLines(lines: CheckoutLine[]): Promise<PricedLine[]> {
+  const out: PricedLine[] = [];
+  for (const line of lines) {
     if (line.kind === "bundle") {
-      const bundle = getBundle(line.slug);
+      const bundle = await getBundle(line.slug);
       if (!bundle) throw new Error("Ett paket i varukorgen finns inte längre.");
       const soldOut = bundle.items.some((i) => i.product.trackStock && i.product.stock < i.qty * line.qty);
       if (soldOut) throw new Error(`${bundle.name} är tillfälligt slut.`);
-      return {
+      out.push({
         ...line,
         plan: "once",
         name: bundle.name,
         unitPrice: bundle.price,
         image: bundle.images[0] ?? null,
         freeShipping: bundle.freeShipping,
-      };
+      });
+      continue;
     }
-    const product = getProduct(line.slug);
+    const product = await getProduct(line.slug);
     if (!product) throw new Error("En produkt i varukorgen finns inte längre.");
     if (!isInStock(product) || (product.trackStock && product.stock < line.qty)) {
       throw new Error(`${product.name} är slutsåld i det antal du valt.`);
@@ -82,8 +84,9 @@ export function priceLines(lines: CheckoutLine[]): PricedLine[] {
       line.plan === "sub"
         ? Math.round(product.price * (1 - site.subscriptionDiscount / 100))
         : tieredUnitPrice(product, line.qty);
-    return { ...line, name: product.name, unitPrice, image: product.images[0] ?? null, freeShipping: line.plan === "sub" };
-  });
+    out.push({ ...line, name: product.name, unitPrice, image: product.images[0] ?? null, freeShipping: line.plan === "sub" });
+  }
+  return out;
 }
 
 export const subtotalOf = (priced: PricedLine[]) => priced.reduce((s, l) => s + l.unitPrice * l.qty, 0);

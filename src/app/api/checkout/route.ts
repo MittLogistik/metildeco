@@ -24,7 +24,7 @@ export async function POST(request: Request) {
   const origin = request.headers.get("origin") ?? process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
 
   try {
-    const priced = priceLines(payload.lines);
+    const priced = await priceLines(payload.lines);
     const hasSub = priced.some((l) => l.plan === "sub");
     const lineItems = buildLineItems(priced, origin);
     const metadata = {

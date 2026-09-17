@@ -1,9 +1,8 @@
 /**
- * Produktkatalog. Källa: /data/products.json (export från gamla butiken).
- * Priser i SEK kommer från product_prices (valuta SEK) med products.price som reserv.
+ * Produkttyper och rena hjälpfunktioner. Själva datan hämtas via `@/lib/catalog`
+ * (databasen) – den här filen innehåller inget som kräver server eller nätverk,
+ * så att den kan användas i både server- och klientkomponenter.
  */
-import productsJson from "../../data/products.json";
-import pricesJson from "../../data/product_prices.json";
 import { mediaUrl, PLACEHOLDER } from "./media";
 
 export type Variant = {
@@ -56,19 +55,52 @@ export type Product = {
   updatedAt: string;
 };
 
-type Raw = (typeof productsJson)[number];
-type RawPrice = (typeof pricesJson)[number];
+/** Rad i tabellen products (och samma form som data/products.json). */
+export type ProductRow = {
+  slug: string;
+  name: string;
+  category: string;
+  price: number | string;
+  old_price: number | string | null;
+  rating: number | string;
+  reviews: number;
+  tags: string[] | null;
+  bg: string;
+  short: string;
+  bullets: string[] | null;
+  description: string[] | null;
+  images: string[] | null;
+  variant: Variant | null;
+  is_active: boolean;
+  sort_order: number;
+  created_at: string;
+  updated_at: string;
+  sku?: string | null;
+  stock?: number | null;
+  track_stock: boolean;
+  video_url?: string | null;
+  video_poster_url?: string | null;
+  story_images?: string[] | null;
+  countries?: string[] | null;
+  tiered_pricing: boolean;
+  tier_2_discount: number;
+  tier_3_discount: number;
+  gtin?: string | null;
+  mpn?: string | null;
+  google_product_category?: string | null;
+  brand?: string | null;
+  story_hero_image?: string | null;
+  customs_description?: string | null;
+  customs_code?: string | null;
+  country_of_origin?: string | null;
+  weight_grams?: number | null;
+};
 
-const sekPrices = new Map<string, RawPrice>();
-for (const row of pricesJson as RawPrice[]) {
-  if (row.currency === "SEK") sekPrices.set(row.product_slug, row);
-}
-
-const toProduct = (r: Raw): Product => {
-  const priceRow = sekPrices.get(r.slug);
-  const price = priceRow ? Number(priceRow.price) : Number(r.price);
-  const rawOld = priceRow ? priceRow.old_price : r.old_price;
-  const oldPrice = rawOld !== null && Number(rawOld) > price ? Number(rawOld) : null;
+/** Bygger en produkt av en databasrad plus (valfritt) SEK-pris från product_prices. */
+export const productFromRow = (r: ProductRow, sekPrice?: { price: number | string; old_price: number | string | null } | null): Product => {
+  const price = sekPrice ? Number(sekPrice.price) : Number(r.price);
+  const rawOld = sekPrice ? sekPrice.old_price : r.old_price;
+  const oldPrice = rawOld !== null && rawOld !== undefined && Number(rawOld) > price ? Number(rawOld) : null;
   return {
     slug: r.slug,
     name: r.name,
@@ -87,7 +119,7 @@ const toProduct = (r: Raw): Product => {
     storyHeroImage: r.story_hero_image ? mediaUrl(r.story_hero_image) : null,
     videoUrl: r.video_url ? mediaUrl(r.video_url) : null,
     videoPosterUrl: r.video_poster_url ? mediaUrl(r.video_poster_url) : null,
-    variant: (r.variant as Variant | null) ?? null,
+    variant: r.variant ?? null,
     isActive: r.is_active,
     sortOrder: r.sort_order,
     sku: r.sku ?? null,
@@ -110,36 +142,21 @@ const toProduct = (r: Raw): Product => {
   };
 };
 
-/** Alla produkter, inklusive inaktiva (används av admin/feeds senare). */
-export const allProducts: Product[] = (productsJson as Raw[])
-  .map(toProduct)
-  .sort((a, b) => a.sortOrder - b.sortOrder);
+export const isInStock = (p: Pick<Product, "trackStock" | "stock">): boolean => !p.trackStock || p.stock > 0;
 
-/** Produkter som säljs i butiken just nu. */
-export const products: Product[] = allProducts.filter((p) => p.isActive);
-
-export const getProduct = (slug: string): Product | undefined =>
-  products.find((p) => p.slug === slug);
-
-export const isInStock = (p: Product): boolean => !p.trackStock || p.stock > 0;
-
-export const isLowStock = (p: Product): boolean =>
+export const isLowStock = (p: Pick<Product, "trackStock" | "stock">): boolean =>
   p.trackStock && p.stock > 0 && p.stock <= 10;
 
-/** Kategorier i sorteringsordning enligt sortimentet. */
-export const categories: string[] = Array.from(new Set(products.map((p) => p.category)));
-
-export const productsInCategory = (category: string): Product[] =>
-  products.filter((p) => p.category === category);
-
 /** Bilder – egna bilder eller en neutral platshållare. */
-export const imagesFor = (p: Product): string[] =>
-  p.images.length > 0 ? p.images : [PLACEHOLDER];
+export const imagesFor = (p: Pick<Product, "images">): string[] => (p.images.length > 0 ? p.images : [PLACEHOLDER]);
 
-export const primaryImage = (p: Product): string => imagesFor(p)[0]!;
+export const primaryImage = (p: Pick<Product, "images">): string => imagesFor(p)[0]!;
 
 /** Pris per förpackning vid mängdrabatt (2 resp. 3 st). */
-export const tieredUnitPrice = (p: Product, qty: number): number => {
+export const tieredUnitPrice = (
+  p: Pick<Product, "price" | "tieredPricing" | "tier2Discount" | "tier3Discount">,
+  qty: number,
+): number => {
   if (!p.tieredPricing) return p.price;
   if (qty >= 3) return Math.round(p.price * (1 - p.tier3Discount / 100));
   if (qty === 2) return Math.round(p.price * (1 - p.tier2Discount / 100));
@@ -147,23 +164,46 @@ export const tieredUnitPrice = (p: Product, qty: number): number => {
 };
 
 /** Antal kapslar/tabletter enligt namnet, t.ex. "… | 60 kapslar" → 60. */
-export const unitCount = (p: Product): number | null => {
+export const unitCount = (p: Pick<Product, "name">): number | null => {
   const m = p.name.match(/(\d+)\s*(kapslar|tabletter)/i);
   return m ? Number(m[1]) : null;
 };
 
+/** Kategorier i sorteringsordning enligt sortimentet. */
+export const categoriesOf = (list: Product[]): string[] => Array.from(new Set(list.map((p) => p.category)));
+
 /** Relaterade produkter: samma kategori först, sedan resten. */
-export const relatedProducts = (p: Product, limit = 4): Product[] => {
-  const same = products.filter((x) => x.slug !== p.slug && x.category === p.category);
-  const others = products.filter((x) => x.slug !== p.slug && x.category !== p.category);
+export const relatedProducts = (p: Product, list: Product[], limit = 4): Product[] => {
+  const same = list.filter((x) => x.slug !== p.slug && x.category === p.category);
+  const others = list.filter((x) => x.slug !== p.slug && x.category !== p.category);
   return [...same, ...others].slice(0, limit);
 };
 
 /** Aggregerat betyg över produkter med omdömen. */
-export const aggregateRating = () => {
-  const rated = products.filter((p) => p.reviews > 0);
+export const aggregateRating = (list: Product[]) => {
+  const rated = list.filter((p) => p.reviews > 0);
   const count = rated.reduce((s, p) => s + p.reviews, 0);
   if (count === 0) return null;
   const avg = rated.reduce((s, p) => s + p.rating * p.reviews, 0) / count;
   return { avg: Math.round(avg * 10) / 10, count };
 };
+
+/** Så mycket av en produkt som behövs i varukorg och kassa (skickas till klienten). */
+export type SlimProduct = Pick<
+  Product,
+  "slug" | "name" | "price" | "images" | "bg" | "tieredPricing" | "tier2Discount" | "tier3Discount" | "trackStock" | "stock" | "category"
+>;
+
+export const slimProduct = (p: Product): SlimProduct => ({
+  slug: p.slug,
+  name: p.name,
+  price: p.price,
+  images: p.images.slice(0, 1),
+  bg: p.bg,
+  tieredPricing: p.tieredPricing,
+  tier2Discount: p.tier2Discount,
+  tier3Discount: p.tier3Discount,
+  trackStock: p.trackStock,
+  stock: p.stock,
+  category: p.category,
+});

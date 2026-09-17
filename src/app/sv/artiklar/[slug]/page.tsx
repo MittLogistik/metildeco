@@ -3,7 +3,8 @@ import Image from "next/image";
 import { notFound } from "next/navigation";
 import { articles, getArticle, type ArticleBlock } from "@/lib/articles";
 import { formatDate } from "@/lib/format";
-import { getProduct } from "@/lib/products";
+import { getProducts } from "@/lib/catalog";
+import type { Product } from "@/lib/products";
 import { routes } from "@/lib/routes";
 import { site } from "@/lib/site";
 import { ArticleCard } from "@/components/ArticleCard";
@@ -28,7 +29,7 @@ export async function generateMetadata({ params }: PageProps<"/sv/artiklar/[slug
   };
 }
 
-function Block({ block }: { block: ArticleBlock }) {
+function Block({ block, products }: { block: ArticleBlock; products: Product[] }) {
   switch (block.type) {
     case "heading":
       return <h2>{block.text}</h2>;
@@ -59,7 +60,7 @@ function Block({ block }: { block: ArticleBlock }) {
         </figure>
       );
     case "products": {
-      const list = block.slugs.map(getProduct).filter((p) => p !== undefined);
+      const list = block.slugs.map((s) => products.find((p) => p.slug === s)).filter((p) => p !== undefined);
       if (list.length === 0) return null;
       return (
         <aside className="my-12 rounded-card bg-sand-soft p-6 not-prose sm:p-8">
@@ -82,6 +83,7 @@ export default async function ArticlePage({ params }: PageProps<"/sv/artiklar/[s
   const article = getArticle(slug);
   if (!article) notFound();
   const more = articles.filter((a) => a.slug !== slug).slice(0, 3);
+  const products = await getProducts();
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -122,7 +124,7 @@ export default async function ArticlePage({ params }: PageProps<"/sv/artiklar/[s
           <p className="mt-8 text-xl leading-relaxed text-muted">{article.lead}</p>
           <div className="prose-metilde mt-8">
             {article.blocks.map((b, i) => (
-              <Block key={i} block={b} />
+              <Block key={i} block={b} products={products} />
             ))}
           </div>
           <p className="mt-12 rounded-2xl bg-sand-soft p-5 text-xs leading-relaxed text-muted">

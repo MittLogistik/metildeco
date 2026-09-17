@@ -3,6 +3,7 @@ import { CartDrawer } from "@/components/cart/CartDrawer";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { JsonLd } from "@/components/JsonLd";
+import { getCatalogSnapshot } from "@/lib/catalog";
 import { company, site } from "@/lib/site";
 
 const organization = {
@@ -33,9 +34,10 @@ const organization = {
   sameAs: [site.social.facebook],
 };
 
-export default function SwedishLayout({ children }: LayoutProps<"/sv">) {
+export default async function SwedishLayout({ children }: LayoutProps<"/sv">) {
+  const catalog = await getCatalogSnapshot();
   return (
-    <CartProvider>
+    <CartProvider catalog={catalog}>
       <JsonLd data={organization} />
       <Header />
       <main className="flex-1">{children}</main>

@@ -2,13 +2,15 @@
 
 import { createContext, useCallback, useContext, useMemo, useState, useSyncExternalStore, type ReactNode } from "react";
 import { site } from "@/lib/site";
-import { getProduct, tieredUnitPrice, type Product } from "@/lib/products";
-import { getBundle, type Bundle } from "@/lib/bundles";
+import { tieredUnitPrice, type SlimProduct } from "@/lib/products";
+import type { SlimBundle } from "@/lib/bundles";
 import { cheapestSwedenRate, shippingCost } from "@/lib/shipping";
 import { cartStore, type CartLine } from "./cartStore";
 import type { Plan } from "./types";
 
 export type { CartLine, Plan };
+
+export type CatalogSnapshot = { products: SlimProduct[]; bundles: SlimBundle[] };
 
 export type ResolvedLine = CartLine & {
   name: string;
@@ -19,8 +21,8 @@ export type ResolvedLine = CartLine & {
   lineTotal: number;
   discountLabel: string | null;
   freeShipping: boolean;
-  product?: Product;
-  bundle?: Bundle;
+  product?: SlimProduct;
+  bundle?: SlimBundle;
 };
 
 type CartState = {
@@ -47,9 +49,9 @@ type CartState = {
 
 const CartContext = createContext<CartState | null>(null);
 
-const resolve = (line: CartLine): ResolvedLine | null => {
+const resolve = (line: CartLine, catalog: CatalogSnapshot): ResolvedLine | null => {
   if (line.kind === "bundle") {
-    const bundle = getBundle(line.slug);
+    const bundle = catalog.bundles.find((b) => b.slug === line.slug);
     if (!bundle) return null;
     return {
       ...line,
@@ -63,7 +65,7 @@ const resolve = (line: CartLine): ResolvedLine | null => {
       bundle,
     };
   }
-  const product = getProduct(line.slug);
+  const product = catalog.products.find((p) => p.slug === line.slug);
   if (!product) return null;
   let unitPrice = product.price;
   let discountLabel: string | null = null;
@@ -88,7 +90,7 @@ const resolve = (line: CartLine): ResolvedLine | null => {
   };
 };
 
-export function CartProvider({ children }: { children: ReactNode }) {
+export function CartProvider({ catalog, children }: { catalog: CatalogSnapshot; children: ReactNode }) {
   const lines = useSyncExternalStore(cartStore.subscribe, cartStore.getSnapshot, cartStore.getServerSnapshot);
   const [isOpen, setOpen] = useState(false);
 
@@ -142,7 +144,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const clear = useCallback(() => cartStore.set([]), []);
 
   const value = useMemo<CartState>(() => {
-    const resolved = lines.map(resolve).filter((l): l is ResolvedLine => l !== null);
+    const resolved = lines.map((l) => resolve(l, catalog)).filter((l): l is ResolvedLine => l !== null);
     const subtotal = resolved.reduce((s, l) => s + l.lineTotal, 0);
     const listTotal = resolved.reduce((s, l) => s + l.listPrice * l.qty, 0);
     const allFree = resolved.length > 0 && resolved.every((l) => l.freeShipping);
@@ -168,7 +170,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
       remove,
       clear,
     };
-  }, [lines, isOpen, addProduct, addBundle, setQty, setPlan, remove, clear]);
+  }, [lines, catalog, isOpen, addProduct, addBundle, setQty, setPlan, remove, clear]);
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
 }

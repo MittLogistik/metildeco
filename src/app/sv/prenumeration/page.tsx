@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import { getProduct, isInStock, products } from "@/lib/products";
+import { getProducts } from "@/lib/catalog";
+import { isInStock } from "@/lib/products";
 import { formatPrice } from "@/lib/format";
 import { routes } from "@/lib/routes";
 import { site } from "@/lib/site";
@@ -39,8 +40,9 @@ const faq = [
   { q: "När dras pengarna?", a: "Första leveransen betalas direkt vid köpet. Därefter dras betalningen automatiskt vid varje förnyelse, samma dag som leveransen skickas." },
 ];
 
-export default function SubscriptionPage() {
-  const example = getProduct("tongkat-ali-elite") ?? products[0]!;
+export default async function SubscriptionPage() {
+  const products = await getProducts();
+  const example = products.find((p) => p.slug === "tongkat-ali-elite") ?? products[0]!;
   const subPrice = Math.round(example.price * (1 - site.subscriptionDiscount / 100));
   const yearly = (example.price - subPrice) * 12;
   const popular = products.filter(isInStock).slice(0, 4);

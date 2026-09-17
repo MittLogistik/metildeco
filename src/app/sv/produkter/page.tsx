@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { bundles } from "@/lib/bundles";
-import { categories, isInStock, products } from "@/lib/products";
+import { getCatalog } from "@/lib/catalog";
+import { categoriesOf, isInStock } from "@/lib/products";
 import { routes } from "@/lib/routes";
 import { site } from "@/lib/site";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
@@ -27,6 +27,8 @@ const sorts: { id: Sort; label: string }[] = [
 
 export default async function ProductsPage({ searchParams }: PageProps<"/sv/produkter">) {
   const sp = await searchParams;
+  const { products, bundles } = await getCatalog();
+  const categories = categoriesOf(products);
   const category = typeof sp.kategori === "string" ? sp.kategori : null;
   const sort: Sort = (sorts.find((s) => s.id === sp.sortera)?.id ?? "utvald") as Sort;
   const showBundles = sp.typ === "paket";

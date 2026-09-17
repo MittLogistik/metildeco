@@ -4,7 +4,8 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getProductContent } from "@/content/product-content";
 import { formatPrice } from "@/lib/format";
-import { getProduct, imagesFor, isInStock, isLowStock, products, relatedProducts } from "@/lib/products";
+import { getProduct, getProducts } from "@/lib/catalog";
+import { imagesFor, isInStock, isLowStock, relatedProducts } from "@/lib/products";
 import { routes } from "@/lib/routes";
 import { cheapestSwedenRate } from "@/lib/shipping";
 import { company, site } from "@/lib/site";
@@ -21,13 +22,13 @@ import { Stars } from "@/components/Stars";
 import { TrustBar } from "@/components/TrustBar";
 import { Container, Eyebrow } from "@/components/ui";
 
-export function generateStaticParams() {
-  return products.map((p) => ({ slug: p.slug }));
+export async function generateStaticParams() {
+  return (await getProducts()).map((p) => ({ slug: p.slug }));
 }
 
 export async function generateMetadata({ params }: PageProps<"/sv/produkt/[slug]">): Promise<Metadata> {
   const { slug } = await params;
-  const product = getProduct(slug);
+  const product = await getProduct(slug);
   if (!product) return { title: "Produkten hittades inte" };
   const content = getProductContent(slug);
   return {
@@ -45,7 +46,7 @@ export async function generateMetadata({ params }: PageProps<"/sv/produkt/[slug]
 
 export default async function ProductPage({ params }: PageProps<"/sv/produkt/[slug]">) {
   const { slug } = await params;
-  const product = getProduct(slug);
+  const product = await getProduct(slug);
   if (!product) notFound();
 
   const content = getProductContent(slug);
@@ -56,7 +57,7 @@ export default async function ProductPage({ params }: PageProps<"/sv/produkt/[sl
   if (product.videoUrl) {
     media.splice(1, 0, { type: "video", src: product.videoUrl, poster: product.videoPosterUrl ?? images[0]! });
   }
-  const related = relatedProducts(product, 4);
+  const related = relatedProducts(product, await getProducts(), 4);
   const url = `${site.url}${routes.product(slug)}`;
 
   const jsonLd = {

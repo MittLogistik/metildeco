@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { goalProductCount, goals, isGoalId, productsByGoals, type GoalId } from "@/content/goals";
+import { getProducts } from "@/lib/catalog";
 import { routes } from "@/lib/routes";
 import { site } from "@/lib/site";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
@@ -19,7 +20,8 @@ export default async function GoalsPage({ searchParams }: PageProps<"/sv/mal">) 
   const sp = await searchParams;
   const raw = typeof sp.mal === "string" ? sp.mal.split(",") : Array.isArray(sp.mal) ? sp.mal : [];
   const selected = raw.filter(isGoalId) as GoalId[];
-  const list = productsByGoals(selected);
+  const products = await getProducts();
+  const list = productsByGoals(selected, products);
 
   const toggleHref = (id: GoalId) => {
     const next = selected.includes(id) ? selected.filter((g) => g !== id) : [...selected, id];
@@ -39,7 +41,7 @@ export default async function GoalsPage({ searchParams }: PageProps<"/sv/mal">) 
       <ul className="mt-10 grid grid-cols-2 gap-3 sm:grid-cols-4">
         {goals.map((g, i) => {
           const active = selected.includes(g.id);
-          const n = goalProductCount(g.id);
+          const n = goalProductCount(g.id, products);
           return (
             <li key={g.id}>
               <Link

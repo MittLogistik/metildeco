@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { bundleInStock, bundles, getBundle } from "@/lib/bundles";
+import { bundleInStock } from "@/lib/bundles";
+import { getBundle, getBundles } from "@/lib/catalog";
 import { formatPrice } from "@/lib/format";
 import { primaryImage } from "@/lib/products";
 import { routes } from "@/lib/routes";
@@ -17,13 +18,13 @@ import { ProductGallery } from "@/components/ProductGallery";
 import { TrustBar } from "@/components/TrustBar";
 import { Container, Eyebrow } from "@/components/ui";
 
-export function generateStaticParams() {
-  return bundles.map((b) => ({ slug: b.slug }));
+export async function generateStaticParams() {
+  return (await getBundles()).map((b) => ({ slug: b.slug }));
 }
 
 export async function generateMetadata({ params }: PageProps<"/sv/paket/[slug]">): Promise<Metadata> {
   const { slug } = await params;
-  const bundle = getBundle(slug);
+  const bundle = await getBundle(slug);
   if (!bundle) return { title: "Paketet hittades inte" };
   return {
     title: bundle.seoTitle ?? `${bundle.name} – spara ${bundle.discount} %`,
@@ -34,10 +35,10 @@ export async function generateMetadata({ params }: PageProps<"/sv/paket/[slug]">
 
 export default async function BundlePage({ params }: PageProps<"/sv/paket/[slug]">) {
   const { slug } = await params;
-  const bundle = getBundle(slug);
+  const bundle = await getBundle(slug);
   if (!bundle) notFound();
   const inStock = bundleInStock(bundle);
-  const others = bundles.filter((b) => b.slug !== slug).slice(0, 3);
+  const others = (await getBundles()).filter((b) => b.slug !== slug).slice(0, 3);
   const url = `${site.url}${routes.bundle(slug)}`;
 
   const jsonLd = {

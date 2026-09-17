@@ -1,7 +1,6 @@
 import "server-only";
 import type Stripe from "stripe";
-import { getBundle } from "./bundles";
-import { getProduct } from "./products";
+import { getBundle, getProduct } from "./catalog";
 import { stripe } from "./stripe";
 import { supabaseAdmin, supabaseConfigured } from "./supabase";
 import { sendOrderConfirmation } from "./email";
@@ -56,11 +55,11 @@ async function decrementStock(items: OrderItemRecord[], meta: CartMeta[]) {
   for (const item of items) {
     const m = meta.find((x) => x.s === item.product_slug);
     if (m?.k === "bundle") {
-      const bundle = getBundle(item.product_slug);
+      const bundle = await getBundle(item.product_slug);
       for (const c of bundle?.items ?? []) {
         await db.rpc("decrement_stock", { _slug: c.product.slug, _qty: c.qty * item.qty });
       }
-    } else if (getProduct(item.product_slug)) {
+    } else if (await getProduct(item.product_slug)) {
       await db.rpc("decrement_stock", { _slug: item.product_slug, _qty: item.qty });
     }
   }
