@@ -27,15 +27,15 @@ export const adStyles: AdStyle[] = [
     label: "Pilar runt produkten",
     description: "Produkten i mitten, tunna pilar till fyra fakta. Som Bloom/Athletic Greens, men med innehåll i stället för löften.",
     presets: ["Callout Fan", "Pill Callouts", "Annotated Tilt", "Ingredient Compass", "Capsule Ring"],
-    script: (p) => ({ headline: shortName(p), sub: "Tillverkad i Sverige", bullets: facts(p) }),
-    layout: "The product bottle centered and large. Around it, four short fact labels connected to the bottle with thin hand-drawn arrows or lines. A headline at the top. Generous space, calm composition.",
+    script: (p) => ({ headline: shortName(p), bullets: [...facts(p).slice(0, 3), "Tillverkad i Sverige"] }),
+    layout: "Exactly one product bottle, centered and large. Around it, four short fact labels connected to the bottle with thin hand-drawn arrows or lines. A headline at the top. Generous space, calm composition.",
   },
   {
     id: "spec",
     label: "Spec-lista",
     description: "Produkten till vänster, rubrik och bocklista till höger. Redaktionell, som AG1.",
     presets: ["Weightless Spec Grid", "Benefit Ladder", "Quiet Numbers", "Zigzag Split"],
-    script: (p) => ({ headline: "Innehållet, rakt upp och ner.", sub: shortName(p), bullets: facts(p), extra: ["Tredjepartstestad batch för batch"] }),
+    script: (p) => ({ headline: "Innehållet, rakt upp och ner.", bullets: facts(p), extra: ["Tredjepartstestad batch för batch", shortName(p)] }),
     layout: "Editorial split layout: the product bottle on the left third, and on the right a headline with a vertical checklist of facts, each with a small green check mark and thin divider lines. Off-white background, lots of air.",
   },
   {

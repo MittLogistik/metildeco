@@ -134,7 +134,7 @@ export async function generateScenes(o: { slug: string; sceneIds?: string[]; cou
     const groupId = randomUUID();
     // Mallarna lägger gärna till egen text och rekvisita: begränsa dem hårt, granskaren fångar resten
     const prompt = style && script
-      ? `${buildPrompt(product, scene)} Layout: ${style.layout} The ONLY text allowed in the image, written exactly and in Swedish: headline "${script.headline}"${script.sub ? `, subline "${script.sub}"` : ""}, items: ${script.bullets.map((b) => `"${b}"`).join(", ")}${script.extra?.length ? `, additional: ${script.extra.map((b) => `"${b}"`).join(", ")}` : ""}. No other words, no English, no claims about effects, no stars or review counts, no fruits or ingredients, no people.`
+      ? `${buildPrompt(product, scene)} Layout: ${style.layout} The ONLY text allowed in the image, written exactly and in Swedish: headline "${script.headline}"${script.sub ? `, subline "${script.sub}"` : ""}, items: ${script.bullets.map((b) => `"${b}"`).join(", ")}${script.extra?.length ? `, additional: ${script.extra.map((b) => `"${b}"`).join(", ")}` : ""}. Write each line exactly once, never repeat the product name. No other words, no English, no claims about effects, no stars or review counts, no fruits or ingredients, no people.`
       : preset
         ? `${buildPrompt(product, scene)} Any text in the image must be in Swedish and limited to the product name "${product.name.replace(/ \|.*$/, "")}" and the facts "${product.short}". No benefit or effect claims, no English words, no fruits or ingredients, no badges with claims.`
         : buildPrompt(product, scene);
