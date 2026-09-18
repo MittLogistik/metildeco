@@ -15,18 +15,19 @@ const tiers = [
 
 const field = "h-11 w-full rounded-xl border border-line bg-white px-3.5 text-sm placeholder:text-muted-soft focus:border-primary focus:outline-none";
 
-/** Förfrågan skickas som mejl till kundservice tills ett eget ärendesystem finns. */
+/** Förfrågan skickas till kundservice via /api/contact; svaret går direkt till avsändaren. */
 export function PartnerForm() {
   const [selected, setSelected] = useState<string[]>([]);
   const [tier, setTier] = useState(tiers[0]!);
-  const [sent, setSent] = useState(false);
+  const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
+  const [error, setError] = useState<string | null>(null);
   const toggle = (c: string) => setSelected((s) => (s.includes(c) ? s.filter((x) => x !== c) : [...s, c]));
 
-  if (sent) {
+  if (status === "sent") {
     return (
       <div className="rounded-card bg-primary-soft p-6">
-        <h2 className="font-display text-xl font-medium">Tack! Ditt mejlprogram har öppnats</h2>
-        <p className="mt-2 text-sm text-muted">Skicka mejlet så hör vi av oss inom fem arbetsdagar. Öppnades inget? Mejla {company.email} direkt.</p>
+        <h2 className="font-display text-xl font-medium">Tack för din förfrågan!</h2>
+        <p className="mt-2 text-sm text-muted">Vi hör av oss inom fem arbetsdagar till den e-postadress du angav.</p>
       </div>
     );
   }
@@ -34,17 +35,28 @@ export function PartnerForm() {
   return (
     <form
       className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_320px]"
-      onSubmit={(e) => {
+      onSubmit={async (e) => {
         e.preventDefault();
         if (selected.length === 0) {
           window.alert("Välj minst en kanal.");
           return;
         }
         const f = new FormData(e.currentTarget);
-        const subject = `Samarbete – ${selected.join(", ")} – ${tier.label}`;
-        const body = `Namn: ${f.get("name")}\nE-post: ${f.get("email")}\nKanaler: ${selected.join(", ")}\nFöljare: ${tier.label}\nLänk/användarnamn: ${f.get("handle")}\n\n${f.get("about")}`;
-        window.location.href = `mailto:${company.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-        setSent(true);
+        setStatus("sending");
+        setError(null);
+        try {
+          const res = await fetch("/api/contact", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ kind: "partner", name: f.get("name"), email: f.get("email"), handle: f.get("handle"), channels: selected, tier: tier.label, message: f.get("about"), website: f.get("website") }),
+          });
+          const data = (await res.json()) as { ok?: boolean; error?: string };
+          if (!res.ok || !data.ok) throw new Error(data.error ?? "Något gick fel.");
+          setStatus("sent");
+        } catch (err) {
+          setStatus("error");
+          setError(err instanceof Error ? err.message : "Något gick fel.");
+        }
       }}
     >
       <div className="space-y-8">
@@ -122,9 +134,15 @@ export function PartnerForm() {
             <dd>Ingår</dd>
           </div>
         </dl>
-        <Button type="submit" className="mt-5 w-full">
-          Skicka förfrågan
+        <input name="website" tabIndex={-1} autoComplete="off" aria-hidden="true" className="hidden" />
+        <Button type="submit" className="mt-5 w-full" disabled={status === "sending"}>
+          {status === "sending" ? "Skickar …" : "Skicka förfrågan"}
         </Button>
+        {status === "error" ? (
+          <p role="alert" className="mt-3 text-sm text-danger">
+            {error} Du kan också mejla {company.email}.
+          </p>
+        ) : null}
         <p className="mt-3 text-xs text-muted">Ersättningen är vägledande och kan justeras utifrån omfattning, format och räckvidd. Vi svarar normalt inom fem arbetsdagar.</p>
       </aside>
     </form>

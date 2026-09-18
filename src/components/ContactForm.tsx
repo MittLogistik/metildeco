@@ -11,25 +11,16 @@ const topics = ["Min order", "Fråga om en produkt", "Prenumeration", "Retur ell
 const field =
   "h-11 w-full rounded-xl border border-line bg-white px-3.5 text-sm placeholder:text-muted-soft focus:border-primary focus:outline-none";
 
-/**
- * Kontaktformulär. Tills backend finns öppnas ett färdigskrivet mejl i
- * användarens e-postprogram – meddelandet når alltid fram.
- */
+/** Kontaktformulär. Skickas till kundservice via /api/contact; kunden får svaret direkt på sin e-post. */
 export function ContactForm() {
-  const [sent, setSent] = useState(false);
+  const [state, setState] = useState<{ status: "idle" | "sending" | "sent" | "error"; error?: string }>({ status: "idle" });
 
-  if (sent) {
+  if (state.status === "sent") {
     return (
       <div className="rounded-2xl bg-primary-soft p-6">
-        <h3 className="font-display text-xl font-medium">Ditt e-postprogram har öppnats</h3>
-        <p className="mt-2 text-sm text-muted">
-          Skicka mejlet så återkommer vi inom 1–2 arbetsdagar. Öppnades inget? Mejla oss direkt på{" "}
-          <a href={`mailto:${company.email}`} className="underline">
-            {company.email}
-          </a>
-          .
-        </p>
-        <button type="button" onClick={() => setSent(false)} className="mt-4 text-sm font-medium underline underline-offset-2">
+        <h3 className="font-display text-xl font-medium">Tack, ditt meddelande är skickat</h3>
+        <p className="mt-2 text-sm text-muted">Vi svarar inom 1–2 arbetsdagar till den e-postadress du angav.</p>
+        <button type="button" onClick={() => setState({ status: "idle" })} className="mt-4 text-sm font-medium underline underline-offset-2">
           Skriv ett till meddelande
         </button>
       </div>
@@ -39,13 +30,22 @@ export function ContactForm() {
   return (
     <form
       className="grid gap-4 sm:grid-cols-2"
-      onSubmit={(e) => {
+      onSubmit={async (e) => {
         e.preventDefault();
         const f = new FormData(e.currentTarget);
-        const subject = `${f.get("topic")}${f.get("order") ? ` – order ${f.get("order")}` : ""}`;
-        const body = `${f.get("message")}\n\n—\n${f.get("name")}\n${f.get("email")}`;
-        window.location.href = `mailto:${company.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-        setSent(true);
+        setState({ status: "sending" });
+        try {
+          const res = await fetch("/api/contact", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ kind: "contact", name: f.get("name"), email: f.get("email"), order: f.get("order"), topic: f.get("topic"), message: f.get("message"), website: f.get("website") }),
+          });
+          const data = (await res.json()) as { ok?: boolean; error?: string };
+          if (!res.ok || !data.ok) throw new Error(data.error ?? "Något gick fel.");
+          setState({ status: "sent" });
+        } catch (err) {
+          setState({ status: "error", error: err instanceof Error ? err.message : "Något gick fel." });
+        }
       }}
     >
       <label className="text-sm">
@@ -79,10 +79,21 @@ export function ContactForm() {
           className="w-full rounded-xl border border-line bg-white p-3.5 text-sm placeholder:text-muted-soft focus:border-primary focus:outline-none"
         />
       </label>
+      {/* Honungsfälla för robotar – dold för människor */}
+      <input name="website" tabIndex={-1} autoComplete="off" aria-hidden="true" className="hidden" />
       <div className="sm:col-span-2">
-        <Button type="submit" size="lg">
-          Skicka meddelande
+        <Button type="submit" size="lg" disabled={state.status === "sending"}>
+          {state.status === "sending" ? "Skickar …" : "Skicka meddelande"}
         </Button>
+        {state.status === "error" ? (
+          <p role="alert" className="mt-3 text-sm text-danger">
+            {state.error} Du kan också mejla{" "}
+            <a href={`mailto:${company.email}`} className="underline">
+              {company.email}
+            </a>
+            .
+          </p>
+        ) : null}
         <p className="mt-3 text-xs text-muted">
           Vi använder dina uppgifter enbart för att svara på ditt ärende. Läs mer i vår{" "}
           <Link href={routes.privacy} className="underline">
