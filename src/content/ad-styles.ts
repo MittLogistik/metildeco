@@ -35,7 +35,8 @@ export const adStyles: AdStyle[] = [
     label: "Spec-lista",
     description: "Produkten till vänster, rubrik och bocklista till höger. Redaktionell, som AG1.",
     presets: ["Weightless Spec Grid", "Benefit Ladder", "Quiet Numbers", "Zigzag Split"],
-    script: (p) => ({ headline: "Innehållet, rakt upp och ner.", bullets: facts(p), extra: ["Tredjepartstestad batch för batch", shortName(p)] }),
+    // Sex punkter fyller mallarnas rutnät utan upprepningar
+    script: (p) => ({ headline: "Innehållet, rakt upp och ner.", bullets: [...facts(p), "Tredjepartstestad batch för batch", "Tillverkad i Sverige"].slice(0, 6), extra: [shortName(p)] }),
     layout: "Editorial split layout: the product bottle on the left third, and on the right a headline with a vertical checklist of facts, each with a small green check mark and thin divider lines. Off-white background, lots of air.",
   },
   {
