@@ -155,7 +155,7 @@ async function makeAd(o: { product: Product; angle: AdAngle; media: Media; hook:
   });
   const ad = await meta.createAd(name, o.adsetId, creative.id, o.status);
   if (supabaseConfigured())
-    await supabaseAdmin().from("ad_variants").insert({ ad_id: ad.id, campaign_id: o.campaignId, adset_id: o.adsetId, product_slug: o.product.slug, angle_id: o.angle.id, group_id: o.media.groupId, media_label: o.media.label, parent_ad_id: o.parentAdId ?? null, ad_score: review?.score ?? null, ad_review: review });
+    await supabaseAdmin().from("ad_variants").insert({ ad_id: ad.id, campaign_id: o.campaignId, adset_id: o.adsetId, product_slug: o.product.slug, angle_id: o.angle.id, group_id: o.media.groupId, media_label: o.media.label, parent_ad_id: o.parentAdId ?? null, ad_score: review?.score ?? null, ad_review: review, primary_text: primaryText, headline, description: description ?? null, image_url: o.media.feedUrl });
   return { id: ad.id, name, score: review?.score ?? null };
 }
 
@@ -227,6 +227,19 @@ export async function buildTestCampaign(o: BuildOptions): Promise<BuildResult> {
   }
   await log(decisions.map((decision) => ({ decision, applied: true, source: o.source ?? "admin" })));
   return { campaignId: campaign.id, adsetId: adset.id, ads, notes };
+}
+
+/** Granskar en befintlig annons på nytt utifrån sparad text och bild. Pausar den om den underkänns. */
+export async function rereviewAd(adId: string): Promise<{ score: number; verdict: string; issues: string[] }> {
+  const db = supabaseAdmin();
+  const v = (await db.from("ad_variants").select("product_slug,primary_text,headline,description,image_url").eq("ad_id", adId).maybeSingle()).data as { product_slug: string; primary_text: string | null; headline: string | null; description: string | null; image_url: string | null } | null;
+  if (!v?.primary_text || !v.image_url) throw new Error("Annonsen saknar sparad text eller bild att granska.");
+  const product = await getProduct(v.product_slug);
+  if (!product) throw new Error("Produkten finns inte längre.");
+  const r = await reviewAd({ primaryText: v.primary_text, headline: v.headline ?? "", description: v.description ?? undefined, imageUrl: v.image_url, product });
+  await db.from("ad_variants").update({ ad_score: r.score, ad_review: r }).eq("ad_id", adId);
+  if (r.verdict === "reject") await meta.setStatus(adId, "PAUSED").catch(() => undefined);
+  return r;
 }
 
 /* --------------------------------- Iteration --------------------------------- */

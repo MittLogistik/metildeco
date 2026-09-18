@@ -81,7 +81,7 @@ export const listTree = () =>
     fields:
       "id,name,status,effective_status,objective,daily_budget,created_time,adsets.limit(50){id,name,status,effective_status,daily_budget,campaign_id,created_time,ads.limit(50){id,name,status,effective_status,adset_id,created_time,creative{id,thumbnail_url}}}",
     limit: 50,
-  }).then((r) => r.data);
+  }).then((r) => r.data.filter((c) => c.effective_status !== "DELETED" && c.effective_status !== "ARCHIVED").sort((a, b) => b.created_time.localeCompare(a.created_time)));
 
 /** Resultat per annons för de senaste N dagarna. */
 export const adInsights = (objectId: string, days = 7, level: "campaign" | "adset" | "ad" = "ad") =>

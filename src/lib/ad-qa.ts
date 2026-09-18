@@ -40,16 +40,32 @@ async function askVision(prompt: string, imageUrls: string[]): Promise<string> {
         messages: [{ role: "user", content: [{ type: "text", text: prompt }, ...imageUrls.map((url) => ({ type: "image_url", image_url: { url } }))] }],
       }),
     });
-    const data = (await res.json()) as { choices?: { message?: { content?: string } }[]; error?: { message?: string } };
+    const data = (await res.json()) as { choices?: { message?: { content?: string | null; refusal?: string | null } }[]; error?: { message?: string } };
     if (!res.ok) throw new Error(`OpenAI: ${data.error?.message ?? res.status}`);
-    return data.choices?.[0]?.message?.content ?? "";
+    const msg = data.choices?.[0]?.message;
+    if (!msg?.content && msg?.refusal) throw new Error(`OpenAI vägrade: ${msg.refusal.slice(0, 200)}`);
+    return msg?.content ?? "";
   }
   throw new Error("Ingen AI-nyckel (ANTHROPIC_API_KEY eller OPENAI_API_KEY) för granskning.");
 }
 
+/** Tomt eller otolkbart svar får aldrig släppa igenom en annons: det räknas som underkänt. */
+const unparsed = (text: string): Review => ({ score: 0, verdict: "reject", issues: ["Granskningen gav inget tolkbart svar."], notes: text.slice(0, 300) });
+
+/** Frågar modellen, och en gång till om svaret inte går att tolka. */
+async function review(prompt: string, images: string[], min: number): Promise<Review> {
+  let last = "";
+  for (let attempt = 0; attempt < 2; attempt++) {
+    last = await askVision(prompt, images);
+    const r = parseReview(last, min);
+    if (!r.issues.includes(unparsed("").issues[0]!)) return r;
+  }
+  return unparsed(last);
+}
+
 function parseReview(text: string, min: number): Review {
   const m = text.match(/\{[\s\S]*\}/);
-  if (!m) return { score: 0, verdict: "review", issues: ["Kunde inte tolka granskningssvaret."], notes: text.slice(0, 300) };
+  if (!m) return unparsed(text);
   try {
     const j = JSON.parse(m[0]) as Partial<Review>;
     const score = Math.max(0, Math.min(100, Math.round(Number(j.score ?? 0))));
@@ -58,7 +74,7 @@ function parseReview(text: string, min: number): Review {
     const verdict: Review["verdict"] = score < min - 15 || (j.verdict === "reject" && score < min) ? "reject" : score < min ? "review" : "ok";
     return { score, verdict, issues, notes: String(j.notes ?? "") };
   } catch {
-    return { score: 0, verdict: "review", issues: ["Kunde inte tolka granskningssvaret."], notes: text.slice(0, 300) };
+    return unparsed(text);
   }
 }
 
@@ -73,7 +89,7 @@ export async function reviewImage(o: { referenceUrl: string; imageUrl: string; p
     `Bedöm sedan kvaliteten: fotorealism, skärpa på produkten, att produkten är tydligt synlig och inte för liten, ljus, komposition för en annons, färgton som passar märket (djupgrön, sand, offwhite, naturligt ljus). Ge en helhetspoäng 0–100 där 100 är en perfekt annonsbild med exakt rätt produkt.`,
     jsonFormat,
   ].join("\n");
-  return parseReview(await askVision(prompt, [o.referenceUrl, o.imageUrl]), minImageScore());
+  return review(prompt, [o.referenceUrl, o.imageUrl], minImageScore());
 }
 
 /** Granskar en färdig annons: text + bild tillsammans, regler och fakta. */
@@ -92,5 +108,5 @@ export async function reviewAd(o: { primaryText: string; headline: string; descr
   ]
     .filter(Boolean)
     .join("\n");
-  return parseReview(await askVision(prompt, [o.imageUrl]), minAdScore());
+  return review(prompt, [o.imageUrl], minAdScore());
 }

@@ -132,6 +132,20 @@ export async function setGroupActive(formData: FormData): Promise<ActionResult> 
   }
 }
 
+export async function rereview(formData: FormData): Promise<ActionResult> {
+  await requireAdmin();
+  const adId = String(formData.get("ad_id") ?? "");
+  if (!adId) return { ok: false, error: "Ogiltigt." };
+  try {
+    const { rereviewAd } = await import("@/lib/ads-engine");
+    const r = await rereviewAd(adId);
+    refresh();
+    return { ok: true, message: `Poäng ${r.score} (${r.verdict === "ok" ? "godkänd" : r.verdict === "reject" ? "underkänd, pausad" : "granska manuellt"})${r.issues.length ? `: ${r.issues.join("; ")}` : ""}` };
+  } catch (e) {
+    return fail(e);
+  }
+}
+
 export async function iterateAd(formData: FormData): Promise<ActionResult> {
   await requireAdmin();
   const adId = String(formData.get("ad_id") ?? "");

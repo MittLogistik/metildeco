@@ -6,7 +6,7 @@ import { site } from "@/lib/site";
 import { supabaseAdmin, supabaseConfigured } from "@/lib/supabase";
 import { ActionForm, SubmitButton } from "../_components/ActionForm";
 import { Card, Field, Input, Select } from "../_components/fields";
-import { createTestCampaign, iterateAd, runReview, setAdSetBudget, setObjectStatus } from "./actions";
+import { createTestCampaign, iterateAd, rereview, runReview, setAdSetBudget, setObjectStatus } from "./actions";
 import Link from "next/link";
 
 type LogRow = { id: string; created_at: string; name: string; action: string; reason: string; applied: boolean; source: string };
@@ -216,7 +216,17 @@ export default async function AdsPage() {
                             <StatusPill status={a.effective_status} />
                           </td>
                           <td className="py-2 pr-3 text-right tabular-nums" title={scoreByAd.get(a.id)?.ad_review ? `${scoreByAd.get(a.id)!.ad_review!.issues.join("; ") || scoreByAd.get(a.id)!.ad_review!.notes}` : undefined}>
-                            {scoreByAd.get(a.id)?.ad_score ?? "–"}
+                            <span className="inline-flex items-center gap-1">
+                              {scoreByAd.get(a.id)?.ad_score ?? "–"}
+                              {scoreByAd.has(a.id) ? (
+                                <ActionForm action={rereview} inline>
+                                  <input type="hidden" name="ad_id" value={a.id} />
+                                  <button type="submit" className="rounded-full border border-line px-2 py-0.5 text-xs hover:bg-sand" title="Granska om med AI">
+                                    ↻
+                                  </button>
+                                </ActionForm>
+                              ) : null}
+                            </span>
                           </td>
                           <td className="py-2 pr-3 text-right tabular-nums">{a.m?.impressions ?? "–"}</td>
                           <td className="py-2 pr-3 text-right tabular-nums">{a.m?.clicks ?? "–"}</td>
