@@ -74,3 +74,72 @@ export async function runReview(formData: FormData): Promise<ActionResult> {
     return fail(e);
   }
 }
+
+/* --------------------------------- Bilder --------------------------------- */
+
+export async function generateAdImages(formData: FormData): Promise<ActionResult> {
+  await requireAdmin();
+  const slug = String(formData.get("slug") ?? "");
+  const sceneIds = formData.getAll("scene").map(String).filter(Boolean);
+  const formats = String(formData.get("formats") ?? "1:1,9:16").split(",").filter(Boolean);
+  const mediaBase = String(formData.get("media_base") ?? "").trim();
+  if (!slug || !mediaBase) return { ok: false, error: "Produkt och bas-URL krävs." };
+  try {
+    const { generateScenes } = await import("@/lib/ad-images");
+    const r = await generateScenes({ slug, sceneIds, formats, mediaBase, count: 3 });
+    revalidatePath("/admin/annonser/bilder");
+    const notes = r.notes.length ? ` Anmärkningar: ${r.notes.join(" · ")}` : "";
+    return { ok: true, message: `Genererade ${r.groups.length} scener (${r.groups.map((g) => g.label).join(", ")}).${notes}` };
+  } catch (e) {
+    return fail(e);
+  }
+}
+
+export async function uploadAdImage(formData: FormData): Promise<ActionResult> {
+  await requireAdmin();
+  const slug = String(formData.get("slug") ?? "");
+  const format = String(formData.get("format") ?? "1:1");
+  const file = formData.get("file");
+  if (!slug || !(file instanceof File) || file.size === 0) return { ok: false, error: "Välj en fil." };
+  if (file.size > 15 * 1024 * 1024) return { ok: false, error: "Filen är större än 15 MB." };
+  try {
+    const { addUploadedCreative } = await import("@/lib/ad-images");
+    await addUploadedCreative(slug, file, format);
+    revalidatePath("/admin/annonser/bilder");
+    return { ok: true, message: "Bilden är uppladdad." };
+  } catch (e) {
+    return fail(e);
+  }
+}
+
+export async function setGroupActive(formData: FormData): Promise<ActionResult> {
+  await requireAdmin();
+  const groupId = String(formData.get("group_id") ?? "");
+  const active = String(formData.get("active")) === "1";
+  if (!groupId) return { ok: false, error: "Ogiltigt." };
+  try {
+    const { setCreativeGroupActive } = await import("@/lib/ad-images");
+    await setCreativeGroupActive(groupId, active);
+    revalidatePath("/admin/annonser/bilder");
+    return { ok: true, message: active ? "Bilden används igen." : "Bilden är dold för motorn." };
+  } catch (e) {
+    return fail(e);
+  }
+}
+
+export async function iterateAd(formData: FormData): Promise<ActionResult> {
+  await requireAdmin();
+  const adId = String(formData.get("ad_id") ?? "");
+  const mediaBase = String(formData.get("media_base") ?? "").trim() || "https://metildeco.vercel.app";
+  const status = String(formData.get("status")) === "ACTIVE" ? "ACTIVE" : "PAUSED";
+  if (!adId) return { ok: false, error: "Ogiltigt." };
+  try {
+    const { iterateFromAd } = await import("@/lib/ads-engine");
+    const r = await iterateFromAd({ adId, mediaBase, status, source: "admin" });
+    refresh();
+    const notes = r.notes.length ? ` Anmärkningar: ${r.notes.join(" · ")}` : "";
+    return { ok: true, message: `Skapade ${r.ads.length} nya annonser (${status === "ACTIVE" ? "aktiva" : "pausade"}).${notes}` };
+  } catch (e) {
+    return fail(e);
+  }
+}

@@ -162,6 +162,21 @@ export type AdSetSpec = {
   productUrl?: string;
 };
 
+/**
+ * Placeringar vi annonserar i. Annonsgruppen begränsas till exakt dessa, och reglerna för
+ * bild per placering täcker exakt samma lista – annars vägrar Meta skapa annonsen.
+ */
+export const placements = {
+  feed: {
+    facebook_positions: ["feed", "marketplace", "search", "profile_feed"],
+    instagram_positions: ["stream", "explore_home", "profile_feed", "ig_search"],
+  },
+  story: {
+    facebook_positions: ["story", "facebook_reels"],
+    instagram_positions: ["story", "reels"],
+  },
+};
+
 /** Annonsgrupp som optimerar mot köp via pixeln, bred målgrupp (Advantage+ audience). */
 export const createAdSet = (s: AdSetSpec) =>
   call<{ id: string }>("POST", `${adAccount()}/adsets`, {
@@ -178,6 +193,9 @@ export const createAdSet = (s: AdSetSpec) =>
       age_min: s.ageMin ?? 25,
       age_max: s.ageMax ?? 65,
       targeting_automation: { advantage_audience: 1 },
+      publisher_platforms: ["facebook", "instagram"],
+      facebook_positions: [...placements.feed.facebook_positions, ...placements.story.facebook_positions],
+      instagram_positions: [...placements.feed.instagram_positions, ...placements.story.instagram_positions],
     },
   });
 
@@ -207,8 +225,55 @@ export const createCreative = (c: CreativeSpec) => {
   });
 };
 
-export const createAd = (name: string, adsetId: string, creativeId: string) =>
-  call<{ id: string }>("POST", `${adAccount()}/ads`, { name, adset_id: adsetId, creative: { creative_id: creativeId }, status: "PAUSED" });
+export const createAd = (name: string, adsetId: string, creativeId: string, status: "ACTIVE" | "PAUSED" = "PAUSED") =>
+  call<{ id: string }>("POST", `${adAccount()}/ads`, { name, adset_id: adsetId, creative: { creative_id: creativeId }, status });
+
+export type PlacementCreativeSpec = {
+  name: string;
+  pageId: string;
+  instagramActorId?: string;
+  /** Bild för flöden (1:1 eller 4:5). */
+  feedHash: string;
+  /** Bild för stories/reels (9:16). Saknas den används flödesbilden överallt. */
+  storyHash?: string;
+  primaryText: string;
+  headline: string;
+  description?: string;
+  link: string;
+};
+
+/**
+ * Bildannons med olika bild per placering: flödesbilden i feeds, storybilden i stories och reels.
+ * Bygger på asset_feed_spec med asset_customization_rules. Utan storybild blir det en vanlig bildannons.
+ */
+export const createPlacementCreative = (c: PlacementCreativeSpec) => {
+  const feedLabel = { name: "feed" };
+  const storyLabel = { name: "story" };
+  const withStory = Boolean(c.storyHash);
+  return call<{ id: string }>("POST", `${adAccount()}/adcreatives`, {
+    name: c.name,
+    object_story_spec: { page_id: c.pageId, instagram_actor_id: c.instagramActorId },
+    asset_feed_spec: {
+      images: withStory ? [{ hash: c.feedHash, adlabels: [feedLabel] }, { hash: c.storyHash, adlabels: [storyLabel] }] : [{ hash: c.feedHash }],
+      bodies: [{ text: c.primaryText }],
+      titles: [{ text: c.headline }],
+      descriptions: c.description ? [{ text: c.description }] : undefined,
+      link_urls: [{ website_url: c.link }],
+      call_to_action_types: ["SHOP_NOW"],
+      ad_formats: ["SINGLE_IMAGE"],
+      ...(withStory
+        ? {
+            // PLACEMENT = "en bild per placering", inte dynamiskt innehåll
+            optimization_type: "PLACEMENT",
+            asset_customization_rules: [
+              { customization_spec: { publisher_platforms: ["facebook", "instagram"], ...placements.feed }, image_label: feedLabel },
+              { customization_spec: { publisher_platforms: ["facebook", "instagram"], ...placements.story }, image_label: storyLabel },
+            ],
+          }
+        : {}),
+    },
+  });
+};
 
 /**
  * Laddar upp en bild och returnerar image_hash. Bilden hämtas av oss och skickas som

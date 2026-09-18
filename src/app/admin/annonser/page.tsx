@@ -6,11 +6,12 @@ import { site } from "@/lib/site";
 import { supabaseAdmin, supabaseConfigured } from "@/lib/supabase";
 import { ActionForm, SubmitButton } from "../_components/ActionForm";
 import { Card, Field, Input, Select } from "../_components/fields";
-import { createTestCampaign, runReview, setAdSetBudget, setObjectStatus } from "./actions";
+import { createTestCampaign, iterateAd, runReview, setAdSetBudget, setObjectStatus } from "./actions";
+import Link from "next/link";
 
 type LogRow = { id: string; created_at: string; name: string; action: string; reason: string; applied: boolean; source: string };
 
-const actionLabel: Record<string, string> = { create: "Skapad", pause: "Pausad", activate: "Aktiverad", budget: "Budget", keep: "Behåll", note: "Info" };
+const actionLabel: Record<string, string> = { create: "Skapad", pause: "Pausad", activate: "Aktiverad", budget: "Budget", keep: "Behåll", iterate: "Itererad", note: "Info" };
 
 function money(v: number, cur: string) {
   return `${v.toFixed(2)} ${cur}`;
@@ -76,7 +77,10 @@ export default async function AdsPage() {
       <div>
         <h1 className="font-display text-3xl font-medium">Annonser</h1>
         <p className="mt-1 text-sm text-muted">
-          Meta-kampanjer via Marketing API. Allt som skapas här är pausat tills du aktiverar det. Belopp i annonskontots valuta ({cur}).
+          Meta-kampanjer via Marketing API. Allt som skapas här är pausat tills du aktiverar det. Belopp i annonskontots valuta ({cur}).{" "}
+          <Link href="/admin/annonser/bilder" className="underline">
+            Annonsbilder
+          </Link>
         </p>
       </div>
 
@@ -94,7 +98,7 @@ export default async function AdsPage() {
       <div className="grid gap-6 lg:grid-cols-2">
         <Card title="Skapa testkampanj">
           <p className="mb-4 text-sm text-muted">
-            Upp till 10 annonser för en produkt: fem textvinklar kombinerade med produktens video och bilder. Skapas pausad. Efter {rules.testDays} dagar behålls de {rules.keepWinners} bästa.
+            Upp till 10 annonser för en produkt: fem textvinklar kombinerade med produktens annonsbilder (genererade scener, egna bilder, packshots). Varje annons har en flödesbild och en storybild. Skapas pausad. Efter {rules.testDays} dagar behålls de {rules.keepWinners} bästa och de itereras.
           </p>
           <ActionForm action={createTestCampaign} className="space-y-4">
             <Field label="Produkt">
@@ -108,7 +112,7 @@ export default async function AdsPage() {
                 <Input name="ads_count" type="number" defaultValue="10" />
               </Field>
             </div>
-            <Field label="Bas-URL för bilder och video" hint="Måste vara nåbar för Meta. Byt till https://metilde.com efter lanseringen.">
+            <Field label="Bas-URL för packshots" hint="Måste vara nåbar för Meta. Byt till https://metilde.com efter lanseringen.">
               <Input name="media_base" defaultValue={site.indexable ? site.url : "https://metildeco.vercel.app"} />
             </Field>
             <Field label="Annonserna länkar till" hint="Lämna tomt för https://metilde.com.">
@@ -215,7 +219,16 @@ export default async function AdsPage() {
                           <td className="py-2 pr-3 text-right tabular-nums">{a.m?.purchases ?? "–"}</td>
                           <td className="py-2 pr-3 text-right tabular-nums">{a.m ? a.m.roas.toFixed(2) : "–"}</td>
                           <td className="py-2 text-right">
-                            <ToggleStatus id={a.id} name={a.name} level="ad" status={a.effective_status} />
+                            <span className="inline-flex gap-1">
+                              {c.name.startsWith(TEST_PREFIX) ? (
+                                <ActionForm action={iterateAd} inline confirm={`Skapa ${rules.iterationsPerWinner} nya varianter från ${a.name}? Nya scener kan genereras via Higgsfield.`}>
+                                  <input type="hidden" name="ad_id" value={a.id} />
+                                  <input type="hidden" name="status" value={a.effective_status === "ACTIVE" ? "ACTIVE" : "PAUSED"} />
+                                  <SubmitButton variant="outline">Iterera</SubmitButton>
+                                </ActionForm>
+                              ) : null}
+                              <ToggleStatus id={a.id} name={a.name} level="ad" status={a.effective_status} />
+                            </span>
                           </td>
                         </tr>
                       ))}

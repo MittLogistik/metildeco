@@ -1,16 +1,18 @@
 import "server-only";
-import { angles, fillCopy, productHooks } from "@/content/ad-copy";
+import { angles, fillCopy, productHooks, type AdAngle } from "@/content/ad-copy";
+import { generateScenes, listCreativeGroups, type CreativeGroup } from "./ad-images";
 import { getProduct } from "./catalog";
 import { META_PIXEL_ID } from "./meta";
 import * as meta from "./meta-ads";
-import { imagesFor } from "./products";
+import { imagesFor, type Product } from "./products";
 import { routes } from "./routes";
 import { site } from "./site";
 import { supabaseAdmin, supabaseConfigured } from "./supabase";
 
 /**
- * Annonsmotorn: skapar testkampanjer (10 annonser per produkt) och granskar dem
- * enligt fasta regler. Allt skapas pausat. Beloppen är i annonskontots valuta (USD).
+ * Annonsmotorn: skapar testkampanjer (bild × textvinkel, upp till 10 annonser per produkt),
+ * granskar dem enligt fasta regler och itererar nya annonser från vinnare.
+ * Allt skapas pausat om inget annat anges. Beloppen är i annonskontots valuta (USD).
  */
 
 export const rules = {
@@ -33,6 +35,8 @@ export const rules = {
   /** Sänkning när en skalad annonsgrupp slutar leverera. */
   shrinkStep: 0.3,
   minDaily: 5,
+  /** Nya annonser per vinnare vid iteration: hälften ny text på samma bild, hälften ny bild på samma text. */
+  iterationsPerWinner: 4,
 };
 
 export const TEST_PREFIX = "Test · ";
@@ -45,7 +49,7 @@ export type Decision = {
   level: "campaign" | "adset" | "ad";
   id: string;
   name: string;
-  action: "pause" | "activate" | "budget" | "keep" | "note";
+  action: "pause" | "activate" | "budget" | "keep" | "iterate" | "note";
   reason: string;
   metrics?: Record<string, number | null>;
   budget?: number;
@@ -72,6 +76,73 @@ async function log(rows: { decision: Decision; applied: boolean; source: string 
     );
 }
 
+/* ---------------------------------- Media ---------------------------------- */
+
+/** En bilduppsättning för en annons: flödesbild + ev. storybild, redan uppladdade till Meta. */
+type Media = { label: string; groupId: string | null; feedHash: string; storyHash?: string };
+
+const hashCache = new Map<string, string>();
+async function hashFor(url: string, name: string) {
+  const cached = hashCache.get(url);
+  if (cached) return cached;
+  const hash = await meta.uploadImage(url, name);
+  hashCache.set(url, hash);
+  return hash;
+}
+
+/**
+ * Samlar produktens annonsbilder: genererade/uppladdade grupper först, sedan packshots.
+ * mediaBase används för packshots (relativa sökvägar), grupperna har redan publika URL:er.
+ */
+async function collectMedia(product: Product, mediaBase: string, notes: string[], onlyGroups?: string[]): Promise<Media[]> {
+  const media: Media[] = [];
+  const groups = (await listCreativeGroups(product.slug)).filter((g) => g.feed || g.story).filter((g) => !onlyGroups || onlyGroups.includes(g.groupId));
+  for (const g of groups) {
+    try {
+      const feedSrc = g.feed ?? g.story!;
+      const feedHash = await hashFor(feedSrc.url, `${product.slug}-${g.groupId}-feed`);
+      const storyHash = g.story && g.feed ? await hashFor(g.story.url, `${product.slug}-${g.groupId}-story`) : undefined;
+      media.push({ label: g.label, groupId: g.groupId, feedHash, storyHash });
+    } catch (e) {
+      notes.push(`${g.label}: ${e instanceof Error ? e.message : e}`);
+    }
+  }
+  if (!onlyGroups) {
+    const images = imagesFor(product).filter((p) => !p.endsWith(".svg")).slice(0, 4);
+    for (const [i, path] of images.entries()) {
+      const url = path.startsWith("http") ? path : `${mediaBase}${path}`;
+      try {
+        media.push({ label: `packshot ${i + 1}`, groupId: null, feedHash: await hashFor(url, `${product.slug}-packshot-${i + 1}`) });
+      } catch (e) {
+        notes.push(`Packshot ${i + 1}: ${e instanceof Error ? e.message : e}`);
+      }
+    }
+  }
+  return media;
+}
+
+async function makeAd(o: { product: Product; angle: AdAngle; media: Media; hook: string; adsetId: string; campaignId: string; link: string; status: "ACTIVE" | "PAUSED"; parentAdId?: string }) {
+  const pageId = process.env.META_PAGE_ID!;
+  const name = `${o.angle.id} · ${o.media.label}`;
+  const creative = await meta.createPlacementCreative({
+    name: `${o.product.slug} · ${name}`,
+    pageId,
+    instagramActorId: process.env.META_INSTAGRAM_ACTOR_ID || undefined,
+    feedHash: o.media.feedHash,
+    storyHash: o.media.storyHash,
+    primaryText: fillCopy(o.angle.text, { name: o.product.name, hook: o.hook }),
+    headline: fillCopy(o.angle.headline, { name: o.product.name, hook: o.hook }),
+    description: o.angle.description ? fillCopy(o.angle.description, { name: o.product.name, hook: o.hook }) : undefined,
+    link: o.link,
+  });
+  const ad = await meta.createAd(name, o.adsetId, creative.id, o.status);
+  if (supabaseConfigured())
+    await supabaseAdmin().from("ad_variants").insert({ ad_id: ad.id, campaign_id: o.campaignId, adset_id: o.adsetId, product_slug: o.product.slug, angle_id: o.angle.id, group_id: o.media.groupId, media_label: o.media.label, parent_ad_id: o.parentAdId ?? null });
+  return { id: ad.id, name };
+}
+
+const productLink = (product: Product, linkBase?: string) => `${(linkBase ?? (site.indexable ? site.url : "https://metilde.com")).replace(/\/$/, "")}${routes.product(product.slug)}`;
+
 /* ------------------------------ Skapa testkampanj ------------------------------ */
 
 export type BuildOptions = {
@@ -80,7 +151,7 @@ export type BuildOptions = {
   dailyBudget: number;
   /** Antal annonser (max 10). */
   adsCount?: number;
-  /** Publik bas-URL där bilder/video kan hämtas av Meta (måste vara nåbar utifrån). */
+  /** Publik bas-URL där packshots kan hämtas (måste vara nåbar utifrån). */
   mediaBase?: string;
   /** Domän som annonserna länkar till. */
   linkBase?: string;
@@ -91,97 +162,119 @@ export type BuildResult = { campaignId: string; adsetId: string; ads: { id: stri
 
 export async function buildTestCampaign(o: BuildOptions): Promise<BuildResult> {
   if (!meta.adsConfigured()) throw new Error("META_ADS_TOKEN eller META_AD_ACCOUNT_ID saknas.");
-  const pageId = process.env.META_PAGE_ID;
-  if (!pageId) throw new Error("META_PAGE_ID saknas.");
+  if (!process.env.META_PAGE_ID) throw new Error("META_PAGE_ID saknas.");
   const product = await getProduct(o.slug);
   if (!product) throw new Error(`Produkten ${o.slug} finns inte.`);
 
   const mediaBase = (o.mediaBase ?? site.url).replace(/\/$/, "");
-  const linkBase = (o.linkBase ?? (site.indexable ? site.url : "https://metilde.com")).replace(/\/$/, "");
-  const link = `${linkBase}${routes.product(product.slug)}`;
+  const link = productLink(product, o.linkBase);
   const adsCount = Math.min(Math.max(o.adsCount ?? 10, 1), 10);
   const notes: string[] = [];
-
-  // Media: video först (om den finns), sedan produktbilder. Bilder laddas upp en gång och återanvänds.
-  type Media = { label: string; imageHash?: string; videoId?: string };
-  const media: Media[] = [];
-  const images = imagesFor(product).filter((p) => !p.endsWith(".svg")).slice(0, 4);
-  const hashes: string[] = [];
-  for (const [i, path] of images.entries()) {
-    try {
-      hashes.push(await meta.uploadImage(`${mediaBase}${path}`, `${product.slug}-${i + 1}`));
-    } catch (e) {
-      notes.push(`Bild ${i + 1} kunde inte laddas upp: ${e instanceof Error ? e.message : e}`);
-    }
-  }
-  if (product.videoUrl) {
-    try {
-      const video = await meta.uploadVideo(`${mediaBase}${product.videoUrl}`, `${product.slug}-video`);
-      let poster = hashes[0];
-      if (product.videoPosterUrl) {
-        try {
-          poster = await meta.uploadImage(`${mediaBase}${product.videoPosterUrl}`, `${product.slug}-poster`);
-        } catch {
-          /* använd första bilden som poster */
-        }
-      }
-      media.push({ label: "video", videoId: video.id, imageHash: poster });
-    } catch (e) {
-      notes.push(`Videon kunde inte laddas upp: ${e instanceof Error ? e.message : e}`);
-    }
-  }
-  hashes.forEach((h, i) => media.push({ label: `bild${i + 1}`, imageHash: h }));
-  if (media.length === 0) throw new Error("Ingen bild eller video kunde laddas upp – kontrollera mediaBase.");
+  const media = await collectMedia(product, mediaBase, notes);
+  if (media.length === 0) throw new Error("Inga bilder att annonsera med – generera scener eller kontrollera mediaBase.");
 
   const hooks = productHooks[product.slug] ?? [product.short];
   const campaign = await meta.createCampaign(`${TEST_PREFIX}${product.name} · ${today()}`);
   const adset = await meta.createAdSet({ name: `${TEST_PREFIX}${product.name}`, campaignId: campaign.id, dailyBudget: o.dailyBudget, pixelId: META_PIXEL_ID });
 
   const ads: { id: string; name: string }[] = [];
-  const decisions: Decision[] = [{ level: "campaign", id: campaign.id, name: `${TEST_PREFIX}${product.name}`, action: "note", reason: `Testkampanj skapad (pausad), budget ${o.dailyBudget}/dag`, campaignId: campaign.id }];
-  // Kombinera vinkel × media tills vi har adsCount annonser. Varje kombination får en egen hook.
+  const decisions: Decision[] = [{ level: "campaign", id: campaign.id, name: `${TEST_PREFIX}${product.name}`, action: "note", reason: `Testkampanj skapad (pausad), budget ${o.dailyBudget}/dag, ${media.length} bilder`, campaignId: campaign.id }];
+  // Varje annons = unik kombination av bild och vinkel. Bilderna roteras så att alla används innan någon upprepas.
   let n = 0;
   let sameErrors = 0;
   let lastError = "";
-  outer: for (let round = 0; round < media.length; round++) {
-    for (const angle of angles) {
-      if (n >= adsCount) break outer;
-      const m = media[(round + angles.indexOf(angle)) % media.length]!;
-      const hook = hooks[n % hooks.length]!;
-      const name = `${angle.id} · ${m.label}`;
-      // Samma vinkel+media får inte upprepas
-      if (ads.some((a) => a.name === name)) continue;
-      try {
-        const creative = await meta.createCreative({
-          name: `${product.slug} · ${name}`,
-          pageId,
-          instagramActorId: process.env.META_INSTAGRAM_ACTOR_ID || undefined,
-          imageHash: m.imageHash,
-          videoId: m.videoId,
-          primaryText: fillCopy(angle.text, { name: product.name, hook }),
-          headline: fillCopy(angle.headline, { name: product.name, hook }),
-          description: angle.description ? fillCopy(angle.description, { name: product.name, hook }) : undefined,
-          link,
-        });
-        const ad = await meta.createAd(name, adset.id, creative.id);
-        ads.push({ id: ad.id, name });
-        decisions.push({ level: "ad", id: ad.id, name, action: "note", reason: "Skapad (pausad)", campaignId: campaign.id, adsetId: adset.id });
-        n++;
-      } catch (e) {
-        const msg = e instanceof Error ? e.message : String(e);
-        sameErrors = msg === lastError ? sameErrors + 1 : 1;
-        lastError = msg;
-        notes.push(`${name}: ${msg}`);
-        // Samma fel tre gånger i rad betyder att inget kommer lyckas – avbryt i stället för att spamma
-        if (sameErrors >= 3) {
-          notes.push("Avbröt efter tre likadana fel.");
-          break outer;
-        }
+  const combos: { angle: AdAngle; m: Media }[] = [];
+  for (let round = 0; round < media.length && combos.length < adsCount; round++) for (const [ai, angle] of angles.entries()) combos.push({ angle, m: media[(round + ai) % media.length]! });
+  const seen = new Set<string>();
+  for (const { angle, m } of combos) {
+    if (n >= adsCount) break;
+    const key = `${angle.id}·${m.label}`;
+    if (seen.has(key)) continue;
+    seen.add(key);
+    try {
+      const ad = await makeAd({ product, angle, media: m, hook: hooks[n % hooks.length]!, adsetId: adset.id, campaignId: campaign.id, link, status: "PAUSED" });
+      ads.push(ad);
+      decisions.push({ level: "ad", id: ad.id, name: ad.name, action: "note", reason: "Skapad (pausad)", campaignId: campaign.id, adsetId: adset.id });
+      n++;
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : String(e);
+      sameErrors = msg === lastError ? sameErrors + 1 : 1;
+      lastError = msg;
+      notes.push(`${key}: ${msg}`);
+      if (sameErrors >= 3) {
+        notes.push("Avbröt efter tre likadana fel.");
+        break;
       }
     }
   }
   await log(decisions.map((decision) => ({ decision, applied: true, source: o.source ?? "admin" })));
   return { campaignId: campaign.id, adsetId: adset.id, ads, notes };
+}
+
+/* --------------------------------- Iteration --------------------------------- */
+
+type Variant = { ad_id: string; campaign_id: string; adset_id: string; product_slug: string; angle_id: string; group_id: string | null; media_label: string; iterated_at: string | null };
+
+/**
+ * Bygger nya annonser från en vinnare: samma bild med nya textvinklar, och samma text med nya bilder.
+ * Nya bilder genereras via Higgsfield om produkten saknar oanvända scener.
+ */
+export async function iterateFromAd(o: { adId: string; mediaBase: string; linkBase?: string; status?: "ACTIVE" | "PAUSED"; source?: string }): Promise<{ ads: { id: string; name: string }[]; notes: string[] }> {
+  const db = supabaseAdmin();
+  const v = (await db.from("ad_variants").select("*").eq("ad_id", o.adId).maybeSingle()).data as Variant | null;
+  if (!v) throw new Error("Annonsen är inte skapad av motorn, så den kan inte itereras.");
+  const product = await getProduct(v.product_slug);
+  if (!product) throw new Error("Produkten finns inte längre.");
+  const notes: string[] = [];
+  const link = productLink(product, o.linkBase);
+  const hooks = productHooks[product.slug] ?? [product.short];
+  const status = o.status ?? "PAUSED";
+  const half = Math.ceil(rules.iterationsPerWinner / 2);
+  const siblings = ((await db.from("ad_variants").select("*").eq("adset_id", v.adset_id)).data ?? []) as Variant[];
+  const usedKeys = new Set(siblings.map((s) => `${s.angle_id}·${s.group_id ?? s.media_label}`));
+  const ads: { id: string; name: string }[] = [];
+
+  // 1) Samma bild, nya vinklar
+  const allMedia = await collectMedia(product, o.mediaBase, notes);
+  const winnerMedia = allMedia.find((m) => (v.group_id ? m.groupId === v.group_id : m.label === v.media_label));
+  const winnerAngle = angles.find((a) => a.id === v.angle_id);
+  if (winnerMedia) {
+    for (const angle of angles.filter((a) => a.id !== v.angle_id && !usedKeys.has(`${a.id}·${v.group_id ?? v.media_label}`)).slice(0, half)) {
+      try {
+        ads.push(await makeAd({ product, angle, media: winnerMedia, hook: hooks[ads.length % hooks.length]!, adsetId: v.adset_id, campaignId: v.campaign_id, link, status, parentAdId: v.ad_id }));
+      } catch (e) {
+        notes.push(`${angle.id}: ${e instanceof Error ? e.message : e}`);
+      }
+    }
+  }
+
+  // 2) Samma vinkel, nya bilder – oanvända grupper först, annars nya scener
+  if (winnerAngle) {
+    let fresh = allMedia.filter((m) => m.groupId && !usedKeys.has(`${v.angle_id}·${m.groupId}`));
+    if (fresh.length < half) {
+      try {
+        const gen = await generateScenes({ slug: product.slug, count: half - fresh.length, mediaBase: o.mediaBase, parentGroupId: v.group_id ?? undefined });
+        notes.push(...gen.notes);
+        const extra = await collectMedia(product, o.mediaBase, notes, gen.groups.map((g: CreativeGroup) => g.groupId));
+        fresh = fresh.concat(extra);
+      } catch (e) {
+        notes.push(`Nya scener: ${e instanceof Error ? e.message : e}`);
+      }
+    }
+    for (const m of fresh.slice(0, half)) {
+      try {
+        ads.push(await makeAd({ product, angle: winnerAngle, media: m, hook: hooks[ads.length % hooks.length]!, adsetId: v.adset_id, campaignId: v.campaign_id, link, status, parentAdId: v.ad_id }));
+      } catch (e) {
+        notes.push(`${m.label}: ${e instanceof Error ? e.message : e}`);
+      }
+    }
+  }
+
+  await db.from("ad_variants").update({ iterated_at: new Date().toISOString() }).eq("ad_id", v.ad_id);
+  await log([
+    { decision: { level: "ad", id: v.ad_id, name: `${v.angle_id} · ${v.media_label}`, action: "iterate", reason: `${ads.length} nya annonser (${status === "ACTIVE" ? "aktiva" : "pausade"}): ${ads.map((a) => a.name).join(", ") || "inga"}`, campaignId: v.campaign_id, adsetId: v.adset_id }, applied: true, source: o.source ?? "admin" },
+  ]);
+  return { ads, notes };
 }
 
 /* --------------------------------- Granskning --------------------------------- */
@@ -202,13 +295,15 @@ const metricsOf = (i: meta.Insight | undefined) => {
 };
 
 /**
- * Går igenom alla aktiva testkampanjer och föreslår (eller utför) paus, urval av vinnare
- * och budgetändringar enligt `rules`. Returnerar besluten.
+ * Går igenom alla aktiva testkampanjer och föreslår (eller utför) paus, urval av vinnare,
+ * iteration från vinnare och budgetändringar enligt `rules`. Returnerar besluten.
  */
-export async function reviewAds(o: { apply: boolean; source: string }): Promise<Decision[]> {
+export async function reviewAds(o: { apply: boolean; source: string; mediaBase?: string }): Promise<Decision[]> {
   if (!meta.adsConfigured()) throw new Error("META_ADS_TOKEN eller META_AD_ACCOUNT_ID saknas.");
   const decisions: Decision[] = [];
   const campaigns = (await meta.listCampaigns()).filter((c) => c.name.startsWith(TEST_PREFIX) && c.effective_status === "ACTIVE");
+  const variants = supabaseConfigured() ? (((await supabaseAdmin().from("ad_variants").select("ad_id,iterated_at")).data ?? []) as Pick<Variant, "ad_id" | "iterated_at">[]) : [];
+  const variantById = new Map(variants.map((v) => [v.ad_id, v]));
 
   for (const c of campaigns) {
     const age = ageDays(c.created_time);
@@ -220,7 +315,6 @@ export async function reviewAds(o: { apply: boolean; source: string }): Promise<
       const daily = Number(adset.daily_budget ?? 0) / 100;
 
       if (age < rules.testDays) {
-        // Testfas: pausa bara tydliga förlorare i förtid
         for (const ad of ads) {
           const m = metricsOf(byAd.get(ad.id));
           if (m.spend >= rules.killMinSpend && m.purchases === 0 && m.ctr < rules.killMaxCtr && m.addToCart === 0)
@@ -231,11 +325,9 @@ export async function reviewAds(o: { apply: boolean; source: string }): Promise<
         continue;
       }
 
-      // Testperiod slut: behåll de bästa, pausa resten
+      // Testperiod slut: behåll de bästa, pausa resten, iterera vinnarna en gång
+      const ranked = ads.map((ad) => ({ ad, m: metricsOf(byAd.get(ad.id)) })).sort((a, b) => b.m.purchases - a.m.purchases || b.m.addToCart - a.m.addToCart || b.m.ctr - a.m.ctr);
       if (ads.length > rules.keepWinners) {
-        const ranked = ads
-          .map((ad) => ({ ad, m: metricsOf(byAd.get(ad.id)) }))
-          .sort((a, b) => b.m.purchases - a.m.purchases || b.m.addToCart - a.m.addToCart || b.m.ctr - a.m.ctr);
         ranked.forEach(({ ad, m }, idx) => {
           const keep = idx < rules.keepWinners;
           decisions.push({
@@ -249,6 +341,11 @@ export async function reviewAds(o: { apply: boolean; source: string }): Promise<
             adsetId: adset.id,
           });
         });
+      }
+      for (const { ad, m } of ranked.slice(0, rules.keepWinners)) {
+        const v = variantById.get(ad.id);
+        if (v && !v.iterated_at && (m.purchases > 0 || m.addToCart > 0))
+          decisions.push({ level: "ad", id: ad.id, name: ad.name, action: "iterate", reason: `Vinnare med ${m.purchases} köp och ${m.addToCart} varukorgar → ${rules.iterationsPerWinner} nya varianter`, metrics: m, campaignId: c.id, adsetId: adset.id });
       }
 
       // Skalning på annonsgruppsnivå utifrån de senaste 3 dagarna
@@ -270,11 +367,15 @@ export async function reviewAds(o: { apply: boolean; source: string }): Promise<
         if (d.action === "pause") await meta.setStatus(d.id, "PAUSED");
         else if (d.action === "activate") await meta.setStatus(d.id, "ACTIVE");
         else if (d.action === "budget" && d.budget) await meta.setDailyBudget(d.id, d.budget);
+        else if (d.action === "iterate") {
+          const r = await iterateFromAd({ adId: d.id, mediaBase: o.mediaBase ?? site.url, status: "ACTIVE", source: o.source });
+          d.reason += ` → skapade ${r.ads.length}`;
+        }
       } catch (e) {
         d.reason += ` (misslyckades: ${e instanceof Error ? e.message : e})`;
       }
     }
   }
-  await log(decisions.filter((d) => d.action !== "keep").map((decision) => ({ decision, applied: o.apply, source: o.source })));
+  await log(decisions.filter((d) => d.action !== "keep" && !(d.action === "iterate" && o.apply)).map((decision) => ({ decision, applied: o.apply, source: o.source })));
   return decisions;
 }
