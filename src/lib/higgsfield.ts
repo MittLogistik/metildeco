@@ -18,13 +18,25 @@ export type HfResolution = "1k" | "2k" | "4k";
 export type HfQuality = "low" | "medium" | "high";
 export const defaultQuality = (): HfQuality => (["low", "medium", "high"].includes(process.env.HF_QUALITY ?? "") ? (process.env.HF_QUALITY as HfQuality) : "medium");
 
-export type HfPreset = { id: string; type: string; name: string };
+export type HfPreset = { id: string; type: string; name: string; metadata?: { aspect_ratio?: string; group_name?: string }; cover_image?: { url: string } };
 
+/** Alla Marketing Studio-mallar (grupper som Hero Spotlight, Proof & Specs). Cachas i tio minuter. */
+let presetCache: { at: number; items: HfPreset[] } | null = null;
 export async function listPresets(): Promise<HfPreset[]> {
-  const res = await fetch(`${BASE}/marketing-studio/image/presets?size=50`, { headers: headers() });
-  if (!res.ok) throw new Error(`Higgsfield presets: ${res.status} ${(await res.text()).slice(0, 200)}`);
-  const data = (await res.json()) as { items?: HfPreset[] };
-  return data.items ?? [];
+  if (!higgsfieldConfigured()) return [];
+  if (presetCache && Date.now() - presetCache.at < 600_000) return presetCache.items;
+  const items: HfPreset[] = [];
+  let cursor = 0;
+  for (let i = 0; i < 4; i++) {
+    const res = await fetch(`${BASE}/marketing-studio/image/presets?size=50&cursor=${cursor}`, { headers: headers() });
+    if (!res.ok) throw new Error(`Higgsfield presets: ${res.status} ${(await res.text()).slice(0, 200)}`);
+    const data = (await res.json()) as { items?: HfPreset[]; cursor?: number; total?: number };
+    items.push(...(data.items ?? []));
+    if (!data.cursor || !(data.items ?? []).length || items.length >= (data.total ?? 0)) break;
+    cursor = data.cursor;
+  }
+  presetCache = { at: Date.now(), items };
+  return items;
 }
 
 type Job = { request_id: string; status_url: string; status: string; images?: { url: string }[]; error?: string | null };

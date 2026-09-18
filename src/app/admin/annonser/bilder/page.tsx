@@ -3,7 +3,7 @@ import { requireAdmin } from "@/lib/auth";
 import { groupScore, listCreativeGroups, scenes } from "@/lib/ad-images";
 import { minImageScore, qaConfigured } from "@/lib/ad-qa";
 import { getCatalog } from "@/lib/catalog";
-import { higgsfieldConfigured } from "@/lib/higgsfield";
+import { higgsfieldConfigured, listPresets } from "@/lib/higgsfield";
 import { site } from "@/lib/site";
 import { ActionForm, SubmitButton } from "../../_components/ActionForm";
 import { Card, Field, Input, Select } from "../../_components/fields";
@@ -19,6 +19,13 @@ export default async function AdImagesPage({ searchParams }: PageProps<"/admin/a
   const groups = slug ? await listCreativeGroups(slug, false) : [];
   const usedScenes = new Set(groups.map((g) => g.sceneId));
   const mediaBase = site.indexable ? site.url : "https://metildeco.vercel.app";
+  const presets = await listPresets().catch(() => []);
+  const presetOptions = [{ value: "", label: "Egen scen (våra prompts, produkten i miljö)" }].concat(
+    presets
+      .slice()
+      .sort((a, b) => (a.metadata?.group_name ?? "").localeCompare(b.metadata?.group_name ?? "") || a.name.localeCompare(b.name))
+      .map((p) => ({ value: p.id, label: `${p.metadata?.group_name ?? "Mall"}: ${p.name}${p.metadata?.aspect_ratio ? ` (${p.metadata.aspect_ratio})` : ""}` })),
+  );
 
   return (
     <div className="space-y-8">
@@ -69,6 +76,9 @@ export default async function AdImagesPage({ searchParams }: PageProps<"/admin/a
                     </label>
                   ))}
                 </div>
+              </Field>
+              <Field label="Stil" hint="Higgsfields mallar styr komposition, ljus och grafik. Scenen ovan blir budskapet i mallen.">
+                <Select name="preset_id" options={presetOptions} />
               </Field>
               <div className="grid gap-4 sm:grid-cols-3">
                 <Field label="Format">

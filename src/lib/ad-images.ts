@@ -1,7 +1,7 @@
 import "server-only";
 import { randomUUID } from "node:crypto";
 import { getProduct } from "./catalog";
-import { generateImage, higgsfieldConfigured, type HfAspect, type HfQuality } from "./higgsfield";
+import { generateImage, higgsfieldConfigured, listPresets, type HfAspect, type HfQuality } from "./higgsfield";
 import { qaConfigured, reviewImage, type Review } from "./ad-qa";
 import { primaryImage, type Product } from "./products";
 import { supabaseAdmin } from "./supabase";
@@ -71,7 +71,8 @@ export async function listCreativeGroups(slug: string, onlyActive = true): Promi
   if (error) throw new Error(error.message);
   const groups = new Map<string, CreativeGroup>();
   for (const c of (data ?? []) as Creative[]) {
-    const g = groups.get(c.group_id) ?? { groupId: c.group_id, label: scenes.find((s) => s.id === c.scene_id)?.label ?? (c.kind === "upload" ? "Egen bild" : c.scene_id ?? "Scen"), kind: c.kind, feed: null, story: null, sceneId: c.scene_id, createdAt: c.created_at };
+    const sceneLabel = (id: string | null) => (id?.includes(" · ") ? `${id.split(" · ")[0]} · ${scenes.find((s) => s.id === id.split(" · ")[1])?.label ?? id.split(" · ")[1]}` : (scenes.find((s) => s.id === id)?.label ?? id));
+    const g = groups.get(c.group_id) ?? { groupId: c.group_id, label: c.kind === "upload" ? "Egen bild" : (sceneLabel(c.scene_id) ?? "Scen"), kind: c.kind, feed: null, story: null, sceneId: c.scene_id, createdAt: c.created_at };
     if (c.format === "9:16") g.story = g.story ?? c;
     else g.feed = g.feed ?? c;
     groups.set(c.group_id, g);
@@ -106,16 +107,20 @@ export async function generateScenes(o: { slug: string; sceneIds?: string[]; cou
   const packshot = `${o.mediaBase.replace(/\/$/, "")}${primaryImage(product)}`;
   const formats = o.formats?.length ? o.formats : ["1:1", "9:16"];
   const existing = await listCreativeGroups(o.slug, false);
-  const used = new Set(existing.map((g) => g.sceneId));
+  // Mallbilder räknas inte som "använd scen": samma scen kan göras i flera mallar
+  const used = new Set(existing.filter((g) => g.kind === "scene").map((g) => g.sceneId));
   const pick = o.sceneIds?.length ? scenes.filter((s) => o.sceneIds!.includes(s.id)) : scenes.filter((s) => !used.has(s.id)).slice(0, o.count ?? 3);
   if (pick.length === 0) throw new Error("Alla scener är redan genererade för produkten. Välj scener att göra om.");
   const notes: string[] = [];
   const db = supabaseAdmin();
   const groups: CreativeGroup[] = [];
+  // Med en Higgsfield-mall styr mallen kompositionen; vår scen blir budskapet. Etiketten på mallbilden: mallens namn.
+  const preset = o.presetId ? (await listPresets()).find((p) => p.id === o.presetId) : undefined;
   for (const scene of pick) {
     const groupId = randomUUID();
     const prompt = buildPrompt(product, scene);
-    const g: CreativeGroup = { groupId, label: scene.label, kind: "scene", feed: null, story: null, sceneId: scene.id, createdAt: new Date().toISOString() };
+    const label = preset ? `${preset.name} · ${scene.label}` : scene.label;
+    const g: CreativeGroup = { groupId, label, kind: preset ? "preset" : "scene", feed: null, story: null, sceneId: scene.id, createdAt: new Date().toISOString() };
     for (const format of formats) {
       try {
         const hfUrl = await generateImage({ prompt, imageUrls: [packshot], aspectRatio: formatAspect[format] ?? "1:1", resolution: "1k", quality: o.quality, presetId: o.presetId });
@@ -131,7 +136,7 @@ export async function generateScenes(o: { slug: string; sceneIds?: string[]; cou
         }
         const rejected = review?.verdict === "reject";
         if (rejected) notes.push(`${scene.label} ${format} underkänd (${review!.score}): ${review!.issues.join("; ") || review!.notes}`);
-        const row = { product_slug: o.slug, kind: "scene", scene_id: scene.id, prompt, group_id: groupId, format, url: stored.url, storage_path: stored.path, parent_group_id: o.parentGroupId ?? null, active: !rejected, image_score: review?.score ?? null, image_review: review, reviewed_at: review ? new Date().toISOString() : null };
+        const row = { product_slug: o.slug, kind: preset ? "preset" : "scene", scene_id: preset ? `${preset.name} · ${scene.id}` : scene.id, prompt: preset ? `[${preset.name}] ${prompt}` : prompt, group_id: groupId, format, url: stored.url, storage_path: stored.path, parent_group_id: o.parentGroupId ?? null, active: !rejected, image_score: review?.score ?? null, image_review: review, reviewed_at: review ? new Date().toISOString() : null };
         const ins = await db.from("ad_creatives").insert(row).select("*").single();
         if (ins.error) throw new Error(ins.error.message);
         const c = ins.data as Creative;

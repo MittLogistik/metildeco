@@ -88,7 +88,8 @@ export async function generateAdImages(formData: FormData): Promise<ActionResult
     const { generateScenes } = await import("@/lib/ad-images");
     const q = String(formData.get("quality") ?? "");
     const quality = q === "low" || q === "medium" || q === "high" ? q : undefined;
-    const r = await generateScenes({ slug, sceneIds, formats, mediaBase, count: 3, quality });
+    const presetId = String(formData.get("preset_id") ?? "").trim() || undefined;
+    const r = await generateScenes({ slug, sceneIds, formats, mediaBase, count: 3, quality, presetId });
     revalidatePath("/admin/annonser/bilder");
     const notes = r.notes.length ? ` Anmärkningar: ${r.notes.join(" · ")}` : "";
     return { ok: true, message: `Genererade ${r.groups.length} scener (${r.groups.map((g) => g.label).join(", ")}).${notes}` };
