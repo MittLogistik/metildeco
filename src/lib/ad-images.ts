@@ -118,7 +118,10 @@ export async function generateScenes(o: { slug: string; sceneIds?: string[]; cou
   const preset = o.presetId ? (await listPresets()).find((p) => p.id === o.presetId) : undefined;
   for (const scene of pick) {
     const groupId = randomUUID();
-    const prompt = buildPrompt(product, scene);
+    // Mallarna lägger gärna till egen text och rekvisita: begränsa dem hårt, granskaren fångar resten
+    const prompt = preset
+      ? `${buildPrompt(product, scene)} Any text in the image must be in Swedish and limited to the product name "${product.name.replace(/ |.*$/, "")}" and the facts "${product.short}". No benefit or effect claims, no English words, no fruits or ingredients, no badges with claims.`
+      : buildPrompt(product, scene);
     const label = preset ? `${preset.name} · ${scene.label}` : scene.label;
     const g: CreativeGroup = { groupId, label, kind: preset ? "preset" : "scene", feed: null, story: null, sceneId: scene.id, createdAt: new Date().toISOString() };
     for (const format of formats) {
