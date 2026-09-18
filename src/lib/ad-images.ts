@@ -98,70 +98,106 @@ export async function storeImage(sourceUrl: string, path: string): Promise<{ url
 
 const formatAspect: Record<string, HfAspect> = { "1:1": "1:1", "9:16": "9:16", "3:4": "3:4" };
 
+/** Väljer scener: de angivna, annars nästa `count` som inte redan finns som egen scen. */
+export async function pickScenes(slug: string, sceneIds?: string[], count = 3): Promise<Scene[]> {
+  if (sceneIds?.length) return scenes.filter((s) => sceneIds.includes(s.id));
+  const existing = await listCreativeGroups(slug, false);
+  // Mallbilder räknas inte som "använd scen": samma scen kan göras i flera mallar
+  const used = new Set(existing.filter((g) => g.kind === "scene").map((g) => g.sceneId));
+  return scenes.filter((s) => !used.has(s.id)).slice(0, count);
+}
+
+export type GenerateOneOptions = {
+  slug: string;
+  sceneId: string;
+  format: string;
+  /** Publik bas-URL för packshoten. */
+  mediaBase: string;
+  /** Bilder i samma scen delar grupp; utelämnas skapas en ny. */
+  groupId?: string;
+  presetId?: string;
+  styleId?: string;
+  quality?: HfQuality;
+  parentGroupId?: string;
+};
+
 /**
- * Genererar scener för en produkt. Varje scen ger en bild per format (1:1 och 9:16 som standard).
- * mediaBase måste vara publikt nåbar så att Higgsfield kan hämta packshoten.
+ * Genererar EN bild (en scen i ett format), granskar den och sparar den. Anropas bild för bild
+ * från webbläsaren så att varje anrop håller sig under serverns tidsgräns.
  */
-export async function generateScenes(o: { slug: string; sceneIds?: string[]; count?: number; formats?: string[]; mediaBase: string; parentGroupId?: string; presetId?: string; quality?: HfQuality; styleId?: string }): Promise<{ groups: CreativeGroup[]; notes: string[] }> {
+export async function generateOne(o: GenerateOneOptions): Promise<{ creative: Creative; label: string; rejected: boolean; note: string | null }> {
   if (!higgsfieldConfigured()) throw new Error("HF_CREDENTIALS saknas.");
   const product = await getProduct(o.slug);
   if (!product) throw new Error(`Produkten ${o.slug} finns inte.`);
+  const scene = scenes.find((s) => s.id === o.sceneId);
+  if (!scene) throw new Error("Okänd scen.");
   const packshot = `${o.mediaBase.replace(/\/$/, "")}${primaryImage(product)}`;
-  const formats = o.formats?.length ? o.formats : ["1:1", "9:16"];
-  const existing = await listCreativeGroups(o.slug, false);
-  // Mallbilder räknas inte som "använd scen": samma scen kan göras i flera mallar
-  const used = new Set(existing.filter((g) => g.kind === "scene").map((g) => g.sceneId));
-  const pick = o.sceneIds?.length ? scenes.filter((s) => o.sceneIds!.includes(s.id)) : scenes.filter((s) => !used.has(s.id)).slice(0, o.count ?? 3);
-  if (pick.length === 0) throw new Error("Alla scener är redan genererade för produkten. Välj scener att göra om.");
-  const notes: string[] = [];
-  const db = supabaseAdmin();
-  const groups: CreativeGroup[] = [];
-  // Med en Higgsfield-mall styr mallen kompositionen; vår scen blir budskapet. Etiketten på mallbilden: mallens namn.
+  const groupId = o.groupId ?? randomUUID();
+
+  // Med en Higgsfield-mall styr mallen kompositionen; vår scen blir budskapet.
   const allPresets = o.presetId || o.styleId ? await listPresets() : [];
-  let preset = o.presetId ? allPresets.find((p) => p.id === o.presetId) : undefined;
-  // Stil = mall + manus. Mallen väljs per format (första av stilens mallar som finns i rätt format, annars första som finns).
   const style = o.styleId ? styleById(o.styleId) : undefined;
   const script = style ? style.script(product) : null;
   const allowed = script ? scriptLines(script) : [];
-  const presetFor = (format: string) => {
-    if (!style) return preset;
-    const want = format === "9:16" ? "9:16" : format === "3:4" ? "3:4" : "1:1";
+  let preset = o.presetId ? allPresets.find((p) => p.id === o.presetId) : undefined;
+  if (style) {
+    // Stil = mall + manus. Mallen väljs per format: första av stilens mallar i rätt format, annars första som finns.
+    const want = o.format === "9:16" ? "9:16" : o.format === "3:4" ? "3:4" : "1:1";
     const candidates = style.presets.map((n) => allPresets.find((p) => p.name === n)).filter((p): p is NonNullable<typeof p> => Boolean(p));
-    return candidates.find((p) => p.metadata?.aspect_ratio === want) ?? candidates[0];
-  };
-  if (style && !preset) preset = presetFor("1:1");
+    preset = candidates.find((p) => p.metadata?.aspect_ratio === want) ?? candidates[0];
+  }
+
+  // Mallarna lägger gärna till egen text och rekvisita: begränsa dem hårt, granskaren fångar resten
+  const prompt = style && script
+    ? `${buildPrompt(product, scene)} Layout: ${style.layout} The ONLY text allowed in the image, written exactly and in Swedish: headline "${script.headline}"${script.sub ? `, subline "${script.sub}"` : ""}, items: ${script.bullets.map((b) => `"${b}"`).join(", ")}${script.extra?.length ? `, additional: ${script.extra.map((b) => `"${b}"`).join(", ")}` : ""}. Write each line exactly once, never repeat the product name. No other words, no English, no claims about effects, no stars or review counts, no fruits or ingredients, no people.`
+    : preset
+      ? `${buildPrompt(product, scene)} Any text in the image must be in Swedish and limited to the product name "${product.name.replace(/ \|.*$/, "")}" and the facts "${product.short}". No benefit or effect claims, no English words, no fruits or ingredients, no badges with claims.`
+      : buildPrompt(product, scene);
+  const label = style ? `${style.label} · ${scene.label}` : preset ? `${preset.name} · ${scene.label}` : scene.label;
+  const kind = style ? "style" : preset ? "preset" : "scene";
+  const sceneKey = style ? `${style.label} · ${scene.id}` : preset ? `${preset.name} · ${scene.id}` : scene.id;
+
+  const hfUrl = await generateImage({ prompt, imageUrls: [packshot], aspectRatio: formatAspect[o.format] ?? "1:1", resolution: "1k", quality: o.quality, presetId: preset?.id });
+  const stored = await storeImage(hfUrl, `ads/${o.slug}/${groupId}-${o.format.replace(":", "x")}`);
+  // AI-granskning mot referensen: underkända bilder sparas men döljs för motorn
+  let review: Review | null = null;
+  let note: string | null = null;
+  if (qaConfigured()) {
+    try {
+      review = await reviewImage({ referenceUrl: packshot, imageUrl: stored.url, product, allowedText: allowed.length ? allowed : undefined });
+    } catch (e) {
+      note = `Granskning: ${e instanceof Error ? e.message : e}`;
+    }
+  }
+  const rejected = review?.verdict === "reject";
+  if (rejected) note = `Underkänd (${review!.score}): ${review!.issues.join("; ") || review!.notes}`;
+  const row = { product_slug: o.slug, kind, scene_id: sceneKey, prompt: kind === "scene" ? prompt : `[${style?.id ?? preset?.name}] ${prompt}`, group_id: groupId, format: o.format, url: stored.url, storage_path: stored.path, parent_group_id: o.parentGroupId ?? null, active: !rejected, image_score: review?.score ?? null, image_review: review, reviewed_at: review ? new Date().toISOString() : null };
+  const ins = await supabaseAdmin().from("ad_creatives").insert(row).select("*").single();
+  if (ins.error) throw new Error(ins.error.message);
+  return { creative: ins.data as Creative, label, rejected, note };
+}
+
+/**
+ * Genererar flera scener i följd (används av motorn vid iteration). Från admin körs i stället
+ * generateOne bild för bild via /api/admin/ad-images, så att varje anrop är kort.
+ */
+export async function generateScenes(o: { slug: string; sceneIds?: string[]; count?: number; formats?: string[]; mediaBase: string; parentGroupId?: string; presetId?: string; quality?: HfQuality; styleId?: string }): Promise<{ groups: CreativeGroup[]; notes: string[] }> {
+  const formats = o.formats?.length ? o.formats : ["1:1", "9:16"];
+  const pick = await pickScenes(o.slug, o.sceneIds, o.count ?? 3);
+  if (pick.length === 0) throw new Error("Alla scener är redan genererade för produkten. Välj scener att göra om.");
+  const notes: string[] = [];
+  const groups: CreativeGroup[] = [];
   for (const scene of pick) {
     const groupId = randomUUID();
-    // Mallarna lägger gärna till egen text och rekvisita: begränsa dem hårt, granskaren fångar resten
-    const prompt = style && script
-      ? `${buildPrompt(product, scene)} Layout: ${style.layout} The ONLY text allowed in the image, written exactly and in Swedish: headline "${script.headline}"${script.sub ? `, subline "${script.sub}"` : ""}, items: ${script.bullets.map((b) => `"${b}"`).join(", ")}${script.extra?.length ? `, additional: ${script.extra.map((b) => `"${b}"`).join(", ")}` : ""}. Write each line exactly once, never repeat the product name. No other words, no English, no claims about effects, no stars or review counts, no fruits or ingredients, no people.`
-      : preset
-        ? `${buildPrompt(product, scene)} Any text in the image must be in Swedish and limited to the product name "${product.name.replace(/ \|.*$/, "")}" and the facts "${product.short}". No benefit or effect claims, no English words, no fruits or ingredients, no badges with claims.`
-        : buildPrompt(product, scene);
-    const label = style ? `${style.label} · ${scene.label}` : preset ? `${preset.name} · ${scene.label}` : scene.label;
-    const g: CreativeGroup = { groupId, label, kind: style ? "style" : preset ? "preset" : "scene", feed: null, story: null, sceneId: scene.id, createdAt: new Date().toISOString() };
+    const g: CreativeGroup = { groupId, label: scene.label, kind: "scene", feed: null, story: null, sceneId: scene.id, createdAt: new Date().toISOString() };
     for (const format of formats) {
       try {
-        const usePreset = style ? presetFor(format) : preset;
-        const hfUrl = await generateImage({ prompt, imageUrls: [packshot], aspectRatio: formatAspect[format] ?? "1:1", resolution: "1k", quality: o.quality, presetId: usePreset?.id });
-        const stored = await storeImage(hfUrl, `ads/${o.slug}/${groupId}-${format.replace(":", "x")}`);
-        // AI-granskning mot referensen: underkända bilder sparas men döljs för motorn
-        let review: Review | null = null;
-        if (qaConfigured()) {
-          try {
-            review = await reviewImage({ referenceUrl: packshot, imageUrl: stored.url, product, allowedText: allowed.length ? allowed : undefined });
-          } catch (e) {
-            notes.push(`Granskning ${scene.label} ${format}: ${e instanceof Error ? e.message : e}`);
-          }
-        }
-        const rejected = review?.verdict === "reject";
-        if (rejected) notes.push(`${scene.label} ${format} underkänd (${review!.score}): ${review!.issues.join("; ") || review!.notes}`);
-        const row = { product_slug: o.slug, kind: style ? "style" : preset ? "preset" : "scene", scene_id: style ? `${style.label} · ${scene.id}` : preset ? `${preset.name} · ${scene.id}` : scene.id, prompt: style ? `[${style.id}] ${prompt}` : preset ? `[${preset.name}] ${prompt}` : prompt, group_id: groupId, format, url: stored.url, storage_path: stored.path, parent_group_id: o.parentGroupId ?? null, active: !rejected, image_score: review?.score ?? null, image_review: review, reviewed_at: review ? new Date().toISOString() : null };
-        const ins = await db.from("ad_creatives").insert(row).select("*").single();
-        if (ins.error) throw new Error(ins.error.message);
-        const c = ins.data as Creative;
-        if (format === "9:16") g.story = c;
-        else g.feed = c;
+        const r = await generateOne({ slug: o.slug, sceneId: scene.id, format, mediaBase: o.mediaBase, groupId, presetId: o.presetId, styleId: o.styleId, quality: o.quality, parentGroupId: o.parentGroupId });
+        g.label = r.label;
+        g.kind = r.creative.kind;
+        if (r.note) notes.push(`${r.label} ${format}: ${r.note}`);
+        if (format === "9:16") g.story = r.creative;
+        else g.feed = r.creative;
       } catch (e) {
         notes.push(`${scene.label} ${format}: ${e instanceof Error ? e.message : e}`);
       }

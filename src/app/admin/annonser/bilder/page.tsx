@@ -7,9 +7,13 @@ import { higgsfieldConfigured, listPresets } from "@/lib/higgsfield";
 import { site } from "@/lib/site";
 import { ActionForm, SubmitButton } from "../../_components/ActionForm";
 import { Card, Field, Input, Select } from "../../_components/fields";
-import { addTextVariantAction, generateAdImages, setGroupActive, uploadAdImage } from "../actions";
+import { addTextVariantAction, setGroupActive, uploadAdImage } from "../actions";
+import { GenerateForm } from "./GenerateForm";
 import { angles, fillCopy } from "@/content/ad-copy";
 import { adStyles } from "@/content/ad-styles";
+
+/** Textvarianter och granskning kan ta en stund. */
+export const maxDuration = 300;
 
 export default async function AdImagesPage({ searchParams }: PageProps<"/admin/annonser/bilder">) {
   await requireAdmin();
@@ -70,38 +74,7 @@ export default async function AdImagesPage({ searchParams }: PageProps<"/admin/a
       {product ? (
         <div className="grid gap-6 lg:grid-cols-2">
           <Card title={`Generera scener för ${product.name}`}>
-            <ActionForm action={generateAdImages} className="space-y-4">
-              <input type="hidden" name="slug" value={product.slug} />
-              <Field label="Scener" hint="Redan genererade scener är markerade. Välj inga så tas nästa tre oanvända.">
-                <div className="grid grid-cols-2 gap-2 text-sm">
-                  {scenes.map((s) => (
-                    <label key={s.id} className="flex items-center gap-2">
-                      <input type="checkbox" name="scene" value={s.id} className="h-4 w-4" />
-                      <span>
-                        {s.label}
-                        {usedScenes.has(s.id) ? <span className="ml-1 text-xs text-muted">(finns)</span> : null}
-                      </span>
-                    </label>
-                  ))}
-                </div>
-              </Field>
-              <Field label="Stil" hint="Stilar = mall + svenskt faktamanus som enda tillåtna text (granskaren vet vilken). Rena mallar får bara produktnamn och fakta. Kräver kvaliteten high.">
-                <Select name="preset_id" options={presetOptions} />
-              </Field>
-              <div className="grid gap-4 sm:grid-cols-3">
-                <Field label="Format">
-                  <Select name="formats" options={[{ value: "1:1,9:16", label: "Flöde 1:1 + Story 9:16" }, { value: "1:1", label: "Bara flöde 1:1" }, { value: "3:4,9:16", label: "Flöde 3:4 + Story 9:16" }]} />
-                </Field>
-                <Field label="Kvalitet" hint="Priset per bild: low ≈ 0,01 USD, high ≈ 0,16 USD.">
-                  <Select name="quality" defaultValue="medium" options={[{ value: "low", label: "Low, billigast" }, { value: "medium", label: "Medium" }, { value: "high", label: "High, dyrast" }]} />
-                </Field>
-                <Field label="Packshot hämtas från" hint="Måste vara nåbar för Higgsfield.">
-                  <Input name="media_base" defaultValue={mediaBase} />
-                </Field>
-              </div>
-              <p className="text-xs text-muted">Tar ungefär en halv minut per scen. Bilderna hittills är gjorda i high.</p>
-              <SubmitButton>Generera</SubmitButton>
-            </ActionForm>
+            <GenerateForm slug={product.slug} scenes={scenes.map((sc) => ({ id: sc.id, label: sc.label, used: usedScenes.has(sc.id) }))} presetOptions={presetOptions} mediaBase={mediaBase} />
           </Card>
 
           <Card title="Ladda upp egen bild">

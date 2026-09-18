@@ -5,6 +5,9 @@ import { adsConfigured } from "@/lib/meta-ads";
  * Daglig annonsgranskning, anropas av Vercel Cron (se vercel.json).
  * Utför åtgärderna bara om ADS_AUTOPILOT=true, annars loggas de som förslag.
  */
+/** Kampanjbygge och iteration anropar Meta och Higgsfield många gånger. */
+export const maxDuration = 300;
+
 export async function GET(request: Request) {
   const secret = process.env.CRON_SECRET;
   if (!secret || request.headers.get("authorization") !== `Bearer ${secret}`) return new Response("Unauthorized", { status: 401 });

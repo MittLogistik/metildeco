@@ -36,6 +36,9 @@ function ToggleStatus({ id, name, level, status }: { id: string; name: string; l
   );
 }
 
+/** Kampanjbygge och iteration anropar Meta och Higgsfield många gånger. */
+export const maxDuration = 300;
+
 export default async function AdsPage() {
   await requireAdmin();
   const configured = meta.adsConfigured();
