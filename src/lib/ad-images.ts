@@ -1,5 +1,6 @@
 import "server-only";
 import { randomUUID } from "node:crypto";
+import { scriptLines, styleById } from "@/content/ad-styles";
 import { getProduct } from "./catalog";
 import { generateImage, higgsfieldConfigured, listPresets, type HfAspect, type HfQuality } from "./higgsfield";
 import { qaConfigured, reviewImage, type Review } from "./ad-qa";
@@ -101,7 +102,7 @@ const formatAspect: Record<string, HfAspect> = { "1:1": "1:1", "9:16": "9:16", "
  * Genererar scener för en produkt. Varje scen ger en bild per format (1:1 och 9:16 som standard).
  * mediaBase måste vara publikt nåbar så att Higgsfield kan hämta packshoten.
  */
-export async function generateScenes(o: { slug: string; sceneIds?: string[]; count?: number; formats?: string[]; mediaBase: string; parentGroupId?: string; presetId?: string; quality?: HfQuality }): Promise<{ groups: CreativeGroup[]; notes: string[] }> {
+export async function generateScenes(o: { slug: string; sceneIds?: string[]; count?: number; formats?: string[]; mediaBase: string; parentGroupId?: string; presetId?: string; quality?: HfQuality; styleId?: string }): Promise<{ groups: CreativeGroup[]; notes: string[] }> {
   if (!higgsfieldConfigured()) throw new Error("HF_CREDENTIALS saknas.");
   const product = await getProduct(o.slug);
   if (!product) throw new Error(`Produkten ${o.slug} finns inte.`);
@@ -116,31 +117,46 @@ export async function generateScenes(o: { slug: string; sceneIds?: string[]; cou
   const db = supabaseAdmin();
   const groups: CreativeGroup[] = [];
   // Med en Higgsfield-mall styr mallen kompositionen; vår scen blir budskapet. Etiketten på mallbilden: mallens namn.
-  const preset = o.presetId ? (await listPresets()).find((p) => p.id === o.presetId) : undefined;
+  const allPresets = o.presetId || o.styleId ? await listPresets() : [];
+  let preset = o.presetId ? allPresets.find((p) => p.id === o.presetId) : undefined;
+  // Stil = mall + manus. Mallen väljs per format (första av stilens mallar som finns i rätt format, annars första som finns).
+  const style = o.styleId ? styleById(o.styleId) : undefined;
+  const script = style ? style.script(product) : null;
+  const allowed = script ? scriptLines(script) : [];
+  const presetFor = (format: string) => {
+    if (!style) return preset;
+    const want = format === "9:16" ? "9:16" : format === "3:4" ? "3:4" : "1:1";
+    const candidates = style.presets.map((n) => allPresets.find((p) => p.name === n)).filter((p): p is NonNullable<typeof p> => Boolean(p));
+    return candidates.find((p) => p.metadata?.aspect_ratio === want) ?? candidates[0];
+  };
+  if (style && !preset) preset = presetFor("1:1");
   for (const scene of pick) {
     const groupId = randomUUID();
     // Mallarna lägger gärna till egen text och rekvisita: begränsa dem hårt, granskaren fångar resten
-    const prompt = preset
-      ? `${buildPrompt(product, scene)} Any text in the image must be in Swedish and limited to the product name "${product.name.replace(/ |.*$/, "")}" and the facts "${product.short}". No benefit or effect claims, no English words, no fruits or ingredients, no badges with claims.`
-      : buildPrompt(product, scene);
-    const label = preset ? `${preset.name} · ${scene.label}` : scene.label;
-    const g: CreativeGroup = { groupId, label, kind: preset ? "preset" : "scene", feed: null, story: null, sceneId: scene.id, createdAt: new Date().toISOString() };
+    const prompt = style && script
+      ? `${buildPrompt(product, scene)} Layout: ${style.layout} The ONLY text allowed in the image, written exactly and in Swedish: headline "${script.headline}"${script.sub ? `, subline "${script.sub}"` : ""}, items: ${script.bullets.map((b) => `"${b}"`).join(", ")}${script.extra?.length ? `, additional: ${script.extra.map((b) => `"${b}"`).join(", ")}` : ""}. No other words, no English, no claims about effects, no stars or review counts, no fruits or ingredients, no people.`
+      : preset
+        ? `${buildPrompt(product, scene)} Any text in the image must be in Swedish and limited to the product name "${product.name.replace(/ \|.*$/, "")}" and the facts "${product.short}". No benefit or effect claims, no English words, no fruits or ingredients, no badges with claims.`
+        : buildPrompt(product, scene);
+    const label = style ? `${style.label} · ${scene.label}` : preset ? `${preset.name} · ${scene.label}` : scene.label;
+    const g: CreativeGroup = { groupId, label, kind: style ? "style" : preset ? "preset" : "scene", feed: null, story: null, sceneId: scene.id, createdAt: new Date().toISOString() };
     for (const format of formats) {
       try {
-        const hfUrl = await generateImage({ prompt, imageUrls: [packshot], aspectRatio: formatAspect[format] ?? "1:1", resolution: "1k", quality: o.quality, presetId: o.presetId });
+        const usePreset = style ? presetFor(format) : preset;
+        const hfUrl = await generateImage({ prompt, imageUrls: [packshot], aspectRatio: formatAspect[format] ?? "1:1", resolution: "1k", quality: o.quality, presetId: usePreset?.id });
         const stored = await storeImage(hfUrl, `ads/${o.slug}/${groupId}-${format.replace(":", "x")}`);
         // AI-granskning mot referensen: underkända bilder sparas men döljs för motorn
         let review: Review | null = null;
         if (qaConfigured()) {
           try {
-            review = await reviewImage({ referenceUrl: packshot, imageUrl: stored.url, product });
+            review = await reviewImage({ referenceUrl: packshot, imageUrl: stored.url, product, allowedText: allowed.length ? allowed : undefined });
           } catch (e) {
             notes.push(`Granskning ${scene.label} ${format}: ${e instanceof Error ? e.message : e}`);
           }
         }
         const rejected = review?.verdict === "reject";
         if (rejected) notes.push(`${scene.label} ${format} underkänd (${review!.score}): ${review!.issues.join("; ") || review!.notes}`);
-        const row = { product_slug: o.slug, kind: preset ? "preset" : "scene", scene_id: preset ? `${preset.name} · ${scene.id}` : scene.id, prompt: preset ? `[${preset.name}] ${prompt}` : prompt, group_id: groupId, format, url: stored.url, storage_path: stored.path, parent_group_id: o.parentGroupId ?? null, active: !rejected, image_score: review?.score ?? null, image_review: review, reviewed_at: review ? new Date().toISOString() : null };
+        const row = { product_slug: o.slug, kind: style ? "style" : preset ? "preset" : "scene", scene_id: style ? `${style.label} · ${scene.id}` : preset ? `${preset.name} · ${scene.id}` : scene.id, prompt: style ? `[${style.id}] ${prompt}` : preset ? `[${preset.name}] ${prompt}` : prompt, group_id: groupId, format, url: stored.url, storage_path: stored.path, parent_group_id: o.parentGroupId ?? null, active: !rejected, image_score: review?.score ?? null, image_review: review, reviewed_at: review ? new Date().toISOString() : null };
         const ins = await db.from("ad_creatives").insert(row).select("*").single();
         if (ins.error) throw new Error(ins.error.message);
         const c = ins.data as Creative;

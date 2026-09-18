@@ -9,6 +9,7 @@ import { ActionForm, SubmitButton } from "../../_components/ActionForm";
 import { Card, Field, Input, Select } from "../../_components/fields";
 import { addTextVariantAction, generateAdImages, setGroupActive, uploadAdImage } from "../actions";
 import { angles, fillCopy } from "@/content/ad-copy";
+import { adStyles } from "@/content/ad-styles";
 
 export default async function AdImagesPage({ searchParams }: PageProps<"/admin/annonser/bilder">) {
   await requireAdmin();
@@ -25,7 +26,9 @@ export default async function AdImagesPage({ searchParams }: PageProps<"/admin/a
   const headlineOptions = product
     ? Array.from(new Set([...angles.map((a) => fillCopy(a.headline, { name: product.name.replace(/ \|.*$/, ""), hook: product.short })), "Tillverkad i Sverige", "Tredjepartstestad batch för batch", "Fri frakt över 499 kr"])).map((h) => ({ value: h, label: h }))
     : [];
-  const presetOptions = [{ value: "", label: "Egen scen (våra prompts, produkten i miljö)" }].concat(
+  const presetOptions = [{ value: "", label: "Egen scen (våra prompts, produkten i miljö)" }]
+    .concat(adStyles.map((s) => ({ value: `style:${s.id}`, label: `Stil: ${s.label} – ${s.description}` })))
+    .concat(
     presets
       .slice()
       .sort((a, b) => (a.metadata?.group_name ?? "").localeCompare(b.metadata?.group_name ?? "") || a.name.localeCompare(b.name))
@@ -82,7 +85,7 @@ export default async function AdImagesPage({ searchParams }: PageProps<"/admin/a
                   ))}
                 </div>
               </Field>
-              <Field label="Stil" hint="Higgsfields mallar styr komposition, ljus och grafik. Scenen ovan blir budskapet i mallen.">
+              <Field label="Stil" hint="Stilar = mall + svenskt faktamanus som enda tillåtna text (granskaren vet vilken). Rena mallar får bara produktnamn och fakta. Kräver kvaliteten high.">
                 <Select name="preset_id" options={presetOptions} />
               </Field>
               <div className="grid gap-4 sm:grid-cols-3">
