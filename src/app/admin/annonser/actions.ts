@@ -144,6 +144,22 @@ export async function addTextVariantAction(formData: FormData): Promise<ActionRe
   }
 }
 
+export async function completeGroupAction(formData: FormData): Promise<ActionResult> {
+  await requireAdmin();
+  const groupId = String(formData.get("group_id") ?? "");
+  const format = String(formData.get("format") ?? "9:16");
+  const mediaBase = String(formData.get("media_base") ?? "").trim() || "https://metilde.com";
+  if (!groupId) return { ok: false, error: "Ogiltigt." };
+  try {
+    const { completeGroup } = await import("@/lib/ad-images");
+    const r = await completeGroup({ groupId, format, mediaBase });
+    revalidatePath("/admin/annonser/bilder");
+    return r.rejected ? { ok: false, error: `Bilden underkändes: ${r.note ?? ""}` } : { ok: true, message: `${format} tillagd${r.creative.image_score != null ? `, poäng ${r.creative.image_score}` : ""}.` };
+  } catch (e) {
+    return fail(e);
+  }
+}
+
 export async function setGroupActive(formData: FormData): Promise<ActionResult> {
   await requireAdmin();
   const groupId = String(formData.get("group_id") ?? "");

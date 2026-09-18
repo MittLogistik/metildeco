@@ -7,7 +7,7 @@ import { higgsfieldConfigured, listPresets } from "@/lib/higgsfield";
 import { site } from "@/lib/site";
 import { ActionForm, SubmitButton } from "../../_components/ActionForm";
 import { Card, Field, Input, Select } from "../../_components/fields";
-import { addTextVariantAction, setGroupActive, uploadAdImage } from "../actions";
+import { addTextVariantAction, completeGroupAction, setGroupActive, uploadAdImage } from "../actions";
 import { GenerateForm } from "./GenerateForm";
 import { angles, fillCopy } from "@/content/ad-copy";
 import { adStyles } from "@/content/ad-styles";
@@ -127,6 +127,14 @@ export default async function AdImagesPage({ searchParams }: PageProps<"/admin/a
                   </p>
                   {(g.feed?.image_review ?? g.story?.image_review)?.issues.length ? <p className="mt-1 text-xs text-danger">{(g.feed?.image_review ?? g.story?.image_review)!.issues.join(" · ")}</p> : null}
                 </div>
+                {!g.story && g.feed && g.kind !== "upload" && g.kind !== "graphic" ? (
+                  <ActionForm action={completeGroupAction} inline>
+                    <input type="hidden" name="group_id" value={g.groupId} />
+                    <input type="hidden" name="format" value="9:16" />
+                    <input type="hidden" name="media_base" value={mediaBase} />
+                    <SubmitButton variant="outline" pendingLabel="Gör 9:16 …">Gör 9:16</SubmitButton>
+                  </ActionForm>
+                ) : null}
                 {g.kind !== "graphic" && product ? (
                   <details className="text-xs">
                     <summary className="cursor-pointer text-muted hover:text-foreground">Lägg text</summary>

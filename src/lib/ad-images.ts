@@ -178,6 +178,25 @@ export async function generateOne(o: GenerateOneOptions): Promise<{ creative: Cr
 }
 
 /**
+ * Kompletterar en bildgrupp med ett format som saknas (t.ex. 9:16 när bara 1:1 finns),
+ * med samma scen, stil eller mall som gruppen gjordes med.
+ */
+export async function completeGroup(o: { groupId: string; format: string; mediaBase: string }): Promise<{ creative: Creative; rejected: boolean; note: string | null }> {
+  const rows = (await supabaseAdmin().from("ad_creatives").select("*").eq("group_id", o.groupId)).data as Creative[] | null;
+  const base = rows?.[0];
+  if (!base) throw new Error("Bildgruppen finns inte.");
+  if (rows!.some((r) => r.format === o.format)) throw new Error("Formatet finns redan i gruppen.");
+  if (base.kind === "upload" || base.kind === "graphic") throw new Error("Bara genererade bilder kan kompletteras.");
+  const sceneId = base.scene_id?.includes(" · ") ? base.scene_id.split(" · ").pop()! : (base.scene_id ?? "studio");
+  const tag = base.prompt?.match(/^\[([^\]]+)\] /)?.[1];
+  const style = tag ? styleById(tag) : undefined;
+  let presetId: string | undefined;
+  if (tag && !style) presetId = (await listPresets()).find((p) => p.name === tag)?.id;
+  const r = await generateOne({ slug: base.product_slug, sceneId, format: o.format, mediaBase: o.mediaBase, groupId: o.groupId, styleId: style?.id, presetId, quality: style || presetId ? "high" : undefined, parentGroupId: base.parent_group_id ?? undefined });
+  return { creative: r.creative, rejected: r.rejected, note: r.note };
+}
+
+/**
  * Genererar flera scener i följd (används av motorn vid iteration). Från admin körs i stället
  * generateOne bild för bild via /api/admin/ad-images, så att varje anrop är kort.
  */
