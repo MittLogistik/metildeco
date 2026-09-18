@@ -10,6 +10,7 @@ import { createTestCampaign, iterateAd, runReview, setAdSetBudget, setObjectStat
 import Link from "next/link";
 
 type LogRow = { id: string; created_at: string; name: string; action: string; reason: string; applied: boolean; source: string };
+type VariantRow = { ad_id: string; ad_score: number | null; ad_review: { issues: string[]; notes: string } | null };
 
 const actionLabel: Record<string, string> = { create: "Skapad", pause: "Pausad", activate: "Aktiverad", budget: "Budget", keep: "Behåll", iterate: "Itererad", note: "Info" };
 
@@ -42,6 +43,8 @@ export default async function AdsPage() {
   const products = catalog.products.filter((p) => p.isActive);
   const logRes = supabaseConfigured() ? await supabaseAdmin().from("ad_log").select("id,created_at,name,action,reason,applied,source").order("created_at", { ascending: false }).limit(40) : null;
   const logs = (logRes?.data ?? []) as LogRow[];
+  const variantRes = supabaseConfigured() ? await supabaseAdmin().from("ad_variants").select("ad_id,ad_score,ad_review") : null;
+  const scoreByAd = new Map(((variantRes?.data ?? []) as VariantRow[]).map((v) => [v.ad_id, v]));
 
   let error: string | null = null;
   let cur = "USD";
@@ -186,6 +189,7 @@ export default async function AdsPage() {
                       <tr>
                         <th className="py-1 pr-3 font-normal">Annons</th>
                         <th className="py-1 pr-3 font-normal">Status</th>
+                        <th className="py-1 pr-3 text-right font-normal">Poäng</th>
                         <th className="py-1 pr-3 text-right font-normal">Visningar</th>
                         <th className="py-1 pr-3 text-right font-normal">Klick</th>
                         <th className="py-1 pr-3 text-right font-normal">CTR</th>
@@ -210,6 +214,9 @@ export default async function AdsPage() {
                           </td>
                           <td className="py-2 pr-3">
                             <StatusPill status={a.effective_status} />
+                          </td>
+                          <td className="py-2 pr-3 text-right tabular-nums" title={scoreByAd.get(a.id)?.ad_review ? `${scoreByAd.get(a.id)!.ad_review!.issues.join("; ") || scoreByAd.get(a.id)!.ad_review!.notes}` : undefined}>
+                            {scoreByAd.get(a.id)?.ad_score ?? "–"}
                           </td>
                           <td className="py-2 pr-3 text-right tabular-nums">{a.m?.impressions ?? "–"}</td>
                           <td className="py-2 pr-3 text-right tabular-nums">{a.m?.clicks ?? "–"}</td>

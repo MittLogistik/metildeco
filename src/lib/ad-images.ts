@@ -2,6 +2,7 @@ import "server-only";
 import { randomUUID } from "node:crypto";
 import { getProduct } from "./catalog";
 import { generateImage, higgsfieldConfigured, type HfAspect } from "./higgsfield";
+import { qaConfigured, reviewImage, type Review } from "./ad-qa";
 import { primaryImage, type Product } from "./products";
 import { supabaseAdmin } from "./supabase";
 
@@ -49,9 +50,18 @@ export type Creative = {
   storage_path: string | null;
   parent_group_id: string | null;
   active: boolean;
+  image_score: number | null;
+  image_review: Review | null;
+  reviewed_at: string | null;
 };
 
 export type CreativeGroup = { groupId: string; label: string; kind: string; feed: Creative | null; story: Creative | null; sceneId: string | null; createdAt: string };
+
+/** Lägsta poängen i gruppen – motorn använder bara grupper där alla bilder är godkända. */
+export const groupScore = (g: CreativeGroup): number | null => {
+  const scores = [g.feed?.image_score, g.story?.image_score].filter((s): s is number => typeof s === "number");
+  return scores.length ? Math.min(...scores) : null;
+};
 
 /** Grupperar bilderna per scen: en flödesbild (1:1 eller 3:4) och ev. en storybild (9:16). */
 export async function listCreativeGroups(slug: string, onlyActive = true): Promise<CreativeGroup[]> {
@@ -110,7 +120,18 @@ export async function generateScenes(o: { slug: string; sceneIds?: string[]; cou
       try {
         const hfUrl = await generateImage({ prompt, imageUrls: [packshot], aspectRatio: formatAspect[format] ?? "1:1", resolution: "1k", presetId: o.presetId });
         const stored = await storeImage(hfUrl, `ads/${o.slug}/${groupId}-${format.replace(":", "x")}`);
-        const row = { product_slug: o.slug, kind: "scene", scene_id: scene.id, prompt, group_id: groupId, format, url: stored.url, storage_path: stored.path, parent_group_id: o.parentGroupId ?? null, active: true };
+        // AI-granskning mot referensen: underkända bilder sparas men döljs för motorn
+        let review: Review | null = null;
+        if (qaConfigured()) {
+          try {
+            review = await reviewImage({ referenceUrl: packshot, imageUrl: stored.url, product });
+          } catch (e) {
+            notes.push(`Granskning ${scene.label} ${format}: ${e instanceof Error ? e.message : e}`);
+          }
+        }
+        const rejected = review?.verdict === "reject";
+        if (rejected) notes.push(`${scene.label} ${format} underkänd (${review!.score}): ${review!.issues.join("; ") || review!.notes}`);
+        const row = { product_slug: o.slug, kind: "scene", scene_id: scene.id, prompt, group_id: groupId, format, url: stored.url, storage_path: stored.path, parent_group_id: o.parentGroupId ?? null, active: !rejected, image_score: review?.score ?? null, image_review: review, reviewed_at: review ? new Date().toISOString() : null };
         const ins = await db.from("ad_creatives").insert(row).select("*").single();
         if (ins.error) throw new Error(ins.error.message);
         const c = ins.data as Creative;
@@ -125,8 +146,8 @@ export async function generateScenes(o: { slug: string; sceneIds?: string[]; cou
   return { groups, notes };
 }
 
-/** Egen uppladdad bild som en egen grupp (ett format). */
-export async function addUploadedCreative(slug: string, file: File, format: string): Promise<Creative> {
+/** Egen uppladdad bild som en egen grupp (ett format). Granskas mot packshoten om AI-nyckel finns. */
+export async function addUploadedCreative(slug: string, file: File, format: string, referenceUrl?: string): Promise<Creative> {
   const db = supabaseAdmin();
   const groupId = randomUUID();
   const ext = file.name.split(".").pop()?.toLowerCase() || "jpg";
@@ -134,7 +155,16 @@ export async function addUploadedCreative(slug: string, file: File, format: stri
   const up = await db.storage.from("product-media").upload(path, file, { contentType: file.type, upsert: false });
   if (up.error) throw new Error(up.error.message);
   const url = db.storage.from("product-media").getPublicUrl(path).data.publicUrl;
-  const ins = await db.from("ad_creatives").insert({ product_slug: slug, kind: "upload", group_id: groupId, format, url, storage_path: path, active: true }).select("*").single();
+  let review: Review | null = null;
+  if (qaConfigured() && referenceUrl) {
+    const product = await getProduct(slug);
+    if (product) review = await reviewImage({ referenceUrl, imageUrl: url, product }).catch(() => null);
+  }
+  const ins = await db
+    .from("ad_creatives")
+    .insert({ product_slug: slug, kind: "upload", group_id: groupId, format, url, storage_path: path, active: review?.verdict !== "reject", image_score: review?.score ?? null, image_review: review, reviewed_at: review ? new Date().toISOString() : null })
+    .select("*")
+    .single();
   if (ins.error) throw new Error(ins.error.message);
   return ins.data as Creative;
 }

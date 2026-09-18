@@ -104,7 +104,12 @@ export async function uploadAdImage(formData: FormData): Promise<ActionResult> {
   if (file.size > 15 * 1024 * 1024) return { ok: false, error: "Filen är större än 15 MB." };
   try {
     const { addUploadedCreative } = await import("@/lib/ad-images");
-    await addUploadedCreative(slug, file, format);
+    const { getProduct } = await import("@/lib/catalog");
+    const { primaryImage } = await import("@/lib/products");
+    const mediaBase = String(formData.get("media_base") ?? "").trim() || "https://metildeco.vercel.app";
+    const product = await getProduct(slug);
+    const ref = product ? `${mediaBase.replace(/\/$/, "")}${primaryImage(product)}` : undefined;
+    await addUploadedCreative(slug, file, format, ref);
     revalidatePath("/admin/annonser/bilder");
     return { ok: true, message: "Bilden är uppladdad." };
   } catch (e) {

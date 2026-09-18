@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { requireAdmin } from "@/lib/auth";
-import { listCreativeGroups, scenes } from "@/lib/ad-images";
+import { groupScore, listCreativeGroups, scenes } from "@/lib/ad-images";
+import { minImageScore, qaConfigured } from "@/lib/ad-qa";
 import { getCatalog } from "@/lib/catalog";
 import { higgsfieldConfigured } from "@/lib/higgsfield";
 import { site } from "@/lib/site";
@@ -40,6 +41,11 @@ export default async function AdImagesPage({ searchParams }: PageProps<"/admin/a
         </nav>
       </div>
 
+      {!qaConfigured() ? (
+        <Card title="AI-granskning är inte kopplad">
+          <p className="text-sm text-muted">Lägg ANTHROPIC_API_KEY eller OPENAI_API_KEY i miljön så granskas varje bild mot packshoten och varje annons för hälsopåståenden innan de används. Utan nyckel används bilderna ogranskade.</p>
+        </Card>
+      ) : null}
       {!higgsfieldConfigured() ? (
         <Card title="Higgsfield är inte kopplat">
           <p className="text-sm text-muted">Lägg HF_CREDENTIALS (key-id:key-secret) i miljön för att kunna generera scener. Egna bilder kan laddas upp ändå.</p>
@@ -110,11 +116,22 @@ export default async function AdImagesPage({ searchParams }: PageProps<"/admin/a
               </div>
               <div className="mt-2 flex items-center justify-between gap-2">
                 <div>
-                  <p className="text-sm font-medium">{g.label}</p>
+                  <p className="text-sm font-medium">
+                    {g.label}
+                    {groupScore(g) !== null ? (
+                      <span
+                        title={[g.feed?.image_review, g.story?.image_review].filter(Boolean).map((r) => `${r!.score}: ${r!.issues.join("; ") || r!.notes}`).join("\n")}
+                        className={`ml-2 rounded-full px-2 py-0.5 text-xs ${groupScore(g)! >= minImageScore() ? "bg-success/10 text-success" : "bg-danger/10 text-danger"}`}
+                      >
+                        {groupScore(g)} p
+                      </span>
+                    ) : null}
+                  </p>
                   <p className="text-xs text-muted">
                     {g.kind === "upload" ? "Egen bild" : "Higgsfield"} · {g.feed ? g.feed.format : ""}
                     {g.story ? " + 9:16" : ""} · {g.createdAt.slice(0, 10)}
                   </p>
+                  {(g.feed?.image_review ?? g.story?.image_review)?.issues.length ? <p className="mt-1 text-xs text-danger">{(g.feed?.image_review ?? g.story?.image_review)!.issues.join(" · ")}</p> : null}
                 </div>
                 <ActionForm action={setGroupActive} inline>
                   <input type="hidden" name="group_id" value={g.groupId} />
