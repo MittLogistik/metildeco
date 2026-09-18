@@ -202,6 +202,7 @@ export const createAdSet = (s: AdSetSpec) =>
 export type CreativeSpec = {
   name: string;
   pageId: string;
+  /** Instagram-konto (instagram_user_id). Page-backed konto: GET {page}/page_backed_instagram_accounts med sidtoken. */
   instagramActorId?: string;
   imageHash?: string;
   videoId?: string;
@@ -217,8 +218,8 @@ export const createCreative = (c: CreativeSpec) => {
   const cta = { type: c.callToAction ?? "SHOP_NOW", value: { link: c.link } };
   const base = { message: c.primaryText, link: c.link, name: c.headline, description: c.description, call_to_action: cta };
   const object_story_spec = c.videoId
-    ? { page_id: c.pageId, instagram_actor_id: c.instagramActorId, video_data: { video_id: c.videoId, image_hash: c.imageHash, title: c.headline, message: c.primaryText, link_description: c.description, call_to_action: cta } }
-    : { page_id: c.pageId, instagram_actor_id: c.instagramActorId, link_data: { ...base, image_hash: c.imageHash } };
+    ? { page_id: c.pageId, instagram_user_id: c.instagramActorId, video_data: { video_id: c.videoId, image_hash: c.imageHash, title: c.headline, message: c.primaryText, link_description: c.description, call_to_action: cta } }
+    : { page_id: c.pageId, instagram_user_id: c.instagramActorId, link_data: { ...base, image_hash: c.imageHash } };
   return call<{ id: string }>("POST", `${adAccount()}/adcreatives`, {
     name: c.name,
     object_story_spec,
@@ -250,9 +251,13 @@ export const createPlacementCreative = (c: PlacementCreativeSpec) => {
   const feedLabel = { name: "feed" };
   const storyLabel = { name: "story" };
   const withStory = Boolean(c.storyHash);
+  // Utan storybild: vanlig bildannons (asset_feed_spec med en bild räknas som dynamiskt innehåll)
+  if (!withStory)
+    return createCreative({ name: c.name, pageId: c.pageId, instagramActorId: c.instagramActorId, imageHash: c.feedHash, primaryText: c.primaryText, headline: c.headline, description: c.description, link: c.link });
   return call<{ id: string }>("POST", `${adAccount()}/adcreatives`, {
     name: c.name,
-    object_story_spec: { page_id: c.pageId, instagram_actor_id: c.instagramActorId },
+    // instagram_user_id krävs för bild per placering; sidans page-backed Instagram-konto duger
+    object_story_spec: { page_id: c.pageId, instagram_user_id: c.instagramActorId },
     asset_feed_spec: {
       images: withStory ? [{ hash: c.feedHash, adlabels: [feedLabel] }, { hash: c.storyHash, adlabels: [storyLabel] }] : [{ hash: c.feedHash }],
       bodies: [{ text: c.primaryText }],
