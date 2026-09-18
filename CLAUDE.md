@@ -52,3 +52,8 @@ quiz, presentkort, spåra order, mitt konto, samarbeten/jobba hos oss, fler spr�
 - AI-granskning `src/lib/ad-qa.ts` (ANTHROPIC_API_KEY eller OPENAI_API_KEY): varje bild poängsätts mot packshoten (rätt burk, framsida, oförändrad etikett, ingen påhittad text), varje annons poängsätts för hälsopåståenden/fakta/koherens. Gränser AD_QA_MIN_IMAGE/AD_QA_MIN_AD (70). Underkända bilder döljs, underkända annonser skapas inte. Poäng i ad_creatives.image_score och ad_variants.ad_score.
 - Meta-placeringar: `placements` i meta-ads.ts styr både annonsgruppens inriktning och bild-per-placering-reglerna. Avvecklade positioner: video_feeds, explore. Motorn använder bara framsidan som packshot.
 - Engångsskript som behöver projektets TS-moduler körs med `npx tsx --env-file=.env.local scripts/x.mts` (ESM, relativa importer med .ts-ändelse). Granskaren (gpt-4o) drar gärna av för etikettens ord Energy/Performance/Vitality trots instruktion; poängen avgör, gränsen är 70.
+
+## Prenumerationer och förnyelser
+- Intervallet lagras i `subscriptions.interval_days` (från `order_items.plan` "sub:30"). Visas på ordersidan, kundsidan och Mitt konto.
+- Förnyelse: Stripe `invoice.paid` (subscription_cycle) → `saveRenewalFromInvoice` skapar ordern med status `scheduled`, `deliver_at` = betaldatum + 8 dagar, `release_at` = 4 dagar före leverans. Cron `/api/cron/orders-release` (04:00 UTC) sätter status `paid` när `release_at` passerats; här kopplas Plocky på.
+- Kunder i admin (`/admin/kunder`) nycklas på e-post i gemener (`src/lib/customers.ts`), intäkt = skarpa ordrar som inte är avbrutna/återbetalda.

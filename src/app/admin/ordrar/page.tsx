@@ -14,10 +14,11 @@ type OrderRow = {
   total: number;
   status: string;
   kind: string;
+  has_subscription: boolean;
   environment: string;
 };
 
-const filters = ["alla", "paid", "packed", "shipped", "delivered", "cancelled"] as const;
+const filters = ["alla", "scheduled", "paid", "packed", "shipped", "delivered", "cancelled"] as const;
 
 export default async function OrdersPage({ searchParams }: PageProps<"/admin/ordrar">) {
   await requireAdmin();
@@ -71,7 +72,7 @@ export default async function OrdersPage({ searchParams }: PageProps<"/admin/ord
                       <Link href={`/admin/ordrar/${o.id}`} className="font-medium hover:underline">
                         {o.order_number}
                       </Link>
-                      {o.kind === "renewal" ? <span className="ml-1 text-xs text-muted">förnyelse</span> : null}
+                      {o.kind === "renewal" ? <span className="ml-1 text-xs text-muted">förnyelse</span> : o.has_subscription ? <span className="ml-1 text-xs text-muted">prenumeration</span> : null}
                       {o.environment === "sandbox" ? <span className="ml-1 rounded bg-sand px-1 text-[10px] uppercase text-muted">test</span> : null}
                     </td>
                     <td className="py-2 pr-3 whitespace-nowrap text-muted">

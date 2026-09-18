@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 const nav = [
   { href: "/admin", label: "Översikt" },
   { href: "/admin/ordrar", label: "Ordrar" },
+  { href: "/admin/kunder", label: "Kunder" },
   { href: "/admin/korgar", label: "Övergivna korgar" },
   { href: "/admin/produkter", label: "Produkter" },
   { href: "/admin/paket", label: "Paket" },

@@ -28,6 +28,18 @@ export type OrderRecord = {
   shipping_method: string | null;
   kind: string;
   created_at: string;
+  phone?: string | null;
+  /** Planerad leverans och när en planerad förnyelseorder släpps till packning. */
+  deliver_at?: string | null;
+  release_at?: string | null;
+};
+
+/** Dagar från att Stripe bekräftat förnyelsebetalningen till planerad leverans, och hur många dagar före leverans ordern släpps. */
+export const RENEWAL_DELIVERY_LEAD_DAYS = 8;
+export const RENEWAL_RELEASE_DAYS_BEFORE = 4;
+export const intervalDaysOf = (plan: string | null | undefined): number | null => {
+  const m = String(plan ?? "").match(/^sub:(\d+)/);
+  return m ? Number(m[1]) : null;
 };
 
 export type OrderItemRecord = {
@@ -189,6 +201,7 @@ export async function saveOrderFromSession(sessionId: string): Promise<{ order: 
         current_period_start: periodStart(subscription),
         current_period_end: periodEnd(subscription),
         next_shipment_at: periodEnd(subscription),
+        interval_days: intervalDaysOf(firstSub?.plan) ?? subscription.items.data[0]?.price.recurring?.interval_count ?? null,
         cancel_at_period_end: subscription.cancel_at_period_end,
         environment: environment(),
         email: customer?.email ?? null,
@@ -252,7 +265,9 @@ const periodEnd = (s: Stripe.Subscription) => {
 
 /**
  * Förnyelse av prenumeration (invoice.paid med billing_reason subscription_cycle).
- * Skapar en ny order MS-xxxx utifrån prenumerationsraden i databasen.
+ * Stripe drar betalningen vid periodens slut; leveransen planeras RENEWAL_DELIVERY_LEAD_DAYS
+ * senare och ordern ligger som "scheduled" tills RENEWAL_RELEASE_DAYS_BEFORE dagar före
+ * leverans, då releaseScheduledOrders() släpper den till packning (status paid, senare Plocky).
  */
 export async function saveRenewalFromInvoice(invoice: Stripe.Invoice): Promise<OrderRecord | null> {
   if (!supabaseConfigured()) return null;
@@ -271,6 +286,10 @@ export async function saveRenewalFromInvoice(invoice: Stripe.Invoice): Promise<O
     ? await db.from("orders").select("*").eq("stripe_subscription_id", subId).order("created_at", { ascending: true }).limit(1).maybeSingle()
     : null;
   const prev = previous?.data as OrderRecord | undefined;
+  const paidAt = new Date((invoice.status_transitions?.paid_at ?? invoice.created) * 1000);
+  const deliverAt = new Date(paidAt.getTime() + RENEWAL_DELIVERY_LEAD_DAYS * 864e5);
+  const releaseAt = new Date(deliverAt.getTime() - RENEWAL_RELEASE_DAYS_BEFORE * 864e5);
+  const intervalDays = (sub?.data?.interval_days as number | null) ?? null;
 
   const items: OrderItemRecord[] = [];
   for (const li of invoice.lines.data) {
@@ -281,7 +300,7 @@ export async function saveRenewalFromInvoice(invoice: Stripe.Invoice): Promise<O
       product_slug: slug,
       name: (li.description ?? slug).replace(/^\d+ × /, "").replace(/ – prenumeration var \d+:e dag.*$/, ""),
       qty,
-      plan: "sub",
+      plan: intervalDays ? `sub:${intervalDays}` : "sub",
       unit_price: kr(li.amount) / qty,
       line_total: kr(li.amount),
     });
@@ -291,7 +310,10 @@ export async function saveRenewalFromInvoice(invoice: Stripe.Invoice): Promise<O
     .from("orders")
     .insert({
       email: invoice.customer_email ?? prev?.email ?? null,
-      status: "paid",
+      phone: invoice.customer_phone ?? prev?.phone ?? null,
+      status: "scheduled",
+      deliver_at: deliverAt.toISOString(),
+      release_at: releaseAt.toISOString(),
       currency: invoice.currency.toUpperCase(),
       subtotal: items.reduce((s, i) => s + i.line_total, 0),
       discount: 0,
@@ -317,8 +339,39 @@ export async function saveRenewalFromInvoice(invoice: Stripe.Invoice): Promise<O
   const order = inserted.data as OrderRecord;
   if (items.length) await db.from("order_items").insert(items.map((i) => ({ ...i, order_id: order.id })));
   await decrementStock(items, items.map((i) => ({ k: "product", s: i.product_slug, q: i.qty, p: "sub", i: null })));
+  if (subId) {
+    // Håll prenumerationsraden i synk med Stripes nya period och nästa planerade leverans
+    const fresh = await stripe().subscriptions.retrieve(subId).catch(() => null);
+    await db
+      .from("subscriptions")
+      .update({
+        status: fresh?.status ?? "active",
+        current_period_start: fresh ? periodStart(fresh) : null,
+        current_period_end: fresh ? periodEnd(fresh) : null,
+        cancel_at_period_end: fresh?.cancel_at_period_end ?? false,
+        next_shipment_at: deliverAt.toISOString(),
+        updated_at: new Date().toISOString(),
+      })
+      .eq("stripe_subscription_id", subId);
+  }
   await sendOrderConfirmation(order, items).catch((e: unknown) => console.error("[email]", e instanceof Error ? e.message : e));
   return order;
+}
+
+/**
+ * Släpper planerade förnyelseordrar vars release_at passerats: status paid så att de
+ * dyker upp bland ordrar att packa. Här kopplas Plocky på när integrationen finns.
+ */
+export async function releaseScheduledOrders(now = new Date()): Promise<OrderRecord[]> {
+  if (!supabaseConfigured()) return [];
+  const db = supabaseAdmin();
+  const due = await db.from("orders").select("*").eq("status", "scheduled").lte("release_at", now.toISOString());
+  const released: OrderRecord[] = [];
+  for (const o of (due.data ?? []) as OrderRecord[]) {
+    const res = await db.from("orders").update({ status: "paid" }).eq("id", o.id).eq("status", "scheduled").select("*").maybeSingle();
+    if (res.data) released.push(res.data as OrderRecord);
+  }
+  return released;
 }
 
 async function productSlugFromStripeProduct(productId: string): Promise<string | null> {

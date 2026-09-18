@@ -31,9 +31,13 @@ const esc = (s: string) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replac
 export async function sendOrderConfirmation(order: OrderRecord, items: OrderItemRecord[]) {
   if (!order.email) return;
   const isRenewal = order.kind === "renewal";
+  const deliverAt = order.deliver_at ? new Date(order.deliver_at).toLocaleDateString("sv-SE", { day: "numeric", month: "long" }) : null;
   const subject = isRenewal
-    ? `Din prenumerationsleverans ${order.order_number} är på väg`
+    ? `Din prenumerationsleverans ${order.order_number} är planerad`
     : `Tack för din beställning ${order.order_number}`;
+  const renewalIntro = deliverAt
+    ? `Din prenumeration har förnyats. Nästa förpackning skickas så att den beräknas nå dig omkring ${deliverAt}.`
+    : "Din prenumeration har förnyats och paketet packas nu.";
 
   const rowsHtml = items
     .map(
@@ -51,9 +55,9 @@ export async function sendOrderConfirmation(order: OrderRecord, items: OrderItem
 <div style="max-width:560px;margin:0 auto;padding:32px 20px">
   <p style="font-size:22px;font-weight:600;margin:0 0 24px">Metilde</p>
   <div style="background:#fff;border-radius:16px;padding:28px">
-    <h1 style="font-size:22px;margin:0 0 8px">${isRenewal ? "Din leverans är på väg" : "Tack för din beställning!"}</h1>
+    <h1 style="font-size:22px;margin:0 0 8px">${isRenewal ? "Din nästa leverans är planerad" : "Tack för din beställning!"}</h1>
     <p style="margin:0 0 20px;color:#555">Ordernummer <strong style="color:#222">${order.order_number}</strong>. ${
-      isRenewal ? "Din prenumeration har förnyats och paketet packas nu." : "Vi har tagit emot din betalning. Ordrar lagda före kl. 12 på vardagar skickas samma dag."
+      isRenewal ? renewalIntro : "Vi har tagit emot din betalning. Ordrar lagda före kl. 12 på vardagar skickas samma dag."
     }</p>
     <table style="width:100%;border-collapse:collapse;font-size:15px">${rowsHtml}
       ${order.discount > 0 ? `<tr><td style="padding:8px 0;color:#2a7a4b">Rabatt</td><td style="padding:8px 0;text-align:right;color:#2a7a4b">−${formatPrice(order.discount)}</td></tr>` : ""}
@@ -67,9 +71,9 @@ export async function sendOrderConfirmation(order: OrderRecord, items: OrderItem
   Frågor? Svara på det här mejlet eller ring ${company.phone} (${company.hours}).</p>
 </div></body></html>`;
 
-  const text = `${isRenewal ? "Din leverans är på väg" : "Tack för din beställning!"}
+  const text = `${isRenewal ? "Din nästa leverans är planerad" : "Tack för din beställning!"}
 Ordernummer ${order.order_number}
-
+${isRenewal ? renewalIntro + "\n" : ""}
 ${rowsText}
 Frakt: ${order.shipping === 0 ? "Fri" : formatPrice(order.shipping)}
 Totalt: ${formatPrice(order.total)}

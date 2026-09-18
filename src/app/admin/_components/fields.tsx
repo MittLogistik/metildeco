@@ -85,10 +85,11 @@ export function Card({ title, children, className = "" }: { title?: string; chil
   );
 }
 
-export const orderStatuses = ["paid", "packed", "shipped", "delivered", "cancelled", "refunded"] as const;
+export const orderStatuses = ["scheduled", "paid", "packed", "shipped", "delivered", "cancelled", "refunded"] as const;
 
 export const statusLabel: Record<string, string> = {
   pending: "Väntar på betalning",
+  scheduled: "Planerad",
   paid: "Betald",
   packed: "Packad",
   shipped: "Skickad",
@@ -101,6 +102,8 @@ export function StatusBadge({ status }: { status: string }) {
   const tone =
     status === "paid"
       ? "bg-accent-soft text-accent"
+      : status === "scheduled"
+        ? "bg-sand text-muted"
       : status === "shipped" || status === "delivered"
         ? "bg-primary-soft text-primary"
         : status === "cancelled" || status === "refunded"

@@ -20,6 +20,7 @@ export const metadata: Metadata = {
 };
 
 const statusLabel: Record<string, string> = {
+  scheduled: "Planerad leverans",
   paid: "Betald",
   packed: "Packas",
   shipped: "Skickad",
