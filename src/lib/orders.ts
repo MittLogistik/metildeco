@@ -45,7 +45,8 @@ type CartMeta = { k: "product" | "bundle"; s: string; q: number; p: "once" | "su
 export const metaIdsFor = (meta: Pick<CartMeta, "k" | "s">[]): Promise<string[]> =>
   Promise.all(meta.map(async (m) => (m.k === "bundle" ? metaContentId("bundle", m.s, (await getBundle(m.s))?.sku) : metaContentId("product", m.s, (await getProduct(m.s))?.sku))));
 
-const environment = () => (process.env.STRIPE_SECRET_KEY?.startsWith("sk_live") ? "live" : "sandbox");
+// Både vanliga (sk_live_) och begränsade (rk_live_) nycklar räknas som live
+const environment = () => (process.env.STRIPE_SECRET_KEY?.includes("_live_") ? "live" : "sandbox");
 const kr = (öre: number | null | undefined) => Math.round(öre ?? 0) / 100;
 
 const parseCart = (raw: string | undefined): CartMeta[] => {
