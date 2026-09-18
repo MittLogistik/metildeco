@@ -86,7 +86,9 @@ export async function generateAdImages(formData: FormData): Promise<ActionResult
   if (!slug || !mediaBase) return { ok: false, error: "Produkt och bas-URL krävs." };
   try {
     const { generateScenes } = await import("@/lib/ad-images");
-    const r = await generateScenes({ slug, sceneIds, formats, mediaBase, count: 3 });
+    const q = String(formData.get("quality") ?? "");
+    const quality = q === "low" || q === "medium" || q === "high" ? q : undefined;
+    const r = await generateScenes({ slug, sceneIds, formats, mediaBase, count: 3, quality });
     revalidatePath("/admin/annonser/bilder");
     const notes = r.notes.length ? ` Anmärkningar: ${r.notes.join(" · ")}` : "";
     return { ok: true, message: `Genererade ${r.groups.length} scener (${r.groups.map((g) => g.label).join(", ")}).${notes}` };

@@ -70,15 +70,18 @@ export default async function AdImagesPage({ searchParams }: PageProps<"/admin/a
                   ))}
                 </div>
               </Field>
-              <div className="grid gap-4 sm:grid-cols-2">
+              <div className="grid gap-4 sm:grid-cols-3">
                 <Field label="Format">
                   <Select name="formats" options={[{ value: "1:1,9:16", label: "Flöde 1:1 + Story 9:16" }, { value: "1:1", label: "Bara flöde 1:1" }, { value: "3:4,9:16", label: "Flöde 3:4 + Story 9:16" }]} />
+                </Field>
+                <Field label="Kvalitet" hint="Priset per bild: low ≈ 0,01 USD, high ≈ 0,16 USD.">
+                  <Select name="quality" defaultValue="medium" options={[{ value: "low", label: "Low, billigast" }, { value: "medium", label: "Medium" }, { value: "high", label: "High, dyrast" }]} />
                 </Field>
                 <Field label="Packshot hämtas från" hint="Måste vara nåbar för Higgsfield.">
                   <Input name="media_base" defaultValue={mediaBase} />
                 </Field>
               </div>
-              <p className="text-xs text-muted">Kostar cirka 0,02 USD per bild. Tar ungefär en halv minut per scen.</p>
+              <p className="text-xs text-muted">Tar ungefär en halv minut per scen. Bilderna hittills är gjorda i high.</p>
               <SubmitButton>Generera</SubmitButton>
             </ActionForm>
           </Card>

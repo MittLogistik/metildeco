@@ -1,7 +1,7 @@
 import "server-only";
 import { randomUUID } from "node:crypto";
 import { getProduct } from "./catalog";
-import { generateImage, higgsfieldConfigured, type HfAspect } from "./higgsfield";
+import { generateImage, higgsfieldConfigured, type HfAspect, type HfQuality } from "./higgsfield";
 import { qaConfigured, reviewImage, type Review } from "./ad-qa";
 import { primaryImage, type Product } from "./products";
 import { supabaseAdmin } from "./supabase";
@@ -99,7 +99,7 @@ const formatAspect: Record<string, HfAspect> = { "1:1": "1:1", "9:16": "9:16", "
  * Genererar scener för en produkt. Varje scen ger en bild per format (1:1 och 9:16 som standard).
  * mediaBase måste vara publikt nåbar så att Higgsfield kan hämta packshoten.
  */
-export async function generateScenes(o: { slug: string; sceneIds?: string[]; count?: number; formats?: string[]; mediaBase: string; parentGroupId?: string; presetId?: string }): Promise<{ groups: CreativeGroup[]; notes: string[] }> {
+export async function generateScenes(o: { slug: string; sceneIds?: string[]; count?: number; formats?: string[]; mediaBase: string; parentGroupId?: string; presetId?: string; quality?: HfQuality }): Promise<{ groups: CreativeGroup[]; notes: string[] }> {
   if (!higgsfieldConfigured()) throw new Error("HF_CREDENTIALS saknas.");
   const product = await getProduct(o.slug);
   if (!product) throw new Error(`Produkten ${o.slug} finns inte.`);
@@ -118,7 +118,7 @@ export async function generateScenes(o: { slug: string; sceneIds?: string[]; cou
     const g: CreativeGroup = { groupId, label: scene.label, kind: "scene", feed: null, story: null, sceneId: scene.id, createdAt: new Date().toISOString() };
     for (const format of formats) {
       try {
-        const hfUrl = await generateImage({ prompt, imageUrls: [packshot], aspectRatio: formatAspect[format] ?? "1:1", resolution: "1k", presetId: o.presetId });
+        const hfUrl = await generateImage({ prompt, imageUrls: [packshot], aspectRatio: formatAspect[format] ?? "1:1", resolution: "1k", quality: o.quality, presetId: o.presetId });
         const stored = await storeImage(hfUrl, `ads/${o.slug}/${groupId}-${format.replace(":", "x")}`);
         // AI-granskning mot referensen: underkända bilder sparas men döljs för motorn
         let review: Review | null = null;

@@ -14,6 +14,9 @@ const headers = () => ({ Authorization: `Key ${process.env.HF_CREDENTIALS ?? ""}
 
 export type HfAspect = "auto" | "1:1" | "3:2" | "2:3" | "4:3" | "3:4" | "16:9" | "9:16" | "21:9";
 export type HfResolution = "1k" | "2k" | "4k";
+/** Kvalitet styr priset mer än upplösningen: low ≈ 0,013 USD, high ≈ 0,16 USD per bild (1k). Utan värde kör Higgsfield high. */
+export type HfQuality = "low" | "medium" | "high";
+export const defaultQuality = (): HfQuality => (["low", "medium", "high"].includes(process.env.HF_QUALITY ?? "") ? (process.env.HF_QUALITY as HfQuality) : "medium");
 
 export type HfPreset = { id: string; type: string; name: string };
 
@@ -30,13 +33,14 @@ type Job = { request_id: string; status_url: string; status: string; images?: { 
  * Genererar en bild. Med imageUrls redigeras/byggs scenen runt de bilderna (vår packshot).
  * Returnerar bildens URL hos Higgsfield.
  */
-export async function generateImage(o: { prompt: string; imageUrls?: string[]; aspectRatio?: HfAspect; resolution?: HfResolution; presetId?: string; timeoutMs?: number }): Promise<string> {
+export async function generateImage(o: { prompt: string; imageUrls?: string[]; aspectRatio?: HfAspect; resolution?: HfResolution; quality?: HfQuality; presetId?: string; timeoutMs?: number }): Promise<string> {
   if (!higgsfieldConfigured()) throw new Error("HF_CREDENTIALS saknas.");
   const body = {
     prompt: o.prompt,
     image_urls: o.imageUrls?.length ? o.imageUrls : undefined,
     aspect_ratio: o.aspectRatio ?? "1:1",
     resolution: o.resolution ?? "1k",
+    quality: o.quality ?? defaultQuality(),
     ...(o.presetId ? { enhance_prompt: true, preset_id: o.presetId } : { enhance_prompt: false }),
   };
   const res = await fetch(`${BASE}/marketing-studio/image`, { method: "POST", headers: headers(), body: JSON.stringify(body) });
