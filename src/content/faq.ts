@@ -11,7 +11,7 @@ export const faqGroups: FaqGroup[] = [
     items: [
       {
         q: "Vilka betalsätt kan jag använda?",
-        a: "Du kan betala med Swish, Klarna, Visa, Mastercard, American Express, Apple Pay och Google Pay. Prenumerationer betalas med kort, Klarna, Apple Pay eller Google Pay. Betalningen hanteras av Stripe – vi lagrar aldrig dina kortuppgifter.",
+        a: "Du kan betala med Klarna, Visa, Mastercard, American Express, Apple Pay och Google Pay. Betalningen hanteras av Stripe – vi lagrar aldrig dina kortuppgifter.",
       },
       {
         q: "Kan jag ändra eller avbryta min order?",

@@ -2,9 +2,9 @@ import Image from "next/image";
 
 export type PaymentMethod = { id: string; name: string; file: string; width: number; height: number };
 
-/** Betalsätt butiken tar emot via Stripe. Swish gäller engångsköp; prenumerationer betalas med kort, Klarna, Apple Pay eller Google Pay. */
+/** Betalsätt butiken tar emot via Stripe. Swish läggs tillbaka när Stripe godkänt ansökan (raden finns kvar nedan, avstängd). */
 export const paymentMethods: PaymentMethod[] = [
-  { id: "swish", name: "Swish", file: "/payments/swish.svg", width: 578, height: 176 },
+  // { id: "swish", name: "Swish", file: "/payments/swish.svg", width: 578, height: 176 },
   { id: "klarna", name: "Klarna", file: "/payments/klarna.svg", width: 1448, height: 609 },
   { id: "visa", name: "Visa", file: "/payments/visa.svg", width: 780, height: 500 },
   { id: "mastercard", name: "Mastercard", file: "/payments/mastercard.svg", width: 780, height: 500 },
