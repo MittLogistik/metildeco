@@ -52,7 +52,8 @@ export async function generateImage(o: { prompt: string; imageUrls?: string[]; a
     image_urls: o.imageUrls?.length ? o.imageUrls : undefined,
     aspect_ratio: o.aspectRatio ?? "1:1",
     resolution: o.resolution ?? "1k",
-    quality: o.quality ?? defaultQuality(),
+    // Mallar (enhance_prompt) kräver high; annars valfri kvalitet
+    quality: o.presetId ? "high" : (o.quality ?? defaultQuality()),
     ...(o.presetId ? { enhance_prompt: true, preset_id: o.presetId } : { enhance_prompt: false }),
   };
   const res = await fetch(`${BASE}/marketing-studio/image`, { method: "POST", headers: headers(), body: JSON.stringify(body) });
