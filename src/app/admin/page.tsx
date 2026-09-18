@@ -48,7 +48,9 @@ export default async function AdminDashboard({ searchParams }: PageProps<"/admin
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
           <h1 className="font-display text-3xl font-medium">Översikt</h1>
-          <p className="mt-1 text-sm text-muted">Så går butiken just nu – {today}.</p>
+          <p className="mt-1 text-sm text-muted">
+            Så går butiken just nu – {today}.{stats.granularity === "hour" ? " Diagrammen visar timma för timma, svensk tid." : ""}
+          </p>
         </div>
         <div className="flex flex-wrap gap-2">
           <nav className="inline-flex rounded-full border border-line bg-white p-1" aria-label="Period">

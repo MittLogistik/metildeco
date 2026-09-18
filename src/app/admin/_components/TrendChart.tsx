@@ -11,7 +11,10 @@ const formatters: Record<Unit, (v: number) => string> = {
   percent: (v) => `${v.toFixed(1).replace(".", ",")} %`,
 };
 
-const fmtDate = (iso: string) => new Date(iso + "T00:00:00").toLocaleDateString("sv-SE", { day: "numeric", month: "short" });
+const fmtDate = (iso: string) =>
+  iso.includes("T")
+    ? new Date(iso).toLocaleTimeString("sv-SE", { timeZone: "Europe/Stockholm", hour: "2-digit", minute: "2-digit" })
+    : new Date(iso + "T00:00:00").toLocaleDateString("sv-SE", { day: "numeric", month: "short" });
 const niceTicks = (max: number): number[] => {
   if (max <= 0) return [0];
   const raw = max / 3;
@@ -66,7 +69,7 @@ export function TrendChart({ points, unit, height = 120 }: { points: Point[]; un
         viewBox={`0 0 ${W} ${H}`}
         className="h-auto w-full touch-none select-none"
         role="img"
-        aria-label="Utveckling per dag"
+        aria-label={points[0]?.date.includes("T") ? "Utveckling per timme" : "Utveckling per dag"}
         onPointerMove={onMove}
         onPointerLeave={() => setHover(null)}
       >
