@@ -54,7 +54,8 @@ function parseReview(text: string, min: number): Review {
     const j = JSON.parse(m[0]) as Partial<Review>;
     const score = Math.max(0, Math.min(100, Math.round(Number(j.score ?? 0))));
     const issues = Array.isArray(j.issues) ? j.issues.map(String) : [];
-    const verdict: Review["verdict"] = j.verdict === "reject" || score < min - 15 ? "reject" : score < min ? "review" : "ok";
+    // Poängen avgör. Modellens eget "reject" gäller bara när poängen också ligger under gränsen.
+    const verdict: Review["verdict"] = score < min - 15 || (j.verdict === "reject" && score < min) ? "reject" : score < min ? "review" : "ok";
     return { score, verdict, issues, notes: String(j.notes ?? "") };
   } catch {
     return { score: 0, verdict: "review", issues: ["Kunde inte tolka granskningssvaret."], notes: text.slice(0, 300) };
@@ -68,7 +69,7 @@ export async function reviewImage(o: { referenceUrl: string; imageUrl: string; p
   const prompt = [
     `Du granskar en AI-genererad annonsbild för det svenska kosttillskottsmärket Metilde. Bild 1 är referensen: produktens framsida. Bild 2 är kandidaten.`,
     `Produkt: ${o.product.name}.`,
-    `Underkänn (verdict "reject") om något av detta gäller: burken i bild 2 är inte samma som i bild 1; etiketten är ändrad, förvrängd, oläslig eller har annan text än referensen; baksidan eller sidan av burken visas i stället för framsidan; det finns fler än en burk; det finns påhittad text, siffror, badges, logotyper eller vattenstämplar i bilden; ansikten syns; bilden ser ut som medicin eller antyder hälsoeffekter.`,
+    `Underkänn (verdict "reject") om något av detta gäller: burken i bild 2 är inte samma som i bild 1; etiketten är ändrad, förvrängd, oläslig eller har annan text än referensen; baksidan eller sidan av burken visas i stället för framsidan; det finns fler än en burk; det finns påhittad text, siffror, badges, logotyper eller vattenstämplar i bilden utanför produktens egen etikett; ansikten syns; bilden ser ut som medicin. Text som finns på etiketten i referensbilden (även ord som Energy, Performance, Vitality) är förpackningens och ska inte ge avdrag, så länge den är oförändrad.`,
     `Bedöm sedan kvaliteten: fotorealism, skärpa på produkten, att produkten är tydligt synlig och inte för liten, ljus, komposition för en annons, färgton som passar märket (djupgrön, sand, offwhite, naturligt ljus). Ge en helhetspoäng 0–100 där 100 är en perfekt annonsbild med exakt rätt produkt.`,
     jsonFormat,
   ].join("\n");
@@ -84,6 +85,7 @@ export async function reviewAd(o: { primaryText: string; headline: string; descr
     `Primärtext: """${o.primaryText}"""`,
     `Rubrik: """${o.headline}"""`,
     o.description ? `Beskrivning: """${o.description}"""` : "",
+    `Viktigt: text som är tryckt på produktens egen etikett i bilden (t.ex. produktnamn, extraktstyrka, dos, ikoner och ord på förpackningen som Energy, Performance, Vitality, Food supplement) är förpackningens innehåll och ska INTE bedömas som annonspåståenden. Bedöm bara annonstexten och text som lagts till i bilden utanför förpackningen.`,
     `Underkänn (verdict "reject") om texten innehåller hälsopåståenden eller antyder effekt på kropp eller sinne (energi, testosteron, sömn, stress, fokus, libido, immunförsvar, prestation, återhämtning, viktnedgång, "naturlig boost" osv.), medicinska termer, före/efter, garantier, jämförelser med läkemedel, eller riktar sig till personliga egenskaper ("du som är över 40", "män med låg…"). Underkänn också om texten påstår fakta som inte finns i produktfakta (dos, styrka, innehåll, certifieringar), om språket inte är korrekt svenska, eller om bilden innehåller text som strider mot samma regler.`,
     `Bedöm sedan: tydlighet, trovärdighet, att text och bild hänger ihop, och att annonsen troligen presterar i flödet. Ge en helhetspoäng 0–100.`,
     jsonFormat,
