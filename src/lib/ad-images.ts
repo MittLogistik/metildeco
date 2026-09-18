@@ -3,6 +3,7 @@ import { randomUUID } from "node:crypto";
 import { getProduct } from "./catalog";
 import { generateImage, higgsfieldConfigured, listPresets, type HfAspect, type HfQuality } from "./higgsfield";
 import { qaConfigured, reviewImage, type Review } from "./ad-qa";
+import { overlayText, type OverlaySpec } from "./ad-overlay";
 import { primaryImage, type Product } from "./products";
 import { supabaseAdmin } from "./supabase";
 
@@ -72,7 +73,7 @@ export async function listCreativeGroups(slug: string, onlyActive = true): Promi
   const groups = new Map<string, CreativeGroup>();
   for (const c of (data ?? []) as Creative[]) {
     const sceneLabel = (id: string | null) => (id?.includes(" · ") ? `${id.split(" · ")[0]} · ${scenes.find((s) => s.id === id.split(" · ")[1])?.label ?? id.split(" · ")[1]}` : (scenes.find((s) => s.id === id)?.label ?? id));
-    const g = groups.get(c.group_id) ?? { groupId: c.group_id, label: c.kind === "upload" ? "Egen bild" : (sceneLabel(c.scene_id) ?? "Scen"), kind: c.kind, feed: null, story: null, sceneId: c.scene_id, createdAt: c.created_at };
+    const g = groups.get(c.group_id) ?? { groupId: c.group_id, label: c.kind === "upload" ? "Egen bild" : c.kind === "graphic" ? `Text · ${(c.prompt ?? "").replace(/^\[text\] /, "").split(" / ")[0]}` : (sceneLabel(c.scene_id) ?? "Scen"), kind: c.kind, feed: null, story: null, sceneId: c.scene_id, createdAt: c.created_at };
     if (c.format === "9:16") g.story = g.story ?? c;
     else g.feed = g.feed ?? c;
     groups.set(c.group_id, g);
@@ -152,6 +153,43 @@ export async function generateScenes(o: { slug: string; sceneIds?: string[]; cou
     if (g.feed || g.story) groups.push(g);
   }
   return { groups, notes };
+}
+
+/**
+ * Skapar en grafisk variant av en bildgrupp: samma bilder med text pålagd i kod.
+ * Blir en egen grupp (kind "graphic") så att motorn testar den som en egen bild.
+ */
+export async function addTextVariant(o: { slug: string; groupId: string; overlay: OverlaySpec; mediaBase: string }): Promise<CreativeGroup> {
+  const db = supabaseAdmin();
+  const product = await getProduct(o.slug);
+  if (!product) throw new Error("Produkten finns inte.");
+  const src = (await db.from("ad_creatives").select("*").eq("group_id", o.groupId)).data as Creative[] | null;
+  if (!src?.length) throw new Error("Bildgruppen finns inte.");
+  const packshot = `${o.mediaBase.replace(/\/$/, "")}${primaryImage(product)}`;
+  const newGroup = randomUUID();
+  const base = src[0]!;
+  const g: CreativeGroup = { groupId: newGroup, label: `Text · ${o.overlay.headline}`, kind: "graphic", feed: null, story: null, sceneId: base.scene_id, createdAt: new Date().toISOString() };
+  for (const c of src) {
+    const img = await fetch(c.url);
+    if (!img.ok) throw new Error(`Kunde inte hämta bilden (${img.status}).`);
+    const out = await overlayText(Buffer.from(await img.arrayBuffer()), o.overlay);
+    const pathName = `ads/${o.slug}/${newGroup}-${c.format.replace(":", "x")}.jpg`;
+    const up = await db.storage.from("product-media").upload(pathName, out, { contentType: "image/jpeg", upsert: true });
+    if (up.error) throw new Error(up.error.message);
+    const url = db.storage.from("product-media").getPublicUrl(pathName).data.publicUrl;
+    let review: Review | null = null;
+    if (qaConfigured()) review = await reviewImage({ referenceUrl: packshot, imageUrl: url, product, allowedText: [o.overlay.eyebrow, o.overlay.headline, o.overlay.subline].filter((t): t is string => Boolean(t)) }).catch(() => null);
+    const ins = await db
+      .from("ad_creatives")
+      .insert({ product_slug: o.slug, kind: "graphic", scene_id: c.scene_id, prompt: `[text] ${o.overlay.headline}${o.overlay.subline ? ` / ${o.overlay.subline}` : ""}`, group_id: newGroup, format: c.format, url, storage_path: pathName, parent_group_id: o.groupId, active: review?.verdict !== "reject", image_score: review?.score ?? null, image_review: review, reviewed_at: review ? new Date().toISOString() : null })
+      .select("*")
+      .single();
+    if (ins.error) throw new Error(ins.error.message);
+    const row = ins.data as Creative;
+    if (row.format === "9:16") g.story = row;
+    else g.feed = row;
+  }
+  return g;
 }
 
 /** Egen uppladdad bild som en egen grupp (ett format). Granskas mot packshoten om AI-nyckel finns. */

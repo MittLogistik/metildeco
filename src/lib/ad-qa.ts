@@ -81,14 +81,17 @@ function parseReview(text: string, min: number): Review {
 const jsonFormat = `Svara ENDAST med JSON: {"score": 0-100, "verdict": "ok" | "review" | "reject", "issues": ["kort punkt på svenska", ...], "notes": "en mening på svenska"}.`;
 
 /** Granskar en genererad annonsbild mot referenspackshoten (bild 1 = referens, bild 2 = kandidat). */
-export async function reviewImage(o: { referenceUrl: string; imageUrl: string; product: Product }): Promise<Review> {
+export async function reviewImage(o: { referenceUrl: string; imageUrl: string; product: Product; allowedText?: string[] }): Promise<Review> {
   const prompt = [
     `Du granskar en AI-genererad annonsbild för det svenska kosttillskottsmärket Metilde. Bild 1 är referensen: produktens framsida. Bild 2 är kandidaten.`,
     `Produkt: ${o.product.name}.`,
+    o.allowedText?.length ? `Följande text har vi själva lagt på bilden med avsikt och den är tillåten: ${o.allowedText.map((t) => `"${t}"`).join(", ")}. Kontrollera att den är läsbar och inte täcker produkten.` : "",
     `Underkänn (verdict "reject") om något av detta gäller: burken i bild 2 är inte samma som i bild 1; etiketten är ändrad, förvrängd, oläslig eller har annan text än referensen; baksidan eller sidan av burken visas i stället för framsidan; det finns fler än en burk; det finns påhittad text, siffror, badges, logotyper eller vattenstämplar i bilden utanför produktens egen etikett; ansikten syns; bilden ser ut som medicin. Text som finns på etiketten i referensbilden (även ord som Energy, Performance, Vitality) är förpackningens och ska inte ge avdrag, så länge den är oförändrad.`,
     `Bedöm sedan kvaliteten: fotorealism, skärpa på produkten, att produkten är tydligt synlig och inte för liten, ljus, komposition för en annons, färgton som passar märket (djupgrön, sand, offwhite, naturligt ljus). Ge en helhetspoäng 0–100 där 100 är en perfekt annonsbild med exakt rätt produkt.`,
     jsonFormat,
-  ].join("\n");
+  ]
+    .filter(Boolean)
+    .join("\n");
   return review(prompt, [o.referenceUrl, o.imageUrl], minImageScore());
 }
 

@@ -120,6 +120,28 @@ export async function uploadAdImage(formData: FormData): Promise<ActionResult> {
   }
 }
 
+export async function addTextVariantAction(formData: FormData): Promise<ActionResult> {
+  await requireAdmin();
+  const slug = String(formData.get("slug") ?? "");
+  const groupId = String(formData.get("group_id") ?? "");
+  const headline = String(formData.get("headline") ?? "").trim();
+  const subline = String(formData.get("subline") ?? "").trim() || undefined;
+  const theme = String(formData.get("theme")) === "green" ? "green" : "sand";
+  const pos = String(formData.get("position"));
+  const position = pos === "bottom" ? "bottom" : pos === "top" ? "top" : "auto";
+  const mediaBase = String(formData.get("media_base") ?? "").trim() || "https://metildeco.vercel.app";
+  if (!slug || !groupId || !headline) return { ok: false, error: "Rubrik krävs." };
+  try {
+    const { addTextVariant } = await import("@/lib/ad-images");
+    const g = await addTextVariant({ slug, groupId, overlay: { headline, subline, eyebrow: "Metilde", theme, position }, mediaBase });
+    revalidatePath("/admin/annonser/bilder");
+    const score = [g.feed?.image_score, g.story?.image_score].filter((s) => typeof s === "number");
+    return { ok: true, message: `Textvariant skapad${score.length ? `, poäng ${score.join("/")}` : ""}.` };
+  } catch (e) {
+    return fail(e);
+  }
+}
+
 export async function setGroupActive(formData: FormData): Promise<ActionResult> {
   await requireAdmin();
   const groupId = String(formData.get("group_id") ?? "");

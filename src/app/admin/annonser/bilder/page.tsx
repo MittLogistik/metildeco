@@ -7,7 +7,8 @@ import { higgsfieldConfigured, listPresets } from "@/lib/higgsfield";
 import { site } from "@/lib/site";
 import { ActionForm, SubmitButton } from "../../_components/ActionForm";
 import { Card, Field, Input, Select } from "../../_components/fields";
-import { generateAdImages, setGroupActive, uploadAdImage } from "../actions";
+import { addTextVariantAction, generateAdImages, setGroupActive, uploadAdImage } from "../actions";
+import { angles, fillCopy } from "@/content/ad-copy";
 
 export default async function AdImagesPage({ searchParams }: PageProps<"/admin/annonser/bilder">) {
   await requireAdmin();
@@ -20,6 +21,10 @@ export default async function AdImagesPage({ searchParams }: PageProps<"/admin/a
   const usedScenes = new Set(groups.map((g) => g.sceneId));
   const mediaBase = site.indexable ? site.url : "https://metildeco.vercel.app";
   const presets = await listPresets().catch(() => []);
+  // Godkända rubriker för text på bild: vinklarnas rubriker + produktfakta
+  const headlineOptions = product
+    ? Array.from(new Set([...angles.map((a) => fillCopy(a.headline, { name: product.name.replace(/ \|.*$/, ""), hook: product.short })), "Tillverkad i Sverige", "Tredjepartstestad batch för batch", "Fri frakt över 499 kr"])).map((h) => ({ value: h, label: h }))
+    : [];
   const presetOptions = [{ value: "", label: "Egen scen (våra prompts, produkten i miljö)" }].concat(
     presets
       .slice()
@@ -146,6 +151,23 @@ export default async function AdImagesPage({ searchParams }: PageProps<"/admin/a
                   </p>
                   {(g.feed?.image_review ?? g.story?.image_review)?.issues.length ? <p className="mt-1 text-xs text-danger">{(g.feed?.image_review ?? g.story?.image_review)!.issues.join(" · ")}</p> : null}
                 </div>
+                {g.kind !== "graphic" && product ? (
+                  <details className="text-xs">
+                    <summary className="cursor-pointer text-muted hover:text-foreground">Lägg text</summary>
+                    <ActionForm action={addTextVariantAction} className="mt-2 space-y-2">
+                      <input type="hidden" name="slug" value={product.slug} />
+                      <input type="hidden" name="group_id" value={g.groupId} />
+                      <input type="hidden" name="media_base" value={mediaBase} />
+                      <Select name="headline" options={headlineOptions} />
+                      <Input name="subline" defaultValue={product.short} placeholder="Underrad" />
+                      <div className="flex gap-2">
+                        <Select name="theme" options={[{ value: "sand", label: "Sand" }, { value: "green", label: "Grön" }]} />
+                        <Select name="position" options={[{ value: "auto", label: "Auto" }, { value: "top", label: "Överst" }, { value: "bottom", label: "Nederst" }]} />
+                      </div>
+                      <SubmitButton variant="outline">Skapa textvariant</SubmitButton>
+                    </ActionForm>
+                  </details>
+                ) : null}
                 <ActionForm action={setGroupActive} inline>
                   <input type="hidden" name="group_id" value={g.groupId} />
                   <input type="hidden" name="slug" value={g.groupId && product ? product.slug : ""} />
