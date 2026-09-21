@@ -63,7 +63,7 @@ quiz, presentkort, spåra order, mitt konto, samarbeten/jobba hos oss, fler spr�
 ## Creative Studio (annonsbilder)
 - `/admin/annonser/bilder` → välj koncept och format, en bilduppsättning per koncept. Fem koncept i `src/content/ad-concepts.ts`: notification, simple-routine, product-facts, comparison, social-proof. Internt namn `<slug>-<concept>-1x1`.
 - Bilden skapas i **en genomkörning**: `images/edits` med packshoten som referens och `input_fidelity: high`. Modellen ritar miljö, produkt, badges, pilar och all typografi. Vi provade att lägga text ovanpå i efterhand – det blev platt och såg klistrat ut. Modellen bygger in typografin i scenen med rätt ljus och djup.
-- Priset för det: etikettens finstilta blir ibland påhittad (500 mg kan bli 800 ng) och enstaka svenska ord felstavas. Prompten säger åt modellen att hellre lämna finstilt i mjukt fokus än att hitta på, och  jämför etiketten mot packshoten och läser stavningen i annonstexten. Underkända bilder döljs och kan göras om.
+- Priset för det: etikettens finstilta blir ibland påhittad (500 mg kan bli 800 ng) och enstaka svenska ord felstavas. Prompten säger åt modellen att hellre lämna finstilt i mjukt fokus än att hitta på, och granskningen (reviewImage) jämför etiketten mot packshoten och läser stavningen i annonstexten. Underkända bilder döljs och kan göras om.
 - Prompten byggs modulärt i `src/lib/ad-prompt.ts` (varumärke + produkt + koncept + format + egna instruktioner + rensning). `brand` där styr den visuella riktningen.
 - Exakta format: 1:1 = 1080×1080, 9:16 = 1080×1920, komponerade var för sig. Story håller text inom safe areas (topp 14 %, botten 19 %).
 - Textlagret vet var burken står (Geo) och lägger aldrig text ovanpå den.
