@@ -257,3 +257,19 @@ export async function composeCreative({ scene, packshot, concept, copy, format }
   const textLayer = await sharp(Buffer.from(svg)).png().toBuffer();
   return sharp(image).composite([{ input: textLayer }]).jpeg({ quality: 92 }).toBuffer();
 }
+
+/**
+ * Provar textmotorn en gång per process. Satori laddar sin wasm vid första anropet, och
+ * misslyckas det vill vi veta det innan vi betalar för en bild – inte efteråt.
+ */
+let warmed: Promise<void> | null = null;
+export function warmupTextEngine(): Promise<void> {
+  warmed ??= (async () => {
+    const probe = box({ width: 8, height: 8 }, [txt({ fontSize: 8, color: "#000" }, "M")]);
+    await satori(probe as unknown as Parameters<typeof satori>[0], { width: 8, height: 8, fonts: await fonts() });
+  })().catch((e: unknown) => {
+    warmed = null;
+    throw new Error(`Textmotorn kunde inte starta: ${e instanceof Error ? e.message : e}`);
+  });
+  return warmed;
+}

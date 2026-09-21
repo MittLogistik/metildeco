@@ -1,7 +1,7 @@
 import "server-only";
 import { randomUUID } from "node:crypto";
 import { conceptById, copyLines, creativeName, formatById, type Format } from "@/content/ad-concepts";
-import { composeCreative } from "./ad-compose";
+import { composeCreative, warmupTextEngine } from "./ad-compose";
 import { buildCreativePrompt, randomVariation } from "./ad-prompt";
 import { qaConfigured, reviewImage, type Review } from "./ad-qa";
 import type { Creative } from "./ad-images";
@@ -69,6 +69,8 @@ export async function generateCreative(o: GenerateInput): Promise<GenerateResult
   const size = formatById(o.format);
   if (!size) throw new Error(`Okänt format: ${o.format}`);
 
+  // Misslyckas textlagret ska det ske innan bilden beställs och kostar pengar
+  await warmupTextEngine();
   const mediaBase = publicBase();
   const packshotPath = primaryImage(product);
   if (!packshotPath || packshotPath.endsWith(".svg")) throw new Error("Produkten saknar en packshot att bygga annonsen runt.");

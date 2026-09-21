@@ -8,6 +8,7 @@ import { getCatalog } from "./catalog";
 import { imageProvider } from "./image-provider";
 import { mediaUrl, publicBase } from "./media";
 import { isInStock, primaryImage, type Product } from "./products";
+import { warmupTextEngine } from "./ad-compose";
 import { qaConfigured, reviewImage } from "./ad-qa";
 import { writeCatalogText } from "./ad-writer";
 import { supabaseAdmin } from "./supabase";
@@ -153,6 +154,7 @@ async function buildCard(banner: Buffer, index: number, product: Product, varian
 
 /** Renderar korten: en bakgrund, ett kort per produkt. Separerad så att den går att testa. */
 export async function renderCatalogCards(products: Product[], variant: CatalogVariant, custom?: string): Promise<Buffer[]> {
+  await warmupTextEngine();
   const banner = await wideBackground(variant, products.length, custom);
   const out: Buffer[] = [];
   for (const [i, product] of products.entries()) out.push(await buildCard(banner, i, product, variant));

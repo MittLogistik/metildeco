@@ -4,8 +4,13 @@ import type { NextConfig } from "next";
 const pendingLocales = ["en", "fi", "da", "no", "de", "nl", "it", "fr", "es", "pl"];
 
 const nextConfig: NextConfig = {
-  // Typsnitten för text på annonsbilder läses från disk i serverless-funktionerna
-  outputFileTracingIncludes: { "/**": ["./src/assets/fonts/*"] },
+  // satori och harfbuzzjs letar upp sina egna filer i körningen. Buntas de av Next hittar
+  // de inte hb.wasm, och all text på annonsbilder misslyckas. Därför externa + medskickade.
+  serverExternalPackages: ["satori", "harfbuzzjs", "@shuding/opentype.js"],
+  // Typsnitten och wasm-filerna läses från disk i serverless-funktionerna
+  outputFileTracingIncludes: {
+    "/**": ["./src/assets/fonts/*", "./node_modules/harfbuzzjs/hb.wasm", "./node_modules/harfbuzzjs/hb.js", "./node_modules/satori/yoga.wasm"],
+  },
   // Serveraktioner tar emot 1 MB som standard – bilduppladdningar i admin är större.
   // Riktigt stora filer går förbi aktionerna, direkt till lagringen (se ad-uploads).
   experimental: { serverActions: { bodySizeLimit: "4mb" } },
