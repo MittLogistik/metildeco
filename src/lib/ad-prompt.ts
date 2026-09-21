@@ -51,7 +51,7 @@ const formatBlock = (format: Format) => {
   const safe =
     "SAFE AREA: nothing may touch or run off the edge of the image. Every headline, badge, arrow and button must sit at least one tenth of the width in from the left and right edges, and be fully visible with air around it. Never crop a word.";
   return format === "9:16"
-    ? `FORMAT: vertical ${f?.width}x${f?.height} for Instagram and Facebook Stories. Use the whole height, but keep text and buttons out of the top 15 percent and the bottom 20 percent, where the app interface sits. ${safe}`
+    ? `FORMAT: vertical ${f?.width}x${f?.height} for Instagram and Facebook Stories. Compose it as three stacked bands down the frame — headline high up, the product large in the middle, the supporting text and button below it — never as a square composition stretched to fit. Do not place elements in a single tall column along one edge. The bottom fifth of the frame must be left completely empty except for background — no text, no badge and no button may reach down into it, because the app covers it with buttons. The top seventh must be kept equally clear. ${safe}`
     : `FORMAT: square ${f?.width}x${f?.height} for the Instagram and Facebook feed. Keep the important parts near the centre. ${safe}`;
 };
 

@@ -137,15 +137,26 @@ export const concepts: Concept[] = [
       cta: "metilde.com",
     }),
     art: ({ format, copy }) =>
-      [
-        `SCENE: the image is split into two halves by a thin vertical line${format === "9:16" ? " running from top to bottom through the middle" : ""}.`,
-        "LEFT HALF: a cluttered bathroom shelf in cool grey light with tangled cables, scattered loose pill organisers and crumpled paper. Messy and joyless, but with no readable packaging and no other brands.",
-        "RIGHT HALF: a calm, tidy light oak surface in warm daylight where the jar stands alone, large and in sharp focus, with a small folded linen cloth beside it.",
-        `LAYOUT: a rounded pale tag at the top of the left half reads ${q(copy.compareLeft ?? "")}, and a rounded dark green tag at the top of the right half reads ${q(copy.compareRight ?? "")}.`,
-        `On the right half, ${copy.facts.length} small rounded badges are stacked beside the jar and read ${list(copy.facts)}.`,
-        copy.cta ? `A small rounded tag at the bottom centre reads ${q(copy.cta)}.` : "",
-        "TYPOGRAPHY: confident sans with a clear hierarchy. The left half is cooler and duller, the right half warm and clean, so the contrast is felt before it is read.",
-      ]
+      (format === "9:16"
+        ? [
+            // I ett högt format delas bilden på höjden: en stapel, inte två spalter
+            "SCENE: the image is split into two horizontal bands by a thin line across the middle.",
+            "UPPER BAND: a cluttered bathroom shelf in cool grey light with tangled cables, scattered loose pill organisers and crumpled paper. Messy and joyless, but with no readable packaging and no other brands. It fills roughly the top third.",
+            "LOWER BAND: a calm, tidy light oak surface in warm daylight that fills the rest of the frame. The jar stands here alone, large and in sharp focus, entirely inside this band and never touching the dividing line.",
+            `LAYOUT: a rounded pale tag sits in the upper band and reads ${q(copy.compareLeft ?? "")}. A rounded dark green tag sits just below the dividing line and reads ${q(copy.compareRight ?? "")}.`,
+            `${Math.min(copy.facts.length, 3)} small rounded badges are placed around the jar in the lower band, some to its left and some to its right, never in a single tall column. They read ${list(copy.facts.slice(0, 3))}.`,
+            copy.cta ? `A small rounded tag at the bottom centre reads ${q(copy.cta)}.` : "",
+          ]
+        : [
+            "SCENE: the image is split into two halves by a thin vertical line.",
+            "LEFT HALF: a cluttered bathroom shelf in cool grey light with tangled cables, scattered loose pill organisers and crumpled paper. Messy and joyless, but with no readable packaging and no other brands.",
+            "RIGHT HALF: a calm, tidy light oak surface in warm daylight where the jar stands alone, large and in sharp focus, entirely inside the right half and never crossing the dividing line.",
+            `LAYOUT: a rounded pale tag at the top of the left half reads ${q(copy.compareLeft ?? "")}, and a rounded dark green tag at the top of the right half reads ${q(copy.compareRight ?? "")}.`,
+            `On the right half, ${copy.facts.length} small rounded badges are placed beside the jar and read ${list(copy.facts)}.`,
+            copy.cta ? `A small rounded tag at the bottom centre reads ${q(copy.cta)}.` : "",
+          ]
+      )
+        .concat("TYPOGRAPHY: confident sans with a clear hierarchy. The messy side is cooler and duller, the Metilde side warm and clean, so the contrast is felt before it is read.")
         .filter(Boolean)
         .join("\n"),
   },

@@ -73,6 +73,9 @@ const brief = (o: { product: Product; concept: Concept; format: Format; copy: Co
     `Titta noga på packshoten och beskriv burken som du ser den – glaset, locket, etikettens färg och form – så att bildmodellen återger rätt burk.`,
     `Var konkret och visuell. Skriv aldrig ut måttangivelser i pixlar. Lova ingenting om effekt på kropp eller sinne.`,
     `Placera aldrig rubrik, badge eller knapp mot bildens kant – allt ska ha luft omkring sig och rymmas i sin helhet. Skriv hellre "well inside the frame" än "at the very top".`,
+    o.format === "9:16"
+      ? `Det här är ett högt format. Komponera det som tre band ovanpå varandra: rubrik högt upp, produkten stor i mitten, stödtext och knapp under. Stapla aldrig alla badges i en hög spalt längs ena kanten, och tänj inte ut en kvadratisk idé. Nedersta femtedelen ska vara tom på text – appen lägger sina knappar där.`
+      : "",``,
     `Svara med enbart regin, ingen inledning och inga rubriker som "Prompt:".`,
   ]
     .filter((l) => l !== undefined)
