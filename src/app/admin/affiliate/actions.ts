@@ -1,7 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { getSettings, retryPostback, saveSettings, syncCommissions } from "@/lib/affiliate";
+import { getSettings, retryPostback, saveSettings, syncCommissions, testConnection } from "@/lib/affiliate";
 import { requireAdmin } from "@/lib/auth";
 import type { ActionResult } from "../actions";
 
@@ -70,6 +70,20 @@ export async function syncAffiliateCommissions(): Promise<ActionResult> {
 /** Formulärvariant, för knappen i adminpanelen. */
 export async function syncCommissionsAction(): Promise<ActionResult> {
   return syncAffiliateCommissions();
+}
+
+/** Provar kopplingen mot AddRevenue och sammanfattar svaret. */
+export async function testAffiliateConnection(): Promise<ActionResult> {
+  await requireAdmin();
+  const r = await testConnection();
+  if (!r.ok) return { ok: false, error: `HTTP ${r.status}: ${(r.error ?? "okänt fel").slice(0, 200)}` };
+  if (r.count === 0) return { ok: true, message: "Kopplingen fungerar. Inga transaktioner ännu – fälten kan kontrolleras när den första kommit in." };
+  return {
+    ok: true,
+    message: r.matchesExpected
+      ? `Kopplingen fungerar. ${r.count} transaktioner, och provisionen läses ur rätt fält.`
+      : `Kopplingen fungerar, men fälten ser annorlunda ut än väntat: ${r.fields.slice(0, 12).join(", ")}.`,
+  };
 }
 
 export { getSettings };

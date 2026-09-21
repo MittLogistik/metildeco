@@ -5,7 +5,7 @@ import { formatPrice } from "@/lib/format";
 import { supabaseAdmin } from "@/lib/supabase";
 import { ActionForm, SubmitButton } from "../_components/ActionForm";
 import { Card, Checkbox, Field, Input } from "../_components/fields";
-import { resendPostback, saveAffiliateSettings, syncCommissionsAction } from "./actions";
+import { resendPostback, saveAffiliateSettings, syncCommissionsAction, testAffiliateConnection } from "./actions";
 
 /** Provisionshämtningen går mot AddRevenue och kan ta en stund. */
 export const maxDuration = 120;
@@ -238,6 +238,13 @@ export default async function AffiliatePage() {
             </Field>
             <SubmitButton>Spara</SubmitButton>
           </ActionForm>
+          <div className="mt-4 border-t border-line pt-4">
+            <ActionForm action={testAffiliateConnection}>
+              <SubmitButton variant="outline" pendingLabel="Testar …">
+                Testa kopplingen
+              </SubmitButton>
+            </ActionForm>
+          </div>
           <p className="mt-4 text-xs text-muted">
             Provisionsgrundande värde = varornas summa efter rabatt delat med moms, frakt exkluderad. Beloppet skickas alltid i ordervalutan och räknas
             aldrig om innan det lämnar oss.
