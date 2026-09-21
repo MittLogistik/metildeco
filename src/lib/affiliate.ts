@@ -397,3 +397,42 @@ export async function purgeExpiredClicks(): Promise<number> {
   if (res.error) throw new Error(res.error.message);
   return res.data?.length ?? 0;
 }
+
+/**
+ * Testar kopplingen mot AddRevenues API och rapporterar hur svaret ser ut.
+ * Fältnamnen i konverteringssvaret avgör hur provisionen läses in, så det här är
+ * sättet att se att vi läser rätt fält innan den första riktiga ordern kommer.
+ */
+export async function testConnection(): Promise<{
+  ok: boolean;
+  status: number;
+  count: number;
+  fields: string[];
+  matchesExpected: boolean;
+  sample: Record<string, unknown> | null;
+  error?: string;
+}> {
+  const token = process.env.ADDREVENUE_API_TOKEN;
+  if (!token) return { ok: false, status: 0, count: 0, fields: [], matchesExpected: false, sample: null, error: "ADDREVENUE_API_TOKEN saknas." };
+  const settings = await getSettings();
+  const url = new URL(`${settings.apiBaseUrl.replace(/\/$/, "")}/conversions`);
+  url.searchParams.set("advertiserId", settings.advertiserId);
+  url.searchParams.set("from", new Date(Date.now() - 90 * 864e5).toISOString().slice(0, 10));
+  try {
+    const res = await fetch(url.toString(), { headers: { authorization: `Bearer ${token}`, accept: "application/json" } });
+    const text = await res.text();
+    if (!res.ok) return { ok: false, status: res.status, count: 0, fields: [], matchesExpected: false, sample: null, error: text.slice(0, 300) };
+    const parsed = JSON.parse(text) as unknown;
+    const list = Array.isArray(parsed)
+      ? (parsed as Record<string, unknown>[])
+      : (((parsed as { results?: unknown[]; data?: unknown[] }).results ?? (parsed as { data?: unknown[] }).data ?? []) as Record<string, unknown>[]);
+    const first = list[0] ?? null;
+    const fields = first ? Object.keys(first) : Object.keys((parsed ?? {}) as Record<string, unknown>);
+    // Hittar vi ordernumret och provisionen med våra namn läser vi rätt fält
+    const has = (names: string[]) => names.some((n) => fields.includes(n));
+    const matchesExpected = Boolean(first) && has(["orderId", "order_id"]) && has(["commission", "commissionAmount"]);
+    return { ok: true, status: res.status, count: list.length, fields, matchesExpected, sample: first };
+  } catch (e) {
+    return { ok: false, status: 0, count: 0, fields: [], matchesExpected: false, sample: null, error: e instanceof Error ? e.message : String(e) };
+  }
+}

@@ -1,4 +1,4 @@
-import { purgeExpiredClicks, sendQueued, syncCommissions } from "@/lib/affiliate";
+import { purgeExpiredClicks, sendQueued, syncCommissions, testConnection } from "@/lib/affiliate";
 import { withJobLock } from "@/lib/job-lock";
 import { supabaseAdmin, supabaseConfigured } from "@/lib/supabase";
 
@@ -23,6 +23,8 @@ async function authorized(request: Request): Promise<boolean> {
 
 export async function GET(request: Request) {
   if (!(await authorized(request))) return new Response("Unauthorized", { status: 401 });
+  // ?test=1 kör bara kopplingstestet, utan att röra kön
+  if (new URL(request.url).searchParams.get("test")) return Response.json(await testConnection());
   try {
     const result = await withJobLock("affiliate", 9, async () => {
       const queue = await sendQueued();
