@@ -71,7 +71,9 @@ export function CatalogBuilder({
   const wideFile = useRef<HTMLInputElement>(null);
   const [wideSlugs, setWideSlugs] = useState<string[]>([]);
 
-  const id = catalog?.id ?? null;
+  // Id:t måste hållas här: annars vet komponenten inte om katalogen den nyss skapade,
+  // och varje uppladdning skulle skapa en ny.
+  const [id, setId] = useState<string | null>(catalog?.id ?? null);
   const published = catalog?.status === "published";
 
   const run = async (name: string, fn: () => Promise<void>) => {
@@ -89,7 +91,9 @@ export function CatalogBuilder({
   const ensureCatalog = async (): Promise<string> => {
     if (id) return id;
     const created = await post({ action: "create", label });
-    router.refresh();
+    setId(created.id!);
+    // Lägg id:t i adressen så att sidan hittar katalogen igen vid omladdning
+    router.replace(`/admin/annonser/katalog?id=${created.id}`, { scroll: false });
     return created.id!;
   };
 
@@ -153,9 +157,11 @@ export function CatalogBuilder({
       setNote(r.source === "ai" ? "Förslag skrivet av AI. Ändra det du vill och godkänn." : "AI var inte tillgänglig, så förslaget bygger på produkternas fakta.");
     });
 
+  const [approved, setApproved] = useState(Boolean(catalog?.primaryText?.trim()));
   const approve = () =>
     run("approve", async () => {
       await post({ action: "saveCopy", id: id!, primaryText, headline });
+      setApproved(true);
       setNote("Texten är godkänd. Nu kan kampanjen startas.");
       router.refresh();
     });
@@ -170,7 +176,6 @@ export function CatalogBuilder({
   const toggleWideSlug = (s: string) => setWideSlugs((cur) => (cur.includes(s) ? cur.filter((x) => x !== s) : cur.length >= maxCards ? cur : [...cur, s]));
   const input = "h-10 w-full rounded-xl border border-line bg-white px-3 text-sm focus:border-primary focus:outline-none";
   const ready = cards.length >= minCards;
-  const approved = Boolean(catalog?.primaryText?.trim());
 
   return (
     <div className="space-y-6">
@@ -185,17 +190,24 @@ export function CatalogBuilder({
 
       {/* Steg 1 */}
       <section className="rounded-2xl border border-line bg-white p-4">
-        <h3 className="font-display text-lg font-medium">1. Bilder och produkter</h3>
+        <h3 className="font-display text-lg font-medium">1. Ladda upp bilder och koppla till produkt</h3>
         <p className="mt-1 text-sm text-muted">
           Ladda upp en bild per kort, eller en bred bild som delas i lika delar. Enskilda kort beskärs till 1080 × 1080. En bred bild sträcks till rätt
           proportion i stället för att beskäras, så att inget i kanterna försvinner.
         </p>
 
         <div className="mt-4 grid gap-5 lg:grid-cols-2">
-          <div className="rounded-xl bg-sand-soft p-3">
-            <p className="text-sm font-medium">Ett kort i taget</p>
-            <div className="mt-2 space-y-2">
-              <input ref={cardFile} type="file" accept="image/*" disabled={published} className="block w-full text-sm" />
+          <div className="rounded-xl border-2 border-dashed border-line bg-sand-soft p-4">
+            <p className="text-sm font-semibold">Ett kort i taget</p>
+            <p className="mt-0.5 text-xs text-muted">Välj en bild, koppla den till en produkt och lägg till den sist i karusellen.</p>
+            <div className="mt-3 space-y-2">
+              <input
+                ref={cardFile}
+                type="file"
+                accept="image/*"
+                disabled={published}
+                className="block w-full cursor-pointer rounded-lg border border-line bg-white p-2 text-sm file:mr-3 file:rounded-full file:border-0 file:bg-primary file:px-3 file:py-1.5 file:text-sm file:font-medium file:text-primary-fg"
+              />
               <select value={slug} onChange={(e) => setSlug(e.target.value)} disabled={published} className={input}>
                 {inStock.map((p) => (
                   <option key={p.slug} value={p.slug}>
@@ -214,8 +226,8 @@ export function CatalogBuilder({
             </div>
           </div>
 
-          <div className="rounded-xl bg-sand-soft p-3">
-            <p className="text-sm font-medium">En bred bild som delas</p>
+          <div className="rounded-xl border-2 border-dashed border-line bg-sand-soft p-4">
+            <p className="text-sm font-semibold">En bred bild som delas</p>
             <p className="mt-1 text-xs text-muted">
               Välj produkterna i den ordning de ska visas. Bilden delas i lika många delar. Gör den {wideSlugs.length || "N"} × 1080 bred och 1080 hög
               ({wideSlugs.length ? wideSlugs.length * 1080 : "N×1080"} × 1080) så hamnar skarvarna exakt rätt.
@@ -238,7 +250,13 @@ export function CatalogBuilder({
               })}
             </div>
             <div className="mt-2 space-y-2">
-              <input ref={wideFile} type="file" accept="image/*" disabled={published} className="block w-full text-sm" />
+              <input
+                ref={wideFile}
+                type="file"
+                accept="image/*"
+                disabled={published}
+                className="block w-full cursor-pointer rounded-lg border border-line bg-white p-2 text-sm file:mr-3 file:rounded-full file:border-0 file:bg-foreground file:px-3 file:py-1.5 file:text-sm file:font-medium file:text-white"
+              />
               <button
                 type="button"
                 onClick={sliceWide}
