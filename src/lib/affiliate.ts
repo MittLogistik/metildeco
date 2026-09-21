@@ -403,7 +403,7 @@ export async function purgeExpiredClicks(): Promise<number> {
  * Fältnamnen i konverteringssvaret avgör hur provisionen läses in, så det här är
  * sättet att se att vi läser rätt fält innan den första riktiga ordern kommer.
  */
-export async function testConnection(): Promise<{
+export async function testConnection(path = "conversions"): Promise<{
   ok: boolean;
   status: number;
   count: number;
