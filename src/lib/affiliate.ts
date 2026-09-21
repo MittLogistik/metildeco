@@ -305,15 +305,24 @@ export async function retryPostback(id: string): Promise<{ ok: boolean; error?: 
 
 /* ------------------------------- provisionen ------------------------------- */
 
-type Conversion = {
+/** En transaktion som AddRevenue returnerar. Fältnamnen följer deras API-dokumentation. */
+type Transaction = {
+  id?: string | number;
   orderId?: string;
-  order_id?: string;
-  commission?: number | string;
+  orderNumber?: string;
+  reference?: string;
+  eventId?: string;
   commissionAmount?: number | string;
+  commission?: number | string;
   brokerageFee?: number | string;
-  brokerage_fee?: number | string;
+  originalBrokerageFee?: number | string;
   currency?: string;
+  status?: string;
+  channelId?: string | number;
 };
+
+/** Ordernumret kan ligga i olika fält beroende på hur konverteringen skapades. */
+const orderRef = (t: Transaction): string => String(t.orderId ?? t.orderNumber ?? t.reference ?? t.eventId ?? "").trim();
 
 const num = (v: unknown): number | null => {
   if (v === null || v === undefined || v === "") return null;
@@ -344,32 +353,36 @@ export async function syncCommissions(o: { days?: number } = {}): Promise<{ chec
   const rows = (orders.data ?? []) as { id: string; order_number: string; currency: string; exchange_rate_to_sek: number | null }[];
   if (!rows.length) return { checked: 0, updated: 0 };
 
-  const url = new URL(`${settings.apiBaseUrl.replace(/\/$/, "")}/conversions`);
+  const url = new URL(`${settings.apiBaseUrl.replace(/\/$/, "")}/transactions`);
   url.searchParams.set("advertiserId", settings.advertiserId);
-  url.searchParams.set("from", since.toISOString().slice(0, 10));
-  let list: Conversion[] = [];
+  url.searchParams.set("fromDate", since.toISOString().slice(0, 10));
+  url.searchParams.set("toDate", new Date(Date.now() + 864e5).toISOString().slice(0, 10));
+  let list: Transaction[] = [];
   try {
     const res = await fetch(url.toString(), { headers: { authorization: `Bearer ${token}`, accept: "application/json" } });
     const text = await res.text();
     if (!res.ok) return { checked: rows.length, updated: 0, error: `AddRevenue: HTTP ${res.status} ${text.slice(0, 200)}` };
     const parsed = JSON.parse(text) as unknown;
-    list = Array.isArray(parsed) ? (parsed as Conversion[]) : (((parsed as { results?: Conversion[]; data?: Conversion[] }).results ?? (parsed as { data?: Conversion[] }).data ?? []) as Conversion[]);
+    list = Array.isArray(parsed)
+      ? (parsed as Transaction[])
+      : (((parsed as { results?: Transaction[]; data?: Transaction[] }).results ?? (parsed as { data?: Transaction[] }).data ?? []) as Transaction[]);
   } catch (e) {
     return { checked: rows.length, updated: 0, error: e instanceof Error ? e.message : "Kunde inte läsa provisioner." };
   }
 
-  const byOrder = new Map<string, Conversion>();
-  for (const c of list) {
-    const key = String(c.orderId ?? c.order_id ?? "").trim();
-    if (key) byOrder.set(key, c);
+  const byOrder = new Map<string, Transaction>();
+  for (const t of list) {
+    const key = orderRef(t);
+    // Nekade transaktioner ska inte skrivas in som provision
+    if (key && t.status !== "denied") byOrder.set(key, t);
   }
 
   let updated = 0;
   for (const order of rows) {
     const c = byOrder.get(order.order_number);
     if (!c) continue;
-    const commission = num(c.commission ?? c.commissionAmount);
-    const brokerage = num(c.brokerageFee ?? c.brokerage_fee);
+    const commission = num(c.commissionAmount ?? c.commission);
+    const brokerage = num(c.brokerageFee ?? c.originalBrokerageFee);
     if (commission === null && brokerage === null) continue;
     const rate = Number(order.exchange_rate_to_sek ?? 1) || 1;
     const res = await db
@@ -403,7 +416,7 @@ export async function purgeExpiredClicks(): Promise<number> {
  * Fältnamnen i konverteringssvaret avgör hur provisionen läses in, så det här är
  * sättet att se att vi läser rätt fält innan den första riktiga ordern kommer.
  */
-export async function testConnection(path = "conversions"): Promise<{
+export async function testConnection(path = "transactions"): Promise<{
   ok: boolean;
   status: number;
   count: number;
@@ -415,9 +428,10 @@ export async function testConnection(path = "conversions"): Promise<{
   const token = process.env.ADDREVENUE_API_TOKEN;
   if (!token) return { ok: false, status: 0, count: 0, fields: [], matchesExpected: false, sample: null, error: "ADDREVENUE_API_TOKEN saknas." };
   const settings = await getSettings();
-  const url = new URL(`${settings.apiBaseUrl.replace(/\/$/, "")}/conversions`);
+  const url = new URL(`${settings.apiBaseUrl.replace(/\/$/, "")}/${path.replace(/^\//, "")}`);
   url.searchParams.set("advertiserId", settings.advertiserId);
-  url.searchParams.set("from", new Date(Date.now() - 90 * 864e5).toISOString().slice(0, 10));
+  url.searchParams.set("fromDate", new Date(Date.now() - 90 * 864e5).toISOString().slice(0, 10));
+  url.searchParams.set("toDate", new Date(Date.now() + 864e5).toISOString().slice(0, 10));
   try {
     const res = await fetch(url.toString(), { headers: { authorization: `Bearer ${token}`, accept: "application/json" } });
     const text = await res.text();
@@ -430,7 +444,7 @@ export async function testConnection(path = "conversions"): Promise<{
     const fields = first ? Object.keys(first) : Object.keys((parsed ?? {}) as Record<string, unknown>);
     // Hittar vi ordernumret och provisionen med våra namn läser vi rätt fält
     const has = (names: string[]) => names.some((n) => fields.includes(n));
-    const matchesExpected = Boolean(first) && has(["orderId", "order_id"]) && has(["commission", "commissionAmount"]);
+    const matchesExpected = Boolean(first) && has(["orderId", "orderNumber", "reference", "eventId"]) && has(["commissionAmount", "commission"]);
     return { ok: true, status: res.status, count: list.length, fields, matchesExpected, sample: first };
   } catch (e) {
     return { ok: false, status: 0, count: 0, fields: [], matchesExpected: false, sample: null, error: e instanceof Error ? e.message : String(e) };
