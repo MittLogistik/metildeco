@@ -23,12 +23,15 @@ export default async function AdImagesPage({ searchParams }: PageProps<"/admin/a
   const products = catalog.products.filter((p) => p.isActive);
   const slug = typeof sp.slug === "string" && products.some((p) => p.slug === sp.slug) ? sp.slug : (products[0]?.slug ?? "");
   const product = products.find((p) => p.slug === slug);
-  const groups = slug ? await listCreativeGroups(slug, false) : [];
+  // Allt som inte beror på varandra hämtas samtidigt – annars blir det fyra turer i rad
+  const [groups, adsByGroup, presets] = await Promise.all([
+    slug ? listCreativeGroups(slug, false) : Promise.resolve([]),
+    slug ? adsPerGroup(slug) : Promise.resolve(new Map<string, number>()),
+    listPresets().catch(() => []),
+  ]);
   const usedScenes = new Set(groups.map((g) => g.sceneId));
   const uploadGroups = groups.map((g) => ({ groupId: g.groupId, label: g.label, hasFeed: Boolean(g.feed), hasStory: Boolean(g.story) }));
-  const adsByGroup = slug ? await adsPerGroup(slug) : new Map<string, number>();
   const mediaBase = site.indexable ? site.url : "https://metildeco.vercel.app";
-  const presets = await listPresets().catch(() => []);
   // Godkända rubriker för text på bild: vinklarnas rubriker + produktfakta
   const headlineOptions = product
     ? Array.from(new Set([...angles.map((a) => fillCopy(a.headline, { name: product.name.replace(/ \|.*$/, ""), hook: product.short })), "Tillverkad i Sverige", "Tredjepartstestad batch för batch", "Fri frakt över 499 kr"])).map((h) => ({ value: h, label: h }))

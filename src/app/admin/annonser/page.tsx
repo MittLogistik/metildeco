@@ -44,9 +44,14 @@ export default async function AdsPage() {
   const configured = meta.adsConfigured();
   const catalog = await getCatalog();
   const products = catalog.products.filter((p) => p.isActive);
-  const logRes = supabaseConfigured() ? await supabaseAdmin().from("ad_log").select("id,created_at,name,action,reason,applied,source").order("created_at", { ascending: false }).limit(40) : null;
+  // Båda frågorna samtidigt – varje tur till databasen syns i laddtiden
+  const [logRes, variantRes] = supabaseConfigured()
+    ? await Promise.all([
+        supabaseAdmin().from("ad_log").select("id,created_at,name,action,reason,applied,source").order("created_at", { ascending: false }).limit(40),
+        supabaseAdmin().from("ad_variants").select("ad_id,ad_score,ad_review"),
+      ])
+    : [null, null];
   const logs = (logRes?.data ?? []) as LogRow[];
-  const variantRes = supabaseConfigured() ? await supabaseAdmin().from("ad_variants").select("ad_id,ad_score,ad_review") : null;
   const scoreByAd = new Map(((variantRes?.data ?? []) as VariantRow[]).map((v) => [v.ad_id, v]));
 
   let error: string | null = null;
