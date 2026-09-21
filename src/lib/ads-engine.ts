@@ -1,5 +1,6 @@
 import "server-only";
-import { angles, fillCopy, productHooks, type AdAngle } from "@/content/ad-copy";
+import { angles, productHooks, type AdAngle } from "@/content/ad-copy";
+import { templateCopy, writeAdCopy } from "./ad-writer";
 import { generateScenes, groupScore, listCreativeGroups, type CreativeGroup } from "./ad-images";
 import { minImageScore, qaConfigured, reviewAd } from "./ad-qa";
 import { getProduct } from "./catalog";
@@ -129,33 +130,46 @@ async function collectMedia(product: Product, mediaBase: string, notes: string[]
   return media;
 }
 
-async function makeAd(o: { product: Product; angle: AdAngle; media: Media; hook: string; adsetId: string; campaignId: string; link: string; status: "ACTIVE" | "PAUSED"; parentAdId?: string }) {
+async function makeAd(o: { product: Product; angle: AdAngle; media: Media; hook: string; adsetId: string; campaignId: string; link: string; status: "ACTIVE" | "PAUSED"; parentAdId?: string; notes?: string[] }) {
   const pageId = process.env.META_PAGE_ID!;
   const name = `${o.angle.id} · ${o.media.label}`;
-  const vars = { name: o.product.name, hook: o.hook };
-  const primaryText = fillCopy(o.angle.text, vars);
-  const headline = fillCopy(o.angle.headline, vars);
-  const description = o.angle.description ? fillCopy(o.angle.description, vars) : undefined;
-  // AI-granskning av hela annonsen innan den skapas
+  // Texten skrivs av AI i vinkelns anda, med mallen som reserv
+  let copy = await writeAdCopy({ product: o.product, angle: o.angle, hook: o.hook, notes: o.notes });
+  const { primaryText, headline, description } = copy;
+  // AI-granskning av hela annonsen innan den skapas. Underkänns en AI-skriven text får
+  // skrivaren en chans till med granskarens synpunkter, och sedan används mallen.
   let review: Awaited<ReturnType<typeof reviewAd>> | null = null;
+  let text = { primaryText, headline, description };
   if (qaConfigured()) {
-    review = await reviewAd({ primaryText, headline, description, imageUrl: o.media.feedUrl, product: o.product });
+    review = await reviewAd({ ...text, imageUrl: o.media.feedUrl, product: o.product });
+    for (let retry = 0; review.verdict === "reject" && retry < 2 && copy.source === "ai"; retry++) {
+      const why = review.issues.join("; ") || review.notes;
+      o.notes?.push(`${o.angle.id} · ${o.media.label}: texten underkändes (${review.score}) – ${retry === 0 ? "skrivs om" : "mallen används"}: ${why}`);
+      const next =
+        retry === 0
+          ? await writeAdCopy({ product: o.product, angle: o.angle, hook: o.hook, notes: o.notes, avoid: why })
+          : templateCopy(o.product, o.angle, o.hook);
+      text = { primaryText: next.primaryText, headline: next.headline, description: next.description };
+      copy = next;
+      review = await reviewAd({ ...text, imageUrl: o.media.feedUrl, product: o.product });
+    }
     if (review.verdict === "reject") throw new Error(`underkänd av granskningen (${review.score}): ${review.issues.join("; ") || review.notes}`);
   }
+  const { primaryText: finalText, headline: finalHeadline, description: finalDescription } = text;
   const creative = await meta.createPlacementCreative({
     name: `${o.product.slug} · ${name}`,
     pageId,
     instagramActorId: process.env.META_INSTAGRAM_ACTOR_ID || undefined,
     feedHash: o.media.feedHash,
     storyHash: o.media.storyHash,
-    primaryText,
-    headline,
-    description,
+    primaryText: finalText,
+    headline: finalHeadline,
+    description: finalDescription,
     link: o.link,
   });
   const ad = await meta.createAd(name, o.adsetId, creative.id, o.status);
   if (supabaseConfigured())
-    await supabaseAdmin().from("ad_variants").insert({ ad_id: ad.id, campaign_id: o.campaignId, adset_id: o.adsetId, product_slug: o.product.slug, angle_id: o.angle.id, group_id: o.media.groupId, media_label: o.media.label, parent_ad_id: o.parentAdId ?? null, ad_score: review?.score ?? null, ad_review: review, primary_text: primaryText, headline, description: description ?? null, image_url: o.media.feedUrl });
+    await supabaseAdmin().from("ad_variants").insert({ ad_id: ad.id, campaign_id: o.campaignId, adset_id: o.adsetId, product_slug: o.product.slug, angle_id: o.angle.id, group_id: o.media.groupId, media_label: o.media.label, parent_ad_id: o.parentAdId ?? null, ad_score: review?.score ?? null, ad_review: review, primary_text: finalText, headline: finalHeadline, description: finalDescription ?? null, image_url: o.media.feedUrl, copy_source: copy.source });
   return { id: ad.id, name, score: review?.score ?? null };
 }
 
@@ -210,7 +224,7 @@ export async function buildTestCampaign(o: BuildOptions): Promise<BuildResult> {
     if (seen.has(key)) continue;
     seen.add(key);
     try {
-      const ad = await makeAd({ product, angle, media: m, hook: hooks[n % hooks.length]!, adsetId: adset.id, campaignId: campaign.id, link, status: "PAUSED" });
+      const ad = await makeAd({ product, angle, media: m, hook: hooks[n % hooks.length]!, adsetId: adset.id, campaignId: campaign.id, link, status: "PAUSED", notes });
       ads.push(ad);
       decisions.push({ level: "ad", id: ad.id, name: ad.name, action: "note", reason: ad.score === null ? "Skapad (pausad)" : `Skapad (pausad), granskningspoäng ${ad.score}`, campaignId: campaign.id, adsetId: adset.id });
       n++;
@@ -272,7 +286,7 @@ export async function iterateFromAd(o: { adId: string; mediaBase: string; linkBa
   if (winnerMedia) {
     for (const angle of angles.filter((a) => a.id !== v.angle_id && !usedKeys.has(`${a.id}·${v.group_id ?? v.media_label}`)).slice(0, half)) {
       try {
-        ads.push(await makeAd({ product, angle, media: winnerMedia, hook: hooks[ads.length % hooks.length]!, adsetId: v.adset_id, campaignId: v.campaign_id, link, status, parentAdId: v.ad_id }));
+        ads.push(await makeAd({ product, angle, media: winnerMedia, hook: hooks[ads.length % hooks.length]!, adsetId: v.adset_id, campaignId: v.campaign_id, link, status, parentAdId: v.ad_id, notes }));
       } catch (e) {
         notes.push(`${angle.id}: ${e instanceof Error ? e.message : e}`);
       }
@@ -294,7 +308,7 @@ export async function iterateFromAd(o: { adId: string; mediaBase: string; linkBa
     }
     for (const m of fresh.slice(0, half)) {
       try {
-        ads.push(await makeAd({ product, angle: winnerAngle, media: m, hook: hooks[ads.length % hooks.length]!, adsetId: v.adset_id, campaignId: v.campaign_id, link, status, parentAdId: v.ad_id }));
+        ads.push(await makeAd({ product, angle: winnerAngle, media: m, hook: hooks[ads.length % hooks.length]!, adsetId: v.adset_id, campaignId: v.campaign_id, link, status, parentAdId: v.ad_id, notes }));
       } catch (e) {
         notes.push(`${m.label}: ${e instanceof Error ? e.message : e}`);
       }

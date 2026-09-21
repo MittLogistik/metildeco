@@ -91,6 +91,10 @@ export default async function AdsPage() {
           Meta-kampanjer via Marketing API. Allt som skapas här är pausat tills du aktiverar det. Belopp i annonskontots valuta ({cur}).{" "}
           <Link href="/admin/annonser/bilder" className="underline">
             Annonsbilder
+          </Link>{" "}
+          ·{" "}
+          <Link href="/admin/annonser/texter" className="underline">
+            Annonstexter
           </Link>
         </p>
       </div>

@@ -67,9 +67,9 @@ export const angles: AdAngle[] = [
   },
   {
     id: "svenskt",
-    text: "{hook}\n\nTillverkad i Sverige, skickas samma dag vid order före 12. Fri frakt över 499 kr och 30 dagars öppet köp.",
+    text: "{hook}\n\nTillverkad i Sverige, skickas samma dag vid order före 12. Fri frakt över 499 kr och 30 dagars ångerrätt på oöppnade produkter.",
     headline: "Tillverkad i Sverige",
-    description: "Skickas samma dag · 30 dagars öppet köp",
+    description: "Skickas samma dag · 30 dagars ångerrätt",
   },
 ];
 

@@ -52,11 +52,21 @@ async function askVision(prompt: string, imageUrls: string[]): Promise<string> {
 /** Tomt eller otolkbart svar får aldrig släppa igenom en annons: det räknas som underkänt. */
 const unparsed = (text: string): Review => ({ score: 0, verdict: "reject", issues: ["Granskningen gav inget tolkbart svar."], notes: text.slice(0, 300) });
 
-/** Frågar modellen, och en gång till om svaret inte går att tolka. */
+/**
+ * Frågar modellen, och en gång till om svaret inte går att tolka. Vägrar modellen att
+ * svara räknas det som underkänt – aldrig som godkänt, och aldrig som ett kastat fel
+ * som avbryter hela kampanjbygget.
+ */
 async function review(prompt: string, images: string[], min: number): Promise<Review> {
   let last = "";
   for (let attempt = 0; attempt < 2; attempt++) {
-    last = await askVision(prompt, images);
+    try {
+      last = await askVision(prompt, images);
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : String(e);
+      if (attempt === 0) continue;
+      return { score: 0, verdict: "reject", issues: ["Granskningen kunde inte genomföras."], notes: msg.slice(0, 300) };
+    }
     const r = parseReview(last, min);
     if (!r.issues.includes(unparsed("").issues[0]!)) return r;
   }
