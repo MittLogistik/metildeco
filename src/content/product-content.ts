@@ -1212,12 +1212,132 @@ export const productContent: Record<string, ProductContent> = {
       },
     ],
   },
+  "ashwagandha": {
+    eyebrow: "Withania somnifera · 10 % withanolider",
+    headline: "Ashwagandha, 400 mg per kapsel",
+    intro:
+      "Ett standardiserat rotextrakt av Withania somnifera med 10 % withanolider – 400 mg per kapsel. 60 kapslar i veganskt kapselskal, utan tillsatser.",
+    highlights: [
+      { label: "Standardisering", value: "10 % withanolider" },
+      { label: "Per kapsel", value: "400 mg" },
+      { label: "Kapslar", value: "60 st" },
+    ],
+    story: [
+      {
+        heading: "Roten, inte hela växten",
+        body:
+          "Ashwagandha kallas även indisk ginseng och har en lång tradition inom ayurvedisk örtkultur. Vårt extrakt kommer enbart från roten. Billigare varianter mals ofta på hela växten, blad och stjälk inräknat, vilket ger ett helt annat innehåll.",
+      },
+      {
+        heading: "Standardiserat till 10 %",
+        body:
+          "Withanolider är de ämnen som mäts i ett ashwagandhaextrakt. Vårt är standardiserat till 10 %, en av de högsta standardiseringarna som finns i kapselform. 400 mg extrakt motsvarar 40 mg withanolider i varje kapsel.",
+      },
+      {
+        heading: "Ren sammansättning",
+        body:
+          "Bara extraktet och ett växtbaserat kapselskal. Inga bindemedel, fyllnadsmedel eller klumpförebyggande medel, och ingenting tillsatt för att dryga ut innehållet.",
+      },
+    ],
+    specs: [
+      { label: "Latinskt namn", value: "Withania somnifera" },
+      { label: "Växtdel", value: "Rot" },
+      { label: "Standardisering", value: "10 % withanolider" },
+      { label: "Per kapsel", value: "400 mg extrakt, varav 40 mg withanolider" },
+      { label: "Dagsdos", value: "2–3 kapslar dagligen" },
+      { label: "Förpackning", value: "60 kapslar" },
+      { label: "Kapsel", value: "Vegansk (HPMC)" },
+    ],
+    ingredients:
+      "Ashwagandhaextrakt (Withania somnifera, rot) standardiserat till 10 % withanolider, kapselskal (vegetabiliskt, HPMC). Innehåll per kapsel: ashwagandhaextrakt 400 mg, varav withanolider 40 mg.",
+    usage: [
+      "2–3 kapslar dagligen med ett glas vatten.",
+      "Överskrid inte rekommenderad dagsdos.",
+      "Förvaras svalt och torrt. Återförslut burken efter varje användning.",
+      "Förvaras utom räckhåll för små barn.",
+    ],
+    faq: [
+      {
+        q: "Vad betyder 10 % withanolider?",
+        a: "Att extraktet standardiserats så att 10 % utgörs av withanolider. I 400 mg extrakt motsvarar det 40 mg.",
+      },
+      {
+        q: "Vilken del av växten används?",
+        a: "Enbart roten. Blad och stjälk används inte.",
+      },
+      {
+        q: "Är kapseln vegansk?",
+        a: "Ja. Kapselskalet är växtbaserat (HPMC).",
+      },
+      {
+        q: "Hur många kapslar innehåller burken?",
+        a: "60 kapslar.",
+      },
+    ],
+  },
+  "pine-pollen": {
+    eyebrow: "Tallpollen · 99 % rent extrakt",
+    headline: "Pine Pollen, 300 mg per kapsel",
+    intro:
+      "Pollen från tall i ett 99 % rent extrakt med spräckta cellväggar – 300 mg per kapsel. 60 kapslar i veganskt kapselskal, utan tillsatser.",
+    highlights: [
+      { label: "Renhet", value: "99 %" },
+      { label: "Per kapsel", value: "300 mg" },
+      { label: "Kapslar", value: "60 st" },
+    ],
+    story: [
+      {
+        heading: "Vårens gula stoft",
+        body:
+          "Under några veckor på våren släpper tallen sitt pollen, ett fint gult stoft som lägger sig över mark och vatten. Skörden sker under den korta period då pollenet finns, och därför är råvaran årstidsbunden.",
+      },
+      {
+        heading: "Spräckta cellväggar",
+        body:
+          "Ett pollenkorn har ett hårt yttre skal. I vårt extrakt är cellväggarna spräckta, vilket är det steg som gör kornets innehåll åtkomligt i stället för att passera obrutet.",
+      },
+      {
+        heading: "Ren sammansättning",
+        body:
+          "99 % rent pollenextrakt och ett växtbaserat kapselskal. Inga bindemedel, fyllnadsmedel eller klumpförebyggande medel.",
+      },
+    ],
+    specs: [
+      { label: "Råvara", value: "Pollen från tall" },
+      { label: "Renhet", value: "99 %" },
+      { label: "Bearbetning", value: "Spräckta cellväggar" },
+      { label: "Per kapsel", value: "300 mg" },
+      { label: "Dagsdos", value: "1–3 kapslar dagligen" },
+      { label: "Förpackning", value: "60 kapslar" },
+      { label: "Kapsel", value: "Vegansk (HPMC)" },
+    ],
+    ingredients: "Tallpollenextrakt (99 % rent, spräckta cellväggar), kapselskal (vegetabiliskt, HPMC). Innehåll per kapsel: pollenextrakt 300 mg.",
+    usage: [
+      "1–3 kapslar dagligen med ett glas vatten.",
+      "Överskrid inte rekommenderad dagsdos.",
+      "Förvaras svalt och torrt. Återförslut burken efter varje användning.",
+      "Förvaras utom räckhåll för små barn.",
+    ],
+    faq: [
+      {
+        q: "Vad betyder spräckta cellväggar?",
+        a: "Pollenkornets yttre skal har öppnats i bearbetningen, så att innehållet blir åtkomligt i stället för att passera obrutet.",
+      },
+      {
+        q: "När skördas pollenet?",
+        a: "Under den korta period på våren då tallen släpper sitt pollen.",
+      },
+      {
+        q: "Är kapseln vegansk?",
+        a: "Ja. Kapselskalet är växtbaserat (HPMC).",
+      },
+      {
+        q: "Hur många kapslar innehåller burken?",
+        a: "60 kapslar.",
+      },
+    ],
+  },
 };
-
-
-
-
-
 
 
 /* --------------------- Elektrolyter (smak × storlek) ---------------------- */
