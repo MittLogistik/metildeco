@@ -67,14 +67,49 @@ export const groupScore = (g: CreativeGroup): number | null => {
 
 /** Grupperar bilderna per scen: en flödesbild (1:1 eller 3:4) och ev. en storybild (9:16). */
 export async function listCreativeGroups(slug: string, onlyActive = true): Promise<CreativeGroup[]> {
-  let q = supabaseAdmin().from("ad_creatives").select("*").eq("product_slug", slug).order("created_at", { ascending: false });
-  if (onlyActive) q = q.eq("active", true);
-  const { data, error } = await q;
+  // Alla rader hämtas alltid, även dolda: numreringen av egna bilder ska bli densamma
+  // i admin och i annonsmotorn, oavsett om något är dolt.
+  const { data, error } = await supabaseAdmin().from("ad_creatives").select("*").eq("product_slug", slug).order("created_at", { ascending: false });
   if (error) throw new Error(error.message);
+  const rows = (data ?? []) as Creative[];
+
+  const sceneLabel = (id: string | null) =>
+    id?.includes(" · ") ? `${id.split(" · ")[0]} · ${scenes.find((s) => s.id === id.split(" · ")[1])?.label ?? id.split(" · ")[1]}` : (scenes.find((s) => s.id === id)?.label ?? id);
+  const labelFor = (c: Creative) =>
+    c.kind === "upload" ? "Egen bild" : c.kind === "graphic" ? `Text · ${(c.prompt ?? "").replace(/^\[text\] /, "").split(" / ")[0]}` : (sceneLabel(c.scene_id) ?? "Scen");
+
+  // Gruppens tid = den första bilden i den. Används både för ordningen och för datumet i admin.
+  const created = new Map<string, string>();
+  const baseLabel = new Map<string, string>();
+  for (const c of rows) {
+    const earlier = created.get(c.group_id);
+    created.set(c.group_id, earlier && earlier < c.created_at ? earlier : c.created_at);
+    baseLabel.set(c.group_id, labelFor(c));
+  }
+
+  // Namn som flera grupper delar numreras i den ordning de skapades, så att varje
+  // bilduppsättning går att skilja åt här och i Meta. Numret räknas över alla grupper,
+  // även dolda, så att det är detsamma i admin som i annonsmotorn.
+  const label = new Map<string, string>();
+  const byLabel = new Map<string, string[]>();
+  for (const [gid, l] of baseLabel) byLabel.set(l, (byLabel.get(l) ?? []).concat(gid));
+  for (const [l, ids] of byLabel) {
+    if (ids.length === 1) label.set(ids[0]!, l);
+    else ids.sort((x, y) => created.get(x)!.localeCompare(created.get(y)!)).forEach((gid, i) => label.set(gid, `${l} ${i + 1}`));
+  }
+
   const groups = new Map<string, CreativeGroup>();
-  for (const c of (data ?? []) as Creative[]) {
-    const sceneLabel = (id: string | null) => (id?.includes(" · ") ? `${id.split(" · ")[0]} · ${scenes.find((s) => s.id === id.split(" · ")[1])?.label ?? id.split(" · ")[1]}` : (scenes.find((s) => s.id === id)?.label ?? id));
-    const g = groups.get(c.group_id) ?? { groupId: c.group_id, label: c.kind === "upload" ? "Egen bild" : c.kind === "graphic" ? `Text · ${(c.prompt ?? "").replace(/^\[text\] /, "").split(" / ")[0]}` : (sceneLabel(c.scene_id) ?? "Scen"), kind: c.kind, feed: null, story: null, sceneId: c.scene_id, createdAt: c.created_at };
+  for (const c of rows) {
+    if (onlyActive && !c.active) continue;
+    const g = groups.get(c.group_id) ?? {
+      groupId: c.group_id,
+      label: label.get(c.group_id) ?? labelFor(c),
+      kind: c.kind,
+      feed: null,
+      story: null,
+      sceneId: c.scene_id,
+      createdAt: created.get(c.group_id) ?? c.created_at,
+    };
     if (c.format === "9:16") g.story = g.story ?? c;
     else g.feed = g.feed ?? c;
     groups.set(c.group_id, g);

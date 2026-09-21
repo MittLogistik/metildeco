@@ -215,12 +215,16 @@ export async function buildTestCampaign(o: BuildOptions): Promise<BuildResult> {
   let n = 0;
   let sameErrors = 0;
   let lastError = "";
+  // Bilden först: varje uppsättning får en annons innan någon används igen. Vinkeln
+  // förskjuts ett steg per varv, så samma par kan aldrig dyka upp två gånger.
   const combos: { angle: AdAngle; m: Media }[] = [];
-  for (let round = 0; round < media.length && combos.length < adsCount; round++) for (const [ai, angle] of angles.entries()) combos.push({ angle, m: media[(round + ai) % media.length]! });
+  for (let round = 0; round < angles.length && combos.length < adsCount + media.length; round++)
+    for (const [mi, m] of media.entries()) combos.push({ angle: angles[(mi + round) % angles.length]!, m });
   const seen = new Set<string>();
   for (const { angle, m } of combos) {
     if (n >= adsCount) break;
-    const key = `${angle.id}·${m.label}`;
+    // Bildgruppens id avgör vad som är samma bild – två uppsättningar kan heta lika
+    const key = `${angle.id}·${m.groupId ?? m.label}`;
     if (seen.has(key)) continue;
     seen.add(key);
     try {
@@ -232,13 +236,16 @@ export async function buildTestCampaign(o: BuildOptions): Promise<BuildResult> {
       const msg = e instanceof Error ? e.message : String(e);
       sameErrors = msg === lastError ? sameErrors + 1 : 1;
       lastError = msg;
-      notes.push(`${key}: ${msg}`);
+      notes.push(`${angle.id} · ${m.label}: ${msg}`);
+      decisions.push({ level: "ad", id: `${campaign.id}-${key}`, name: `${angle.id} · ${m.label}`, action: "note", reason: `Annonsen skapades inte: ${msg}`.slice(0, 500), campaignId: campaign.id, adsetId: adset.id });
       if (sameErrors >= 3) {
         notes.push("Avbröt efter tre likadana fel.");
+        decisions.push({ level: "campaign", id: campaign.id, name: `${TEST_PREFIX}${product.name}`, action: "note", reason: "Avbröt efter tre likadana fel i rad.", campaignId: campaign.id });
         break;
       }
     }
   }
+  if (ads.length < adsCount) notes.push(`${ads.length} av ${adsCount} annonser skapades. ${media.length} bilduppsättningar och ${angles.length} textvinklar fanns att kombinera.`);
   await log(decisions.map((decision) => ({ decision, applied: true, source: o.source ?? "admin" })));
   return { campaignId: campaign.id, adsetId: adset.id, ads, notes };
 }
