@@ -130,13 +130,16 @@ export async function getStats(period: Period, env: Env): Promise<Stats> {
     if (r.event === "begin_checkout") bump(checkoutByDay, day, r.events);
   }
 
+  // Fraktpriser och inköpspriser hämtas parallellt – varje anrop kostar en tur till databasen
   const purchasePrice = new Map<string, number | null>();
-  const rates = await db.from("shipping_rates").select("method,cost").eq("currency", "SEK");
+  const [rates, rawProducts] = await Promise.all([
+    db.from("shipping_rates").select("method,cost").eq("currency", "SEK"),
+    db.from("products").select("slug,purchase_price"),
+  ]);
   const shippingCostByLabel = new Map<string, number>();
   const labels: Record<string, string> = { varubrev: "Varubrev", "tracked-letter": "Spårbart brev", ombud: "Paket till ombud" };
   for (const r of rates.data ?? []) shippingCostByLabel.set(labels[r.method] ?? r.method, Number(r.cost ?? 0));
 
-  const rawProducts = await db.from("products").select("slug,purchase_price");
   for (const p of rawProducts.data ?? []) purchasePrice.set(p.slug, p.purchase_price === null ? null : Number(p.purchase_price));
   const bundleParts = new Map(catalog.allBundles.map((b) => [b.slug, b.items.map((i) => ({ slug: i.product.slug, qty: i.qty }))]));
 

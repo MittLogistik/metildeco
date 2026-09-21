@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import Link, { useLinkStatus } from "next/link";
 import { usePathname } from "next/navigation";
 
 const nav = [
@@ -13,6 +13,13 @@ const nav = [
   { href: "/admin/annonser", label: "Annonser" },
   { href: "/admin/konto", label: "Mitt konto" },
 ];
+
+/** Snurra i länken som just klickats, så klicket syns innan servern hunnit svara. */
+function Pending() {
+  const { pending } = useLinkStatus();
+  if (!pending) return null;
+  return <span className="ml-2 inline-block h-3 w-3 animate-spin rounded-full border-2 border-current border-t-transparent align-middle" aria-hidden="true" />;
+}
 
 export function AdminNav() {
   const path = usePathname();
@@ -27,6 +34,7 @@ export function AdminNav() {
             className={`shrink-0 rounded-xl px-3 py-2 text-sm transition-colors ${active ? "bg-primary-soft font-medium text-primary" : "text-muted hover:bg-sand hover:text-foreground"}`}
           >
             {n.label}
+            <Pending />
           </Link>
         );
       })}

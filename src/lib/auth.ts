@@ -2,6 +2,7 @@ import "server-only";
 import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import { cache } from "react";
 import { supabaseAdmin } from "./supabase";
 
 /** Supabase-klient som läser inloggningen ur cookies (publika nyckeln, följer RLS). */
@@ -23,8 +24,11 @@ export async function createSessionClient() {
 
 export type AdminUser = { id: string; email: string };
 
-/** Inloggad användare med rollen admin, annars null. */
-export async function getAdminUser(): Promise<AdminUser | null> {
+/**
+ * Inloggad användare med rollen admin, annars null. Cachad per begäran: layouten och
+ * sidan frågar båda, och varje kontroll kostar två anrop till databasen.
+ */
+export const getAdminUser = cache(async (): Promise<AdminUser | null> => {
   const client = await createSessionClient();
   const { data } = await client.auth.getUser();
   const user = data.user;
@@ -32,7 +36,7 @@ export async function getAdminUser(): Promise<AdminUser | null> {
   const role = await supabaseAdmin().from("user_roles").select("role").eq("user_id", user.id).eq("role", "admin").maybeSingle();
   if (!role.data) return null;
   return { id: user.id, email: user.email ?? "" };
-}
+});
 
 /** Kräver admin – skickar annars till inloggningen. */
 export async function requireAdmin(): Promise<AdminUser> {
