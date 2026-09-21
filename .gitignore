@@ -46,3 +46,4 @@ scripts/_*.mjs
 
 .vercel
 .env*
+!.env.example
