@@ -2,6 +2,7 @@ import "server-only";
 import { randomUUID } from "node:crypto";
 import { conceptById, copyLines, creativeName, formatById, type Format } from "@/content/ad-concepts";
 
+import { directArt } from "./ad-art-director";
 import { buildCreativePrompt, randomVariation } from "./ad-prompt";
 import { qaConfigured, reviewImage, type Review } from "./ad-qa";
 import type { Creative } from "./ad-images";
@@ -31,6 +32,8 @@ export type GenerateInput = {
   review?: string;
   /** Ny visuell tolkning i stället för samma bild igen. */
   regenerate?: boolean;
+  /** Noteringar från art directorn, om något gick fel. */
+  notes?: string[];
   providerId?: string;
 };
 
@@ -77,13 +80,18 @@ export async function generateCreative(o: GenerateInput): Promise<GenerateResult
   const groupId = o.groupId ?? randomUUID();
   const provider = imageProvider(o.providerId);
   const copy = concept.copy({ product, review: o.review?.trim() || undefined });
+  const variation = o.regenerate ? randomVariation() : undefined;
+  // Art directorn ser packshoten och skriver regin, som i ChatGPT-chatten
+  const packshotUrl = mediaUrl(packshotPath).startsWith("http") ? mediaUrl(packshotPath) : `${mediaBase}${mediaUrl(packshotPath)}`;
+  const direction = await directArt({ product, concept, format: o.format, copy, packshotUrl, customInstructions: o.customInstructions, variation, notes: o.notes });
   const prompt = buildCreativePrompt({
     product,
     concept,
     format: o.format,
     copy,
+    art: direction.art,
     customInstructions: o.customInstructions,
-    variation: o.regenerate ? randomVariation() : undefined,
+    variation,
   });
 
   // Modellen ritar hela annonsen, med packshoten som referens för produkten

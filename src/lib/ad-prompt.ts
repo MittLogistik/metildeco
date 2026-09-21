@@ -48,9 +48,11 @@ const textBlock = (copy: ConceptCopy) => {
 
 const formatBlock = (format: Format) => {
   const f = formatById(format);
+  const safe =
+    "SAFE AREA: nothing may touch or run off the edge of the image. Every headline, badge, arrow and button must sit at least one tenth of the width in from the left and right edges, and be fully visible with air around it. Never crop a word.";
   return format === "9:16"
-    ? `FORMAT: vertical ${f?.width}x${f?.height} for Instagram and Facebook Stories. Use the whole height. Keep text and buttons out of the top 15 percent and the bottom 20 percent, where the app interface sits.`
-    : `FORMAT: square ${f?.width}x${f?.height} for the Instagram and Facebook feed. Keep the important parts near the centre with an even margin.`;
+    ? `FORMAT: vertical ${f?.width}x${f?.height} for Instagram and Facebook Stories. Use the whole height, but keep text and buttons out of the top 15 percent and the bottom 20 percent, where the app interface sits. ${safe}`
+    : `FORMAT: square ${f?.width}x${f?.height} for the Instagram and Facebook feed. Keep the important parts near the centre. ${safe}`;
 };
 
 const complianceBlock = () =>
@@ -69,14 +71,16 @@ export type PromptInput = {
   customInstructions?: string;
   /** Extra variation vid omgenerering. */
   variation?: string;
+  /** Regi skriven av art director. Utelämnas används konceptets egen beskrivning. */
+  art?: string;
 };
 
 /** Sätter ihop prompten: varumärke, produkt, koncept, text, format, önskemål, regler. */
-export function buildCreativePrompt({ product, concept, format, copy, customInstructions, variation }: PromptInput): string {
+export function buildCreativePrompt({ product, concept, format, copy, customInstructions, variation, art }: PromptInput): string {
   return [
     brandBlock(),
     productBlock(product),
-    concept.art({ product, format, copy }),
+    art?.trim() ? art.trim() : concept.art({ product, format, copy }),
     textBlock(copy),
     formatBlock(format),
     variation ? `VARIATION: ${variation}` : "",
