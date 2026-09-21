@@ -72,13 +72,13 @@ quiz, presentkort, spåra order, mitt konto, samarbeten/jobba hos oss, fler spr�
 - Leverantör byts med `AD_IMAGE_PROVIDER` (openai|higgsfield), modell med `AD_IMAGE_MODEL`, kvalitet med `AD_IMAGE_QUALITY`. `getApprovedCreatives(slug)` ger kampanjbyggaren de godkända bilderna.
 
 ## Katalogannonser (karusell)
-- `/admin/annonser/katalog`. Bakgrunden genereras **en gång** som en bred banner (N:1) och skärs i kvadrater om 1080×1080, därför löper miljön sömlöst när man swipar. Modellerna ritar inte så breda bilder: vi tar en liggande bild, beskär mittbandet och skalar upp – bakgrunden är mjuk så det syns inte.
-- Bara produkter där `isInStock(p)` är sant kommer med. Slutsålda går inte att välja och listas som utelämnade.
-- Två varianter i `src/content/ad-catalog.ts` (ljus studio / mörk natur) skiljer sig i både bild, kortrad och textvinkel, så att de kan ställas mot varandra i samma annonsgrupp.
-- Mörka varianter rensar packshotens inbakade ljusa skugga ur alfakanalen, annars syns den som en fläck.
-- `publishCatalog` skapar en **pausad** karusellannons via `createCarouselCreative` (`child_attachments`). Varje kort länkar till sin produktsida. `multi_share_end_card` är av.
+- `/admin/annonser/katalog`. Bilderna görs **utanför systemet** och laddas upp: ett kort i taget, eller en bred bild som delas i lika stora kvadrater. Genereringen togs bort – resultatet höll inte.
+- Bred bild skalas med `fit: "fill"`, inte `cover`. Beskärning skulle flytta en bakgrund som riktats upp mot kortgränserna. Rätt mått är N × 1080 brett och 1080 högt.
+- Ordningen styrs i gränssnittet och avgör hur skarvarna möts. Positionerna är unika per katalog, så bytet görs i två pass (negativa tillfälliga värden först).
+- Titel, beskrivning och länk per kort hämtas från produkten. Bara varor i lager kan väljas.
+- Annonstexten föreslås av `writeCatalogText`, redigeras och **godkänns** innan kampanjen kan startas. `publishCatalog` vägrar utan godkänd text.
+- Kampanjen skapas alltid pausad, via `createCarouselCreative` (`child_attachments`, `multi_share_end_card` av).
 - Tabeller: `ad_catalogs` + `ad_catalog_cards`.
-
 ## Affiliate (AddRevenue)
 - Klick fångas i `src/components/affiliate/ClickTracker.tsx` (adt_id, adt_ei, arid, clickid + channelId), besökar-id i localStorage `metilde_vid`. Klicket skickas till `/api/affiliate/click` och sparas i `visitor_tracking` med `expires_at` = nu + attributionsdagar. Webbläsaren pratar aldrig med AddRevenue.
 - Attributionen **fryses i kassan**: `/api/checkout` slår upp senaste giltiga klicket och lägger `aff_src/aff_click/aff_ref` i Stripe-sessionens metadata. `saveOrderFromSession` skriver dem på ordern tillsammans med `exchange_rate_to_sek`.
