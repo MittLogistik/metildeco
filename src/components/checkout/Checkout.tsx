@@ -10,6 +10,7 @@ import { routes } from "@/lib/routes";
 import { company, site } from "@/lib/site";
 import { track } from "@/lib/track";
 import { metaTrack } from "@/components/consent/MetaPixel";
+import { visitorId } from "@/components/affiliate/ClickTracker";
 import { metaContentId } from "@/lib/consent";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { LockIcon } from "@/components/icons";
@@ -51,6 +52,7 @@ export function Checkout() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           lines: cart.lines.map((l) => ({ kind: l.kind, slug: l.slug, qty: l.qty, plan: l.plan, intervalDays: l.intervalDays })),
+          visitorId: visitorId(),
         }),
       });
       const data = (await res.json()) as { url?: string; error?: string };

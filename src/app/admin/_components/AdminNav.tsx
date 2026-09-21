@@ -11,6 +11,7 @@ const nav = [
   { href: "/admin/produkter", label: "Produkter" },
   { href: "/admin/paket", label: "Paket" },
   { href: "/admin/annonser", label: "Annonser" },
+  { href: "/admin/affiliate", label: "Affiliate" },
   { href: "/admin/konto", label: "Mitt konto" },
 ];
 

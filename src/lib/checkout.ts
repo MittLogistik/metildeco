@@ -23,6 +23,8 @@ export type CheckoutLine = {
 export type CheckoutRequest = {
   lines: CheckoutLine[];
   email: string | null;
+  /** Besökarens id från localStorage, för att knyta ett affiliateklick till ordern. */
+  visitorId: string | null;
 };
 
 export type PricedLine = CheckoutLine & {
@@ -53,7 +55,8 @@ export function parseCheckoutRequest(body: unknown): CheckoutRequest {
   });
   if (lines.length === 0) throw new Error("Varukorgen är tom.");
   const email = clean(b.email, 200).toLowerCase();
-  return { lines, email: /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email) ? email : null };
+  const visitorId = clean(b.visitorId, 100) || null;
+  return { lines, email: /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email) ? email : null, visitorId };
 }
 
 /** Sätter pris på varje rad utifrån katalogen. Okända eller slutsålda varor ger fel. */

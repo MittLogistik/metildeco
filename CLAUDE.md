@@ -78,3 +78,12 @@ quiz, presentkort, spåra order, mitt konto, samarbeten/jobba hos oss, fler spr�
 - Mörka varianter rensar packshotens inbakade ljusa skugga ur alfakanalen, annars syns den som en fläck.
 - `publishCatalog` skapar en **pausad** karusellannons via `createCarouselCreative` (`child_attachments`). Varje kort länkar till sin produktsida. `multi_share_end_card` är av.
 - Tabeller: `ad_catalogs` + `ad_catalog_cards`.
+
+## Affiliate (AddRevenue)
+- Klick fångas i `src/components/affiliate/ClickTracker.tsx` (adt_id, adt_ei, arid, clickid + channelId), besökar-id i localStorage `metilde_vid`. Klicket skickas till `/api/affiliate/click` och sparas i `visitor_tracking` med `expires_at` = nu + attributionsdagar. Webbläsaren pratar aldrig med AddRevenue.
+- Attributionen **fryses i kassan**: `/api/checkout` slår upp senaste giltiga klicket och lägger `aff_src/aff_click/aff_ref` i Stripe-sessionens metadata. `saveOrderFromSession` skriver dem på ordern tillsammans med `exchange_rate_to_sek`.
+- När ordern är betald köas konverteringen i `postback_queue` (unikt på order_id + source). Cron `/api/cron/affiliate` var tionde minut skickar kön med backoff 1, 5, 15, 60, 180, 720 minuter, hämtar provision och rensar utgångna klick. Låset ligger i `job_locks`.
+- **Två endpoints med olika regler**: trackern `https://addrevenue.io/t` tar emot konverteringen och får INTE ha Authorization-header. `https://addrevenue.io/api/v2/conversions` hämtar provision och kräver `Bearer ADDREVENUE_API_TOKEN`. Samma token finns bara på det andra stället.
+- Provisionsgrundande värde = `orders.subtotal` (redan efter rabatt, utan frakt) delat med (1 + momssats för leveranslandet). Beloppet skickas alltid i **ordervalutan** – räkna aldrig om det. Kursen på ordern används bara för våra egna SEK-sammanställningar.
+- Momssatser per land ligger i `integration_settings.affiliate_addrevenue.vatRates` och ändras i `/admin/affiliate`. SE = 0,12 för kosttillskott; `default` gäller övriga länder och måste stämmas av innan en ny marknad öppnas.
+- Förnyelseordrar ärver inte attributionen och köar ingen konvertering.

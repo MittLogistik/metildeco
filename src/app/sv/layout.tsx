@@ -3,6 +3,7 @@ import { CartDrawer } from "@/components/cart/CartDrawer";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Analytics } from "@/components/Analytics";
+import { ClickTracker } from "@/components/affiliate/ClickTracker";
 import { CookieBanner } from "@/components/consent/CookieBanner";
 import { MetaPixel } from "@/components/consent/MetaPixel";
 import { JsonLd } from "@/components/JsonLd";
@@ -42,6 +43,7 @@ export default async function SwedishLayout({ children }: LayoutProps<"/sv">) {
   return (
     <CartProvider catalog={catalog}>
       <Analytics />
+      <ClickTracker />
       <JsonLd data={organization} />
       <Header />
       <main className="flex-1">{children}</main>

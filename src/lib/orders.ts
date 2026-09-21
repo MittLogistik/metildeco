@@ -6,6 +6,8 @@ import { supabaseAdmin, supabaseConfigured } from "./supabase";
 import { sendOrderConfirmation } from "./email";
 import { issueGiftCard } from "./giftcards";
 import { markRecovered } from "./abandoned";
+import { AFFILIATE_SOURCE, enqueuePostback, type AffiliateOrder } from "./affiliate";
+import { rateToSek } from "./exchange";
 import { sendMetaEvents } from "./meta";
 import { metaContentId } from "./consent";
 
@@ -32,6 +34,10 @@ export type OrderRecord = {
   /** Planerad leverans och när en planerad förnyelseorder släpps till packning. */
   deliver_at?: string | null;
   release_at?: string | null;
+  /** Affiliate: klicket som ledde till köpet, fryst i kassan. */
+  affiliate_source?: string | null;
+  affiliate_click_id?: string | null;
+  affiliate_click_ref?: string | null;
 };
 
 /** Dagar från att Stripe bekräftat förnyelsebetalningen till planerad leverans, och hur många dagar före leverans ordern släpps. */
@@ -170,6 +176,11 @@ export async function saveOrderFromSession(sessionId: string): Promise<{ order: 
       kind: isGiftCard ? "giftcard" : "checkout",
       locale: "sv",
       discount_code: session.discounts?.[0]?.promotion_code ? String(session.discounts[0].promotion_code) : null,
+      // Affiliateklicket frystes i kassan; kursen sparas så att provisionen kan räknas om senare
+      affiliate_source: session.metadata?.aff_click ? (session.metadata?.aff_src || AFFILIATE_SOURCE) : null,
+      affiliate_click_id: session.metadata?.aff_click || null,
+      affiliate_click_ref: session.metadata?.aff_ref || null,
+      exchange_rate_to_sek: await rateToSek(session.currency ?? "sek"),
     })
     .select("*")
     .single();
@@ -212,6 +223,8 @@ export async function saveOrderFromSession(sessionId: string): Promise<{ order: 
 
   await decrementStock(items, meta);
   await markRecovered(order.email, order.id).catch(() => undefined);
+  // Affiliatekonvertering: köas här, skickas av cron-jobbet
+  await enqueuePostback(order as unknown as AffiliateOrder).catch((e: unknown) => console.error("[affiliate]", e instanceof Error ? e.message : e));
   if (session.metadata?.consent === "all") {
     const [firstName, ...rest] = (shippingDetails?.name ?? customer?.name ?? "").split(" ");
     const subInterval = items.find((i) => i.plan.startsWith("sub"))?.plan.split(":")[1] ?? null;
@@ -332,6 +345,7 @@ export async function saveRenewalFromInvoice(invoice: Stripe.Invoice): Promise<O
       environment: environment(),
       kind: "renewal",
       locale: "sv",
+      exchange_rate_to_sek: await rateToSek(invoice.currency),
     })
     .select("*")
     .single();

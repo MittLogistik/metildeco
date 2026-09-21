@@ -3,6 +3,7 @@ import { buildLineItems, buildShippingOptions, parseCheckoutRequest, priceLines,
 import { routes } from "@/lib/routes";
 import { cheapestSwedenRate, shippingCost } from "@/lib/shipping";
 import { stripe, stripeConfigured } from "@/lib/stripe";
+import { latestClick } from "@/lib/affiliate";
 import { CONSENT_COOKIE } from "@/lib/consent";
 
 /**
@@ -31,11 +32,14 @@ export async function POST(request: Request) {
     const consent = request.headers.get("cookie")?.match(new RegExp(`(?:^|; )${CONSENT_COOKIE}=(necessary|all)`))?.[1] ?? "necessary";
     const fbp = request.headers.get("cookie")?.match(/(?:^|; )_fbp=([^;]+)/)?.[1] ?? "";
     const fbc = request.headers.get("cookie")?.match(/(?:^|; )_fbc=([^;]+)/)?.[1] ?? "";
+    // Affiliateklicket fryses här, vid köpögonblicket, i stället för vid betalningen
+    const click = payload.visitorId ? await latestClick(payload.visitorId).catch(() => null) : null;
     const metadata = {
       consent,
       fbp: fbp.slice(0, 100),
       fbc: fbc.slice(0, 200),
       cart: JSON.stringify(priced.map((l) => ({ k: l.kind, s: l.slug, q: l.qty, p: l.plan, i: l.intervalDays ?? null }))).slice(0, 500),
+      ...(click ? { aff_src: click.source, aff_click: click.clickId ?? "", aff_ref: click.clickRef ?? "" } : {}),
     };
 
     const params: Stripe.Checkout.SessionCreateParams = {
