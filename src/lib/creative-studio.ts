@@ -1,7 +1,7 @@
 import "server-only";
 import { randomUUID } from "node:crypto";
 import { conceptById, copyLines, creativeName, formatById, type Format } from "@/content/ad-concepts";
-import { composeCreative, warmupTextEngine } from "./ad-compose";
+
 import { buildCreativePrompt, randomVariation } from "./ad-prompt";
 import { qaConfigured, reviewImage, type Review } from "./ad-qa";
 import type { Creative } from "./ad-images";
@@ -69,8 +69,6 @@ export async function generateCreative(o: GenerateInput): Promise<GenerateResult
   const size = formatById(o.format);
   if (!size) throw new Error(`Okänt format: ${o.format}`);
 
-  // Misslyckas textlagret ska det ske innan bilden beställs och kostar pengar
-  await warmupTextEngine();
   const mediaBase = publicBase();
   const packshotPath = primaryImage(product);
   if (!packshotPath || packshotPath.endsWith(".svg")) throw new Error("Produkten saknar en packshot att bygga annonsen runt.");
@@ -78,22 +76,24 @@ export async function generateCreative(o: GenerateInput): Promise<GenerateResult
 
   const groupId = o.groupId ?? randomUUID();
   const provider = imageProvider(o.providerId);
+  const copy = concept.copy({ product, review: o.review?.trim() || undefined });
   const prompt = buildCreativePrompt({
     product,
     concept,
     format: o.format,
+    copy,
     customInstructions: o.customInstructions,
     variation: o.regenerate ? randomVariation() : undefined,
   });
 
-  const scene = await provider.generate({ prompt, size: { width: size.width, height: size.height } });
-  const copy = concept.copy({ product, review: o.review?.trim() || undefined });
-  const image = await composeCreative({ scene, packshot, concept, copy, format: o.format });
+  // Modellen ritar hela annonsen, med packshoten som referens för produkten
+  const image = await provider.generate({ prompt, size: { width: size.width, height: size.height }, reference: packshot });
 
   const db = supabaseAdmin();
   const name = creativeName(o.slug, concept.id, o.format);
   const storagePath = `ads/${o.slug}/${groupId}-${o.format.replace(":", "x")}-${Date.now().toString(36)}.jpg`;
-  const up = await db.storage.from("product-media").upload(storagePath, image, { contentType: "image/jpeg", upsert: false });
+  const jpeg = await (await import("sharp")).default(image).jpeg({ quality: 92 }).toBuffer();
+  const up = await db.storage.from("product-media").upload(storagePath, jpeg, { contentType: "image/jpeg", upsert: false });
   if (up.error) throw new Error(up.error.message);
   const url = db.storage.from("product-media").getPublicUrl(storagePath).data.publicUrl;
 

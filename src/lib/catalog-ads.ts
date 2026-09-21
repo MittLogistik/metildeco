@@ -8,7 +8,6 @@ import { getCatalog } from "./catalog";
 import { imageProvider } from "./image-provider";
 import { mediaUrl, publicBase } from "./media";
 import { isInStock, primaryImage, type Product } from "./products";
-import { warmupTextEngine } from "./ad-compose";
 import { qaConfigured, reviewImage } from "./ad-qa";
 import { writeCatalogText } from "./ad-writer";
 import { supabaseAdmin } from "./supabase";
@@ -102,6 +101,22 @@ async function cardText(line: string, theme: "light" | "dark"): Promise<Buffer> 
   ]);
   const svg = await satori(root as unknown as Parameters<typeof satori>[0], { width: CARD, height: CARD, fonts: await fonts() });
   return sharp(Buffer.from(svg)).png().toBuffer();
+}
+
+/**
+ * Provar textmotorn en gång per process. Satori laddar sin wasm vid första anropet, och
+ * misslyckas det vill vi veta det innan vi betalar för bilder – inte efteråt.
+ */
+let warmed: Promise<void> | null = null;
+function warmupTextEngine(): Promise<void> {
+  warmed ??= (async () => {
+    const probe = { type: "div", props: { style: { display: "flex", fontFamily: "Figtree", fontSize: 8 }, children: "M" } };
+    await satori(probe as unknown as Parameters<typeof satori>[0], { width: 8, height: 8, fonts: await fonts() });
+  })().catch((e: unknown) => {
+    warmed = null;
+    throw new Error(`Textmotorn kunde inte starta: ${e instanceof Error ? e.message : e}`);
+  });
+  return warmed;
 }
 
 async function packshotBuffer(product: Product): Promise<Buffer> {

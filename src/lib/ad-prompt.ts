@@ -1,11 +1,11 @@
 import "server-only";
-import { type Concept, type Format, formatById } from "@/content/ad-concepts";
+import { type Concept, type ConceptCopy, copyLines, type Format, formatById } from "@/content/ad-concepts";
 import type { Product } from "./products";
 
 /**
  * Bygger prompten till bildmodellen i block, så att koncept, format och egna
- * instruktioner kan ändras var för sig. Prompten beskriver bara miljön: produkten
- * och all text läggs på i efterhand, därför är "no products, no text" alltid med.
+ * instruktioner kan ändras var för sig. Modellen ritar hela annonsen, inklusive
+ * typografin – därför räknar prompten upp exakt vilken text som får förekomma.
  */
 
 /** Metildes visuella riktning. Ändras här, slår igenom i alla koncept. */
@@ -19,57 +19,80 @@ export const brand = {
 
 const brandBlock = () =>
   [
-    `Background plate for an advertisement by ${brand.name}, a Swedish brand of botanical supplements in capsule form.`,
-    `Visual direction: ${brand.visualStyle}. Palette: ${brand.palette}. Light: ${brand.light}.`,
-    `Avoid: ${brand.avoid}.`,
+    `You are designing a finished, polished advertisement image for ${brand.name}, a Swedish brand of botanical supplements in capsule form.`,
+    `You design the whole thing: scene, composition, badges, arrows and all typography, with light and shadow that belong to the same photograph.`,
+    `Visual direction: ${brand.visualStyle}. Palette: ${brand.palette}. Light: ${brand.light}. Avoid: ${brand.avoid}.`,
   ].join(" ");
 
-/** Fakta ger modellen sammanhang för miljön – aldrig text att skriva ut. */
+/**
+ * Produkten är det enda som inte får tolkas. Etikettens finstilta är den svåraste biten:
+ * kan modellen inte återge den exakt ska den hellre hamna i mjukt fokus än hittas på,
+ * eftersom en påhittad dos är ett felaktigt påstående om varan.
+ */
 const productBlock = (product: Product) =>
-  `Context only, never write any of this in the image: the product is ${product.name.replace(/ \|.*$/, "")}, a botanical supplement in a small glass jar with a metal cap.`;
+  [
+    "THE PRODUCT — the most important rule:",
+    `Use the jar from the attached reference image exactly as it is: same glass, same metal cap, same label shape, same logo, same colours and the same printed text, letter for letter.`,
+    `Never re-letter, restyle, translate or invent anything printed on the label. If you cannot reproduce the smallest print exactly, render that part softly out of focus rather than inventing characters or numbers.`,
+    `There is exactly one jar in the image, large and in sharp focus. The product is ${product.name.replace(/ \|.*$/, "")}.`,
+  ].join(" ");
 
-const compositionBlock = (format: Format) => {
-  const f = formatById(format);
-  return format === "9:16"
-    ? `Composition: vertical ${f?.width}x${f?.height} for Instagram and Facebook Stories. Use the full height naturally. Keep the top 15 percent and the bottom 20 percent calm and free of detail, since the app interface covers them. The empty product area belongs in the middle of the frame.`
-    : `Composition: square ${f?.width}x${f?.height} for the Instagram and Facebook feed. Keep the important area near the centre and leave an even margin around it.`;
+const textBlock = (copy: ConceptCopy) => {
+  const lines = copyLines(copy);
+  return [
+    "TEXT: every word in the image must come from this list, spelled exactly like this, in Swedish:",
+    lines.map((l) => `- "${l}"`).join("\n"),
+    "Do not add any other words, numbers, percentages, claims, badges, logos, watermarks, hashtags or signatures. Do not repeat a line twice. Text printed on the jar's own label does not count and must stay unchanged.",
+  ].join("\n");
 };
 
-/** Sista ordet: ingen text och ingen produkt får finnas i den genererade bilden. */
-const cleanBlock = () =>
-  "Absolute requirements: the image must contain no text, no letters, no numbers, no logos, no watermarks, no labels, no signage, and no product packaging of any kind. It is only an empty environment. Do not add any bottle, jar, box, tube or capsule.";
+const formatBlock = (format: Format) => {
+  const f = formatById(format);
+  return format === "9:16"
+    ? `FORMAT: vertical ${f?.width}x${f?.height} for Instagram and Facebook Stories. Use the whole height. Keep text and buttons out of the top 15 percent and the bottom 20 percent, where the app interface sits.`
+    : `FORMAT: square ${f?.width}x${f?.height} for the Instagram and Facebook feed. Keep the important parts near the centre with an even margin.`;
+};
+
+const complianceBlock = () =>
+  [
+    "RULES: this is a food supplement, so the image must not suggest any effect on the body or mind.",
+    "No words about energy, testosterone, hormones, libido, sleep, stress, focus, immunity, performance, recovery, muscles or weight.",
+    "No medical or pharmaceutical look, no before and after, no doctors, no lab coats, no pills spilling out like medication, no faces.",
+  ].join(" ");
 
 export type PromptInput = {
   product: Product;
   concept: Concept;
   format: Format;
+  copy: ConceptCopy;
   /** Fritext från användaren, t.ex. "mörkare bakgrund" eller "mer minimalistisk". */
   customInstructions?: string;
   /** Extra variation vid omgenerering. */
   variation?: string;
 };
 
-/** Sätter ihop prompten: varumärke, produktsammanhang, koncept, format, egna önskemål, rensning. */
-export function buildCreativePrompt({ product, concept, format, customInstructions, variation }: PromptInput): string {
+/** Sätter ihop prompten: varumärke, produkt, koncept, text, format, önskemål, regler. */
+export function buildCreativePrompt({ product, concept, format, copy, customInstructions, variation }: PromptInput): string {
   return [
     brandBlock(),
     productBlock(product),
-    concept.scene({ product, format }),
-    compositionBlock(format),
-    variation ? `Variation: ${variation}` : "",
-    customInstructions?.trim() ? `Extra direction from the art director: ${customInstructions.trim()}` : "",
-    cleanBlock(),
+    concept.art({ product, format, copy }),
+    textBlock(copy),
+    formatBlock(format),
+    variation ? `VARIATION: ${variation}` : "",
+    customInstructions?.trim() ? `EXTRA DIRECTION from the art director: ${customInstructions.trim()}` : "",
+    complianceBlock(),
   ]
     .filter(Boolean)
-    .join("\n");
+    .join("\n\n");
 }
 
 /** Slumpad variation så att en omgenerering ger en ny tolkning, inte samma bild igen. */
 const variations = [
-  "shift the camera slightly lower and closer",
-  "use a softer, more diffused light and a lighter background",
-  "use a warmer late-afternoon light with longer shadows",
-  "make the composition more asymmetric, with the empty area slightly off centre",
+  "shift the camera lower and closer to the jar",
+  "use softer, more diffused light and a lighter background",
+  "use warmer late-afternoon light with longer shadows",
+  "make the composition more asymmetric, with the jar slightly off centre",
   "use a deeper, moodier background with more contrast",
   "pull the camera back for a wider, airier framing",
 ];
