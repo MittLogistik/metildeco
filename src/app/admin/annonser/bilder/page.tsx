@@ -6,9 +6,10 @@ import { getCatalog } from "@/lib/catalog";
 import { higgsfieldConfigured, listPresets } from "@/lib/higgsfield";
 import { site } from "@/lib/site";
 import { ActionForm, SubmitButton } from "../../_components/ActionForm";
-import { Card, Field, Input, Select } from "../../_components/fields";
-import { addTextVariantAction, completeGroupAction, setGroupActive, uploadAdImage } from "../actions";
+import { Card, Input, Select } from "../../_components/fields";
+import { addTextVariantAction, completeGroupAction, setGroupActive } from "../actions";
 import { GenerateForm } from "./GenerateForm";
+import { UploadForm } from "./UploadForm";
 import { angles, fillCopy } from "@/content/ad-copy";
 import { adStyles } from "@/content/ad-styles";
 
@@ -24,6 +25,7 @@ export default async function AdImagesPage({ searchParams }: PageProps<"/admin/a
   const product = products.find((p) => p.slug === slug);
   const groups = slug ? await listCreativeGroups(slug, false) : [];
   const usedScenes = new Set(groups.map((g) => g.sceneId));
+  const uploadGroups = groups.map((g) => ({ groupId: g.groupId, label: g.label, hasFeed: Boolean(g.feed), hasStory: Boolean(g.story) }));
   const mediaBase = site.indexable ? site.url : "https://metildeco.vercel.app";
   const presets = await listPresets().catch(() => []);
   // Godkända rubriker för text på bild: vinklarnas rubriker + produktfakta
@@ -77,17 +79,8 @@ export default async function AdImagesPage({ searchParams }: PageProps<"/admin/a
             <GenerateForm slug={product.slug} scenes={scenes.map((sc) => ({ id: sc.id, label: sc.label, used: usedScenes.has(sc.id) }))} presetOptions={presetOptions} mediaBase={mediaBase} />
           </Card>
 
-          <Card title="Ladda upp egen bild">
-            <ActionForm action={uploadAdImage} className="space-y-4">
-              <input type="hidden" name="slug" value={product.slug} />
-              <Field label="Bildfil" hint="JPG eller PNG. Flöde: 1080×1080 eller 1080×1350. Story: 1080×1920.">
-                <input type="file" name="file" accept="image/*" required className="block w-full text-sm" />
-              </Field>
-              <Field label="Format">
-                <Select name="format" options={[{ value: "1:1", label: "Flöde 1:1" }, { value: "3:4", label: "Flöde 4:5 / 3:4" }, { value: "9:16", label: "Story 9:16" }]} />
-              </Field>
-              <SubmitButton variant="outline">Ladda upp</SubmitButton>
-            </ActionForm>
+          <Card title="Ladda upp egna bilder">
+            <UploadForm slug={product.slug} groups={uploadGroups} mediaBase={mediaBase} />
           </Card>
         </div>
       ) : null}
@@ -134,6 +127,12 @@ export default async function AdImagesPage({ searchParams }: PageProps<"/admin/a
                     <input type="hidden" name="media_base" value={mediaBase} />
                     <SubmitButton variant="outline" pendingLabel="Gör 9:16 …">Gör 9:16</SubmitButton>
                   </ActionForm>
+                ) : null}
+                {product && (!g.feed || !g.story) ? (
+                  <details className="text-xs">
+                    <summary className="cursor-pointer text-muted hover:text-foreground">Lägg till bild</summary>
+                    <UploadForm slug={product.slug} groups={uploadGroups} mediaBase={mediaBase} targetGroupId={g.groupId} compact />
+                  </details>
                 ) : null}
                 {g.kind !== "graphic" && product ? (
                   <details className="text-xs">

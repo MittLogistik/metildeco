@@ -263,27 +263,42 @@ export async function addTextVariant(o: { slug: string; groupId: string; overlay
   return g;
 }
 
-/** Egen uppladdad bild som en egen grupp (ett format). Granskas mot packshoten om AI-nyckel finns. */
-export async function addUploadedCreative(slug: string, file: File, format: string, referenceUrl?: string): Promise<Creative> {
+export const uploadFormats = ["1:1", "3:4", "9:16"] as const;
+
+/**
+ * Signerad adress dit webbläsaren lägger filen direkt. Serveraktioner tar bara emot
+ * någon megabyte, så egna annonsbilder går utanför dem – hit och sedan registerUploadedCreative.
+ */
+export async function signAdUpload(o: { slug: string; groupId: string; format: string; ext: string }): Promise<{ signedUrl: string; path: string }> {
+  const ext = /^[a-z0-9]{1,5}$/.test(o.ext) ? o.ext : "jpg";
+  const path = `ads/${o.slug}/${o.groupId}-${o.format.replace(":", "x")}-${Date.now().toString(36)}.${ext}`;
+  const { data, error } = await supabaseAdmin().storage.from("product-media").createSignedUploadUrl(path);
+  if (error || !data) throw new Error(error?.message ?? "Kunde inte skapa uppladdningsadress.");
+  return { signedUrl: data.signedUrl, path: data.path ?? path };
+}
+
+/**
+ * Registrerar en redan uppladdad fil som annonsbild och granskar den mot packshoten.
+ * Samma group_id betyder samma grupp, så en 1:1 och en 9:16 hör ihop som flöde + story.
+ */
+export async function registerUploadedCreative(o: { slug: string; groupId: string; format: string; path: string; referenceUrl?: string }): Promise<{ creative: Creative; rejected: boolean; note: string | null }> {
   const db = supabaseAdmin();
-  const groupId = randomUUID();
-  const ext = file.name.split(".").pop()?.toLowerCase() || "jpg";
-  const path = `ads/${slug}/${groupId}-${format.replace(":", "x")}.${ext}`;
-  const up = await db.storage.from("product-media").upload(path, file, { contentType: file.type, upsert: false });
-  if (up.error) throw new Error(up.error.message);
-  const url = db.storage.from("product-media").getPublicUrl(path).data.publicUrl;
+  const url = db.storage.from("product-media").getPublicUrl(o.path).data.publicUrl;
+  const head = await fetch(url, { method: "HEAD" }).catch(() => null);
+  if (!head?.ok) throw new Error("Filen kom aldrig fram till lagringen.");
   let review: Review | null = null;
-  if (qaConfigured() && referenceUrl) {
-    const product = await getProduct(slug);
-    if (product) review = await reviewImage({ referenceUrl, imageUrl: url, product }).catch(() => null);
+  if (qaConfigured() && o.referenceUrl) {
+    const product = await getProduct(o.slug);
+    if (product) review = await reviewImage({ referenceUrl: o.referenceUrl, imageUrl: url, product }).catch(() => null);
   }
+  const rejected = review?.verdict === "reject";
   const ins = await db
     .from("ad_creatives")
-    .insert({ product_slug: slug, kind: "upload", group_id: groupId, format, url, storage_path: path, active: review?.verdict !== "reject", image_score: review?.score ?? null, image_review: review, reviewed_at: review ? new Date().toISOString() : null })
+    .insert({ product_slug: o.slug, kind: "upload", group_id: o.groupId, format: o.format, url, storage_path: o.path, active: !rejected, image_score: review?.score ?? null, image_review: review, reviewed_at: review ? new Date().toISOString() : null })
     .select("*")
     .single();
   if (ins.error) throw new Error(ins.error.message);
-  return ins.data as Creative;
+  return { creative: ins.data as Creative, rejected, note: review?.issues.join("; ") || review?.notes || null };
 }
 
 export async function setCreativeGroupActive(groupId: string, active: boolean) {

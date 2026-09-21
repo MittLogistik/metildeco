@@ -43,3 +43,6 @@ next-env.d.ts
 
 # Tillfälliga hjälpskript
 scripts/_*.mjs
+
+.vercel
+.env*

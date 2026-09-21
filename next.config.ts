@@ -6,6 +6,9 @@ const pendingLocales = ["en", "fi", "da", "no", "de", "nl", "it", "fr", "es", "p
 const nextConfig: NextConfig = {
   // Typsnitten för text på annonsbilder läses från disk i serverless-funktionerna
   outputFileTracingIncludes: { "/**": ["./src/assets/fonts/*"] },
+  // Serveraktioner tar emot 1 MB som standard – bilduppladdningar i admin är större.
+  // Riktigt stora filer går förbi aktionerna, direkt till lagringen (se ad-uploads).
+  experimental: { serverActions: { bodySizeLimit: "4mb" } },
   images: {
     formats: ["image/avif", "image/webp"],
     deviceSizes: [360, 640, 828, 1080, 1200, 1600],
