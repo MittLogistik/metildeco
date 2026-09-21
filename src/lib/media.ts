@@ -14,3 +14,12 @@ export const mediaUrl = (src: string | null | undefined): string => {
 };
 
 export const isVideo = (src: string) => /\.(mp4|webm|mov)$/i.test(src);
+
+/**
+ * Bas-adress som går att nå utifrån. Bildmodellen och granskaren hämtar packshoten över
+ * nätet, så en lokal adress duger inte – då används den riktiga domänen i stället.
+ */
+export const publicBase = (): string => {
+  const url = process.env.NEXT_PUBLIC_SITE_URL ?? "";
+  return /^https:\/\//.test(url) && !/localhost|127\.0\.0\.1/.test(url) ? url.replace(/\/$/, "") : "https://metilde.com";
+};

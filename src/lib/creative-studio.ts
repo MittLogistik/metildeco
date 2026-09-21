@@ -7,7 +7,7 @@ import { qaConfigured, reviewImage, type Review } from "./ad-qa";
 import type { Creative } from "./ad-images";
 import { getProduct } from "./catalog";
 import { imageProvider } from "./image-provider";
-import { mediaUrl } from "./media";
+import { mediaUrl, publicBase } from "./media";
 import { primaryImage } from "./products";
 import { supabaseAdmin } from "./supabase";
 
@@ -69,7 +69,7 @@ export async function generateCreative(o: GenerateInput): Promise<GenerateResult
   const size = formatById(o.format);
   if (!size) throw new Error(`Okänt format: ${o.format}`);
 
-  const mediaBase = process.env.NEXT_PUBLIC_SITE_URL ?? "https://metilde.com";
+  const mediaBase = publicBase();
   const packshotPath = primaryImage(product);
   if (!packshotPath || packshotPath.endsWith(".svg")) throw new Error("Produkten saknar en packshot att bygga annonsen runt.");
   const packshot = await packshotBuffer(packshotPath, mediaBase);

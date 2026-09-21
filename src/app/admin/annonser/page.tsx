@@ -95,6 +95,10 @@ export default async function AdsPage() {
           ·{" "}
           <Link href="/admin/annonser/texter" className="underline">
             Annonstexter
+          </Link>{" "}
+          ·{" "}
+          <Link href="/admin/annonser/katalog" className="underline">
+            Katalog
           </Link>
         </p>
       </div>

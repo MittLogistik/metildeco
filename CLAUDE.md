@@ -68,3 +68,11 @@ quiz, presentkort, spåra order, mitt konto, samarbeten/jobba hos oss, fler spr�
 - Textlagret vet var burken står (Geo) och lägger aldrig text ovanpå den.
 - Omdömeskonceptet visar bara ett citat om det finns en publicerad recension i `product_reviews` eller om admin skriver in en äkta. Annars kort utan stjärnor.
 - Leverantör byts med `AD_IMAGE_PROVIDER` (openai|higgsfield), modell med `AD_IMAGE_MODEL`, kvalitet med `AD_IMAGE_QUALITY`. `getApprovedCreatives(slug)` ger kampanjbyggaren de godkända bilderna.
+
+## Katalogannonser (karusell)
+- `/admin/annonser/katalog`. Bakgrunden genereras **en gång** som en bred banner (N:1) och skärs i kvadrater om 1080×1080, därför löper miljön sömlöst när man swipar. Modellerna ritar inte så breda bilder: vi tar en liggande bild, beskär mittbandet och skalar upp – bakgrunden är mjuk så det syns inte.
+- Bara produkter där `isInStock(p)` är sant kommer med. Slutsålda går inte att välja och listas som utelämnade.
+- Två varianter i `src/content/ad-catalog.ts` (ljus studio / mörk natur) skiljer sig i både bild, kortrad och textvinkel, så att de kan ställas mot varandra i samma annonsgrupp.
+- Mörka varianter rensar packshotens inbakade ljusa skugga ur alfakanalen, annars syns den som en fläck.
+- `publishCatalog` skapar en **pausad** karusellannons via `createCarouselCreative` (`child_attachments`). Varje kort länkar till sin produktsida. `multi_share_end_card` är av.
+- Tabeller: `ad_catalogs` + `ad_catalog_cards`.

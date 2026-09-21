@@ -211,3 +211,48 @@ export async function writeAdCopy(o: { product: Product; angle: AdAngle; hook: s
   o.notes?.push(`${o.angle.id}: mallen används i stället för AI-texten.`);
   return templateCopy(o.product, o.angle, o.hook);
 }
+
+/**
+ * Primärtext till en katalogannons (karusell). Samma regler som vanliga annonser:
+ * säljande ton med emojis, men bara påståenden som går att styrka. Faller tillbaka på
+ * en neutral text som byggs av produkternas egna fakta.
+ */
+export async function writeCatalogText(o: { products: Product[]; angle: string; notes?: string[] }): Promise<AdCopy> {
+  const list = o.products
+    .map((p) => `- ${p.name.replace(/ \|.*$/, "")}: ${p.bullets.filter((b) => b.length <= 46).slice(0, 2).join("; ") || p.short}`)
+    .join("\n");
+  const fallback = (): AdCopy => ({
+    primaryText: `${o.products.length} botaniska extrakt från Metilde 🌿\n\n${o.products.map((p) => `• ${p.name.replace(/ \|.*$/, "")}`).join("\n")}\n\nExtraktstyrka och dos står på varje burk. Tillverkade i Sverige, analyserade batch för batch. 📦 Fri frakt över ${site.freeShippingOver} kr.\n\nSvep och välj din.`,
+    headline: "Hela sortimentet",
+    description: "Tillverkat i Sverige",
+    source: "mall",
+  });
+  if (!copyAiConfigured()) return fallback();
+
+  let brief = [
+    `Du skriver primärtexten till en karusellannons där varje kort visar en produkt ur sortimentet.`,
+    `Produkter i karusellen (bara dessa fakta får användas):\n${list}`,
+    `Villkor: fri frakt över ${site.freeShippingOver} kr, 30 dagars ångerrätt på oöppnade produkter, prenumeration ger ${site.subscriptionDiscount} % rabatt.`,
+    `Vinkel: ${o.angle}`,
+    `Nämn gärna att man kan svepa mellan korten. Räkna aldrig upp fler produkter än de som står ovan.`,
+  ].join("\n");
+
+  for (let attempt = 0; attempt < 2; attempt++) {
+    try {
+      const raw = parse(await askText(systemPrompt, brief));
+      if (!raw) {
+        brief = `${brief}\n\nDitt förra svar gick inte att tolka. Svara bara med JSON.`;
+        continue;
+      }
+      const copy = { primaryText: clean(raw.primaryText, LIMITS.primaryMax), headline: clean(raw.headline, LIMITS.headlineMax), description: clean(raw.description, LIMITS.descriptionMax) };
+      const problem = validate(copy);
+      if (!problem) return { ...copy, description: copy.description || undefined, source: "ai" };
+      o.notes?.push(`katalogtexten skrevs om: ${problem}`);
+      brief = `${brief}\n\nDitt förra förslag godkändes inte: ${problem} Skriv om texten utan det.`;
+    } catch (e) {
+      o.notes?.push(`katalogtexten misslyckades (${e instanceof Error ? e.message : e}), mallen används.`);
+      break;
+    }
+  }
+  return fallback();
+}

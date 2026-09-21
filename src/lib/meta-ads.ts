@@ -299,3 +299,42 @@ export const uploadVideo = (fileUrl: string, name: string) => call<{ id: string 
 /** Vad token får göra – används av adminpanelen för att visa status. */
 export const tokenInfo = () =>
   call<{ data: { scopes: string[]; type: string; is_valid: boolean; expires_at: number } }>("GET", "debug_token", { input_token: token() }).then((r) => r.data);
+
+export type CarouselCard = { imageHash: string; headline: string; description?: string; link: string };
+
+/**
+ * Karusellannons: flera kort som swipas i sidled. Bakgrunden löper över korten, så
+ * ordningen spelar roll – Meta visar dem i den ordning de skickas.
+ * multi_share_end_card stängs av; sista kortet ska vara en produkt, inte en sidprofil.
+ */
+export const createCarouselCreative = (c: {
+  name: string;
+  pageId: string;
+  instagramActorId?: string;
+  primaryText: string;
+  link: string;
+  cards: CarouselCard[];
+}) => {
+  if (c.cards.length < 2) throw new Error("En karusell behöver minst två kort.");
+  return call<{ id: string }>("POST", `${adAccount()}/adcreatives`, {
+    name: c.name,
+    object_story_spec: {
+      page_id: c.pageId,
+      instagram_user_id: c.instagramActorId,
+      link_data: {
+        message: c.primaryText,
+        link: c.link,
+        multi_share_optimized: false,
+        multi_share_end_card: false,
+        call_to_action: { type: "SHOP_NOW", value: { link: c.link } },
+        child_attachments: c.cards.map((card) => ({
+          link: card.link,
+          image_hash: card.imageHash,
+          name: card.headline,
+          description: card.description,
+          call_to_action: { type: "SHOP_NOW", value: { link: card.link } },
+        })),
+      },
+    },
+  });
+};
