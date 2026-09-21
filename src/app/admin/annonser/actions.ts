@@ -100,6 +100,20 @@ export async function generateAdImages(formData: FormData): Promise<ActionResult
   }
 }
 
+export async function deleteGroupAction(formData: FormData): Promise<ActionResult> {
+  await requireAdmin();
+  const groupId = String(formData.get("group_id") ?? "");
+  if (!groupId) return { ok: false, error: "Ogiltigt." };
+  try {
+    const { deleteCreativeGroup } = await import("@/lib/ad-images");
+    const r = await deleteCreativeGroup(groupId);
+    revalidatePath("/admin/annonser/bilder");
+    return { ok: true, message: `Bildgruppen är borttagen (${r.removed} ${r.removed === 1 ? "bild" : "bilder"}).` };
+  } catch (e) {
+    return fail(e);
+  }
+}
+
 export async function addTextVariantAction(formData: FormData): Promise<ActionResult> {
   await requireAdmin();
   const slug = String(formData.get("slug") ?? "");

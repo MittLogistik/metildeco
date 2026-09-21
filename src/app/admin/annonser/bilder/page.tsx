@@ -1,13 +1,13 @@
 import Link from "next/link";
 import { requireAdmin } from "@/lib/auth";
-import { groupScore, listCreativeGroups, scenes } from "@/lib/ad-images";
+import { adsPerGroup, groupScore, listCreativeGroups, scenes } from "@/lib/ad-images";
 import { minImageScore, qaConfigured } from "@/lib/ad-qa";
 import { getCatalog } from "@/lib/catalog";
 import { higgsfieldConfigured, listPresets } from "@/lib/higgsfield";
 import { site } from "@/lib/site";
 import { ActionForm, SubmitButton } from "../../_components/ActionForm";
 import { Card, Input, Select } from "../../_components/fields";
-import { addTextVariantAction, completeGroupAction, setGroupActive } from "../actions";
+import { addTextVariantAction, completeGroupAction, deleteGroupAction, setGroupActive } from "../actions";
 import { GenerateForm } from "./GenerateForm";
 import { UploadForm } from "./UploadForm";
 import { angles, fillCopy } from "@/content/ad-copy";
@@ -26,6 +26,7 @@ export default async function AdImagesPage({ searchParams }: PageProps<"/admin/a
   const groups = slug ? await listCreativeGroups(slug, false) : [];
   const usedScenes = new Set(groups.map((g) => g.sceneId));
   const uploadGroups = groups.map((g) => ({ groupId: g.groupId, label: g.label, hasFeed: Boolean(g.feed), hasStory: Boolean(g.story) }));
+  const adsByGroup = slug ? await adsPerGroup(slug) : new Map<string, number>();
   const mediaBase = site.indexable ? site.url : "https://metildeco.vercel.app";
   const presets = await listPresets().catch(() => []);
   // Godkända rubriker för text på bild: vinklarnas rubriker + produktfakta
@@ -117,6 +118,7 @@ export default async function AdImagesPage({ searchParams }: PageProps<"/admin/a
                   <p className="text-xs text-muted">
                     {g.kind === "upload" ? "Egen bild" : "Higgsfield"} · {g.feed ? g.feed.format : ""}
                     {g.story ? " + 9:16" : ""} · {g.createdAt.slice(0, 10)}
+                    {adsByGroup.get(g.groupId) ? ` · ${adsByGroup.get(g.groupId)} annonser` : ""}
                   </p>
                   {(g.feed?.image_review ?? g.story?.image_review)?.issues.length ? <p className="mt-1 text-xs text-danger">{(g.feed?.image_review ?? g.story?.image_review)!.issues.join(" · ")}</p> : null}
                 </div>
@@ -156,6 +158,18 @@ export default async function AdImagesPage({ searchParams }: PageProps<"/admin/a
                   <input type="hidden" name="slug" value={g.groupId && product ? product.slug : ""} />
                   <input type="hidden" name="active" value={(g.feed ?? g.story)?.active ? "0" : "1"} />
                   <SubmitButton variant="outline">{(g.feed ?? g.story)?.active ? "Dölj" : "Aktivera"}</SubmitButton>
+                </ActionForm>
+                <ActionForm
+                  action={deleteGroupAction}
+                  inline
+                  confirm={
+                    adsByGroup.get(g.groupId)
+                      ? `${g.label}: bilderna tas bort för alltid. Gruppen används i ${adsByGroup.get(g.groupId)} annonser – de fortsätter att visas, men motorn kan inte iterera vidare på bilden. Ta bort?`
+                      : `${g.label}: bilderna tas bort för alltid. Ta bort?`
+                  }
+                >
+                  <input type="hidden" name="group_id" value={g.groupId} />
+                  <SubmitButton variant="danger" pendingLabel="Tar bort …">Ta bort</SubmitButton>
                 </ActionForm>
               </div>
             </li>

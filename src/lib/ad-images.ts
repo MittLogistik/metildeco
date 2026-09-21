@@ -305,3 +305,33 @@ export async function setCreativeGroupActive(groupId: string, active: boolean) {
   const res = await supabaseAdmin().from("ad_creatives").update({ active }).eq("group_id", groupId);
   if (res.error) throw new Error(res.error.message);
 }
+
+/** Antal annonser som byggts av varje bildgrupp. Bilden ligger kvar hos Meta även om gruppen tas bort. */
+export async function adsPerGroup(slug: string): Promise<Map<string, number>> {
+  const res = await supabaseAdmin().from("ad_variants").select("group_id").eq("product_slug", slug).not("group_id", "is", null);
+  const counts = new Map<string, number>();
+  for (const r of (res.data ?? []) as { group_id: string }[]) counts.set(r.group_id, (counts.get(r.group_id) ?? 0) + 1);
+  return counts;
+}
+
+/**
+ * Tar bort en bildgrupp: filerna ur lagringen och raderna ur ad_creatives. Går inte att ångra.
+ * Annonser som redan byggts av gruppen påverkas inte – Meta har en egen kopia av bilden –
+ * men motorn kan inte längre iterera vidare på just den bilden.
+ */
+export async function deleteCreativeGroup(groupId: string): Promise<{ removed: number; slug: string | null }> {
+  const db = supabaseAdmin();
+  const rows = (await db.from("ad_creatives").select("id,product_slug,storage_path").eq("group_id", groupId)).data as
+    | { id: string; product_slug: string; storage_path: string | null }[]
+    | null;
+  if (!rows?.length) throw new Error("Bildgruppen finns inte längre.");
+  const paths = rows.map((r) => r.storage_path).filter((p): p is string => Boolean(p));
+  if (paths.length) {
+    const rm = await db.storage.from("product-media").remove(paths);
+    // Saknad fil ska inte hindra att raden städas bort
+    if (rm.error) console.error("[ad-images] kunde inte ta bort filer:", rm.error.message);
+  }
+  const del = await db.from("ad_creatives").delete().eq("group_id", groupId);
+  if (del.error) throw new Error(del.error.message);
+  return { removed: rows.length, slug: rows[0]?.product_slug ?? null };
+}
