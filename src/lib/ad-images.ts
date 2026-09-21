@@ -55,6 +55,12 @@ export type Creative = {
   image_score: number | null;
   image_review: Review | null;
   reviewed_at: string | null;
+  /** Creative Studio: konceptet, det interna namnet och egna instruktioner. */
+  concept_id?: string | null;
+  name?: string | null;
+  custom_instructions?: string | null;
+  provider?: string | null;
+  approved_at?: string | null;
 };
 
 export type CreativeGroup = { groupId: string; label: string; kind: string; feed: Creative | null; story: Creative | null; sceneId: string | null; createdAt: string };

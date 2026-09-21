@@ -59,3 +59,12 @@ quiz, presentkort, spåra order, mitt konto, samarbeten/jobba hos oss, fler spr�
 - Förnyelse: Stripe `invoice.paid` (subscription_cycle) → `saveRenewalFromInvoice` skapar ordern med status `scheduled`, `deliver_at` = betaldatum + 8 dagar, `release_at` = 4 dagar före leverans. Cron `/api/cron/orders-release` (04:00 UTC) sätter status `paid` när `release_at` passerats; här kopplas Plocky på.
 - Kunder i admin (`/admin/kunder`) nycklas på e-post i gemener (`src/lib/customers.ts`), intäkt = skarpa ordrar som inte är avbrutna/återbetalda.
 - Annonstexter skrivs av AI (`src/lib/ad-writer.ts`, OpenAI i första hand, annars Anthropic; `AD_COPY_AI=false` stänger av, `AD_COPY_MODEL` byter modell). Säljande ton med emojis, men bara påståenden som går att styrka – hälsopåståenden stoppas av en ordlista i skrivaren och av `reviewAd`. Underkänd text skrivs om en gång med granskarens motivering och faller sedan tillbaka på mallarna i `src/content/ad-copy.ts`. Förhandsvisning: `/admin/annonser/texter`. Källan sparas i `ad_variants.copy_source`.
+
+## Creative Studio (annonsbilder)
+- `/admin/annonser/bilder` → välj koncept och format, en bilduppsättning per koncept. Fem koncept i `src/content/ad-concepts.ts`: notification, simple-routine, product-facts, comparison, social-proof. Internt namn `<slug>-<concept>-1x1`.
+- Bilden byggs i tre lager: miljön genereras av bildleverantören (`src/lib/image-provider.ts`, gpt-image-1 via `images/generations`), produktens riktiga packshot komposits in (`src/lib/ad-compose.ts`) och texten ritas med satori ur `product.bullets`. Bildmodellen får aldrig skriva text – den felstavar svenska och får inte hitta på fakta. Scenprompten säger därför alltid "no text, no products".
+- Prompten byggs modulärt i `src/lib/ad-prompt.ts` (varumärke + produkt + koncept + format + egna instruktioner + rensning). `brand` där styr den visuella riktningen.
+- Exakta format: 1:1 = 1080×1080, 9:16 = 1080×1920, komponerade var för sig. Story håller text inom safe areas (topp 14 %, botten 19 %).
+- Textlagret vet var burken står (Geo) och lägger aldrig text ovanpå den.
+- Omdömeskonceptet visar bara ett citat om det finns en publicerad recension i `product_reviews` eller om admin skriver in en äkta. Annars kort utan stjärnor.
+- Leverantör byts med `AD_IMAGE_PROVIDER` (openai|higgsfield), modell med `AD_IMAGE_MODEL`, kvalitet med `AD_IMAGE_QUALITY`. `getApprovedCreatives(slug)` ger kampanjbyggaren de godkända bilderna.

@@ -1,6 +1,9 @@
 import Link from "next/link";
 import { requireAdmin } from "@/lib/auth";
-import { adsPerGroup, groupScore, listCreativeGroups, scenes } from "@/lib/ad-images";
+import { concepts, formats } from "@/content/ad-concepts";
+import { adsPerGroup, groupScore, listCreativeGroups, scenes, type CreativeGroup } from "@/lib/ad-images";
+import { realReview } from "@/lib/creative-studio";
+import { imageProvider } from "@/lib/image-provider";
 import { minImageScore, qaConfigured } from "@/lib/ad-qa";
 import { getCatalog } from "@/lib/catalog";
 import { higgsfieldConfigured, listPresets } from "@/lib/higgsfield";
@@ -8,6 +11,7 @@ import { site } from "@/lib/site";
 import { ActionForm, SubmitButton } from "../../_components/ActionForm";
 import { Card, Input, Select } from "../../_components/fields";
 import { addTextVariantAction, completeGroupAction, deleteGroupAction, setGroupActive } from "../actions";
+import { CreativeStudio } from "./CreativeStudio";
 import { GenerateForm } from "./GenerateForm";
 import { UploadForm } from "./UploadForm";
 import { angles, fillCopy } from "@/content/ad-copy";
@@ -24,11 +28,19 @@ export default async function AdImagesPage({ searchParams }: PageProps<"/admin/a
   const slug = typeof sp.slug === "string" && products.some((p) => p.slug === sp.slug) ? sp.slug : (products[0]?.slug ?? "");
   const product = products.find((p) => p.slug === slug);
   // Allt som inte beror på varandra hämtas samtidigt – annars blir det fyra turer i rad
-  const [groups, adsByGroup, presets] = await Promise.all([
-    slug ? listCreativeGroups(slug, false) : Promise.resolve([]),
+  const [groups, adsByGroup, presets, review] = await Promise.all([
+    slug ? listCreativeGroups(slug, false) : Promise.resolve([] as CreativeGroup[]),
     slug ? adsPerGroup(slug) : Promise.resolve(new Map<string, number>()),
     listPresets().catch(() => []),
+    slug ? realReview(slug).catch(() => null) : Promise.resolve(null),
   ]);
+  const provider = (() => {
+    try {
+      return imageProvider();
+    } catch {
+      return null;
+    }
+  })();
   const usedScenes = new Set(groups.map((g) => g.sceneId));
   const uploadGroups = groups.map((g) => ({ groupId: g.groupId, label: g.label, hasFeed: Boolean(g.feed), hasStory: Boolean(g.story) }));
   const mediaBase = site.indexable ? site.url : "https://metildeco.vercel.app";
@@ -51,7 +63,7 @@ export default async function AdImagesPage({ searchParams }: PageProps<"/admin/a
         <div>
           <h1 className="font-display text-3xl font-medium">Annonsbilder</h1>
           <p className="mt-1 text-sm text-muted">
-            Scener genereras runt produktens riktiga packshot via Higgsfield, i 1:1 för flödet och 9:16 för stories. Motorn använder alla aktiva bilder när den bygger annonser.{" "}
+            Miljön genereras av {provider?.label ?? "bildmodellen"}, produktens riktiga packshot läggs in ovanpå och texten ritas ur verifierade fakta. Flöde 1080 × 1080 och story 1080 × 1920 komponeras var för sig. Motorn använder alla godkända bilder när den bygger annonser.{" "}
             <Link href="/admin/annonser" className="underline">
               Till kampanjerna
             </Link>
@@ -78,14 +90,29 @@ export default async function AdImagesPage({ searchParams }: PageProps<"/admin/a
       ) : null}
 
       {product ? (
-        <div className="grid gap-6 lg:grid-cols-2">
-          <Card title={`Generera scener för ${product.name}`}>
-            <GenerateForm slug={product.slug} scenes={scenes.map((sc) => ({ id: sc.id, label: sc.label, used: usedScenes.has(sc.id) }))} presetOptions={presetOptions} mediaBase={mediaBase} />
+        <div className="space-y-6">
+          <Card title={`Creative Studio – ${product.name.replace(/ \|.*$/, "")}`}>
+            <CreativeStudio
+              slug={product.slug}
+              productName={product.name.replace(/ \|.*$/, "")}
+              concepts={concepts.map((c) => ({ id: c.id, label: c.label, description: c.description, preview: c.preview, wantsReview: c.wantsReview }))}
+              formats={formats.map((f) => ({ id: f.id, label: f.label, width: f.width, height: f.height }))}
+              hasReview={Boolean(review)}
+            />
           </Card>
 
-          <Card title="Ladda upp egna bilder">
-            <UploadForm slug={product.slug} groups={uploadGroups} mediaBase={mediaBase} />
-          </Card>
+          <div className="grid gap-6 lg:grid-cols-2">
+            <Card title="Ladda upp egna bilder">
+              <UploadForm slug={product.slug} groups={uploadGroups} mediaBase={mediaBase} />
+            </Card>
+            <details className="rounded-card border border-line bg-white p-5">
+              <summary className="cursor-pointer font-display text-lg font-medium">Äldre scengenerering</summary>
+              <p className="mt-2 text-sm text-muted">Higgsfield-scener och mallar. Creative Studio ovan ersätter det här för nya bilder.</p>
+              <div className="mt-4">
+                <GenerateForm slug={product.slug} scenes={scenes.map((sc) => ({ id: sc.id, label: sc.label, used: usedScenes.has(sc.id) }))} presetOptions={presetOptions} mediaBase={mediaBase} />
+              </div>
+            </details>
+          </div>
         </div>
       ) : null}
 
@@ -119,7 +146,7 @@ export default async function AdImagesPage({ searchParams }: PageProps<"/admin/a
                     ) : null}
                   </p>
                   <p className="text-xs text-muted">
-                    {g.kind === "upload" ? "Egen bild" : "Higgsfield"} · {g.feed ? g.feed.format : ""}
+                    {g.kind === "upload" ? "Egen bild" : g.kind === "concept" ? "Creative Studio" : "Higgsfield"} · {g.feed ? g.feed.format : ""}
                     {g.story ? " + 9:16" : ""} · {g.createdAt.slice(0, 10)}
                     {adsByGroup.get(g.groupId) ? ` · ${adsByGroup.get(g.groupId)} annonser` : ""}
                   </p>
