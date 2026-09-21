@@ -423,6 +423,7 @@ export async function testConnection(path = "transactions"): Promise<{
   fields: string[];
   matchesExpected: boolean;
   sample: Record<string, unknown> | null;
+  url?: string;
   error?: string;
 }> {
   const token = process.env.ADDREVENUE_API_TOKEN;
@@ -435,7 +436,7 @@ export async function testConnection(path = "transactions"): Promise<{
   try {
     const res = await fetch(url.toString(), { headers: { authorization: `Bearer ${token}`, accept: "application/json" } });
     const text = await res.text();
-    if (!res.ok) return { ok: false, status: res.status, count: 0, fields: [], matchesExpected: false, sample: null, error: text.slice(0, 300) };
+    if (!res.ok) return { ok: false, status: res.status, count: 0, fields: [], matchesExpected: false, sample: null, url: url.toString(), error: text.slice(0, 300) };
     const parsed = JSON.parse(text) as unknown;
     const list = Array.isArray(parsed)
       ? (parsed as Record<string, unknown>[])
@@ -445,7 +446,7 @@ export async function testConnection(path = "transactions"): Promise<{
     // Hittar vi ordernumret och provisionen med våra namn läser vi rätt fält
     const has = (names: string[]) => names.some((n) => fields.includes(n));
     const matchesExpected = Boolean(first) && has(["orderId", "orderNumber", "reference", "eventId"]) && has(["commissionAmount", "commission"]);
-    return { ok: true, status: res.status, count: list.length, fields, matchesExpected, sample: first };
+    return { ok: true, status: res.status, count: list.length, fields, matchesExpected, sample: first, url: url.toString() };
   } catch (e) {
     return { ok: false, status: 0, count: 0, fields: [], matchesExpected: false, sample: null, error: e instanceof Error ? e.message : String(e) };
   }
