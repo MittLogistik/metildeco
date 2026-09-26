@@ -6,10 +6,17 @@ import { site } from "@/lib/site";
 import { supabaseAdmin, supabaseConfigured } from "@/lib/supabase";
 import { ActionForm, SubmitButton } from "../_components/ActionForm";
 import { Card, Field, Input, Select } from "../_components/fields";
-import { createTestCampaign, iterateAd, rereview, runReview, setAdSetBudget, setObjectStatus } from "./actions";
+import { applySuggestion, createTestCampaign, iterateAd, rereview, runReview, setAdSetBudget, setObjectStatus } from "./actions";
 import Link from "next/link";
 
 type LogRow = { id: string; created_at: string; name: string; action: string; reason: string; applied: boolean; source: string };
+/** Förslag som går att utföra med en knapp direkt på loggraden. */
+const applicable = new Set(["pause", "activate", "budget", "iterate"]);
+const applyLabel: Record<string, string> = { pause: "Pausa nu", activate: "Aktivera nu", budget: "Sätt budgeten", iterate: "Iterera nu" };
+const applyConfirm: Record<string, string | undefined> = {
+  activate: "Aktivera i Meta? Då börjar den kosta pengar.",
+  iterate: `Skapa ${rules.iterationsPerWinner} nya aktiva varianter från vinnaren? Nya scener kan genereras och de börjar kosta pengar direkt.`,
+};
 type VariantRow = { ad_id: string; ad_score: number | null; ad_review: { issues: string[]; notes: string } | null };
 
 const actionLabel: Record<string, string> = { create: "Skapad", pause: "Pausad", activate: "Aktiverad", budget: "Budget", keep: "Behåll", iterate: "Itererad", note: "Info" };
@@ -284,6 +291,12 @@ export default async function AdsPage() {
               <span className="font-medium">{l.name}</span>
               <span className="text-muted">{l.reason}</span>
               <span className="text-xs text-muted">{l.source}</span>
+              {!l.applied && applicable.has(l.action) ? (
+                <ActionForm action={applySuggestion} inline confirm={applyConfirm[l.action]} className="basis-full sm:basis-auto">
+                  <input type="hidden" name="log_id" value={l.id} />
+                  <SubmitButton variant={l.action === "pause" ? "danger" : "primary"}>{applyLabel[l.action] ?? "Utför"}</SubmitButton>
+                </ActionForm>
+              ) : null}
             </li>
           ))}
         </ul>

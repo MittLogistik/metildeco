@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { requireAdmin } from "@/lib/auth";
-import { buildTestCampaign, reviewAds } from "@/lib/ads-engine";
+import { applyLogSuggestion, buildTestCampaign, reviewAds } from "@/lib/ads-engine";
 import * as meta from "@/lib/meta-ads";
 import { supabaseAdmin, supabaseConfigured } from "@/lib/supabase";
 import type { ActionResult } from "../actions";
@@ -70,6 +70,20 @@ export async function runReview(formData: FormData): Promise<ActionResult> {
     const acted = decisions.filter((d) => d.action !== "keep");
     if (acted.length === 0) return { ok: true, message: "Inga åtgärder behövs just nu." };
     return { ok: true, message: `${apply ? "Utförde" : "Föreslår"} ${acted.length} åtgärder – se loggen nedan.` };
+  } catch (e) {
+    return fail(e);
+  }
+}
+
+/** Utför ett förslag ur loggen (paus, aktivering, budget, iteration) direkt från raden. */
+export async function applySuggestion(formData: FormData): Promise<ActionResult> {
+  await requireAdmin();
+  const id = String(formData.get("log_id") ?? "");
+  if (!id) return { ok: false, error: "Ogiltigt." };
+  try {
+    const message = await applyLogSuggestion(id);
+    refresh();
+    return { ok: true, message };
   } catch (e) {
     return fail(e);
   }

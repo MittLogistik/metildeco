@@ -71,11 +71,69 @@ async function log(rows: { decision: Decision; applied: boolean; source: string 
         name: d.name,
         action: d.action,
         reason: d.reason,
-        metrics: d.metrics ?? null,
+        // Budgetförslaget sparas med mätvärdena så att förslaget kan utföras från loggen senare
+        metrics: d.metrics || d.budget ? { ...(d.metrics ?? {}), ...(d.budget ? { budget: d.budget } : {}) } : null,
         applied,
         source,
       })),
     );
+}
+
+type LogRowRecord = {
+  id: string;
+  campaign_id: string | null;
+  adset_id: string | null;
+  ad_id: string | null;
+  name: string;
+  action: string;
+  reason: string;
+  metrics: Record<string, number | null> | null;
+  applied: boolean;
+};
+
+/**
+ * Utför ett förslag som ligger i loggen (paus, aktivering, budget eller iteration) direkt
+ * från adminvyn, utan att leta upp annonsen i kampanjträdet. Raden markeras som utförd.
+ */
+export async function applyLogSuggestion(logId: string, o: { mediaBase?: string } = {}): Promise<string> {
+  if (!supabaseConfigured()) throw new Error("Databasen är inte konfigurerad.");
+  const db = supabaseAdmin();
+  const row = (await db.from("ad_log").select("id,campaign_id,adset_id,ad_id,name,action,reason,metrics,applied").eq("id", logId).maybeSingle()).data as LogRowRecord | null;
+  if (!row) throw new Error("Förslaget finns inte längre.");
+  if (row.applied) throw new Error("Förslaget är redan utfört.");
+  // Målet är den mest specifika nivån som loggats: annons, annars annonsgrupp, annars kampanj
+  const target = row.ad_id ?? row.adset_id ?? row.campaign_id;
+  if (!target) throw new Error("Förslaget pekar inte på något i Meta.");
+
+  let message: string;
+  switch (row.action) {
+    case "pause":
+      await meta.setStatus(target, "PAUSED");
+      message = `${row.name} är pausad.`;
+      break;
+    case "activate":
+      await meta.setStatus(target, "ACTIVE");
+      message = `${row.name} är aktiverad.`;
+      break;
+    case "budget": {
+      const fromReason = row.reason.match(/→\s*(\d+(?:[.,]\d+)?)\s*$/)?.[1];
+      const budget = Number(row.metrics?.budget ?? (fromReason ? fromReason.replace(",", ".") : NaN));
+      if (!row.adset_id || !(budget >= 1)) throw new Error("Budgetförslaget saknar belopp eller annonsgrupp.");
+      await meta.setDailyBudget(row.adset_id, budget);
+      message = `Budget för ${row.name} satt till ${budget}/dag.`;
+      break;
+    }
+    case "iterate": {
+      if (!row.ad_id) throw new Error("Iterationen saknar annons.");
+      const r = await iterateFromAd({ adId: row.ad_id, mediaBase: o.mediaBase ?? site.url, status: "ACTIVE", source: "admin" });
+      message = `Skapade ${r.ads.length} nya annonser från ${row.name} (aktiva).${r.notes.length ? ` Anmärkningar: ${r.notes.join(" · ")}` : ""}`;
+      break;
+    }
+    default:
+      throw new Error(`Förslaget "${row.action}" går inte att utföra automatiskt.`);
+  }
+  await db.from("ad_log").update({ applied: true, reason: `${row.reason} · utförd från admin` }).eq("id", row.id);
+  return message;
 }
 
 /* ---------------------------------- Media ---------------------------------- */
