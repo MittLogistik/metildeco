@@ -61,15 +61,26 @@ export type Creative = {
   custom_instructions?: string | null;
   provider?: string | null;
   approved_at?: string | null;
+  /** Admin har godkänt bilden trots att granskningen underkände den – poängen ignoreras. */
+  approved_override?: boolean;
 };
 
 export type CreativeGroup = { groupId: string; label: string; kind: string; feed: Creative | null; story: Creative | null; sceneId: string | null; createdAt: string };
 
-/** Lägsta poängen i gruppen – motorn använder bara grupper där alla bilder är godkända. */
+/** Lägsta poängen i gruppen – motorn använder bara grupper där alla bilder är godkända. Manuellt godkända bilder räknas inte. */
 export const groupScore = (g: CreativeGroup): number | null => {
-  const scores = [g.feed?.image_score, g.story?.image_score].filter((s): s is number => typeof s === "number");
+  const scores = [g.feed, g.story].filter((c): c is Creative => Boolean(c) && !c!.approved_override && typeof c!.image_score === "number").map((c) => c.image_score as number);
   return scores.length ? Math.min(...scores) : null;
 };
+
+/** Sant när admin kört över granskningen för någon bild i gruppen. */
+export const groupOverridden = (g: CreativeGroup): boolean => Boolean(g.feed?.approved_override || g.story?.approved_override);
+
+/** "Jag håller inte med, godkänn ändå": bilden aktiveras och granskningens poäng ignoreras av motorn. */
+export async function approveCreativeGroupAnyway(groupId: string) {
+  const res = await supabaseAdmin().from("ad_creatives").update({ active: true, approved_override: true, approved_at: new Date().toISOString() }).eq("group_id", groupId);
+  if (res.error) throw new Error(res.error.message);
+}
 
 /** Grupperar bilderna per scen: en flödesbild (1:1 eller 3:4) och ev. en storybild (9:16). */
 export async function listCreativeGroups(slug: string, onlyActive = true): Promise<CreativeGroup[]> {

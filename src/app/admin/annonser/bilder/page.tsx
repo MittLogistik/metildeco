@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { requireAdmin } from "@/lib/auth";
 import { concepts, formats } from "@/content/ad-concepts";
-import { adsPerGroup, groupScore, listCreativeGroups, scenes, type CreativeGroup } from "@/lib/ad-images";
+import { adsPerGroup, groupOverridden, groupScore, listCreativeGroups, scenes, type CreativeGroup } from "@/lib/ad-images";
 import { realReview } from "@/lib/creative-studio";
 import { imageProvider } from "@/lib/image-provider";
 import { minImageScore, qaConfigured } from "@/lib/ad-qa";
@@ -10,7 +10,7 @@ import { higgsfieldConfigured, listPresets } from "@/lib/higgsfield";
 import { site } from "@/lib/site";
 import { ActionForm, SubmitButton } from "../../_components/ActionForm";
 import { Card, Input, Select } from "../../_components/fields";
-import { addTextVariantAction, completeGroupAction, deleteGroupAction, setGroupActive } from "../actions";
+import { addTextVariantAction, approveGroupAnyway, completeGroupAction, deleteGroupAction, setGroupActive } from "../actions";
 import { CreativeStudio } from "./CreativeStudio";
 import { GenerateForm } from "./GenerateForm";
 import { UploadForm } from "./UploadForm";
@@ -144,6 +144,11 @@ export default async function AdImagesPage({ searchParams }: PageProps<"/admin/a
                         {groupScore(g)} p
                       </span>
                     ) : null}
+                    {groupOverridden(g) ? (
+                      <span title="Du godkände bilden trots granskningen. Poängen ignoreras." className="ml-2 rounded-full bg-primary-soft px-2 py-0.5 text-xs text-primary">
+                        godkänd manuellt
+                      </span>
+                    ) : null}
                   </p>
                   <p className="text-xs text-muted">
                     {g.kind === "upload" ? "Egen bild" : g.kind === "concept" ? "Creative Studio" : "Higgsfield"} · {g.feed ? g.feed.format : ""}
@@ -182,6 +187,12 @@ export default async function AdImagesPage({ searchParams }: PageProps<"/admin/a
                       <SubmitButton variant="outline">Skapa textvariant</SubmitButton>
                     </ActionForm>
                   </details>
+                ) : null}
+                {!groupOverridden(g) && groupScore(g) !== null && groupScore(g)! < minImageScore() ? (
+                  <ActionForm action={approveGroupAnyway} inline confirm={`${g.label} fick ${groupScore(g)} poäng av granskningen. Godkänn ändå? Bilden aktiveras och motorn använder den i nya annonser.`}>
+                    <input type="hidden" name="group_id" value={g.groupId} />
+                    <SubmitButton variant="primary">Godkänn ändå</SubmitButton>
+                  </ActionForm>
                 ) : null}
                 <ActionForm action={setGroupActive} inline>
                   <input type="hidden" name="group_id" value={g.groupId} />

@@ -181,6 +181,21 @@ export async function setGroupActive(formData: FormData): Promise<ActionResult> 
   }
 }
 
+/** Kör över AI-granskningen: bilden godkänns, aktiveras och används av motorn trots låg poäng. */
+export async function approveGroupAnyway(formData: FormData): Promise<ActionResult> {
+  await requireAdmin();
+  const groupId = String(formData.get("group_id") ?? "");
+  if (!groupId) return { ok: false, error: "Ogiltigt." };
+  try {
+    const { approveCreativeGroupAnyway } = await import("@/lib/ad-images");
+    await approveCreativeGroupAnyway(groupId);
+    revalidatePath("/admin/annonser/bilder");
+    return { ok: true, message: "Bilden är godkänd manuellt och används av motorn." };
+  } catch (e) {
+    return fail(e);
+  }
+}
+
 export async function rereview(formData: FormData): Promise<ActionResult> {
   await requireAdmin();
   const adId = String(formData.get("ad_id") ?? "");
