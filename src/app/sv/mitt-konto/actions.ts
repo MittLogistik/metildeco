@@ -3,15 +3,37 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { createSessionClient } from "@/lib/auth";
+import { emailConfigured, sendLoginCodeEmail } from "@/lib/email";
+import { runSubscriptionCommand } from "@/lib/subscriptions";
 import { stripe } from "@/lib/stripe";
 import { supabaseAdmin } from "@/lib/supabase";
 
 export type AccountResult = { ok: true; message?: string } | { ok: false; error: string };
 
-/** Skickar en engångskod till kundens e-post. Kontot skapas automatiskt första gången. */
+/**
+ * Skickar en engångskod till kundens e-post. Kontot skapas automatiskt första gången.
+ * Koden hämtas från Supabase (generateLink) och skickas med vår egen Resend-avsändare,
+ * så att inloggningen inte beror på Supabases inbyggda e-postutskick (som är hårt
+ * begränsat och ofta fastnar i skräpposten). Saknas Resend används Supabases utskick.
+ */
 export async function sendLoginCode(formData: FormData): Promise<AccountResult> {
   const email = String(formData.get("email") ?? "").trim().toLowerCase();
   if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) return { ok: false, error: "Ange en giltig e-postadress." };
+  if (emailConfigured()) {
+    const { data, error } = await supabaseAdmin().auth.admin.generateLink({ type: "magiclink", email });
+    const code = data?.properties?.email_otp;
+    if (error || !code) {
+      console.error("[login] generateLink", error?.message ?? "ingen kod");
+      return { ok: false, error: "Kunde inte skapa en kod just nu. Försök igen om en stund." };
+    }
+    try {
+      await sendLoginCodeEmail(email, code);
+    } catch (e) {
+      console.error("[login] e-post", e instanceof Error ? e.message : e);
+      return { ok: false, error: "Kunde inte skicka koden just nu. Försök igen om en stund." };
+    }
+    return { ok: true, message: email };
+  }
   const client = await createSessionClient();
   const { error } = await client.auth.signInWithOtp({ email, options: { shouldCreateUser: true } });
   if (error) return { ok: false, error: "Kunde inte skicka koden just nu. Försök igen om en stund." };
@@ -51,44 +73,27 @@ async function ownedSubscription(stripeSubscriptionId: string) {
   return data;
 }
 
-const syncSubscription = async (id: string) => {
-  const s = await stripe().subscriptions.retrieve(id);
-  const item = s.items.data[0];
-  await supabaseAdmin()
-    .from("subscriptions")
-    .update({
-      status: s.status,
-      cancel_at_period_end: s.cancel_at_period_end,
-      paused_at: s.pause_collection ? new Date().toISOString() : null,
-      current_period_end: item ? new Date(item.current_period_end * 1000).toISOString() : null,
-      next_shipment_at: item ? new Date(item.current_period_end * 1000).toISOString() : null,
-    })
-    .eq("stripe_subscription_id", id);
-  revalidatePath("/sv/mitt-konto");
+const runOwned = async (formData: FormData, command: "pause" | "resume" | "cancel_period_end"): Promise<AccountResult> => {
+  const id = String(formData.get("id") ?? "");
+  if (!(await ownedSubscription(id))) return { ok: false, error: "Prenumerationen hittades inte." };
+  try {
+    const message = await runSubscriptionCommand(id, command);
+    revalidatePath("/sv/mitt-konto");
+    return { ok: true, message };
+  } catch (e) {
+    console.error("[prenumeration]", e instanceof Error ? e.message : e);
+    return { ok: false, error: "Det gick inte att ändra prenumerationen just nu. Mejla oss så hjälper vi dig." };
+  }
 };
 
 export async function pauseSubscription(formData: FormData): Promise<AccountResult> {
-  const id = String(formData.get("id") ?? "");
-  if (!(await ownedSubscription(id))) return { ok: false, error: "Prenumerationen hittades inte." };
-  await stripe().subscriptions.update(id, { pause_collection: { behavior: "void" } });
-  await syncSubscription(id);
-  return { ok: true, message: "Prenumerationen är pausad. Inga pengar dras förrän du återupptar den." };
+  return runOwned(formData, "pause");
 }
-
 export async function resumeSubscription(formData: FormData): Promise<AccountResult> {
-  const id = String(formData.get("id") ?? "");
-  if (!(await ownedSubscription(id))) return { ok: false, error: "Prenumerationen hittades inte." };
-  await stripe().subscriptions.update(id, { pause_collection: null, cancel_at_period_end: false });
-  await syncSubscription(id);
-  return { ok: true, message: "Prenumerationen är återupptagen." };
+  return runOwned(formData, "resume");
 }
-
 export async function cancelSubscription(formData: FormData): Promise<AccountResult> {
-  const id = String(formData.get("id") ?? "");
-  if (!(await ownedSubscription(id))) return { ok: false, error: "Prenumerationen hittades inte." };
-  await stripe().subscriptions.update(id, { cancel_at_period_end: true, pause_collection: null });
-  await syncSubscription(id);
-  return { ok: true, message: "Prenumerationen avslutas efter innevarande period. Inga fler dragningar görs." };
+  return runOwned(formData, "cancel_period_end");
 }
 
 /** Öppnar Stripes kundportal för betalsätt, adress och kvitton. */

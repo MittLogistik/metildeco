@@ -2,11 +2,14 @@ import type Stripe from "stripe";
 import { saveAbandonedCart } from "@/lib/abandoned";
 import { saveOrderFromSession, saveRenewalFromInvoice } from "@/lib/orders";
 import { stripe } from "@/lib/stripe";
+import { syncSubscriptionFromStripe } from "@/lib/subscriptions";
 
 /**
  * Tar emot händelser från Stripe. Signaturen verifieras med STRIPE_WEBHOOK_SECRET.
  * checkout.session.completed → order sparas i databasen och kunden får bekräftelse.
  * invoice.paid (förnyelse)   → ny order för prenumerationsleveransen.
+ * customer.subscription.updated/deleted → tabellen subscriptions speglar Stripe, så att
+ *   avslut gjorda i Stripes kundportal eller Dashboard syns i admin och på Mitt konto.
  */
 export async function POST(request: Request) {
   const secret = process.env.STRIPE_WEBHOOK_SECRET;
@@ -40,6 +43,12 @@ export async function POST(request: Request) {
       case "invoice.paid": {
         const order = await saveRenewalFromInvoice(event.data.object);
         if (order) console.log("[stripe] förnyelse", order.order_number);
+        break;
+      }
+      case "customer.subscription.updated":
+      case "customer.subscription.deleted": {
+        await syncSubscriptionFromStripe(event.data.object);
+        console.log("[stripe] prenumeration", event.data.object.id, event.data.object.status);
         break;
       }
       default:

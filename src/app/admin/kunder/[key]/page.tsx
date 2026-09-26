@@ -6,6 +6,7 @@ import { getCustomer, intervalLabel, subscriptionStatusLabel } from "@/lib/custo
 import { formatPrice } from "@/lib/format";
 import { RENEWAL_RELEASE_DAYS_BEFORE } from "@/lib/orders";
 import { Card, StatusBadge } from "../../_components/fields";
+import { AdminSubscriptionActions } from "../AdminSubscriptionActions";
 
 const fmtDate = (iso: string | null | undefined) => (iso ? new Date(iso).toLocaleDateString("sv-SE", { dateStyle: "medium" }) : "–");
 const fmtDateTime = (iso: string) => new Date(iso).toLocaleString("sv-SE", { dateStyle: "short", timeStyle: "short" });
@@ -91,12 +92,14 @@ export default async function CustomerPage({ params }: PageProps<"/admin/kunder/
                       </div>
                     </dl>
                     {s.environment === "sandbox" ? <span className="mt-1 inline-block rounded bg-sand px-1 text-[10px] uppercase text-muted">test</span> : null}
+                    <AdminSubscriptionActions id={s.stripe_subscription_id} status={s.status} paused={Boolean(s.paused_at)} cancelling={s.cancel_at_period_end} />
                   </li>
                 ))}
               </ul>
             )}
             <p className="mt-3 text-xs text-muted">
-              När Stripe bekräftat förnyelsen skapas en planerad order som släpps till packning {RENEWAL_RELEASE_DAYS_BEFORE} dagar före planerad leverans.
+              När Stripe bekräftat förnyelsen skapas en planerad order som släpps till packning {RENEWAL_RELEASE_DAYS_BEFORE} dagar före planerad leverans. Knapparna ändrar
+              prenumerationen direkt i Stripe, till exempel när kunden mejlar en uppsägning.
             </p>
           </Card>
 

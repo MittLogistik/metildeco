@@ -59,6 +59,9 @@ export function LoginForm() {
       <Button type="submit" size="lg" className="mt-5 w-full" disabled={sending}>
         {sending ? "Skickar kod …" : "Skicka kod"}
       </Button>
+      <p className="mt-4 text-xs text-muted">
+        Kommer du inte in? Mejla <a href="mailto:support@metilde.com" className="underline underline-offset-2">support@metilde.com</a> från adressen du handlat med, så pausar eller avslutar vi prenumerationen åt dig och bekräftar skriftligen.
+      </p>
     </form>
   );
 }

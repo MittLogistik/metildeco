@@ -3,6 +3,7 @@
   "crons": [
     { "path": "/api/cron/ads-review", "schedule": "0 5 * * *" },
     { "path": "/api/cron/orders-release", "schedule": "0 4 * * *" },
-    { "path": "/api/cron/affiliate", "schedule": "*/10 * * * *" }
+    { "path": "/api/cron/affiliate", "schedule": "*/10 * * * *" },
+    { "path": "/api/cron/plocky", "schedule": "*/10 * * * *" }
   ]
 }

@@ -4,8 +4,10 @@ import { requireAdmin } from "@/lib/auth";
 import { customerHref, intervalLabel, subscriptionStatusLabel, type SubscriptionRecord } from "@/lib/customers";
 import { formatPrice } from "@/lib/format";
 import { intervalDaysOf, RENEWAL_RELEASE_DAYS_BEFORE } from "@/lib/orders";
+import { plockyConfigured } from "@/lib/plocky";
 import { supabaseAdmin } from "@/lib/supabase";
 import { updateOrder } from "../../actions";
+import { resendToPlocky } from "../../plocky/actions";
 import { ActionForm, SubmitButton } from "../../_components/ActionForm";
 import { Card, Field, Input, orderStatuses, Select, StatusBadge, statusLabel } from "../../_components/fields";
 
@@ -17,10 +19,13 @@ export default async function OrderDetailPage({ params }: PageProps<"/admin/ordr
   const db = supabaseAdmin();
   const { data: o } = await db.from("orders").select("*").eq("id", id).maybeSingle();
   if (!o) notFound();
-  const [{ data: items }, subRes] = await Promise.all([
+  const [{ data: items }, subRes, wmsRes] = await Promise.all([
     db.from("order_items").select("*").eq("order_id", id),
     o.stripe_subscription_id ? db.from("subscriptions").select("*").eq("stripe_subscription_id", o.stripe_subscription_id).maybeSingle() : Promise.resolve({ data: null }),
+    db.from("wms_queue").select("status,attempts,last_error,warning,wms_order_id,sent_at,next_attempt_at").eq("order_id", id).maybeSingle(),
   ]);
+  const wms = (wmsRes.data ?? null) as { status: string; attempts: number; last_error: string | null; warning: string | null; wms_order_id: string | null; sent_at: string | null; next_attempt_at: string } | null;
+  const wmsStatusLabel: Record<string, string> = { pending: "Väntar på att skickas", retrying: "Försöker igen", sent: "Skickad till Plocky", failed: "Misslyckades" };
   const sub = (subRes.data ?? null) as SubscriptionRecord | null;
   const subItem = (items ?? []).find((i) => String(i.plan).startsWith("sub"));
   const intervalDays = sub?.interval_days ?? intervalDaysOf(subItem?.plan);
@@ -174,7 +179,7 @@ export default async function OrderDetailPage({ params }: PageProps<"/admin/ordr
               <Field label="Status">
                 <Select name="status" defaultValue={o.status} options={orderStatuses.map((s) => ({ value: s, label: statusLabel[s] ?? s }))} />
               </Field>
-              <Field label="Kolli-id" hint="Fylls i automatiskt när Plocky är kopplat.">
+              <Field label="Kolli-id" hint="Fylls i av Plocky när frakten bokas.">
                 <Input name="tracking_number" defaultValue={o.tracking_number} />
               </Field>
               <Field label="Spårningslänk">
@@ -183,6 +188,39 @@ export default async function OrderDetailPage({ params }: PageProps<"/admin/ordr
               <SubmitButton>Spara</SubmitButton>
             </ActionForm>
           </Card>
+          {o.kind !== "giftcard" ? (
+            <Card title="Plocky (lager)">
+              {wms ? (
+                <dl className="space-y-2 text-sm">
+                  <div>
+                    <dt className="text-xs uppercase tracking-wider text-muted">Status</dt>
+                    <dd className={wms.status === "failed" ? "text-danger" : ""}>
+                      {wmsStatusLabel[wms.status] ?? wms.status}
+                      {wms.sent_at ? ` ${new Date(wms.sent_at).toLocaleString("sv-SE", { dateStyle: "short", timeStyle: "short" })}` : ""}
+                    </dd>
+                  </div>
+                  {wms.wms_order_id || o.wms_order_id ? (
+                    <div>
+                      <dt className="text-xs uppercase tracking-wider text-muted">Plockys ordernummer</dt>
+                      <dd className="tabular-nums">{wms.wms_order_id ?? o.wms_order_id}</dd>
+                    </div>
+                  ) : null}
+                  {wms.last_error ? <p className="text-xs text-danger">{wms.last_error}</p> : null}
+                  {wms.warning ? <p className="text-xs text-muted">{wms.warning}</p> : null}
+                </dl>
+              ) : (
+                <p className="text-sm text-muted">
+                  {o.status === "scheduled" ? "Skickas till Plocky när ordern släpps till packning." : plockyConfigured() ? "Inte skickad till Plocky." : "Plocky är inte kopplat ännu."}
+                </p>
+              )}
+              {plockyConfigured() && o.status !== "scheduled" && o.status !== "cancelled" && o.status !== "refunded" ? (
+                <ActionForm action={resendToPlocky} className="mt-3" confirm={wms?.status === "sent" ? "Ordern är redan skickad till Plocky. Skicka igen ändå? Plocky svarar då att den redan finns." : undefined}>
+                  <input type="hidden" name="order_id" value={o.id} />
+                  <SubmitButton variant="outline">{wms?.status === "sent" ? "Skicka igen" : "Skicka till Plocky"}</SubmitButton>
+                </ActionForm>
+              ) : null}
+            </Card>
+          ) : null}
           <Card title="Stripe">
             <ul className="space-y-1 text-sm">
               {o.stripe_payment_intent ? (

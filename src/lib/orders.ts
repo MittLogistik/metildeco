@@ -10,6 +10,7 @@ import { AFFILIATE_SOURCE, enqueuePostback, type AffiliateOrder } from "./affili
 import { rateToSek } from "./exchange";
 import { sendMetaEvents } from "./meta";
 import { metaContentId } from "./consent";
+import { pushOrderToPlocky } from "./plocky";
 
 export type OrderRecord = {
   id: string;
@@ -223,6 +224,8 @@ export async function saveOrderFromSession(sessionId: string): Promise<{ order: 
 
   await decrementStock(items, meta);
   await markRecovered(order.email, order.id).catch(() => undefined);
+  // Till lagret (Plocky) – köas och skickas direkt; misslyckas det tar cron-jobbet vid
+  await pushOrderToPlocky(order);
   // Affiliatekonvertering: köas här, skickas av cron-jobbet
   await enqueuePostback(order as unknown as AffiliateOrder).catch((e: unknown) => console.error("[affiliate]", e instanceof Error ? e.message : e));
   if (session.metadata?.consent === "all") {
@@ -374,7 +377,7 @@ export async function saveRenewalFromInvoice(invoice: Stripe.Invoice): Promise<O
 
 /**
  * Släpper planerade förnyelseordrar vars release_at passerats: status paid så att de
- * dyker upp bland ordrar att packa. Här kopplas Plocky på när integrationen finns.
+ * dyker upp bland ordrar att packa och skickas till Plocky.
  */
 export async function releaseScheduledOrders(now = new Date()): Promise<OrderRecord[]> {
   if (!supabaseConfigured()) return [];
@@ -383,7 +386,10 @@ export async function releaseScheduledOrders(now = new Date()): Promise<OrderRec
   const released: OrderRecord[] = [];
   for (const o of (due.data ?? []) as OrderRecord[]) {
     const res = await db.from("orders").update({ status: "paid" }).eq("id", o.id).eq("status", "scheduled").select("*").maybeSingle();
-    if (res.data) released.push(res.data as OrderRecord);
+    if (res.data) {
+      released.push(res.data as OrderRecord);
+      await pushOrderToPlocky(res.data as OrderRecord);
+    }
   }
   return released;
 }

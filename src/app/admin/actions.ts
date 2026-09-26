@@ -4,6 +4,7 @@ import { revalidatePath, revalidateTag } from "next/cache";
 import { redirect } from "next/navigation";
 import { createSessionClient, requireAdmin } from "@/lib/auth";
 import { CATALOG_TAG } from "@/lib/catalog";
+import { pushOrderToPlocky } from "@/lib/plocky";
 import { supabaseAdmin } from "@/lib/supabase";
 import { orderStatuses } from "./_components/fields";
 
@@ -30,7 +31,10 @@ export async function updateOrder(formData: FormData): Promise<ActionResult> {
   const id = String(formData.get("id") ?? "");
   const status = String(formData.get("status") ?? "");
   if (!id || !(orderStatuses as readonly string[]).includes(status)) return { ok: false, error: "Ogiltig status." };
-  const res = await supabaseAdmin()
+  const db = supabaseAdmin();
+  const before = (await db.from("orders").select("id,order_number,kind,status").eq("id", id).maybeSingle()).data as { id: string; order_number: string; kind: string; status: string } | null;
+  if (!before) return { ok: false, error: "Ordern finns inte." };
+  const res = await db
     .from("orders")
     .update({
       status,
@@ -39,6 +43,8 @@ export async function updateOrder(formData: FormData): Promise<ActionResult> {
     })
     .eq("id", id);
   if (res.error) return { ok: false, error: res.error.message };
+  // En planerad prenumerationsleverans som släpps i förtid ska också till lagret
+  if (status === "paid" && before.status === "scheduled") await pushOrderToPlocky(before);
   revalidatePath("/admin", "layout");
   return { ok: true, message: "Ordern är uppdaterad." };
 }

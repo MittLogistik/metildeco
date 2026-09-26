@@ -33,6 +33,18 @@ quiz, presentkort, spåra order, mitt konto, samarbeten/jobba hos oss, fler spr�
 - Övergivna korgar kommer från Stripes `checkout.session.expired` (sessionen har 24 h giltighet och återställningslänk). Kräver att händelsen är påslagen i Stripes webhook-destination.
 - Adminöversikten (`/admin`) visar ett diagram per mått – aldrig flera serier på samma axel.
 
+## Mitt konto och prenumerationer
+- Inloggning med engångskod: koden skapas med `auth.admin.generateLink({ type: "magiclink" })` och skickas med Resend (`sendLoginCodeEmail`), inte med Supabases inbyggda utskick (hårt begränsat, hamnar i skräppost). Utan `RESEND_API_KEY` faller den tillbaka på Supabase.
+- `src/lib/subscriptions.ts` är enda stället som ändrar prenumerationer i Stripe (pausa, återuppta, avsluta vid periodens slut, avsluta direkt) och speglar svaret i `subscriptions`. Kund via Mitt konto, admin via `/admin/kunder/<e-post>` (för uppsägningar som kommer via mejl).
+- Webhooken tar emot `customer.subscription.updated/deleted` så att avslut i Stripes portal/Dashboard syns här. Händelserna måste vara påslagna i Stripes webhook-destination.
+
+## Plocky (WMS, lager och frakt)
+- Plocky är MittLogistik-WMS:et i syskonrepot `../wms`; Metilde är en butik under kunden **Swedish Treats AB** (inte Herbwell AB) och kopplas via Plockys generiska **Webshop-API** (`wms/docs/WEBSHOP-API.md`). Ingen kod behövs på Plocky-sidan.
+- `src/lib/plocky.ts`: betalda ordrar köas i `wms_queue` och POSTas till `${PLOCKY_URL}/orders` med `X-Api-Key: PLOCKY_API_KEY` (201/409 = klart, 422/401/404 = stopp, annars backoff 1–720 min via cron `/api/cron/plocky` var 10:e minut). Anropas från `saveOrderFromSession`, `releaseScheduledOrders` (förnyelser) och admin när en planerad order sätts till Betald. Presentkort skickas aldrig.
+- `external_id` = orderns uuid, `order_number` = vårt ordernummer. Paket skickas som paketrad (`is_bundle`) plus innehållet som egna rader; Plocky plockar bara innehållet. Artikelnummer måste vara identiska (MET-…); saknas sku skickas slugen och ordern hamnar på paus i Plocky (varning i kön).
+- Inkommande `/api/plocky/wms-inbound` (header `X-Wms-Key: PLOCKY_INBOUND_KEY`): `ping`, `stock.update` (absolut säljbart saldo, skriver `products.stock`; Plocky skickar ALLA kundens artiklar, bara SKU:er med prefixet `PLOCKY_SKU_PREFIX` (MET-) rapporteras som okända) och `shipment.created` (status Skickad, kolli-id, spårningslänk, leveransmejl `sendShippingConfirmation`). Artiklar till Plocky: `/api/plocky/wms-catalog?resource=products`. Loggas i `wms_events`.
+- Adminvy `/admin/plocky`: status, test, kö med "Skicka igen", händelser från Plocky, produkter utan artikelnummer och stegen för att koppla butiken. Bas-URL på Plockys kort = `https://metilde.com/api/plocky`.
+
 ## Meta (pixel, Conversions API, katalogfeed)
 - Pixeln laddas bara efter cookiesamtycke "all" (`src/components/consent/`, cookie `metilde_consent`). Utan `NEXT_PUBLIC_META_PIXEL_ID` är allt avstängt.
 - Varje händelse skickas både via pixeln och `/api/meta` → Conversions API med samma `event_id` (avduplicering). Purchase skickas från servern i `saveOrderFromSession` med `event_id = Stripe-sessionens id`, och från tacksidan med samma id. Serverns Purchase skickas bara om `metadata.consent === "all"` (sätts i `/api/checkout`).

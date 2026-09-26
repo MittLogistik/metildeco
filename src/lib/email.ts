@@ -113,3 +113,49 @@ export async function sendGiftCardEmail(
   const text = `${subject}\n\n${intro}\n${opts.message ? `\n"${opts.message}"\n` : ""}\nKod: ${code}\nSkriv in koden i betalsteget på metilde.com. Gäller till och med ${validTo}.\n\n${company.legalName} · ${company.address}`;
   await sendEmail(to, subject, html, text);
 }
+
+const frame = (title: string, body: string) => `<!doctype html><html lang="sv"><body style="margin:0;background:#f7f5f0;font-family:Helvetica,Arial,sans-serif;color:#222">
+<div style="max-width:560px;margin:0 auto;padding:32px 20px">
+  <p style="font-size:22px;font-weight:600;margin:0 0 24px">Metilde</p>
+  <div style="background:#fff;border-radius:16px;padding:28px">
+    <h1 style="font-size:22px;margin:0 0 8px">${title}</h1>
+    ${body}
+  </div>
+  <p style="font-size:12px;color:#888;margin:24px 0 0;line-height:1.6">${company.legalName} · Org.nr ${company.orgNumber} · ${company.address}<br>
+  Frågor? Svara på det här mejlet eller ring ${company.phone} (${company.hours}).</p>
+</div></body></html>`;
+
+/** Engångskod för inloggning på Mitt konto. */
+export async function sendLoginCodeEmail(to: string, code: string) {
+  const subject = `Din inloggningskod: ${code}`;
+  const html = frame(
+    "Din inloggningskod",
+    `<p style="margin:0 0 20px;color:#555">Skriv in koden på metilde.com för att logga in på Mitt konto. Koden gäller en kort stund och kan bara användas en gång.</p>
+    <p style="margin:0;font-size:13px;color:#555">Kod</p>
+    <p style="margin:4px 0 16px;font-size:30px;font-weight:700;letter-spacing:6px;font-family:monospace">${esc(code)}</p>
+    <p style="margin:0;font-size:14px;color:#555">Har du inte försökt logga in kan du bortse från det här mejlet. Ingen kommer åt ditt konto utan koden.</p>`,
+  );
+  const text = `Din inloggningskod: ${code}\n\nSkriv in koden på metilde.com för att logga in på Mitt konto. Har du inte försökt logga in kan du bortse från mejlet.`;
+  await sendEmail(to, subject, html, text);
+}
+
+/** Leveransbesked med spårningslänk när Plocky bokat frakten. */
+export async function sendShippingConfirmation(order: OrderRecord, tracking: { number: string | null; url: string | null; carrier: string | null }) {
+  if (!order.email) return;
+  const carrierName: Record<string, string> = { postnord: "PostNord", dhl: "DHL", bring: "Bring", gls: "GLS" };
+  const carrier = tracking.carrier ? (carrierName[tracking.carrier] ?? tracking.carrier) : null;
+  const subject = `Din order ${order.order_number} är på väg`;
+  const trackHtml = tracking.url
+    ? `<p style="margin:16px 0 0"><a href="${esc(tracking.url)}" style="display:inline-block;background:#2f5445;color:#fff;text-decoration:none;border-radius:999px;padding:12px 22px;font-weight:600">Spåra paketet</a></p>`
+    : "";
+  const html = frame(
+    "Ditt paket är på väg",
+    `<p style="margin:0 0 12px;color:#555">Order <strong style="color:#222">${order.order_number}</strong> har lämnat vårt lager${carrier ? ` med ${esc(carrier)}` : ""}.${
+      tracking.number ? ` Kolli-id: <strong style="color:#222">${esc(tracking.number)}</strong>.` : ""
+    }</p>
+    ${trackHtml}
+    <p style="margin:20px 0 0;font-size:14px;color:#555">Spårningen kan dröja några timmar innan den visar första händelsen.</p>`,
+  );
+  const text = `Ditt paket är på väg\nOrder ${order.order_number}${carrier ? ` skickas med ${carrier}` : ""}.${tracking.number ? ` Kolli-id: ${tracking.number}.` : ""}${tracking.url ? `\nSpåra: ${tracking.url}` : ""}`;
+  await sendEmail(order.email, subject, html, text);
+}
