@@ -204,7 +204,9 @@ async function makeAd(o: { product: Product; angle: AdAngle; media: Media; hook:
   let text = { primaryText, headline, description };
   if (qaConfigured()) {
     review = await reviewAd({ ...text, imageUrl: o.media.feedUrl, product: o.product });
-    for (let retry = 0; review.verdict === "reject" && retry < 2 && copy.source === "ai"; retry++) {
+    // I läget "warn" har admin redan sagt att granskningen inte ska stoppa: texten behålls som den
+    // skrevs, granskningen sätter bara poäng. Annars skrivs texten om en gång och faller sedan på mallen.
+    for (let retry = 0; o.reviewMode !== "warn" && review.verdict === "reject" && retry < 2 && copy.source === "ai"; retry++) {
       const why = review.issues.join("; ") || review.notes;
       o.notes?.push(`${o.angle.id} · ${o.media.label}: texten underkändes (${review.score}) – ${retry === 0 ? "skrivs om" : "mallen används"}: ${why}`);
       const next = retry === 0 ? await write(why) : templateCopy(o.product, o.angle, o.hook);
