@@ -217,9 +217,9 @@ export const listCustomAudiences = () =>
  * Fylls med historik (prefill) så att den går att använda direkt.
  */
 export const createWebsiteAudience = (o: { name: string; pixelId: string; event: "PageView" | "ViewContent" | "AddToCart" | "Purchase"; retentionDays: number; description?: string }) =>
+  // Ingen subtype: i nuvarande API-version avgörs typen (webbplats) av regelns event_sources
   call<{ id: string }>("POST", `${adAccount()}/customaudiences`, {
     name: o.name,
-    subtype: "WEBSITE",
     description: o.description ?? "",
     prefill: true,
     rule: JSON.stringify({
