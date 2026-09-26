@@ -3,6 +3,7 @@ import { timingSafeEqual } from "node:crypto";
 import { revalidatePath, revalidateTag } from "next/cache";
 import { CATALOG_TAG, getCatalog } from "./catalog";
 import { sendShippingConfirmation } from "./email";
+import { PLACEHOLDER, publicBase } from "./media";
 import type { OrderItemRecord, OrderRecord } from "./orders";
 import { supabaseAdmin, supabaseConfigured } from "./supabase";
 
@@ -462,6 +463,13 @@ async function handleShipment(body: Record<string, unknown>): Promise<InboundRes
 /* Artikelkatalog till Plocky                                                                 */
 /* ------------------------------------------------------------------------------------------ */
 
+/** Bildadresser måste gå att nå från Plocky: lokala /media-sökvägar får domänen framför, platshållaren skickas inte. */
+const absoluteImages = (images: string[]) =>
+  images
+    .filter((src) => src && src !== PLACEHOLDER)
+    .slice(0, 1)
+    .map((src) => (/^https?:\/\//.test(src) ? src : `${publicBase()}${src.startsWith("/") ? "" : "/"}${src}`));
+
 /** Artiklar i det format Plockys "Synka artiklar" läser. Paket flaggas is_bundle så att paketraden inte plockas. */
 export async function plockyCatalog() {
   const c = await getCatalog();
@@ -476,8 +484,8 @@ export async function plockyCatalog() {
     gtin: p.gtin,
     stock_quantity: p.stock,
     is_bundle: false,
-    images: p.images.slice(0, 1),
-    url: `${(process.env.NEXT_PUBLIC_SITE_URL ?? "https://metilde.com").replace(/\/+$/, "")}/sv/produkter/${p.slug}`,
+    images: absoluteImages(p.images),
+    url: `${publicBase()}/sv/produkter/${p.slug}`,
   }));
   const bundles = c.allBundles.map((b) => ({
     sku: b.sku ?? b.slug,
@@ -488,7 +496,7 @@ export async function plockyCatalog() {
     commodity_code: null,
     stock_quantity: b.items.length ? Math.min(...b.items.map((i) => (i.product.trackStock ? Math.floor(i.product.stock / i.qty) : 9999))) : 0,
     is_bundle: true,
-    images: b.images.slice(0, 1),
+    images: absoluteImages(b.images),
     components: b.items.map((i) => ({ sku: i.product.sku ?? i.product.slug, quantity: i.qty })),
   }));
   return { products: [...products, ...bundles] };
