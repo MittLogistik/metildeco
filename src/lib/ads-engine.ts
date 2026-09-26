@@ -1,6 +1,6 @@
 import "server-only";
 import { angles, productHooks, retargetingAngles, type AdAngle } from "@/content/ad-copy";
-import { templateCopy, writeAdCopy } from "./ad-writer";
+import { templateCopy, writeAdCopy, writeAdCopyFromImage } from "./ad-writer";
 import { groupScore, listCreativeGroups } from "./ad-images";
 import { minImageScore, qaConfigured, reviewAd } from "./ad-qa";
 import { getProduct } from "./catalog";
@@ -154,13 +154,13 @@ async function hashFor(url: string, name: string) {
  * Samlar produktens annonsbilder: genererade/uppladdade grupper först, sedan packshots.
  * mediaBase används för packshots (relativa sökvägar), grupperna har redan publika URL:er.
  */
-async function collectMedia(product: Product, mediaBase: string, notes: string[], onlyGroups?: string[]): Promise<Media[]> {
+async function collectMedia(product: Product, mediaBase: string, notes: string[], onlyGroups?: string[], o: { ignoreScore?: boolean } = {}): Promise<Media[]> {
   const media: Media[] = [];
   const groups = (await listCreativeGroups(product.slug)).filter((g) => g.feed || g.story).filter((g) => !onlyGroups || onlyGroups.includes(g.groupId));
   for (const g of groups) {
-    // Bara bilder som klarat AI-granskningen (eller inte granskats alls) får användas
+    // Bara bilder som klarat AI-granskningen (eller inte granskats alls) får användas – om inte admin valt bilderna själv
     const score = groupScore(g);
-    if (score !== null && score < minImageScore()) {
+    if (!o.ignoreScore && score !== null && score < minImageScore()) {
       notes.push(`${g.label} hoppas över (bildpoäng ${score})`);
       continue;
     }
@@ -188,11 +188,15 @@ async function collectMedia(product: Product, mediaBase: string, notes: string[]
   return media;
 }
 
-async function makeAd(o: { product: Product; angle: AdAngle; media: Media; hook: string; adsetId: string; campaignId: string; link: string; status: "ACTIVE" | "PAUSED"; parentAdId?: string; notes?: string[] }) {
+async function makeAd(o: { product: Product; angle: AdAngle; media: Media; hook: string; adsetId: string; campaignId: string; link: string; status: "ACTIVE" | "PAUSED"; parentAdId?: string; notes?: string[]; copyFromImage?: boolean }) {
   const pageId = process.env.META_PAGE_ID!;
   const name = `${o.angle.id} · ${o.media.label}`;
-  // Texten skrivs av AI i vinkelns anda, med mallen som reserv
-  let copy = await writeAdCopy({ product: o.product, angle: o.angle, hook: o.hook, notes: o.notes });
+  // Texten skrivs av AI i vinkelns anda, med mallen som reserv. Med copyFromImage läser modellen bilden och skriver texten till den.
+  const write = (avoid?: string) =>
+    o.copyFromImage
+      ? writeAdCopyFromImage({ product: o.product, imageUrl: o.media.feedUrl, hook: o.hook, notes: o.notes, avoid, fallbackAngle: o.angle })
+      : writeAdCopy({ product: o.product, angle: o.angle, hook: o.hook, notes: o.notes, avoid });
+  let copy = await write();
   const { primaryText, headline, description } = copy;
   // AI-granskning av hela annonsen innan den skapas. Underkänns en AI-skriven text får
   // skrivaren en chans till med granskarens synpunkter, och sedan används mallen.
@@ -203,10 +207,7 @@ async function makeAd(o: { product: Product; angle: AdAngle; media: Media; hook:
     for (let retry = 0; review.verdict === "reject" && retry < 2 && copy.source === "ai"; retry++) {
       const why = review.issues.join("; ") || review.notes;
       o.notes?.push(`${o.angle.id} · ${o.media.label}: texten underkändes (${review.score}) – ${retry === 0 ? "skrivs om" : "mallen används"}: ${why}`);
-      const next =
-        retry === 0
-          ? await writeAdCopy({ product: o.product, angle: o.angle, hook: o.hook, notes: o.notes, avoid: why })
-          : templateCopy(o.product, o.angle, o.hook);
+      const next = retry === 0 ? await write(why) : templateCopy(o.product, o.angle, o.hook);
       text = { primaryText: next.primaryText, headline: next.headline, description: next.description };
       copy = next;
       review = await reviewAd({ ...text, imageUrl: o.media.feedUrl, product: o.product });
@@ -304,6 +305,59 @@ export async function buildTestCampaign(o: BuildOptions): Promise<BuildResult> {
     }
   }
   if (ads.length < adsCount) notes.push(`${ads.length} av ${adsCount} annonser skapades. ${media.length} bilduppsättningar och ${angles.length} textvinklar fanns att kombinera.`);
+  await log(decisions.map((decision) => ({ decision, applied: true, source: o.source ?? "admin" })));
+  return { campaignId: campaign.id, adsetId: adset.id, ads, notes };
+}
+
+/* ------------------------------ Annonser av valda bildset ------------------------------ */
+
+/** Pseudovinkel för annonser där texten skrivits utifrån bilden. Mallen är reserven om AI:n inte håller. */
+const imageAngle: AdAngle = { ...angles[0]!, id: "bild" };
+
+export type FromGroupsOptions = {
+  slug: string;
+  groupIds: string[];
+  dailyBudget: number;
+  mediaBase?: string;
+  linkBase?: string;
+  source?: string;
+};
+
+/**
+ * Utkast från bildset som admin valt själv: en pausad testkampanj med en annonsgrupp och en
+ * annons per bildset. AI:n tittar på bilden och skriver texten till just den. Valda bilder
+ * används även om granskningen gett dem låg poäng – valet är admins.
+ */
+export async function buildFromGroups(o: FromGroupsOptions): Promise<BuildResult> {
+  if (!meta.adsConfigured()) throw new Error("META_ADS_TOKEN eller META_AD_ACCOUNT_ID saknas.");
+  if (!process.env.META_PAGE_ID) throw new Error("META_PAGE_ID saknas.");
+  if (o.groupIds.length === 0) throw new Error("Välj minst ett bildset.");
+  const product = await getProduct(o.slug);
+  if (!product) throw new Error(`Produkten ${o.slug} finns inte.`);
+  const notes: string[] = [];
+  const mediaBase = (o.mediaBase ?? site.url).replace(/\/$/, "");
+  const link = productLink(product, o.linkBase);
+  const media = await collectMedia(product, mediaBase, notes, o.groupIds, { ignoreScore: true });
+  if (media.length === 0) throw new Error("Inga av de valda bildseten gick att använda.");
+  const missing = o.groupIds.filter((id) => !media.some((m) => m.groupId === id));
+  if (missing.length) notes.push(`${missing.length} valda bildset hittades inte eller saknar bild.`);
+
+  const hooks = productHooks[product.slug] ?? [product.short];
+  const campaign = await meta.createCampaign(`${TEST_PREFIX}${product.name} · ${today()} · bildset`);
+  const adset = await meta.createAdSet({ name: `${TEST_PREFIX}${product.name} · bildset`, campaignId: campaign.id, dailyBudget: o.dailyBudget, pixelId: META_PIXEL_ID });
+  const ads: BuildResult["ads"] = [];
+  const decisions: Decision[] = [{ level: "campaign", id: campaign.id, name: `${TEST_PREFIX}${product.name} · bildset`, action: "note", reason: `Utkast från ${media.length} valda bildset (pausad), budget ${o.dailyBudget}/dag`, campaignId: campaign.id }];
+  for (const [i, m] of media.entries()) {
+    try {
+      const ad = await makeAd({ product, angle: imageAngle, media: m, hook: hooks[i % hooks.length]!, adsetId: adset.id, campaignId: campaign.id, link, status: "PAUSED", notes, copyFromImage: true });
+      ads.push(ad);
+      decisions.push({ level: "ad", id: ad.id, name: ad.name, action: "note", reason: ad.score === null ? "Skapad (pausad)" : `Skapad (pausad), granskningspoäng ${ad.score}`, campaignId: campaign.id, adsetId: adset.id });
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : String(e);
+      notes.push(`${m.label}: ${msg}`);
+      decisions.push({ level: "ad", id: `${campaign.id}-${m.groupId}`, name: `bild · ${m.label}`, action: "note", reason: `Annonsen skapades inte: ${msg}`.slice(0, 500), campaignId: campaign.id, adsetId: adset.id });
+    }
+  }
   await log(decisions.map((decision) => ({ decision, applied: true, source: o.source ?? "admin" })));
   return { campaignId: campaign.id, adsetId: adset.id, ads, notes };
 }

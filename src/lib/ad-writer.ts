@@ -85,6 +85,49 @@ async function askText(system: string, user: string): Promise<string> {
   throw new Error("Ingen AI-nyckel för annonstexter.");
 }
 
+/** Som askText, men modellen får också se en bild. Samma leverantörsordning: OpenAI först, annars Anthropic. */
+async function askVision(system: string, user: string, imageUrl: string): Promise<string> {
+  const model = process.env.AD_COPY_MODEL;
+  if (process.env.OPENAI_API_KEY) {
+    const res = await fetch("https://api.openai.com/v1/chat/completions", {
+      method: "POST",
+      headers: { "content-type": "application/json", authorization: `Bearer ${process.env.OPENAI_API_KEY}` },
+      body: JSON.stringify({
+        model: model ?? "gpt-4o",
+        temperature: 0.9,
+        max_tokens: 700,
+        response_format: { type: "json_object" },
+        messages: [
+          { role: "system", content: system },
+          { role: "user", content: [{ type: "text", text: user }, { type: "image_url", image_url: { url: imageUrl, detail: "low" } }] },
+        ],
+      }),
+    });
+    const data = (await res.json()) as { choices?: { message?: { content?: string | null; refusal?: string | null } }[]; error?: { message?: string } };
+    if (!res.ok) throw new Error(`OpenAI: ${data.error?.message ?? res.status}`);
+    const msg = data.choices?.[0]?.message;
+    if (!msg?.content && msg?.refusal) throw new Error(`OpenAI vägrade: ${msg.refusal.slice(0, 200)}`);
+    return msg?.content ?? "";
+  }
+  if (process.env.ANTHROPIC_API_KEY) {
+    const res = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST",
+      headers: { "content-type": "application/json", "x-api-key": process.env.ANTHROPIC_API_KEY, "anthropic-version": "2023-06-01" },
+      body: JSON.stringify({
+        model: model ?? "claude-sonnet-5",
+        max_tokens: 700,
+        temperature: 1,
+        system,
+        messages: [{ role: "user", content: [{ type: "image", source: { type: "url", url: imageUrl } }, { type: "text", text: user }] }],
+      }),
+    });
+    const data = (await res.json()) as { content?: { text?: string }[]; error?: { message?: string } };
+    if (!res.ok) throw new Error(`Anthropic: ${data.error?.message ?? res.status}`);
+    return data.content?.map((c) => c.text ?? "").join("") ?? "";
+  }
+  throw new Error("Ingen AI-nyckel för annonstexter.");
+}
+
 const systemPrompt = `Du är copywriter för Metilde, ett svenskt märke som säljer botaniska kosttillskott i kapselform.
 Du skriver Meta-annonser (Facebook och Instagram) på svenska som ska stoppa scrollen och sälja.
 
@@ -212,6 +255,52 @@ export async function writeAdCopy(o: { product: Product; angle: AdAngle; hook: s
   }
   o.notes?.push(`${o.angle.id}: mallen används i stället för AI-texten.`);
   return templateCopy(o.product, o.angle, o.hook);
+}
+
+/**
+ * Skriver texten utifrån bilden: modellen ser annonsbilden och skriver en text som passar
+ * det den visar (miljö, stämning, det som står på bilden) utan att upprepa bildens text.
+ * Samma regler och samma kontroll som writeAdCopy; mallen för fallbackAngle är reserven.
+ */
+export async function writeAdCopyFromImage(o: { product: Product; imageUrl: string; hook: string; notes?: string[]; avoid?: string; fallbackAngle: AdAngle }): Promise<AdCopy> {
+  const label = "bild";
+  if (!copyAiConfigured()) return templateCopy(o.product, o.fallbackAngle, o.hook);
+  let brief = [
+    `Produkt: ${o.product.name}`,
+    `Pris: ${o.product.price} kr för ${[o.product.variant?.size, o.product.variant?.format].filter(Boolean).join(" ") || "en burk"}`,
+    `Kort beskrivning: ${o.product.short}`,
+    o.product.bullets.length ? `Verifierade fakta (bara dessa får användas):\n- ${o.product.bullets.join("\n- ")}` : "",
+    `Faktamening att bygga på: ${o.hook}`,
+    `Villkor som alltid gäller: fri frakt över ${site.freeShippingOver} kr, 30 dagars ångerrätt på oöppnade produkter, prenumeration ger ${site.subscriptionDiscount} % rabatt och kan pausas eller avslutas när som helst, order före kl. 12 på vardagar skickas samma dag.`,
+    "Bilden är annonsens bild. Titta noga på den: miljön, stämningen, vad som lyfts fram och vilken text som redan står på bilden.",
+    "Skriv en text som hör ihop med just den här bilden: ta upp det bilden visar och förstärk det, i stället för en allmän produkttext. Upprepa inte ord för ord det som redan står på bilden. Påstå aldrig något om bilden som inte syns, och hitta inte på siffror utöver de verifierade fakta.",
+  ]
+    .filter(Boolean)
+    .join("\n");
+  if (o.avoid) brief = `${brief}\n\nEn tidigare text underkändes av granskningen med motiveringen: "${o.avoid}". Undvik det helt den här gången.`;
+  for (let attempt = 0; attempt < 2; attempt++) {
+    try {
+      const raw = parse(await askVision(systemPrompt, brief, o.imageUrl));
+      if (!raw) {
+        brief = `${brief}\n\nDitt förra svar gick inte att tolka. Svara bara med JSON.`;
+        continue;
+      }
+      const copy = {
+        primaryText: clean(raw.primaryText, LIMITS.primaryMax),
+        headline: clean(raw.headline, LIMITS.headlineMax),
+        description: clean(raw.description, LIMITS.descriptionMax),
+      };
+      const problem = validate(copy);
+      if (!problem) return { ...copy, description: copy.description || undefined, source: "ai" };
+      o.notes?.push(`${label}: omskrivning – ${problem}`);
+      brief = `${brief}\n\nDitt förra förslag godkändes inte: ${problem} Skriv om texten utan det, behåll säljtonen och emojisarna.`;
+    } catch (e) {
+      o.notes?.push(`${label}: AI-texten misslyckades (${e instanceof Error ? e.message : e}), mallen används.`);
+      break;
+    }
+  }
+  o.notes?.push(`${label}: mallen används i stället för AI-texten.`);
+  return templateCopy(o.product, o.fallbackAngle, o.hook);
 }
 
 /**

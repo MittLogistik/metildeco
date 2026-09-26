@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { requireAdmin } from "@/lib/auth";
-import { applyLogSuggestion, buildRetargeting, buildTestCampaign, reviewAds } from "@/lib/ads-engine";
+import { applyLogSuggestion, buildFromGroups, buildRetargeting, buildTestCampaign, reviewAds } from "@/lib/ads-engine";
 import * as meta from "@/lib/meta-ads";
 import { supabaseAdmin, supabaseConfigured } from "@/lib/supabase";
 import type { ActionResult } from "../actions";
@@ -24,6 +24,28 @@ export async function createTestCampaign(formData: FormData): Promise<ActionResu
     refresh();
     const notes = r.notes.length ? ` Anmärkningar: ${r.notes.join(" · ")}` : "";
     return { ok: true, message: `Skapade kampanj ${r.campaignId} med ${r.ads.length} annonser (pausade).${notes}` };
+  } catch (e) {
+    return fail(e);
+  }
+}
+
+/** Utkast från valda bildset: AI:n läser varje bild och skriver texten, kampanjen skapas pausad med angiven budget. */
+export async function createAdsFromGroups(formData: FormData): Promise<ActionResult> {
+  await requireAdmin();
+  const slug = String(formData.get("slug") ?? "");
+  const groupIds = formData.getAll("group_id").map(String).filter(Boolean);
+  const dailyBudget = Number(formData.get("daily_budget") ?? 0);
+  const mediaBase = String(formData.get("media_base") ?? "").trim() || undefined;
+  const linkBase = String(formData.get("link_base") ?? "").trim() || undefined;
+  if (!slug) return { ok: false, error: "Produkt saknas." };
+  if (groupIds.length === 0) return { ok: false, error: "Bocka i minst ett bildset i listan nedan." };
+  if (!(dailyBudget >= 1)) return { ok: false, error: "Ange en daglig budget på minst 1." };
+  try {
+    const r = await buildFromGroups({ slug, groupIds, dailyBudget, mediaBase, linkBase, source: "admin" });
+    revalidatePath("/admin/annonser/bilder");
+    refresh();
+    const notes = r.notes.length ? ` Anmärkningar: ${r.notes.join(" · ")}` : "";
+    return { ok: true, message: `Utkast skapat: kampanj ${r.campaignId} med ${r.ads.length} av ${groupIds.length} annonser (pausade), ${dailyBudget}/dag. Aktivera under Annonser.${notes}` };
   } catch (e) {
     return fail(e);
   }

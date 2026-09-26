@@ -10,7 +10,7 @@ import { higgsfieldConfigured, listPresets } from "@/lib/higgsfield";
 import { site } from "@/lib/site";
 import { ActionForm, SubmitButton } from "../../_components/ActionForm";
 import { Card, Input, Select } from "../../_components/fields";
-import { addTextVariantAction, approveGroupAnyway, completeGroupAction, deleteGroupAction, setGroupActive } from "../actions";
+import { addTextVariantAction, approveGroupAnyway, completeGroupAction, createAdsFromGroups, deleteGroupAction, setGroupActive } from "../actions";
 import { CreativeStudio } from "./CreativeStudio";
 import { GenerateForm } from "./GenerateForm";
 import { UploadForm } from "./UploadForm";
@@ -116,12 +116,33 @@ export default async function AdImagesPage({ searchParams }: PageProps<"/admin/a
         </div>
       ) : null}
 
+      {product && groups.length ? (
+        <Card title="Skapa annonser av valda bildset">
+          <p className="mb-3 text-sm text-muted">
+            Bocka i bildseten i listan nedan. AI:n tittar på varje bild och skriver en egen text till den (granskad för hälsopåståenden, mallen som reserv). Resultatet blir en pausad kampanj med en annonsgrupp och en annons per bildset, som du aktiverar under Annonser när du är nöjd.
+          </p>
+          <ActionForm action={createAdsFromGroups} id="from-groups" className="flex flex-wrap items-end gap-3">
+            <input type="hidden" name="slug" value={product.slug} />
+            <input type="hidden" name="media_base" value={mediaBase} />
+            <label className="block text-sm">
+              <span className="mb-1 block font-medium">Daglig budget (USD)</span>
+              <Input name="daily_budget" type="number" defaultValue="10" />
+            </label>
+            <SubmitButton pendingLabel="Skriver texter och skapar annonser …">Skapa utkast (pausat)</SubmitButton>
+          </ActionForm>
+        </Card>
+      ) : null}
+
       <section className="space-y-3">
         <h2 className="font-display text-xl font-medium">Bilder ({groups.length})</h2>
         {groups.length === 0 ? <p className="text-sm text-muted">Inga bilder ännu för den här produkten.</p> : null}
         <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {groups.map((g) => (
-            <li key={g.groupId} className={`rounded-2xl border border-line bg-white p-3 ${(g.feed ?? g.story)?.active ? "" : "opacity-50"}`}>
+            <li key={g.groupId} className={`relative rounded-2xl border border-line bg-white p-3 ${(g.feed ?? g.story)?.active ? "" : "opacity-50"}`}>
+              <label className="absolute left-5 top-5 z-10 flex cursor-pointer items-center gap-1.5 rounded-full bg-white/90 px-2 py-1 text-xs font-medium shadow" title="Välj för Skapa annonser av valda bildset">
+                <input type="checkbox" name="group_id" value={g.groupId} form="from-groups" className="h-4 w-4 accent-primary" />
+                Välj
+              </label>
               <div className="flex gap-2">
                 {g.feed ? (
                   // eslint-disable-next-line @next/next/no-img-element

@@ -16,16 +16,20 @@ export function ActionForm({
   className = "",
   confirm,
   inline = false,
+  id,
 }: {
   action: Action;
   children: ReactNode;
   className?: string;
   confirm?: string;
   inline?: boolean;
+  /** Gör att fält utanför formuläret kan höra till det via attributet form="…" (t.ex. kryssrutor i en lista). */
+  id?: string;
 }) {
   const [state, formAction, pending] = useActionState(async (_prev: ActionResult | null, fd: FormData) => action(fd), null);
   return (
     <form
+      id={id}
       action={formAction}
       className={className}
       onSubmit={(e) => {
