@@ -30,7 +30,7 @@ quiz, presentkort, spåra order, mitt konto, samarbeten/jobba hos oss, fler spr�
 
 ## Statistik och övergivna korgar
 - `/api/track` räknar sidvisningar, unika besökare per dag (hashad IP, `visitors_daily`) och korghändelser (`cart_events_hourly`). Inga cookies.
-- Övergivna korgar kommer från Stripes `checkout.session.expired` (sessionen har 24 h giltighet och återställningslänk). Kräver att händelsen är påslagen i Stripes webhook-destination.
+- Övergivna korgar (`src/lib/abandoned.ts`): kassan samlar in e-post före Stripe och sparar korgen i `abandoned_carts` när kunden trycker Till betalning (`recordCheckoutStart` i `/api/checkout`). Stripes `checkout.session.expired` är bara reserv för kunder som skrev e-posten först hos Stripe. Fyra påminnelser (3 h, 24 h, 3 d, 10 d, `REMINDER_HOURS`) via cron `/api/cron/abandoned` var 15:e minut; stoppas vid köp (`markRecovered` + kontroll mot orders), avregistrering (`/api/unsubscribe`, signerad länk, tabell `email_optouts`) eller admin. Från mejl 2 följer rabattkoden `ABANDONED_DISCOUNT_CODE` (KORG10, `ABANDONED_DISCOUNT_PERCENT` 10) med; länken `/sv/kassa?korg=<id>&kod=KORG10` fyller korgen (`/api/cart/<id>`) och kassan skickar koden så att `/api/checkout` lägger på den som `discounts` (då utan `allow_promotion_codes`). Koden skapas och testas skarpt från `/admin/korgar`.
 - Adminöversikten (`/admin`) visar ett diagram per mått – aldrig flera serier på samma axel.
 
 ## Mitt konto och prenumerationer

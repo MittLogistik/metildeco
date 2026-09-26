@@ -25,6 +25,8 @@ export type CheckoutRequest = {
   email: string | null;
   /** Besökarens id från localStorage, för att knyta ett affiliateklick till ordern. */
   visitorId: string | null;
+  /** Rabattkod som kommit via länk (t.ex. påminnelse om övergiven korg) och ska läggas på automatiskt. */
+  code: string | null;
 };
 
 export type PricedLine = CheckoutLine & {
@@ -56,7 +58,8 @@ export function parseCheckoutRequest(body: unknown): CheckoutRequest {
   if (lines.length === 0) throw new Error("Varukorgen är tom.");
   const email = clean(b.email, 200).toLowerCase();
   const visitorId = clean(b.visitorId, 100) || null;
-  return { lines, email: /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email) ? email : null, visitorId };
+  const code = clean(b.code, 40).toUpperCase().replace(/[^A-Z0-9_-]/g, "") || null;
+  return { lines, email: /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email) ? email : null, visitorId, code };
 }
 
 /** Sätter pris på varje rad utifrån katalogen. Okända eller slutsålda varor ger fel. */

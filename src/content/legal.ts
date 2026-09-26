@@ -77,6 +77,7 @@ const privacy: LegalDoc = {
         "Betaluppgifter: betalsätt, transaktions-ID och betalstatus. Fullständiga kortnummer lagras aldrig av oss utan hanteras av vår betalleverantör.",
         "Supportuppgifter: meddelanden, ärenden och bilagor du skickar till kundservice.",
         "Marknadsföringsuppgifter: e-postadress och samtyckesstatus om du prenumererar på nyhetsbrevet.",
+        "Varukorgsuppgifter: e-postadress och innehållet i varukorgen när du påbörjat ett köp i kassan, så att vi kan spara korgen och påminna dig per e-post (högst fyra gånger under tio dagar). Varje påminnelse har en länk för att avsäga sig fler.",
         "Tekniska uppgifter: IP-adress, enhets- och webbläsartyp, besökta sidor och interaktioner, insamlade via cookies och liknande tekniker.",
       ],
     },

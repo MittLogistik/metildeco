@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { Checkout } from "@/components/checkout/Checkout";
 
 export const metadata: Metadata = {
@@ -7,6 +8,11 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 };
 
+/** Kassan läser ?korg och ?kod från påminnelselänkar, därför Suspense runt klientkomponenten. */
 export default function CheckoutPage() {
-  return <Checkout />;
+  return (
+    <Suspense fallback={null}>
+      <Checkout />
+    </Suspense>
+  );
 }

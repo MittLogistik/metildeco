@@ -4,6 +4,7 @@ import { routes } from "@/lib/routes";
 import { cheapestSwedenRate, shippingCost } from "@/lib/shipping";
 import { stripe, stripeConfigured } from "@/lib/stripe";
 import { latestClick } from "@/lib/affiliate";
+import { promotionCodeId, recordCheckoutStart } from "@/lib/abandoned";
 import { CONSENT_COOKIE } from "@/lib/consent";
 
 /**
@@ -50,13 +51,17 @@ export async function POST(request: Request) {
       shipping_address_collection: { allowed_countries: ["SE"] },
       phone_number_collection: { enabled: true },
       billing_address_collection: "auto",
-      allow_promotion_codes: true,
       expires_at: Math.floor(Date.now() / 1000) + 24 * 3600,
       after_expiration: { recovery: { enabled: true, allow_promotion_codes: true } },
       success_url: `${origin}${routes.home}/tack?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${origin}${routes.checkout}`,
       metadata,
     };
+    // En kod från en påminnelselänk läggs på direkt; annars får kunden skriva in en kod hos Stripe.
+    // Stripe tillåter inte båda samtidigt.
+    const promo = await promotionCodeId(payload.code);
+    if (promo) params.discounts = [{ promotion_code: promo }];
+    else params.allow_promotion_codes = true;
 
     if (hasSub) {
       // Stripe stöder inte fraktalternativ i subscription-läget. Prenumerationer är fraktfria;
@@ -86,6 +91,8 @@ export async function POST(request: Request) {
 
     const session = await stripe().checkout.sessions.create(params);
     if (!session.url) throw new Error("Stripe returnerade ingen betalningslänk.");
+    // Korgen sparas nu, med e-posten från vår kassa, så att påminnelser kan gå redan efter tre timmar
+    if (payload.email) await recordCheckoutStart({ sessionId: session.id, email: payload.email, priced, subtotal: subtotalOf(priced) }).catch((e: unknown) => console.error("[korg]", e instanceof Error ? e.message : e));
     return Response.json({ url: session.url });
   } catch (e) {
     const message = e instanceof Error ? e.message : "Kunde inte starta betalningen.";
