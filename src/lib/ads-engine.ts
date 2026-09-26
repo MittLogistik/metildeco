@@ -353,19 +353,30 @@ export async function buildFromGroups(o: FromGroupsOptions): Promise<BuildResult
   const campaign = await meta.createCampaign(`${TEST_PREFIX}${product.name} · ${today()} · bildset`);
   const adset = await meta.createAdSet({ name: `${TEST_PREFIX}${product.name} · bildset`, campaignId: campaign.id, dailyBudget: o.dailyBudget, pixelId: META_PIXEL_ID });
   const ads: BuildResult["ads"] = [];
-  const decisions: Decision[] = [{ level: "campaign", id: campaign.id, name: `${TEST_PREFIX}${product.name} · bildset`, action: "note", reason: `Utkast från ${media.length} valda bildset (pausad), budget ${o.dailyBudget}/dag`, campaignId: campaign.id }];
+  const source = o.source ?? "admin";
+  // Loggas steg för steg, så att det syns hur långt bygget kom även om serverfunktionen skulle avbrytas
+  await log([{ decision: { level: "campaign", id: campaign.id, name: `${TEST_PREFIX}${product.name} · bildset`, action: "note", reason: `Utkast från ${media.length} valda bildset (pausad), budget ${o.dailyBudget}/dag${o.skipReview ? ", granskningen stoppar inte" : ""}`, campaignId: campaign.id }, applied: true, source }]);
+  const started = Date.now();
   for (const [i, m] of media.entries()) {
+    // Vercel avbryter funktionen efter maxDuration; hellre färre annonser än en avbruten körning utan spår
+    if (Date.now() - started > 240_000) {
+      const left = media.length - i;
+      notes.push(`Tiden tog slut efter ${i} annonser. ${left} bildset återstår – välj dem och skapa ett utkast till.`);
+      await log([{ decision: { level: "campaign", id: campaign.id, name: `${TEST_PREFIX}${product.name} · bildset`, action: "note", reason: `Avbröt i tid: ${i} av ${media.length} annonser skapades. Välj de ${left} återstående bildseten och skapa ett nytt utkast.`, campaignId: campaign.id }, applied: true, source }]);
+      break;
+    }
+    let decision: Decision;
     try {
       const ad = await makeAd({ product, angle: imageAngle, media: m, hook: hooks[i % hooks.length]!, adsetId: adset.id, campaignId: campaign.id, link, status: "PAUSED", notes, copyFromImage: true, reviewMode: o.skipReview ? "warn" : "block" });
       ads.push(ad);
-      decisions.push({ level: "ad", id: ad.id, name: ad.name, action: "note", reason: ad.score === null ? "Skapad (pausad)" : `Skapad (pausad), granskningspoäng ${ad.score}`, campaignId: campaign.id, adsetId: adset.id });
+      decision = { level: "ad", id: ad.id, name: ad.name, action: "note", reason: ad.score === null ? "Skapad (pausad)" : `Skapad (pausad), granskningspoäng ${ad.score}`, campaignId: campaign.id, adsetId: adset.id };
     } catch (e) {
       const msg = e instanceof Error ? e.message : String(e);
       notes.push(`${m.label}: ${msg}`);
-      decisions.push({ level: "ad", id: `${campaign.id}-${m.groupId}`, name: `bild · ${m.label}`, action: "note", reason: `Annonsen skapades inte: ${msg}`.slice(0, 500), campaignId: campaign.id, adsetId: adset.id });
+      decision = { level: "ad", id: `${campaign.id}-${m.groupId}`, name: `bild · ${m.label}`, action: "note", reason: `Annonsen skapades inte: ${msg}`.slice(0, 500), campaignId: campaign.id, adsetId: adset.id };
     }
+    await log([{ decision, applied: true, source }]);
   }
-  await log(decisions.map((decision) => ({ decision, applied: true, source: o.source ?? "admin" })));
   return { campaignId: campaign.id, adsetId: adset.id, ads, notes };
 }
 
