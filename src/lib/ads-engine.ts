@@ -1,7 +1,7 @@
 import "server-only";
 import { angles, productHooks, type AdAngle } from "@/content/ad-copy";
 import { templateCopy, writeAdCopy } from "./ad-writer";
-import { generateScenes, groupScore, listCreativeGroups, type CreativeGroup } from "./ad-images";
+import { groupScore, listCreativeGroups } from "./ad-images";
 import { minImageScore, qaConfigured, reviewAd } from "./ad-qa";
 import { getProduct } from "./catalog";
 import { META_PIXEL_ID } from "./meta";
@@ -327,7 +327,8 @@ type Variant = { ad_id: string; campaign_id: string; adset_id: string; product_s
 
 /**
  * Bygger nya annonser från en vinnare: samma bild med nya textvinklar, och samma text med nya bilder.
- * Nya bilder genereras via Higgsfield om produkten saknar oanvända scener.
+ * Bara bilder som redan finns används (egna uppladdade och godkända i Creative Studio) – inga nya
+ * genereras. Saknas oanvända bilder blir det färre varianter och en anmärkning om att ladda upp fler.
  */
 export async function iterateFromAd(o: { adId: string; mediaBase: string; linkBase?: string; status?: "ACTIVE" | "PAUSED"; source?: string }): Promise<{ ads: { id: string; name: string; score: number | null }[]; notes: string[] }> {
   const db = supabaseAdmin();
@@ -358,19 +359,10 @@ export async function iterateFromAd(o: { adId: string; mediaBase: string; linkBa
     }
   }
 
-  // 2) Samma vinkel, nya bilder – oanvända grupper först, annars nya scener
+  // 2) Samma vinkel, nya bilder – bara bilder som redan finns och inte använts med den här vinkeln
   if (winnerAngle) {
-    let fresh = allMedia.filter((m) => m.groupId && !usedKeys.has(`${v.angle_id}·${m.groupId}`));
-    if (fresh.length < half) {
-      try {
-        const gen = await generateScenes({ slug: product.slug, count: half - fresh.length, mediaBase: o.mediaBase, parentGroupId: v.group_id ?? undefined });
-        notes.push(...gen.notes);
-        const extra = await collectMedia(product, o.mediaBase, notes, gen.groups.map((g: CreativeGroup) => g.groupId));
-        fresh = fresh.concat(extra);
-      } catch (e) {
-        notes.push(`Nya scener: ${e instanceof Error ? e.message : e}`);
-      }
-    }
+    const fresh = allMedia.filter((m) => m.groupId && !usedKeys.has(`${v.angle_id}·${m.groupId}`));
+    if (fresh.length < half) notes.push(`Bara ${fresh.length} oanvända bilder för ${product.name} – ladda upp fler under Annonsbilder för fler varianter.`);
     for (const m of fresh.slice(0, half)) {
       try {
         ads.push(await makeAd({ product, angle: winnerAngle, media: m, hook: hooks[ads.length % hooks.length]!, adsetId: v.adset_id, campaignId: v.campaign_id, link, status, parentAdId: v.ad_id, notes }));

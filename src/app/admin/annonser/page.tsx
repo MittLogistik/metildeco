@@ -15,7 +15,7 @@ const applicable = new Set(["pause", "activate", "budget", "iterate"]);
 const applyLabel: Record<string, string> = { pause: "Pausa nu", activate: "Aktivera nu", budget: "Sätt budgeten", iterate: "Iterera nu" };
 const applyConfirm: Record<string, string | undefined> = {
   activate: "Aktivera i Meta? Då börjar den kosta pengar.",
-  iterate: `Skapa ${rules.iterationsPerWinner} nya aktiva varianter från vinnaren? Nya scener kan genereras och de börjar kosta pengar direkt.`,
+  iterate: `Skapa upp till ${rules.iterationsPerWinner} nya aktiva varianter från vinnaren? Bara dina befintliga bilder används. De börjar kosta pengar direkt.`,
 };
 type VariantRow = { ad_id: string; ad_score: number | null; ad_review: { issues: string[]; notes: string } | null };
 
@@ -43,7 +43,7 @@ function ToggleStatus({ id, name, level, status }: { id: string; name: string; l
   );
 }
 
-/** Kampanjbygge och iteration anropar Meta och Higgsfield många gånger. */
+/** Kampanjbygge och iteration anropar Meta många gånger. */
 export const maxDuration = 300;
 
 export default async function AdsPage() {
@@ -261,7 +261,7 @@ export default async function AdsPage() {
                           <td className="py-2 text-right">
                             <span className="inline-flex gap-1">
                               {c.name.startsWith(TEST_PREFIX) ? (
-                                <ActionForm action={iterateAd} inline confirm={`Skapa ${rules.iterationsPerWinner} nya varianter från ${a.name}? Nya scener kan genereras via Higgsfield.`}>
+                                <ActionForm action={iterateAd} inline confirm={`Skapa upp till ${rules.iterationsPerWinner} nya varianter från ${a.name}? Bara dina befintliga bilder används, inga nya genereras.`}>
                                   <input type="hidden" name="ad_id" value={a.id} />
                                   <input type="hidden" name="status" value={a.effective_status === "ACTIVE" ? "ACTIVE" : "PAUSED"} />
                                   <SubmitButton variant="outline">Iterera</SubmitButton>
