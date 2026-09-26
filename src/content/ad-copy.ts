@@ -73,5 +73,24 @@ export const angles: AdAngle[] = [
   },
 ];
 
+/**
+ * Vinklar för retargeting: personer som redan besökt sajten eller lagt varan i korgen.
+ * Används aldrig i testkampanjer mot nya besökare. Samma regel: inga hälsopåståenden.
+ */
+export const retargetingAngles: AdAngle[] = [
+  {
+    id: "varukorg",
+    text: "{name} ligger kvar i din varukorg.\n\n{hook}\n\nSkickas samma dag vid order före 12, fri frakt över 499 kr och 30 dagars ångerrätt på oöppnade produkter.",
+    headline: "Din varukorg väntar",
+    description: "Skickas samma dag · Fri frakt över 499 kr",
+  },
+  {
+    id: "paminnelse",
+    text: "Du tittade på {name} hos oss.\n\n{hook}\n\nVill du veta mer? Extraktstyrka, dos och analysresultat står öppet på produktsidan. Prenumerera och spara 15 % på varje leverans.",
+    headline: "Fortfarande nyfiken på {name}?",
+    description: "Tillverkad i Sverige · Tredjepartstestad",
+  },
+];
+
 export const fillCopy = (template: string, vars: { name: string; hook: string }) =>
   template.replace(/\{name\}/g, vars.name).replace(/\{hook\}/g, vars.hook).trim();

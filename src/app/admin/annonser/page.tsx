@@ -1,12 +1,12 @@
 import { requireAdmin } from "@/lib/auth";
-import { rules, TEST_PREFIX } from "@/lib/ads-engine";
+import { RETARGET_PREFIX, retargetingAudiences, rules, TEST_PREFIX } from "@/lib/ads-engine";
 import { getCatalog } from "@/lib/catalog";
 import * as meta from "@/lib/meta-ads";
 import { site } from "@/lib/site";
 import { supabaseAdmin, supabaseConfigured } from "@/lib/supabase";
 import { ActionForm, SubmitButton } from "../_components/ActionForm";
 import { Card, Field, Input, Select } from "../_components/fields";
-import { applySuggestion, createTestCampaign, iterateAd, rereview, runReview, setAdSetBudget, setObjectStatus } from "./actions";
+import { applySuggestion, createRetargeting, createTestCampaign, iterateAd, rereview, runReview, setAdSetBudget, setObjectStatus } from "./actions";
 import Link from "next/link";
 
 type LogRow = { id: string; created_at: string; name: string; action: string; reason: string; applied: boolean; source: string };
@@ -168,6 +168,41 @@ export default async function AdsPage() {
         </Card>
       </div>
 
+      <Card title="Retargeting">
+        <p className="mb-4 text-sm text-muted">
+          Två annonsgrupper mot egna besökare: <strong>Varukorg 7 dagar</strong> (lagt i korgen men inte köpt) och <strong>Besökare 30 dagar</strong> (varit på sajten, inte i korgen). Köpare senaste 30 dagarna utesluts.
+          Målgrupperna skapas från pixeln första gången ({Object.values(retargetingAudiences).map((a) => a.name).join(", ")}). Texterna är påminnelser utan hälsopåståenden. Allt skapas pausat, och granskningens regler rör inte retargeting.
+        </p>
+        <ActionForm action={createRetargeting} className="space-y-4">
+          <fieldset>
+            <legend className="mb-1 block text-sm font-medium">Produkter</legend>
+            <div className="grid gap-1.5 sm:grid-cols-2">
+              {products.map((p) => (
+                <label key={p.slug} className="flex items-center gap-2 text-sm">
+                  <input type="checkbox" name="slug" value={p.slug} className="h-4 w-4 accent-primary" />
+                  {p.name}
+                </label>
+              ))}
+            </div>
+          </fieldset>
+          <div className="grid gap-4 sm:grid-cols-3">
+            <Field label={`Varukorg 7 dagar (${cur}/dag)`} hint="Liten men köpstark grupp. 3–5 räcker ofta.">
+              <Input name="cart_budget" type="number" defaultValue="4" />
+            </Field>
+            <Field label={`Besökare 30 dagar (${cur}/dag)`} hint="0 hoppar över gruppen.">
+              <Input name="visitors_budget" type="number" defaultValue="6" />
+            </Field>
+            <Field label="Bilder per produkt" hint="1–4. Varje bild blir en annons per grupp.">
+              <Input name="images_per_product" type="number" defaultValue="2" />
+            </Field>
+          </div>
+          <Field label="Bas-URL för packshots">
+            <Input name="media_base" defaultValue={site.indexable ? site.url : "https://metildeco.vercel.app"} />
+          </Field>
+          <SubmitButton>Skapa retargeting (pausad)</SubmitButton>
+        </ActionForm>
+      </Card>
+
       <section className="space-y-4">
         <h2 className="font-display text-xl font-medium">Kampanjer</h2>
         {tree.length === 0 && configured && !error ? <p className="text-sm text-muted">Inga kampanjer i kontot.</p> : null}
@@ -179,7 +214,7 @@ export default async function AdsPage() {
                   {c.name} <StatusPill status={c.effective_status} />
                 </h3>
                 <p className="text-xs text-muted">
-                  {c.objective} · skapad {c.created_time.slice(0, 10)} · {c.name.startsWith(TEST_PREFIX) ? "styrs av motorn" : "manuell kampanj"}
+                  {c.objective} · skapad {c.created_time.slice(0, 10)} · {c.name.startsWith(TEST_PREFIX) ? "styrs av motorn" : c.name.startsWith(RETARGET_PREFIX) ? "retargeting, styrs manuellt" : "manuell kampanj"}
                 </p>
               </div>
               <ToggleStatus id={c.id} name={c.name} level="campaign" status={c.effective_status} />

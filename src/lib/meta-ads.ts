@@ -199,6 +199,75 @@ export const createAdSet = (s: AdSetSpec) =>
     },
   });
 
+/* ------------------------------ Målgrupper (retargeting) ------------------------------ */
+
+export type CustomAudience = { id: string; name: string; subtype?: string; approximate_count_lower_bound?: number; approximate_count_upper_bound?: number; delivery_status?: { code: number; description: string } };
+
+export const listCustomAudiences = () =>
+  call<{ data: CustomAudience[] }>("GET", `${adAccount()}/customaudiences`, {
+    fields: "id,name,subtype,approximate_count_lower_bound,approximate_count_upper_bound,delivery_status",
+    limit: 200,
+  }).then((r) => r.data ?? []);
+
+/**
+ * Webbplatsmålgrupp från pixeln: alla som utlöst händelsen de senaste dagarna.
+ * Fylls med historik (prefill) så att den går att använda direkt.
+ */
+export const createWebsiteAudience = (o: { name: string; pixelId: string; event: "PageView" | "ViewContent" | "AddToCart" | "Purchase"; retentionDays: number; description?: string }) =>
+  call<{ id: string }>("POST", `${adAccount()}/customaudiences`, {
+    name: o.name,
+    subtype: "WEBSITE",
+    description: o.description ?? "",
+    prefill: true,
+    rule: JSON.stringify({
+      inclusions: {
+        operator: "or",
+        rules: [
+          {
+            event_sources: [{ id: o.pixelId, type: "pixel" }],
+            retention_seconds: o.retentionDays * 86400,
+            filter: { operator: "and", filters: [{ field: "event", operator: "eq", value: o.event }] },
+          },
+        ],
+      },
+    }),
+  });
+
+export type RetargetingAdSetSpec = {
+  name: string;
+  campaignId: string;
+  dailyBudget: number;
+  pixelId: string;
+  /** Målgrupper som ska nås respektive uteslutas (custom audience-id). */
+  include: string[];
+  exclude: string[];
+  countries?: string[];
+};
+
+/** Annonsgrupp mot egna målgrupper, utan Advantage+-breddning: bara de som redan varit på sajten nås. */
+export const createRetargetingAdSet = (s: RetargetingAdSetSpec) =>
+  call<{ id: string }>("POST", `${adAccount()}/adsets`, {
+    name: s.name,
+    campaign_id: s.campaignId,
+    status: "PAUSED",
+    daily_budget: budgetUnits(s.dailyBudget),
+    billing_event: "IMPRESSIONS",
+    optimization_goal: "OFFSITE_CONVERSIONS",
+    bid_strategy: "LOWEST_COST_WITHOUT_CAP",
+    promoted_object: { pixel_id: s.pixelId, custom_event_type: "PURCHASE" },
+    targeting: {
+      geo_locations: { countries: s.countries ?? ["SE"] },
+      age_min: 18,
+      age_max: 65,
+      custom_audiences: s.include.map((id) => ({ id })),
+      excluded_custom_audiences: s.exclude.map((id) => ({ id })),
+      targeting_automation: { advantage_audience: 0 },
+      publisher_platforms: ["facebook", "instagram"],
+      facebook_positions: [...placements.feed.facebook_positions, ...placements.story.facebook_positions],
+      instagram_positions: [...placements.feed.instagram_positions, ...placements.story.instagram_positions],
+    },
+  });
+
 export type CreativeSpec = {
   name: string;
   pageId: string;

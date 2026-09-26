@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { requireAdmin } from "@/lib/auth";
-import { applyLogSuggestion, buildTestCampaign, reviewAds } from "@/lib/ads-engine";
+import { applyLogSuggestion, buildRetargeting, buildTestCampaign, reviewAds } from "@/lib/ads-engine";
 import * as meta from "@/lib/meta-ads";
 import { supabaseAdmin, supabaseConfigured } from "@/lib/supabase";
 import type { ActionResult } from "../actions";
@@ -24,6 +24,28 @@ export async function createTestCampaign(formData: FormData): Promise<ActionResu
     refresh();
     const notes = r.notes.length ? ` Anmärkningar: ${r.notes.join(" · ")}` : "";
     return { ok: true, message: `Skapade kampanj ${r.campaignId} med ${r.ads.length} annonser (pausade).${notes}` };
+  } catch (e) {
+    return fail(e);
+  }
+}
+
+/** Retargeting: varukorgar senaste 7 dagarna och besökare senaste 30, köpare uteslutna. Skapas pausat. */
+export async function createRetargeting(formData: FormData): Promise<ActionResult> {
+  await requireAdmin();
+  const slugs = formData.getAll("slug").map(String).filter(Boolean);
+  const cartBudget = Number(formData.get("cart_budget") ?? 0);
+  const visitorsBudget = Number(formData.get("visitors_budget") ?? 0);
+  const imagesPerProduct = Number(formData.get("images_per_product") ?? 2);
+  const mediaBase = String(formData.get("media_base") ?? "").trim() || undefined;
+  const linkBase = String(formData.get("link_base") ?? "").trim() || undefined;
+  if (slugs.length === 0) return { ok: false, error: "Välj minst en produkt." };
+  if (!(cartBudget >= 1) && !(visitorsBudget >= 1)) return { ok: false, error: "Ange en daglig budget på minst 1 för minst en av annonsgrupperna." };
+  try {
+    const r = await buildRetargeting({ slugs, cartBudget, visitorsBudget, imagesPerProduct, mediaBase, linkBase, source: "admin" });
+    refresh();
+    const created = r.adsets.map((s) => `${s.name}: ${s.ads.length} annonser`).join(" · ");
+    const notes = r.notes.length ? ` Anmärkningar: ${r.notes.join(" · ")}` : "";
+    return { ok: true, message: `Retargeting skapad (pausad) i kampanj ${r.campaignId}. ${created}.${notes}` };
   } catch (e) {
     return fail(e);
   }

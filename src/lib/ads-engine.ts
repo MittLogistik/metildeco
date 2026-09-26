@@ -1,5 +1,5 @@
 import "server-only";
-import { angles, productHooks, type AdAngle } from "@/content/ad-copy";
+import { angles, productHooks, retargetingAngles, type AdAngle } from "@/content/ad-copy";
 import { templateCopy, writeAdCopy } from "./ad-writer";
 import { groupScore, listCreativeGroups } from "./ad-images";
 import { minImageScore, qaConfigured, reviewAd } from "./ad-qa";
@@ -306,6 +306,107 @@ export async function buildTestCampaign(o: BuildOptions): Promise<BuildResult> {
   if (ads.length < adsCount) notes.push(`${ads.length} av ${adsCount} annonser skapades. ${media.length} bilduppsättningar och ${angles.length} textvinklar fanns att kombinera.`);
   await log(decisions.map((decision) => ({ decision, applied: true, source: o.source ?? "admin" })));
   return { campaignId: campaign.id, adsetId: adset.id, ads, notes };
+}
+
+/* ------------------------------ Retargeting ------------------------------ */
+
+export const RETARGET_PREFIX = "Retargeting · ";
+
+/** Målgrupperna motorn skapar i annonskontot. Namnen är nyckeln: finns de redan återanvänds de. */
+export const retargetingAudiences = {
+  visitors: { name: "Metilde · Besökare 30 dagar", event: "PageView" as const, days: 30 },
+  cart: { name: "Metilde · Varukorg 7 dagar", event: "AddToCart" as const, days: 7 },
+  buyers: { name: "Metilde · Köpare 30 dagar", event: "Purchase" as const, days: 30 },
+};
+
+export type RetargetingOptions = {
+  /** Produkter som får annonser i båda annonsgrupperna. */
+  slugs: string[];
+  /** Daglig budget per annonsgrupp i kontots valuta. */
+  cartBudget: number;
+  visitorsBudget: number;
+  /** Bilder per produkt och annonsgrupp. */
+  imagesPerProduct?: number;
+  mediaBase?: string;
+  linkBase?: string;
+  source?: string;
+};
+
+export type RetargetingResult = { campaignId: string; adsets: { id: string; name: string; ads: { id: string; name: string; score: number | null }[] }[]; audiences: Record<string, string>; notes: string[] };
+
+/**
+ * Retargeting mot egna besökare: en annonsgrupp för varukorgar senaste 7 dagarna och en för
+ * besökare senaste 30 dagarna. Köpare senaste 30 dagarna utesluts, och varukorgsgruppen
+ * utesluts ur besökargruppen så att ingen nås av båda. Målgrupperna skapas från pixeln
+ * (eller återanvänds om de finns), kampanjen återanvänds om den finns. Allt skapas pausat.
+ */
+export async function buildRetargeting(o: RetargetingOptions): Promise<RetargetingResult> {
+  if (!meta.adsConfigured()) throw new Error("META_ADS_TOKEN eller META_AD_ACCOUNT_ID saknas.");
+  if (!process.env.META_PAGE_ID) throw new Error("META_PAGE_ID saknas.");
+  if (o.slugs.length === 0) throw new Error("Välj minst en produkt.");
+  const notes: string[] = [];
+  const mediaBase = (o.mediaBase ?? site.url).replace(/\/$/, "");
+  const perProduct = Math.min(Math.max(o.imagesPerProduct ?? 2, 1), 4);
+
+  // 1) Målgrupper
+  const existing = await meta.listCustomAudiences();
+  const audiences: Record<string, string> = {};
+  for (const [key, spec] of Object.entries(retargetingAudiences)) {
+    const found = existing.find((a) => a.name === spec.name);
+    if (found) {
+      audiences[key] = found.id;
+      continue;
+    }
+    const created = await meta.createWebsiteAudience({ name: spec.name, pixelId: META_PIXEL_ID, event: spec.event, retentionDays: spec.days, description: "Skapad av Metildes annonsmotor." });
+    audiences[key] = created.id;
+    notes.push(`Målgruppen "${spec.name}" skapades. Den fylls på från pixelns historik och kan vara liten första dagarna.`);
+  }
+
+  // 2) Kampanj (återanvänds)
+  const campaignName = `${RETARGET_PREFIX}Metilde`;
+  const campaigns = await meta.listCampaigns();
+  const campaignId = campaigns.find((c) => c.name === campaignName)?.id ?? (await meta.createCampaign(campaignName)).id;
+
+  // 3) Annonsgrupper
+  const stamp = today();
+  const groups: { key: "cart" | "visitors"; name: string; budget: number; include: string[]; exclude: string[]; angle: AdAngle }[] = [
+    { key: "cart", name: `${RETARGET_PREFIX}Varukorg 7 dagar · ${stamp}`, budget: o.cartBudget, include: [audiences.cart!], exclude: [audiences.buyers!], angle: retargetingAngles.find((a) => a.id === "varukorg")! },
+    { key: "visitors", name: `${RETARGET_PREFIX}Besökare 30 dagar · ${stamp}`, budget: o.visitorsBudget, include: [audiences.visitors!], exclude: [audiences.buyers!, audiences.cart!], angle: retargetingAngles.find((a) => a.id === "paminnelse")! },
+  ];
+  const decisions: Decision[] = [];
+  const adsets: RetargetingResult["adsets"] = [];
+  for (const g of groups) {
+    if (!(g.budget >= 1)) {
+      notes.push(`${g.name}: ingen budget angiven, hoppades över.`);
+      continue;
+    }
+    const adset = await meta.createRetargetingAdSet({ name: g.name, campaignId, dailyBudget: g.budget, pixelId: META_PIXEL_ID, include: g.include, exclude: g.exclude });
+    decisions.push({ level: "adset", id: adset.id, name: g.name, action: "note", reason: `Retargeting skapad (pausad), budget ${g.budget}/dag`, campaignId });
+    const ads: { id: string; name: string; score: number | null }[] = [];
+    for (const slug of o.slugs) {
+      const product = await getProduct(slug);
+      if (!product) {
+        notes.push(`${slug}: produkten finns inte.`);
+        continue;
+      }
+      const link = productLink(product, o.linkBase);
+      const hooks = productHooks[product.slug] ?? [product.short];
+      const media = (await collectMedia(product, mediaBase, notes)).slice(0, perProduct);
+      if (media.length === 0) notes.push(`${product.name}: inga bilder att annonsera med.`);
+      for (const [i, m] of media.entries()) {
+        try {
+          const ad = await makeAd({ product, angle: g.angle, media: m, hook: hooks[i % hooks.length]!, adsetId: adset.id, campaignId, link, status: "PAUSED", notes });
+          ads.push(ad);
+          decisions.push({ level: "ad", id: ad.id, name: `${product.name} · ${ad.name}`, action: "note", reason: ad.score === null ? "Skapad (pausad)" : `Skapad (pausad), granskningspoäng ${ad.score}`, campaignId, adsetId: adset.id });
+        } catch (e) {
+          notes.push(`${product.name} · ${m.label}: ${e instanceof Error ? e.message : e}`);
+        }
+      }
+    }
+    adsets.push({ id: adset.id, name: g.name, ads });
+  }
+  await log(decisions.map((decision) => ({ decision, applied: true, source: o.source ?? "admin" })));
+  return { campaignId, adsets, audiences, notes };
 }
 
 /** Granskar en befintlig annons på nytt utifrån sparad text och bild. Pausar den om den underkänns. */
