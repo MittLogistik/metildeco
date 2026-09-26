@@ -37,11 +37,12 @@ export async function createAdsFromGroups(formData: FormData): Promise<ActionRes
   const dailyBudget = Number(formData.get("daily_budget") ?? 0);
   const mediaBase = String(formData.get("media_base") ?? "").trim() || undefined;
   const linkBase = String(formData.get("link_base") ?? "").trim() || undefined;
+  const skipReview = formData.get("skip_review") === "on";
   if (!slug) return { ok: false, error: "Produkt saknas." };
   if (groupIds.length === 0) return { ok: false, error: "Bocka i minst ett bildset i listan nedan." };
   if (!(dailyBudget >= 1)) return { ok: false, error: "Ange en daglig budget på minst 1." };
   try {
-    const r = await buildFromGroups({ slug, groupIds, dailyBudget, mediaBase, linkBase, source: "admin" });
+    const r = await buildFromGroups({ slug, groupIds, dailyBudget, mediaBase, linkBase, skipReview, source: "admin" });
     revalidatePath("/admin/annonser/bilder");
     refresh();
     const notes = r.notes.length ? ` Anmärkningar: ${r.notes.join(" · ")}` : "";

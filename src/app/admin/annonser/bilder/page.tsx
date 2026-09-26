@@ -128,6 +128,13 @@ export default async function AdImagesPage({ searchParams }: PageProps<"/admin/a
               <span className="mb-1 block font-medium">Daglig budget (USD)</span>
               <Input name="daily_budget" type="number" defaultValue="10" />
             </label>
+            <label className="flex items-start gap-2 text-sm">
+              <input type="checkbox" name="skip_review" className="mt-0.5 h-4 w-4 accent-primary" />
+              <span>
+                <span className="font-medium">Skapa även om granskningen underkänner</span>
+                <span className="block text-xs text-muted">Granskaren straffar orden Energy och Vitality som står på etiketten. Poängen sparas ändå och syns i kampanjträdet. Du ansvarar för att texten inte innehåller hälsopåståenden.</span>
+              </span>
+            </label>
             <SubmitButton pendingLabel="Skriver texter och skapar annonser …">Skapa utkast (pausat)</SubmitButton>
           </ActionForm>
         </Card>

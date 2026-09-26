@@ -188,7 +188,7 @@ async function collectMedia(product: Product, mediaBase: string, notes: string[]
   return media;
 }
 
-async function makeAd(o: { product: Product; angle: AdAngle; media: Media; hook: string; adsetId: string; campaignId: string; link: string; status: "ACTIVE" | "PAUSED"; parentAdId?: string; notes?: string[]; copyFromImage?: boolean }) {
+async function makeAd(o: { product: Product; angle: AdAngle; media: Media; hook: string; adsetId: string; campaignId: string; link: string; status: "ACTIVE" | "PAUSED"; parentAdId?: string; notes?: string[]; copyFromImage?: boolean; reviewMode?: "block" | "warn" }) {
   const pageId = process.env.META_PAGE_ID!;
   const name = `${o.angle.id} · ${o.media.label}`;
   // Texten skrivs av AI i vinkelns anda, med mallen som reserv. Med copyFromImage läser modellen bilden och skriver texten till den.
@@ -212,7 +212,12 @@ async function makeAd(o: { product: Product; angle: AdAngle; media: Media; hook:
       copy = next;
       review = await reviewAd({ ...text, imageUrl: o.media.feedUrl, product: o.product });
     }
-    if (review.verdict === "reject") throw new Error(`underkänd av granskningen (${review.score}): ${review.issues.join("; ") || review.notes}`);
+    if (review.verdict === "reject") {
+      const why = `underkänd av granskningen (${review.score}): ${review.issues.join("; ") || review.notes}`;
+      // Admin kan välja att skapa annonsen ändå; poängen sparas så att den syns i kampanjträdet
+      if (o.reviewMode === "warn") o.notes?.push(`${name}: skapad trots att den är ${why}`);
+      else throw new Error(why);
+    }
   }
   const { primaryText: finalText, headline: finalHeadline, description: finalDescription } = text;
   const creative = await meta.createPlacementCreative({
@@ -318,6 +323,8 @@ export type FromGroupsOptions = {
   slug: string;
   groupIds: string[];
   dailyBudget: number;
+  /** Skapa annonsen även om AI-granskningen underkänner texten (poängen sparas ändå). */
+  skipReview?: boolean;
   mediaBase?: string;
   linkBase?: string;
   source?: string;
@@ -349,7 +356,7 @@ export async function buildFromGroups(o: FromGroupsOptions): Promise<BuildResult
   const decisions: Decision[] = [{ level: "campaign", id: campaign.id, name: `${TEST_PREFIX}${product.name} · bildset`, action: "note", reason: `Utkast från ${media.length} valda bildset (pausad), budget ${o.dailyBudget}/dag`, campaignId: campaign.id }];
   for (const [i, m] of media.entries()) {
     try {
-      const ad = await makeAd({ product, angle: imageAngle, media: m, hook: hooks[i % hooks.length]!, adsetId: adset.id, campaignId: campaign.id, link, status: "PAUSED", notes, copyFromImage: true });
+      const ad = await makeAd({ product, angle: imageAngle, media: m, hook: hooks[i % hooks.length]!, adsetId: adset.id, campaignId: campaign.id, link, status: "PAUSED", notes, copyFromImage: true, reviewMode: o.skipReview ? "warn" : "block" });
       ads.push(ad);
       decisions.push({ level: "ad", id: ad.id, name: ad.name, action: "note", reason: ad.score === null ? "Skapad (pausad)" : `Skapad (pausad), granskningspoäng ${ad.score}`, campaignId: campaign.id, adsetId: adset.id });
     } catch (e) {
