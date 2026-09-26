@@ -91,6 +91,28 @@ export async function setObjectStatus(formData: FormData): Promise<ActionResult>
   }
 }
 
+/** Tar bort en annons, annonsgrupp eller kampanj i Meta och rensar motorns spår av den. */
+export async function deleteObjectAction(formData: FormData): Promise<ActionResult> {
+  await requireAdmin();
+  const id = String(formData.get("id") ?? "");
+  const level = String(formData.get("level") ?? "");
+  const name = String(formData.get("name") ?? id);
+  if (!id || !["campaign", "adset", "ad"].includes(level)) return { ok: false, error: "Ogiltigt." };
+  try {
+    await meta.deleteObject(id);
+    if (supabaseConfigured()) {
+      const db = supabaseAdmin();
+      const col = level === "ad" ? "ad_id" : level === "adset" ? "adset_id" : "campaign_id";
+      await db.from("ad_variants").delete().eq(col, id);
+      await db.from("ad_log").insert({ name, action: "note", reason: `Borttagen i Meta (${level === "ad" ? "annons" : level === "adset" ? "annonsgrupp" : "kampanj"})`, applied: true, source: "admin", [col]: id });
+    }
+    refresh();
+    return { ok: true, message: `${name} är borttagen.` };
+  } catch (e) {
+    return fail(e);
+  }
+}
+
 export async function setAdSetBudget(formData: FormData): Promise<ActionResult> {
   await requireAdmin();
   const id = String(formData.get("id") ?? "");

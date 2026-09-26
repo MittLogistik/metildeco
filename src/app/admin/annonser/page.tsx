@@ -6,7 +6,7 @@ import { site } from "@/lib/site";
 import { supabaseAdmin, supabaseConfigured } from "@/lib/supabase";
 import { ActionForm, SubmitButton } from "../_components/ActionForm";
 import { Card, Field, Input, Select } from "../_components/fields";
-import { applySuggestion, createRetargeting, createTestCampaign, iterateAd, rereview, runReview, setAdSetBudget, setObjectStatus } from "./actions";
+import { applySuggestion, createRetargeting, createTestCampaign, deleteObjectAction, iterateAd, rereview, runReview, setAdSetBudget, setObjectStatus } from "./actions";
 import Link from "next/link";
 
 type LogRow = { id: string; created_at: string; name: string; action: string; reason: string; applied: boolean; source: string };
@@ -39,6 +39,20 @@ function ToggleStatus({ id, name, level, status }: { id: string; name: string; l
       <input type="hidden" name="level" value={level} />
       <input type="hidden" name="status" value={next} />
       <SubmitButton variant={next === "ACTIVE" ? "primary" : "outline"}>{next === "ACTIVE" ? "Aktivera" : "Pausa"}</SubmitButton>
+    </ActionForm>
+  );
+}
+
+function DeleteButton({ id, name, level }: { id: string; name: string; level: "campaign" | "adset" | "ad" }) {
+  const what = level === "ad" ? "annonsen" : level === "adset" ? "annonsgruppen och alla dess annonser" : "kampanjen med alla annonsgrupper och annonser";
+  return (
+    <ActionForm action={deleteObjectAction} inline confirm={`Ta bort ${what} "${name}" i Meta? Det går inte att ångra. Statistiken finns kvar i Ads Manager.`}>
+      <input type="hidden" name="id" value={id} />
+      <input type="hidden" name="name" value={name} />
+      <input type="hidden" name="level" value={level} />
+      <button type="submit" className="rounded-full border border-danger/30 px-3 py-1.5 text-xs text-danger hover:bg-danger/5" title="Ta bort i Meta">
+        Ta bort
+      </button>
     </ActionForm>
   );
 }
@@ -217,7 +231,10 @@ export default async function AdsPage() {
                   {c.objective} · skapad {c.created_time.slice(0, 10)} · {c.name.startsWith(TEST_PREFIX) ? "styrs av motorn" : c.name.startsWith(RETARGET_PREFIX) ? "retargeting, styrs manuellt" : "manuell kampanj"}
                 </p>
               </div>
-              <ToggleStatus id={c.id} name={c.name} level="campaign" status={c.effective_status} />
+              <span className="inline-flex items-center gap-2">
+                <ToggleStatus id={c.id} name={c.name} level="campaign" status={c.effective_status} />
+                <DeleteButton id={c.id} name={c.name} level="campaign" />
+              </span>
             </div>
             {c.adsets.map((s) => (
               <div key={s.id} className="mt-5 rounded-xl border border-line p-4">
@@ -303,6 +320,7 @@ export default async function AdsPage() {
                                 </ActionForm>
                               ) : null}
                               <ToggleStatus id={a.id} name={a.name} level="ad" status={a.effective_status} />
+                              <DeleteButton id={a.id} name={a.name} level="ad" />
                             </span>
                           </td>
                         </tr>

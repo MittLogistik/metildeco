@@ -124,6 +124,9 @@ export const summarize = (i: Insight) => {
 
 export const setStatus = (objectId: string, status: "ACTIVE" | "PAUSED") => call("POST", objectId, { status });
 
+/** Tar bort en kampanj, annonsgrupp eller annons i Meta. En kampanj tar sina annonsgrupper och annonser med sig. Statistiken finns kvar i Ads Manager. */
+export const deleteObject = (objectId: string) => call("DELETE", objectId);
+
 /** Kontots valuta (t.ex. USD) – cachas per process. */
 let currencyCache: string | null = null;
 export const accountCurrency = async () => {
