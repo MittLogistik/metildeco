@@ -108,3 +108,8 @@ quiz, presentkort, spåra order, mitt konto, samarbeten/jobba hos oss, fler spr�
 - Provisionsgrundande värde = `orders.subtotal` (redan efter rabatt, utan frakt) delat med (1 + momssats för leveranslandet). Beloppet skickas alltid i **ordervalutan** – räkna aldrig om det. Kursen på ordern används bara för våra egna SEK-sammanställningar.
 - Momssatser per land ligger i `integration_settings.affiliate_addrevenue.vatRates` och ändras i `/admin/affiliate`. SE = 0,12 för kosttillskott; `default` gäller övriga länder och måste stämmas av innan en ny marknad öppnas.
 - Förnyelseordrar ärver inte attributionen och köar ingen konvertering.
+
+## Rapporter (försäljning)
+- `/admin/rapporter` (`src/lib/reports.ts`): vad som sålts per period – denna/förra månaden, i år, förra året, allt eller egna datum (svensk tid). Räknar allt utom `pending`, `cancelled` och `refunded` (`countsAsSale`), skarpt och test var för sig.
+- Visar omsättning (inkl. moms och frakt), varor (`subtotal`, efter rabatt), frakt, rabatt, nya/återkommande kunder, sålt per produkt (paket som egna rader), "burkar som lämnat lagret" (paketinnehåll upplöst), per land, fraktsätt, ordertyp och rabattkod. Diagram per dag upp till 62 dagar, annars per månad (`TrendChart` tolkar nyckeln YYYY-MM).
+- CSV: `/admin/rapporter/export?typ=produkter|ordrar` med samma period- och env-parametrar.
