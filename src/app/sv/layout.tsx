@@ -6,6 +6,7 @@ import { Analytics } from "@/components/Analytics";
 import { ClickTracker } from "@/components/affiliate/ClickTracker";
 import { CookieBanner } from "@/components/consent/CookieBanner";
 import { MetaPixel } from "@/components/consent/MetaPixel";
+import { GoogleTag } from "@/components/consent/GoogleTag";
 import { JsonLd } from "@/components/JsonLd";
 import { getCatalogSnapshot } from "@/lib/catalog";
 import { company, site } from "@/lib/site";
@@ -51,6 +52,7 @@ export default async function SwedishLayout({ children }: LayoutProps<"/sv">) {
       <CartDrawer />
       <CookieBanner />
       <MetaPixel />
+      <GoogleTag />
     </CartProvider>
   );
 }

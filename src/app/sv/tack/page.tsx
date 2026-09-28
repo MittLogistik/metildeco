@@ -7,6 +7,7 @@ import { company } from "@/lib/site";
 import { stripe, stripeConfigured } from "@/lib/stripe";
 import { ClearCart } from "@/components/checkout/ClearCart";
 import { MetaPurchase } from "@/components/consent/MetaEvents";
+import { GooglePurchase } from "@/components/consent/GoogleTag";
 import { CheckIcon } from "@/components/icons";
 import { ButtonLink, Container } from "@/components/ui";
 
@@ -76,6 +77,7 @@ export default async function ThankYouPage({ searchParams }: PageProps<"/sv/tack
     <Container className="py-12 sm:py-16">
       <ClearCart />
       {saved ? <MetaPurchase sessionId={session.id} value={saved.order.total} ids={metaIds} subscription={saved.order.has_subscription} /> : null}
+      {saved ? <GooglePurchase orderNumber={orderNumber} value={saved.order.total} email={email} /> : null}
       <div className="mx-auto max-w-2xl">
         <span className="inline-flex h-14 w-14 items-center justify-center rounded-full bg-primary-soft text-primary">
           <CheckIcon size={28} />

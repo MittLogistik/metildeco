@@ -2,7 +2,7 @@ import "server-only";
 import { getProductContent } from "@/content/product-content";
 import { bundleInStock, type Bundle } from "./bundles";
 import { getCatalog } from "./catalog";
-import { imagesFor, isInStock, type Product } from "./products";
+import { imagesFor, isInStock, unitCount, type Product } from "./products";
 import { routes } from "./routes";
 import { site } from "./site";
 import { metaContentId } from "./consent";
@@ -34,6 +34,25 @@ const describe = (p: Product): string => {
 const tag = (name: string, value: string | number | null | undefined) =>
   value === null || value === undefined || value === "" ? "" : `<${name}>${esc(String(value))}</${name}>`;
 
+/**
+ * Jämförpris (krav enligt prisinformationslagen): antal kapslar/tabletter i förpackningen
+ * och basmåttet 1 st, så att Google visar pris per kapsel. Utan känt antal utelämnas
+ * attributen hellre än att gissa.
+ */
+const unitPricing = (count: number | null): string =>
+  count && count > 0 ? [tag("g:unit_pricing_measure", `${count} ct`), tag("g:unit_pricing_base_measure", "1 ct")].join("\n") : "";
+
+/** Antal kapslar i ett paket = summan av innehållet; null om någon vara saknar antal. */
+const bundleCount = (b: Bundle): number | null => {
+  let total = 0;
+  for (const item of b.items) {
+    const n = unitCount(item.product);
+    if (!n) return null;
+    total += n * item.qty;
+  }
+  return total;
+};
+
 const productItem = (p: Product): string => {
   const images = imagesFor(p).map(abs);
   const onSale = p.oldPrice !== null && p.oldPrice > p.price;
@@ -57,6 +76,7 @@ ${tag("g:google_product_category", p.googleProductCategory ?? GOOGLE_CATEGORY)}
 ${tag("g:product_type", p.category)}
 ${p.variant ? tag("g:item_group_id", p.variant.group) : ""}
 ${p.weightGrams ? tag("g:shipping_weight", `${p.weightGrams} g`) : ""}
+${unitPricing(unitCount(p))}
 ${tag("g:adult", "no")}
 </item>`;
 };
@@ -79,6 +99,7 @@ ${tag("g:condition", "new")}
 ${tag("g:google_product_category", GOOGLE_CATEGORY)}
 ${tag("g:product_type", "Paket")}
 ${tag("g:is_bundle", "yes")}
+${unitPricing(bundleCount(b))}
 ${tag("g:adult", "no")}
 </item>`;
 };

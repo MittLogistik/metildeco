@@ -23,7 +23,7 @@ export const openCookieSettings = () => {
   notify();
 };
 
-/** Samtyckesbanner. Marknadsföringscookies (Meta Pixel) sätts först efter Acceptera alla. */
+/** Samtyckesbanner. Marknadsföringscookies (Meta Pixel, Google-taggen) sätts först efter Acceptera alla. */
 export function CookieBanner() {
   const consent = useSyncExternalStore(subscribe, readConsent, () => "necessary" as Consent);
   if (consent) return null;
@@ -35,7 +35,7 @@ export function CookieBanner() {
     <div role="dialog" aria-label="Cookies" className="fixed inset-x-3 bottom-3 z-50 mx-auto max-w-xl rounded-2xl border border-line bg-white p-5 shadow-float sm:inset-x-6 sm:bottom-6">
       <p className="font-display text-lg font-medium">Cookies på metilde.com</p>
       <p className="mt-1 text-sm text-muted">
-        Nödvändiga cookies håller varukorgen och kassan igång. Med ditt samtycke använder vi också cookies från Meta för att mäta våra annonser.
+        Nödvändiga cookies håller varukorgen och kassan igång. Med ditt samtycke använder vi också cookies från Google och Meta för att mäta våra annonser.
         Läs mer i vår{" "}
         <Link href={routes.cookies} className="underline">
           cookiepolicy

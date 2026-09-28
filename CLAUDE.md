@@ -53,6 +53,12 @@ quiz, presentkort, spåra order, mitt konto, samarbeten/jobba hos oss, fler spr�
 - Pixeln 1606920894391393 har en Conversions API Gateway kopplad (openbridge, on.aws). Den och vår egen CAPI skickar samma event_id, så Meta avduplicerar. Pixeln skickar inget från headless Chrome, testa i ett riktigt fönster.
 - `META_TEST_EVENT_CODE` sätts bara tillfälligt vid test i Events Manager → Testhändelser.
 
+## Google Ads (tagg)
+- `src/components/consent/GoogleTag.tsx` laddar gtag.js bara efter cookiesamtycke "all", samma mönster som Meta-pixeln. `NEXT_PUBLIC_GOOGLE_ADS_ID` (AW-18480599377) slår på den; tomt = avstängt. Consent Mode v2 sätts till beviljat vid laddning.
+- Köp skickas från tacksidan (`GooglePurchase`) som `conversion` med `send_to = <tagg-id>/<NEXT_PUBLIC_GOOGLE_ADS_PURCHASE_LABEL>`, ordernummer som `transaction_id` och totalbelopp i SEK. Utan etikett skickas bara standardhändelsen `purchase`. Förbättrade konverteringar är på i Google Ads: tacksidan ger kundens e-post som `user_data`, taggen hashar den i webbläsaren. Etiketten hämtas i Google Ads under Mål → Konverteringar → Köp → "Ställ in manuellt via kod".
+- Googles egen "Testa installation" hittar inte taggen (crawlern ger inget samtycke). Testa i ett riktigt fönster efter Acceptera alla, med Tag Assistant.
+- Google-feeden (`/feeds/google.xml`) skickar jämförpris: `unit_pricing_measure` = antal kapslar (`unitCount` från namnet) och `unit_pricing_base_measure` = 1 ct. Paket = summan av innehållet.
+
 ## Meta Marketing API (annonser)
 - `src/lib/meta-ads.ts` – klient för kampanjer/annonsgrupper/annonser/insikter. Kräver `META_ADS_TOKEN` (systemanvändare "Conversions API System User" i portföljen Nordicsauna, token genererad via appen "Metilde Health" 1575304117393916 med ads_management + ads_read m.fl.) och `META_AD_ACCOUNT_ID` (928861056362107). Sidan som annonserar: `META_PAGE_ID`.
 - `npm run meta-ads status|campaigns|insights|pages` verifierar kopplingen från .env.local.
