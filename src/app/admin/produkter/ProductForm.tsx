@@ -3,12 +3,14 @@ import { editProductImage, saveProduct, uploadProductImage } from "../actions";
 import { ActionForm, SubmitButton } from "../_components/ActionForm";
 import { Card, Checkbox, Field, Input, Textarea } from "../_components/fields";
 import { ImageManager } from "../_components/ImageManager";
+import { GiftPicker, type GiftCandidate } from "./GiftPicker";
 
 const categories = ["Tongkat Ali", "Träning", "Lugn & sömn", "Örter", "Hud & hår", "Svampextrakt", "Adaptogener", "Maghälsa", "Vitaminer", "Mineraler", "Omega-3", "Elektrolyter"];
 
-export function ProductForm({ product }: { product: Product | null }) {
+export function ProductForm({ product, giftCandidates = [] }: { product: Product | null; giftCandidates?: GiftCandidate[] }) {
   const p = product;
   const isNew = p === null;
+  const initialGifts = p ? (p.offerGiftChoices.length ? p.offerGiftChoices : p.offerGiftSlug ? [p.offerGiftSlug] : []) : [];
   return (
     <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_340px]">
       <ActionForm action={saveProduct} className="space-y-6">
@@ -79,12 +81,11 @@ export function ProductForm({ product }: { product: Product | null }) {
               <Field label="Antal i flerpacket" hint="2 = leverans var 60:e dag, 3 = var 90:e dag.">
                 <Input name="offer_pack_qty" type="number" step="1" defaultValue={p?.offerPackQty ?? 3} />
               </Field>
-              <Field label="Gåva (produktens slug)" hint="T.ex. fadogia-agrestis. Måste finnas i lager för att visas.">
-                <Input name="offer_gift_slug" defaultValue={p?.offerGiftSlug} placeholder="fadogia-agrestis" />
-              </Field>
-              <Field label="Valbara gåvor (slugs)" hint="Kommaseparerat. Fylls det i får kunden välja mellan dem.">
-                <Input name="offer_gift_choices" defaultValue={p?.offerGiftChoices.join(", ")} placeholder="fadogia-agrestis, maca" />
-              </Field>
+            </div>
+            <div>
+              <p className="mb-1 text-sm font-medium">Gåva</p>
+              <p className="mb-2 text-xs text-muted">Bocka i en gåva som följer med, eller flera så får kunden välja. Den första du bockar i blir standard.</p>
+              <GiftPicker candidates={giftCandidates} initial={initialGifts} excludeSlug={p?.slug ?? null} />
             </div>
           </div>
         </Card>

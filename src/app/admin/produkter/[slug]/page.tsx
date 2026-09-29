@@ -10,6 +10,7 @@ export default async function EditProductPage({ params }: PageProps<"/admin/prod
   const { allProducts } = await getCatalog();
   const product = allProducts.find((p) => p.slug === slug);
   if (!product) notFound();
+  const giftCandidates = allProducts.map((g) => ({ slug: g.slug, name: g.name, price: g.price, stock: g.stock, trackStock: g.trackStock, isActive: g.isActive, image: g.images[0] ?? null }));
   return (
     <div className="space-y-6">
       <div>
@@ -18,7 +19,7 @@ export default async function EditProductPage({ params }: PageProps<"/admin/prod
         </Link>
         <h1 className="mt-2 font-display text-3xl font-medium">{product.name}</h1>
       </div>
-      <ProductForm product={product} />
+      <ProductForm product={product} giftCandidates={giftCandidates} />
     </div>
   );
 }
