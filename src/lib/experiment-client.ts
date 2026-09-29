@@ -32,15 +32,16 @@ const write = (v: Variant) => {
 /** Varianten för den här webbläsaren. Stabil under sidladdningen (useSyncExternalStore kräver det). */
 export function buyboxVariant(mode: ExperimentMode, split: number): Variant {
   if (typeof window === "undefined") return "a";
-  if (mode === "off") return "a";
-  if (mode === "on") return "b";
-  if (cached) return cached;
+  // ?ab= i adressen vinner alltid, även när testet är av: så förhandsgranskar admin erbjudandet
   const forced = new URLSearchParams(window.location.search).get("ab");
   if (forced === "a" || forced === "b") {
     write(forced);
     cached = forced;
     return forced;
   }
+  if (mode === "off") return "a";
+  if (mode === "on") return "b";
+  if (cached) return cached;
   const stored = read();
   if (stored) {
     cached = stored;
