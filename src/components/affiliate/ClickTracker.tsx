@@ -11,7 +11,16 @@ import { useEffect } from "react";
 
 const VISITOR_KEY = "metilde_vid";
 const SENT_KEY = "metilde_click";
-const CLICK_KEYS = ["adt_id", "adt_ei", "arid", "clickid", "click_id"];
+/** AddRevenue lägger på clickId, channelId och advertiserId på landningsadressen; äldre länkar använder adt_id/arid. */
+const CLICK_KEYS = ["clickid", "adt_id", "adt_ei", "arid", "click_id"];
+
+/** Skiftlägesokänslig uppslagning: AddRevenue skriver clickId, andra skriver clickid. */
+const findParam = (params: URLSearchParams, keys: string[]): string | null => {
+  for (const [key, value] of params.entries()) {
+    if (keys.includes(key.toLowerCase()) && value.trim()) return value.trim();
+  }
+  return null;
+};
 
 /** Besökarens id, skapat vid första besöket. Används för att knyta klick till order. */
 export function visitorId(): string | null {
@@ -30,7 +39,7 @@ export function visitorId(): string | null {
 export function ClickTracker() {
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
-    const clickId = CLICK_KEYS.map((k) => params.get(k)).find((v) => v && v.trim())?.trim();
+    const clickId = findParam(params, CLICK_KEYS);
     const id = visitorId();
     if (!clickId || !id) return;
     try {

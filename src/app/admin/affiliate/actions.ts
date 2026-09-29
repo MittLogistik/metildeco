@@ -1,7 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { getSettings, retryPostback, saveSettings, syncCommissions, testConnection } from "@/lib/affiliate";
+import { getSettings, retryPostback, saveSettings, sendTestConversion, syncCommissions, testConnection } from "@/lib/affiliate";
 import { requireAdmin } from "@/lib/auth";
 import type { ActionResult } from "../actions";
 
@@ -84,6 +84,22 @@ export async function testAffiliateConnection(): Promise<ActionResult> {
       ? `Kopplingen fungerar. ${r.count} transaktioner, och provisionen läses ur rätt fält.`
       : `Kopplingen fungerar, men fälten ser annorlunda ut än väntat: ${r.fields.slice(0, 12).join(", ")}.`,
   };
+}
+
+/** Skickar en testkonvertering (1 kr, ordernummer TEST-…) till trackern med ett klick-id. */
+export async function sendTestConversionAction(formData: FormData): Promise<ActionResult> {
+  await requireAdmin();
+  const clickId = str(formData, "clickId", 200);
+  const channelId = str(formData, "channelId", 100) || null;
+  if (!clickId) return { ok: false, error: "Ange ett klick-id. Det får du genom att besöka sajten via en AddRevenue-länk, se listan Senaste klick." };
+  try {
+    const r = await sendTestConversion({ clickId, channelId });
+    revalidatePath("/admin/affiliate");
+    const detail = `Skickade ${JSON.stringify(r.payload)} → HTTP ${r.status}${r.body ? `: ${r.body.slice(0, 300)}` : ""}`;
+    return r.ok ? { ok: true, message: `Trackern tog emot testet. ${detail}. Be AddRevenue kontrollera att transaktionen ${String(r.payload.orderId)} syns hos dem, och avvisa den sedan.` } : { ok: false, error: `Trackern svarade fel. ${detail}` };
+  } catch (e) {
+    return { ok: false, error: e instanceof Error ? e.message : "Kunde inte skicka." };
+  }
 }
 
 export { getSettings };

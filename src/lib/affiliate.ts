@@ -67,7 +67,8 @@ export async function saveSettings(patch: Partial<AffiliateSettings>): Promise<A
 /* --------------------------------- klicket --------------------------------- */
 
 /** Parametrar som kan bära klick-ID. adt_id är den vanliga, övriga förekommer. */
-const CLICK_KEYS = ["adt_id", "adt_ei", "arid", "clickid", "click_id"];
+/** AddRevenue lägger på clickId (camelCase) på landningsadressen; övriga är äldre varianter. */
+const CLICK_KEYS = ["clickId", "clickid", "click_id", "adt_id", "adt_ei", "arid"];
 /** Parametrar som bär kanalen (publisher). */
 const CHANNEL_KEYS = ["channelId", "channelid", "channel_id", "adt_ch", "adt_channel"];
 /** Sparas som spår, även när de inte används i postbacken. */
@@ -450,4 +451,37 @@ export async function testConnection(path = "transactions"): Promise<{
   } catch (e) {
     return { ok: false, status: 0, count: 0, fields: [], matchesExpected: false, sample: null, error: e instanceof Error ? e.message : String(e) };
   }
+}
+
+/* ------------------------------------------------------------------------------------------ */
+/* Test av spårningen                                                                         */
+/* ------------------------------------------------------------------------------------------ */
+
+export type RecentClick = { id: string; visitor_id: string; click_id: string | null; click_ref: string | null; landing_url: string | null; created_at: string; expires_at: string };
+
+/** Senaste sparade klicken, för att se att landningssidan fångar AddRevenues parametrar. */
+export async function recentClicks(limit = 10): Promise<RecentClick[]> {
+  if (!supabaseConfigured()) return [];
+  const res = await supabaseAdmin().from("visitor_tracking").select("id,visitor_id,click_id,click_ref,landing_url,created_at,expires_at").eq("source", AFFILIATE_SOURCE).order("created_at", { ascending: false }).limit(limit);
+  return (res.data ?? []) as RecentClick[];
+}
+
+/**
+ * Skickar en testkonvertering till trackern med samma format som en riktig order, men med
+ * ordernummer TEST-… och 1 kr. Syns hos AddRevenue som en transaktion de kan avvisa.
+ */
+export async function sendTestConversion(o: { clickId: string; channelId: string | null }): Promise<{ ok: boolean; status: number; body: string; payload: Record<string, unknown> }> {
+  const settings = await getSettings();
+  const payload = {
+    type: "Purchase",
+    advertiserId: settings.advertiserId,
+    channelId: o.channelId ?? undefined,
+    orderId: `TEST-${Date.now().toString(36).toUpperCase()}`,
+    clickId: o.clickId,
+    value: 1,
+    currency: "SEK",
+    market: "SE",
+  };
+  const r = await postConversion(settings.endpointUrl, payload);
+  return { ...r, payload };
 }

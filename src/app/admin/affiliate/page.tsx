@@ -1,11 +1,12 @@
 import Link from "next/link";
-import { getSettings } from "@/lib/affiliate";
+import { getSettings, recentClicks } from "@/lib/affiliate";
 import { requireAdmin } from "@/lib/auth";
 import { formatPrice } from "@/lib/format";
+import { site } from "@/lib/site";
 import { supabaseAdmin } from "@/lib/supabase";
 import { ActionForm, SubmitButton } from "../_components/ActionForm";
 import { Card, Checkbox, Field, Input } from "../_components/fields";
-import { resendPostback, saveAffiliateSettings, syncCommissionsAction, testAffiliateConnection } from "./actions";
+import { resendPostback, saveAffiliateSettings, sendTestConversionAction, syncCommissionsAction, testAffiliateConnection } from "./actions";
 
 /** Provisionshämtningen går mot AddRevenue och kan ta en stund. */
 export const maxDuration = 120;
@@ -62,6 +63,8 @@ export default async function AffiliatePage() {
 
   const queue = (queueRes.data ?? []) as QueueRow[];
   const orders = (ordersRes.data ?? []) as OrderRow[];
+  const clicks = await recentClicks(10).catch(() => []);
+  const latest = clicks[0] ?? null;
   const activeClicks = clicksRes.count ?? 0;
   const counts = queue.reduce<Record<string, number>>((acc, q) => ({ ...acc, [q.status]: (acc[q.status] ?? 0) + 1 }), {});
   const commissionSek = orders.reduce((s, o) => s + Number(o.affiliate_commission_sek ?? 0), 0);
@@ -218,6 +221,45 @@ export default async function AffiliatePage() {
           </Card>
         </div>
 
+        <div className="space-y-6">
+        <Card title="Testa spårningen">
+          <ol className="list-decimal space-y-1.5 pl-5 text-sm">
+            <li>
+              Öppna sajten via en AddRevenue-länk, eller klistra in den här i webbläsaren:{" "}
+              <code className="rounded bg-sand px-1 text-xs select-all">{`${site.url}/sv?clickId=TEST-1&channelId=TESTKANAL&advertiserId=${settings.advertiserId}`}</code>
+              <span className="text-muted"> (byt TEST-1 mot ett nytt värde för varje test, samma klick-id sparas bara en gång per webbläsare)</span>
+            </li>
+            <li>Ladda om den här sidan. Klicket ska synas i listan nedan.</li>
+            <li>Skicka en testkonvertering med klick-id:t. Trackern svarar direkt, och AddRevenue ser en transaktion TEST-… som de avvisar.</li>
+            <li>För ett riktigt köp utan pengar: skapa en 100 %-kod i Stripe, gå in via länken i steg 1 och handla för minst {site.freeShippingOver} kr med koden. Ordern blir 0 kr, konverteringen köas och skickas inom tio minuter. Avbryt ordern efteråt.</li>
+          </ol>
+          <ActionForm action={sendTestConversionAction} className="mt-4 space-y-3">
+            <Field label="Klick-id" hint="Förifyllt med senaste sparade klicket.">
+              <Input name="clickId" defaultValue={latest?.click_id ?? ""} required />
+            </Field>
+            <Field label="Kanal-id">
+              <Input name="channelId" defaultValue={latest?.click_ref ?? ""} />
+            </Field>
+            <SubmitButton variant="outline" pendingLabel="Skickar …">
+              Skicka testkonvertering
+            </SubmitButton>
+          </ActionForm>
+          <p className="mt-4 mb-1 text-xs font-medium uppercase tracking-wider text-muted">Senaste klick</p>
+          {clicks.length === 0 ? (
+            <p className="text-sm text-muted">Inga klick sparade ännu. Besök sajten via länken i steg 1.</p>
+          ) : (
+            <ul className="divide-y divide-line text-xs">
+              {clicks.map((c) => (
+                <li key={c.id} className="py-1.5">
+                  <span className="font-mono">{c.click_id}</span>
+                  {c.click_ref ? <span className="ml-2 text-muted">kanal {c.click_ref}</span> : null}
+                  <span className="block text-muted">{fmt(c.created_at)} · gäller till {fmt(c.expires_at)}</span>
+                </li>
+              ))}
+            </ul>
+          )}
+        </Card>
+
         <Card title="Inställningar">
           <ActionForm action={saveAffiliateSettings} className="space-y-4">
             <Checkbox name="enabled" label="Integrationen är på" defaultChecked={settings.enabled} hint="Avstängd sparas inga klick och inga konverteringar köas." />
@@ -250,6 +292,7 @@ export default async function AffiliatePage() {
             aldrig om innan det lämnar oss.
           </p>
         </Card>
+        </div>
       </div>
     </div>
   );
