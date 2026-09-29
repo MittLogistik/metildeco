@@ -6,7 +6,7 @@ import { useCart } from "./CartProvider";
 import { formatPrice } from "@/lib/format";
 import { site } from "@/lib/site";
 import { unitCount, type Product } from "@/lib/products";
-import { artworkFor } from "@/content/offer-artwork";
+import { artworkFor, isCutout, packArtworkFor } from "@/content/offer-artwork";
 import { Button } from "@/components/ui";
 import { CheckIcon } from "@/components/icons";
 
@@ -18,12 +18,13 @@ type Point = { text: string; tone?: "gift" };
 const shortName = (name: string) => name.replace(/\s*\|.*$/, "");
 
 /**
- * Köprutan i erbjudandeläget (variant B): tre kompakta kort ovanpå varandra.
+ * Köprutan i erbjudandeläget (variant B): tre kort ovanpå varandra.
  *  1. Prenumerera på 1 förpackning: 15 % rabatt och fri frakt.
  *  2. Prenumerera på ett flerpack: 15 % rabatt, fri frakt och en gåva.
  *  3. Köp 1 gång till ordinarie pris.
- * Innehållet står som rader i kortet ("3 × Tongkat Ali Elite", "Gåva: …") och syns som
- * små burkar under priset. Besparingen räknas mot fullt värde inkl. gåvans pris.
+ * Varje kort har produktbilden till vänster (flerpacket som en bild med gåvan framför),
+ * texten i mitten och pris med besparing till höger. Bilderna ligger direkt på kortets färg:
+ * friställda PNG:er som de är, vanliga bilder med vit bakgrund blandas bort (multiply).
  */
 export function OfferBuyBox({ product, inStock, gifts }: { product: Product; inStock: boolean; gifts: GiftOption[] }) {
   const cart = useCart();
@@ -33,7 +34,8 @@ export function OfferBuyBox({ product, inStock, gifts }: { product: Product; inS
   const [added, setAdded] = useState(false);
   const gift = gifts.find((g) => g.slug === giftSlug) ?? null;
   const perPack = unitCount(product);
-  const productImage = artworkFor(product.slug, product.images[0] ?? "/media/placeholder.svg");
+  const single = artworkFor(product.slug, product.images[0] ?? "/media/placeholder.svg");
+  const pack = packArtworkFor(product.slug);
   const name = shortName(product.name);
 
   const subUnit = Math.round(product.price * (1 - site.subscriptionDiscount / 100));
@@ -61,7 +63,7 @@ export function OfferBuyBox({ product, inStock, gifts }: { product: Product; inS
 
   return (
     <div className="space-y-3">
-      <div role="radiogroup" aria-label="Välj köpalternativ" className="space-y-2.5">
+      <div role="radiogroup" aria-label="Välj köpalternativ" className="space-y-3">
         <OptionCard
           active={option === "sub1"}
           onClick={() => setOption("sub1")}
@@ -72,8 +74,8 @@ export function OfferBuyBox({ product, inStock, gifts }: { product: Product; inS
           price={subUnit}
           list={product.price}
           save={oneSave}
-          points={[{ text: `1 × ${name}` }, { text: "Fri frakt · levereras var 30:e dag" }, { text: "Pausa eller avsluta när du vill" }]}
-          tiles={<Tile src={productImage} />}
+          points={[{ text: "Fri frakt · var 30:e dag" }, { text: "Avsluta när du vill" }]}
+          visual={<Art src={single} className="h-[60px] w-11 sm:h-[68px] sm:w-12" />}
         />
 
         <OptionCard
@@ -88,16 +90,28 @@ export function OfferBuyBox({ product, inStock, gifts }: { product: Product; inS
           list={packValue}
           save={packSave}
           points={[
-            { text: `${packQty} × ${name}` },
-            ...(gift ? [{ text: `Gåva: ${shortName(gift.name)} (värde ${formatPrice(gift.price)})`, tone: "gift" as const }] : []),
-            { text: `Fri frakt · levereras var ${packInterval}:e dag` },
-            { text: "Pausa eller avsluta när du vill" },
+            ...(gift ? [{ text: `+ ${shortName(gift.name)} på köpet (värde ${formatPrice(gift.price)})`, tone: "gift" as const }] : []),
+            { text: `Fri frakt · var ${packInterval}:e dag` },
+            { text: "Avsluta när du vill" },
           ]}
-          tiles={
-            <>
-              <Tile src={productImage} badge={`×${packQty}`} />
-              {gift ? <Tile src={artworkFor(gift.slug, gift.image)} badge="Gåva" gift /> : null}
-            </>
+          visual={
+            <span className="relative block h-[68px] w-[68px] sm:h-[84px] sm:w-[84px]">
+              {pack ? (
+                <Art src={pack} className="absolute inset-0" />
+              ) : (
+                <>
+                  <Art src={single} className="absolute left-0 top-2 h-[72px] w-12 opacity-80" />
+                  <Art src={single} className="absolute right-0 top-2 h-[72px] w-12 opacity-80" />
+                  <Art src={single} className="absolute left-1/2 top-0 h-[82px] w-14 -translate-x-1/2" />
+                </>
+              )}
+              {gift ? (
+                <span className="absolute -bottom-1 -right-1 block h-10 w-7 drop-shadow-md sm:h-[48px] sm:w-9">
+                  <Art src={artworkFor(gift.slug, gift.image)} className="absolute inset-0" />
+                </span>
+              ) : null}
+              <span className="absolute -left-1 bottom-0 rounded-full bg-foreground px-1.5 py-0.5 text-[10px] font-bold leading-none text-white">×{packQty}</span>
+            </span>
           }
         >
           {gifts.length > 1 && option === "pack" ? (
@@ -117,7 +131,7 @@ export function OfferBuyBox({ product, inStock, gifts }: { product: Product; inS
                       giftSlug === g.slug ? "border-primary bg-primary text-primary-fg" : "border-line bg-white hover:border-foreground/40"
                     }`}
                   >
-                    <span className="relative h-5 w-5 overflow-hidden rounded-full bg-sand">
+                    <span className="relative h-5 w-4">
                       <Image src={artworkFor(g.slug, g.image)} alt="" fill sizes="20px" className="object-contain" />
                     </span>
                     {shortName(g.name)}
@@ -131,13 +145,13 @@ export function OfferBuyBox({ product, inStock, gifts }: { product: Product; inS
         <OptionCard
           active={option === "once"}
           onClick={() => setOption("once")}
-          title="Köp 1 förpackning, en gång"
-          sub="Ordinarie pris, ingen bindning"
+          title="Köp 1 förpackning"
+          sub="Engångsköp, ordinarie pris"
           price={product.price}
           list={null}
           save={null}
-          points={[{ text: `1 × ${name}` }, { text: `Fri frakt över ${site.freeShippingOver} kr` }]}
-          tiles={<Tile src={productImage} />}
+          points={[{ text: `Fri frakt över ${site.freeShippingOver} kr` }]}
+          visual={<Art src={single} className="h-[60px] w-11 sm:h-[68px] sm:w-12" />}
         />
       </div>
 
@@ -155,23 +169,20 @@ export function OfferBuyBox({ product, inStock, gifts }: { product: Product; inS
           </>
         )}
       </Button>
-      <p className="text-xs text-muted">
+      <p className="text-center text-xs text-muted">
         {option === "once"
-          ? "Betala en gång. Vill du ha rabatt och fri frakt kan du byta till prenumeration i varukorgen."
-          : `Ingen bindningstid. Du ändrar, pausar eller avslutar på Mitt konto.${option === "pack" && gift ? " Gåvan följer med i första leveransen." : ""}`}
+          ? "Betala en gång. Rabatt och fri frakt får du med prenumeration."
+          : `Ingen bindningstid. Ändra, pausa eller avsluta på Mitt konto.${option === "pack" && gift ? " Gåvan följer med första leveransen." : ""}`}
       </p>
     </div>
   );
 }
 
-/** Liten bildruta under priset: burken, med antal eller gåvomärkning i hörnet. */
-function Tile({ src, badge, gift }: { src: string; badge?: string; gift?: boolean }) {
+/** Produktbild utan egen bakgrund. Bilder med vit bakgrund blandas in i kortets färg. */
+function Art({ src, className = "" }: { src: string; className?: string }) {
   return (
-    <span className="relative h-[52px] w-11 shrink-0 overflow-visible rounded-lg bg-white/70">
-      <Image src={src} alt="" fill sizes="56px" className="object-contain p-0.5" />
-      {badge ? (
-        <span className={`absolute -bottom-1 -right-1 rounded-full px-1.5 py-0.5 text-[10px] font-bold leading-none shadow ${gift ? "bg-primary text-primary-fg" : "bg-foreground text-white"}`}>{badge}</span>
-      ) : null}
+    <span className={`block ${className.includes("absolute") ? "" : "relative "}${className}`}>
+      <Image src={src} alt="" fill sizes="120px" className={`object-contain ${isCutout(src) ? "" : "mix-blend-multiply"}`} />
     </span>
   );
 }
@@ -188,7 +199,7 @@ function OptionCard({
   list,
   save,
   points,
-  tiles,
+  visual,
   children,
 }: {
   active: boolean;
@@ -202,7 +213,7 @@ function OptionCard({
   list: number | null;
   save: number | null;
   points: Point[];
-  tiles?: React.ReactNode;
+  visual: React.ReactNode;
   children?: React.ReactNode;
 }) {
   return (
@@ -217,44 +228,41 @@ function OptionCard({
           onClick();
         }
       }}
-      className={`relative cursor-pointer rounded-2xl border-2 px-3.5 py-3 transition-colors ${active ? "border-primary bg-primary-soft" : "border-line bg-white hover:border-foreground/30"}`}
+      className={`relative cursor-pointer rounded-2xl border-2 p-3 transition-all ${
+        active ? "border-primary bg-primary-soft shadow-sm" : "border-line bg-white hover:border-foreground/30"
+      }`}
     >
       {badge ? (
-        <span className={`absolute -top-2.5 right-3 rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide ${badgeTone === "accent" ? "bg-accent text-white" : "bg-primary text-primary-fg"}`}>
+        <span className={`absolute -top-2.5 left-4 rounded-full px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider ${badgeTone === "accent" ? "bg-accent text-white" : "bg-primary text-primary-fg"}`}>
           {badge}
         </span>
       ) : null}
-      <div className="flex items-start gap-3">
-        <span className={`mt-1 inline-flex h-4 w-4 shrink-0 items-center justify-center rounded-full border ${active ? "border-primary bg-primary" : "border-foreground/30"}`}>
-          {active ? <span className="h-1.5 w-1.5 rounded-full bg-white" /> : null}
+      <div className="flex items-center gap-2.5 sm:gap-3">
+        <span className={`inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full border-2 ${active ? "border-primary bg-primary" : "border-foreground/25 bg-white"}`}>
+          {active ? <span className="h-2 w-2 rounded-full bg-white" /> : null}
         </span>
-
+        <div className="flex w-[68px] shrink-0 justify-center sm:w-[84px]">{visual}</div>
         <div className="min-w-0 flex-1">
-          <p className="text-sm font-semibold leading-tight">{title}</p>
-          <p className="mt-0.5 text-xs text-muted">{sub}</p>
-          <ul className="mt-2 space-y-1 text-xs">
+          <p className="text-sm font-semibold leading-snug">{title}</p>
+          <p className="text-xs text-muted">{sub}</p>
+          {pct && save ? (
+            <p className="mt-1.5 inline-flex items-center gap-1.5 rounded-full bg-success/12 px-2 py-0.5 text-[11px] font-bold text-success">
+              Spara {pct} % · {formatPrice(save)}
+            </p>
+          ) : null}
+          <ul className="mt-1.5 space-y-0.5 text-xs">
             {points.map((p) => (
-              <li key={p.text} className={`flex items-start gap-1.5 ${p.tone === "gift" ? "font-semibold text-success" : ""}`}>
-                <CheckIcon size={13} className={`mt-0.5 shrink-0 ${p.tone === "gift" ? "text-success" : "text-primary"}`} />
+              <li key={p.text} className={`flex items-start gap-1.5 ${p.tone === "gift" ? "font-semibold text-success" : "text-foreground/80"}`}>
+                <CheckIcon size={12} className={`mt-0.5 shrink-0 ${p.tone === "gift" ? "text-success" : "text-primary"}`} />
                 <span>{p.text}</span>
               </li>
             ))}
           </ul>
           {children}
         </div>
-
-        <div className="flex shrink-0 flex-col items-end gap-2 text-right">
-          <div>
-            <p className="text-lg font-semibold tabular-nums leading-tight">{formatPrice(price)}</p>
-            {list !== null && list > price ? <p className="text-xs text-muted line-through tabular-nums">{formatPrice(list)}</p> : null}
-            {pct && save ? (
-              <p className="mt-1 flex items-center justify-end gap-1 text-[11px] font-medium text-success">
-                <span className="rounded-full bg-success/15 px-1.5 py-0.5 font-bold">−{pct} %</span>
-                {formatPrice(save)}
-              </p>
-            ) : null}
-          </div>
-          {tiles ? <div className="flex items-center gap-1.5">{tiles}</div> : null}
+        <div className="shrink-0 self-start text-right">
+          <p className="text-base font-bold tabular-nums leading-tight">{formatPrice(price)}</p>
+          {list !== null && list > price ? <p className="text-[11px] text-muted line-through tabular-nums">{formatPrice(list)}</p> : null}
         </div>
       </div>
     </div>
