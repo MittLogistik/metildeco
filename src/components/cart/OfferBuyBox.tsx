@@ -36,7 +36,6 @@ export function OfferBuyBox({ product, inStock, gifts }: { product: Product; inS
   const perPack = unitCount(product);
   const single = artworkFor(product.slug, product.images[0] ?? "/media/placeholder.svg");
   const pack = packArtworkFor(product.slug);
-  const name = shortName(product.name);
 
   const subUnit = Math.round(product.price * (1 - site.subscriptionDiscount / 100));
   const packInterval: 30 | 60 | 90 = packQty >= 3 ? 90 : 60;
