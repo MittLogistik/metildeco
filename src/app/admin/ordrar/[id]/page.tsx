@@ -223,6 +223,14 @@ export default async function OrderDetailPage({ params }: PageProps<"/admin/ordr
           ) : null}
           <Card title="Stripe">
             <ul className="space-y-1 text-sm">
+              {o.stripe_session_id ? (
+                <li>
+                  <a href={`/sv/tack?session_id=${encodeURIComponent(o.stripe_session_id)}`} target="_blank" rel="noopener" className="underline">
+                    Öppna tacksidan
+                  </a>
+                  <span className="ml-1 text-xs text-muted">(för att testa Google- och Meta-taggarna: acceptera alla cookies först; ordernumret gör att köpet inte räknas dubbelt)</span>
+                </li>
+              ) : null}
               {o.stripe_payment_intent ? (
                 <li>
                   <a href={`${stripeBase}/payments/${o.stripe_payment_intent}`} target="_blank" rel="noopener" className="underline">
