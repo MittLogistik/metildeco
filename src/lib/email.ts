@@ -42,7 +42,7 @@ export async function sendOrderConfirmation(order: OrderRecord, items: OrderItem
   const rowsHtml = items
     .map(
       (i) =>
-        `<tr><td style="padding:8px 0;border-bottom:1px solid #eee">${i.qty} × ${esc(i.name)}${i.plan.startsWith("sub") ? ' <span style="color:#666">(prenumeration)</span>' : ""}</td><td style="padding:8px 0;border-bottom:1px solid #eee;text-align:right;white-space:nowrap">${formatPrice(i.line_total)}</td></tr>`,
+        `<tr><td style="padding:8px 0;border-bottom:1px solid #eee">${i.qty} × ${esc(i.name)}${i.plan.startsWith("sub") ? ' <span style="color:#666">(prenumeration)</span>' : i.plan === "gift" ? ' <span style="color:#2a7a4b">(gåva)</span>' : ""}</td><td style="padding:8px 0;border-bottom:1px solid #eee;text-align:right;white-space:nowrap">${i.plan === "gift" ? "0 kr" : formatPrice(i.line_total)}</td></tr>`,
     )
     .join("");
   const rowsText = items.map((i) => `${i.qty} × ${i.name} – ${formatPrice(i.line_total)}`).join("\n");

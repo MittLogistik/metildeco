@@ -8,6 +8,7 @@ import { CartLineRow } from "@/components/cart/CartLineRow";
 import { CartTotals } from "@/components/cart/CartTotals";
 import { cartStore, type CartLine } from "@/components/cart/cartStore";
 import { clientValues, useClientValue } from "./clientStore";
+import { storedVariant } from "@/lib/experiment-client";
 import { formatPrice } from "@/lib/format";
 import { routes } from "@/lib/routes";
 import { company, site } from "@/lib/site";
@@ -52,10 +53,10 @@ export function Checkout() {
       clientValues.set("restoring", "1");
       fetch(`/api/cart/${encodeURIComponent(korg)}`)
         .then((r) => (r.ok ? r.json() : null))
-        .then((data: { lines?: { kind: "product" | "bundle"; slug: string; qty: number; plan: "once" | "sub"; intervalDays: number | null }[]; email?: string } | null) => {
+        .then((data: { lines?: { kind: "product" | "bundle"; slug: string; qty: number; plan: "once" | "sub" | "gift"; intervalDays: number | null }[]; email?: string } | null) => {
           if (data?.lines?.length) {
             const lines: CartLine[] = data.lines.map((l) => ({
-              key: l.kind === "bundle" ? `bundle:${l.slug}` : `product:${l.slug}:${l.plan}`,
+              key: l.kind === "bundle" ? `bundle:${l.slug}` : l.plan === "gift" ? `gift:${l.slug}` : l.plan === "sub" ? `product:${l.slug}:sub:${l.intervalDays ?? 30}` : `product:${l.slug}:once`,
               kind: l.kind,
               slug: l.slug,
               qty: l.qty,
@@ -106,10 +107,12 @@ export function Checkout() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          lines: cart.lines.map((l) => ({ kind: l.kind, slug: l.slug, qty: l.qty, plan: l.plan, intervalDays: l.intervalDays })),
+          // Bara giltiga rader: en gåva utan sitt flerpack skickas inte med
+          lines: cart.resolved.map((l) => ({ kind: l.kind, slug: l.slug, qty: l.qty, plan: l.plan, intervalDays: l.intervalDays })),
           visitorId: visitorId(),
           email: email.trim().toLowerCase(),
           code: code || null,
+          variant: storedVariant(),
         }),
       });
       const data = (await res.json()) as { url?: string; error?: string };

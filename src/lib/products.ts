@@ -53,6 +53,12 @@ export type Product = {
   weightGrams: number | null;
   /** Kanaler produkten inte ska med i: "google" | "meta" | "addrevenue". */
   feedExclusions: string[];
+  /** Köperbjudandet på produktsidan: flerpack-prenumeration med gåva. */
+  offerEnabled: boolean;
+  offerPackQty: number;
+  offerGiftSlug: string | null;
+  /** Gåvor kunden får välja mellan (slugs). Tom = bara offerGiftSlug. */
+  offerGiftChoices: string[];
   createdAt: string;
   updatedAt: string;
 };
@@ -97,6 +103,10 @@ export type ProductRow = {
   country_of_origin?: string | null;
   weight_grams?: number | null;
   feed_exclusions?: string[] | null;
+  offer_enabled?: boolean | null;
+  offer_pack_qty?: number | null;
+  offer_gift_slug?: string | null;
+  offer_gift_choices?: string[] | null;
 };
 
 /** Bygger en produkt av en databasrad plus (valfritt) SEK-pris från product_prices. */
@@ -141,9 +151,20 @@ export const productFromRow = (r: ProductRow, sekPrice?: { price: number | strin
     countryOfOrigin: r.country_of_origin ?? null,
     weightGrams: r.weight_grams ?? null,
     feedExclusions: r.feed_exclusions ?? [],
+    offerEnabled: r.offer_enabled ?? false,
+    offerPackQty: Math.max(2, r.offer_pack_qty ?? 3),
+    offerGiftSlug: r.offer_gift_slug ?? null,
+    offerGiftChoices: r.offer_gift_choices ?? [],
     createdAt: r.created_at,
     updatedAt: r.updated_at,
   };
+};
+
+/** Gåvor som får följa med produktens flerpack: valda alternativ, annars standardgåvan. */
+export const offerGiftSlugs = (p: Pick<Product, "offerEnabled" | "offerGiftSlug" | "offerGiftChoices">): string[] => {
+  if (!p.offerEnabled) return [];
+  const list = p.offerGiftChoices.length ? p.offerGiftChoices : p.offerGiftSlug ? [p.offerGiftSlug] : [];
+  return Array.from(new Set(list.filter(Boolean)));
 };
 
 export const isInStock = (p: Pick<Product, "trackStock" | "stock">): boolean => !p.trackStock || p.stock > 0;
@@ -195,7 +216,22 @@ export const aggregateRating = (list: Product[]) => {
 /** Så mycket av en produkt som behövs i varukorg och kassa (skickas till klienten). */
 export type SlimProduct = Pick<
   Product,
-  "slug" | "sku" | "name" | "price" | "images" | "bg" | "tieredPricing" | "tier2Discount" | "tier3Discount" | "trackStock" | "stock" | "category"
+  | "slug"
+  | "sku"
+  | "name"
+  | "price"
+  | "images"
+  | "bg"
+  | "tieredPricing"
+  | "tier2Discount"
+  | "tier3Discount"
+  | "trackStock"
+  | "stock"
+  | "category"
+  | "offerEnabled"
+  | "offerPackQty"
+  | "offerGiftSlug"
+  | "offerGiftChoices"
 >;
 
 export const slimProduct = (p: Product): SlimProduct => ({
@@ -211,4 +247,8 @@ export const slimProduct = (p: Product): SlimProduct => ({
   trackStock: p.trackStock,
   stock: p.stock,
   category: p.category,
+  offerEnabled: p.offerEnabled,
+  offerPackQty: p.offerPackQty,
+  offerGiftSlug: p.offerGiftSlug,
+  offerGiftChoices: p.offerGiftChoices,
 });

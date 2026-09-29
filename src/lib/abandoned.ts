@@ -18,9 +18,9 @@ import { supabaseAdmin, supabaseConfigured } from "./supabase";
  * Från och med andra mejlet följer en rabattkod med, som läggs på automatiskt via länken.
  */
 
-type CartMeta = { k: "product" | "bundle"; s: string; q: number; p: "once" | "sub"; i: number | null };
+type CartMeta = { k: "product" | "bundle"; s: string; q: number; p: "once" | "sub" | "gift"; i: number | null };
 
-export type CartItem = { kind: "product" | "bundle"; slug: string; qty: number; plan: "once" | "sub"; intervalDays: number | null; name: string; lineTotal: number };
+export type CartItem = { kind: "product" | "bundle"; slug: string; qty: number; plan: "once" | "sub" | "gift"; intervalDays: number | null; name: string; lineTotal: number };
 
 export type AbandonedCart = {
   id: string;
@@ -209,7 +209,7 @@ export async function markRecovered(email: string | null, orderId: string) {
 }
 
 /** Korgens rader för återställning i kassan. Id:t är en uuid och fungerar som nyckel. */
-export async function getCartLines(cartId: string): Promise<{ lines: { kind: "product" | "bundle"; slug: string; qty: number; plan: "once" | "sub"; intervalDays: number | null }[]; email: string } | null> {
+export async function getCartLines(cartId: string): Promise<{ lines: { kind: "product" | "bundle"; slug: string; qty: number; plan: "once" | "sub" | "gift"; intervalDays: number | null }[]; email: string } | null> {
   if (!supabaseConfigured() || !/^[0-9a-f-]{36}$/i.test(cartId)) return null;
   const r = (await supabaseAdmin().from("abandoned_carts").select("items,email,source").eq("id", cartId).maybeSingle()).data as { items: CartItem[]; email: string; source: string } | null;
   if (!r || r.source === "giftcard") return null;

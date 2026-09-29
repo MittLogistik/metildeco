@@ -120,6 +120,10 @@ export default async function AdsPage() {
           ·{" "}
           <Link href="/admin/annonser/katalog" className="underline">
             Katalog
+          </Link>{" "}
+          ·{" "}
+          <Link href="/admin/annonser/abtest" className="underline">
+            A/B-test av köprutan
           </Link>
         </p>
       </div>

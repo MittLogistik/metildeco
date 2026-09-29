@@ -2,7 +2,7 @@
 
 import { createContext, useCallback, useContext, useMemo, useState, useSyncExternalStore, type ReactNode } from "react";
 import { site } from "@/lib/site";
-import { tieredUnitPrice, type SlimProduct } from "@/lib/products";
+import { offerGiftSlugs, tieredUnitPrice, type SlimProduct } from "@/lib/products";
 import type { SlimBundle } from "@/lib/bundles";
 import { cheapestSwedenRate, shippingCost } from "@/lib/shipping";
 import { track } from "@/lib/track";
@@ -42,6 +42,8 @@ type CartState = {
   open: () => void;
   close: () => void;
   addProduct: (slug: string, qty?: number, plan?: Plan, intervalDays?: 30 | 60 | 90) => void;
+  /** Flerpack-prenumeration med gåva: produktraden och gåvoraden läggs i korgen tillsammans. */
+  addOffer: (slug: string, qty: number, intervalDays: 30 | 60 | 90, giftSlug: string | null) => void;
   addBundle: (slug: string, qty?: number) => void;
   setQty: (key: string, qty: number) => void;
   /** Byter köpplan för en produktrad (engångsköp ↔ prenumeration) och behåller antalet. */
@@ -70,6 +72,20 @@ const resolve = (line: CartLine, catalog: CatalogSnapshot): ResolvedLine | null 
   }
   const product = catalog.products.find((p) => p.slug === line.slug);
   if (!product) return null;
+  if (line.plan === "gift") {
+    return {
+      ...line,
+      qty: 1,
+      name: product.name,
+      image: product.images[0] ?? "/media/placeholder.svg",
+      unitPrice: 0,
+      listPrice: product.price,
+      lineTotal: 0,
+      discountLabel: `Gåva · värde ${product.price} kr`,
+      freeShipping: true,
+      product,
+    };
+  }
   let unitPrice = product.price;
   let discountLabel: string | null = null;
   if (line.plan === "sub") {
@@ -92,6 +108,18 @@ const resolve = (line: CartLine, catalog: CatalogSnapshot): ResolvedLine | null 
     product,
   };
 };
+
+/**
+ * En gåvorad gäller bara så länge korgen har ett flerpack som ger rätt till den: en prenumerationsrad
+ * med minst erbjudandets antal, på en produkt vars gåvor innehåller den. Annars visas den inte och
+ * skickas inte till kassan (servern gör samma kontroll).
+ */
+export const giftQualifies = (giftSlug: string, lines: CartLine[], catalog: CatalogSnapshot): boolean =>
+  lines.some((l) => {
+    if (l.kind !== "product" || l.plan !== "sub") return false;
+    const p = catalog.products.find((x) => x.slug === l.slug);
+    return Boolean(p && p.offerEnabled && l.qty >= p.offerPackQty && offerGiftSlugs(p).includes(giftSlug));
+  });
 
 export function CartProvider({ catalog, children }: { catalog: CatalogSnapshot; children: ReactNode }) {
   const lines = useSyncExternalStore(cartStore.subscribe, cartStore.getSnapshot, cartStore.getServerSnapshot);
@@ -130,6 +158,29 @@ export function CartProvider({ catalog, children }: { catalog: CatalogSnapshot; 
     (slug: string, qty = 1) => upsert({ key: `bundle:${slug}`, kind: "bundle", slug, qty, plan: "once" }),
     [upsert],
   );
+  const addOffer = useCallback(
+    (slug: string, qty: number, intervalDays: 30 | 60 | 90, giftSlug: string | null) => {
+      const key = `product:${slug}:sub:${intervalDays}`;
+      cartStore.update((prev) => {
+        // Flerpacket ersätter en befintlig prenumerationsrad på samma produkt i stället för att läggas ovanpå
+        const rest = prev.filter((l) => l.key !== key && !(l.plan === "gift" && giftSlug && l.slug === giftSlug));
+        const next: CartLine[] = [...rest, { key, kind: "product", slug, qty, plan: "sub", intervalDays }];
+        if (giftSlug) next.push({ key: `gift:${giftSlug}`, kind: "product", slug: giftSlug, qty: 1, plan: "gift" });
+        return next;
+      });
+      track("add_to_cart");
+      const resolved = resolve({ key, kind: "product", slug, qty, plan: "sub", intervalDays }, catalog);
+      metaTrack("AddToCart", {
+        content_ids: [metaContentId("product", slug, resolved?.product?.sku)],
+        content_name: resolved?.name,
+        content_type: "product",
+        value: resolved ? resolved.unitPrice * qty : undefined,
+        currency: "SEK",
+      });
+      setOpen(true);
+    },
+    [catalog],
+  );
   const setQty = useCallback((key: string, qty: number) => {
     cartStore.update((prev) =>
       qty <= 0 ? prev.filter((l) => l.key !== key) : prev.map((l) => (l.key === key ? { ...l, qty } : l)),
@@ -156,7 +207,10 @@ export function CartProvider({ catalog, children }: { catalog: CatalogSnapshot; 
   const clear = useCallback(() => cartStore.set([]), []);
 
   const value = useMemo<CartState>(() => {
-    const resolved = lines.map((l) => resolve(l, catalog)).filter((l): l is ResolvedLine => l !== null);
+    const resolved = lines
+      .filter((l) => l.plan !== "gift" || giftQualifies(l.slug, lines, catalog))
+      .map((l) => resolve(l, catalog))
+      .filter((l): l is ResolvedLine => l !== null);
     const subtotal = resolved.reduce((s, l) => s + l.lineTotal, 0);
     const listTotal = resolved.reduce((s, l) => s + l.listPrice * l.qty, 0);
     const allFree = resolved.length > 0 && resolved.every((l) => l.freeShipping);
@@ -176,13 +230,14 @@ export function CartProvider({ catalog, children }: { catalog: CatalogSnapshot; 
       open: () => setOpen(true),
       close: () => setOpen(false),
       addProduct,
+      addOffer,
       addBundle,
       setQty,
       setPlan,
       remove,
       clear,
     };
-  }, [lines, catalog, isOpen, addProduct, addBundle, setQty, setPlan, remove, clear]);
+  }, [lines, catalog, isOpen, addProduct, addOffer, addBundle, setQty, setPlan, remove, clear]);
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
 }

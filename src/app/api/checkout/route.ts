@@ -37,6 +37,7 @@ export async function POST(request: Request) {
     const click = payload.visitorId ? await latestClick(payload.visitorId).catch(() => null) : null;
     const metadata = {
       consent,
+      ...(payload.variant ? { ab: payload.variant } : {}),
       fbp: fbp.slice(0, 100),
       fbc: fbc.slice(0, 200),
       cart: JSON.stringify(priced.map((l) => ({ k: l.kind, s: l.slug, q: l.qty, p: l.plan, i: l.intervalDays ?? null }))).slice(0, 500),

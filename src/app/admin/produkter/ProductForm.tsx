@@ -68,6 +68,27 @@ export function ProductForm({ product }: { product: Product | null }) {
           </div>
         </Card>
 
+        <Card title="Erbjudande: flerpack med gåva">
+          <p className="mb-4 text-xs text-muted">
+            Visas i den nya köprutan (A/B-testet under Annonser → A/B-test): prenumerera på 1, prenumerera på ett flerpack med gåva, eller köp en gång. Gåvan är 0 kr,
+            följer med första leveransen och dras från lagret som en vanlig vara.
+          </p>
+          <div className="space-y-3">
+            <Checkbox name="offer_enabled" label="Erbjudandet är på för den här produkten" defaultChecked={p?.offerEnabled ?? false} />
+            <div className="grid gap-4 sm:grid-cols-3">
+              <Field label="Antal i flerpacket" hint="2 = leverans var 60:e dag, 3 = var 90:e dag.">
+                <Input name="offer_pack_qty" type="number" step="1" defaultValue={p?.offerPackQty ?? 3} />
+              </Field>
+              <Field label="Gåva (produktens slug)" hint="T.ex. fadogia-agrestis. Måste finnas i lager för att visas.">
+                <Input name="offer_gift_slug" defaultValue={p?.offerGiftSlug} placeholder="fadogia-agrestis" />
+              </Field>
+              <Field label="Valbara gåvor (slugs)" hint="Kommaseparerat. Fylls det i får kunden välja mellan dem.">
+                <Input name="offer_gift_choices" defaultValue={p?.offerGiftChoices.join(", ")} placeholder="fadogia-agrestis, maca" />
+              </Field>
+            </div>
+          </div>
+        </Card>
+
         <Card title="Lager och synlighet">
           <div className="grid gap-4 sm:grid-cols-3">
             <Field label="Lagersaldo" hint="Synkas från Plocky när kopplingen finns.">

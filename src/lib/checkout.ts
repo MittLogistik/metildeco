@@ -5,7 +5,7 @@
  */
 import type Stripe from "stripe";
 import { getBundle, getProduct } from "./catalog";
-import { isInStock, tieredUnitPrice } from "./products";
+import { isInStock, offerGiftSlugs, tieredUnitPrice } from "./products";
 import { ratesForZone, shippingCost } from "./shipping";
 import { site } from "./site";
 
@@ -16,7 +16,8 @@ export type CheckoutLine = {
   kind: "product" | "bundle";
   slug: string;
   qty: number;
-  plan: "once" | "sub";
+  /** gift = gåva som följer med ett flerpack, 0 kr. Kräver en kvalificerande prenumerationsrad i samma korg. */
+  plan: "once" | "sub" | "gift";
   intervalDays?: SubInterval;
 };
 
@@ -27,6 +28,8 @@ export type CheckoutRequest = {
   visitorId: string | null;
   /** Rabattkod som kommit via länk (t.ex. påminnelse om övergiven korg) och ska läggas på automatiskt. */
   code: string | null;
+  /** Vilken köpruta kunden såg (A/B-test), sparas på ordern. */
+  variant: string | null;
 };
 
 export type PricedLine = CheckoutLine & {
@@ -47,19 +50,21 @@ export function parseCheckoutRequest(body: unknown): CheckoutRequest {
     const x = (l ?? {}) as Record<string, unknown>;
     const qty = Math.min(20, Math.max(1, Math.floor(Number(x.qty) || 1)));
     const interval = Number(x.intervalDays);
+    const plan = x.plan === "sub" ? "sub" : x.plan === "gift" && x.kind !== "bundle" ? "gift" : "once";
     return {
       kind: x.kind === "bundle" ? "bundle" : "product",
       slug: clean(x.slug, 120),
-      qty,
-      plan: x.plan === "sub" ? "sub" : "once",
+      qty: plan === "gift" ? 1 : qty,
+      plan,
       intervalDays: (SUB_INTERVALS as readonly number[]).includes(interval) ? (interval as SubInterval) : 30,
     };
   });
-  if (lines.length === 0) throw new Error("Varukorgen är tom.");
+  if (lines.filter((l) => l.plan !== "gift").length === 0) throw new Error("Varukorgen är tom.");
   const email = clean(b.email, 200).toLowerCase();
   const visitorId = clean(b.visitorId, 100) || null;
   const code = clean(b.code, 40).toUpperCase().replace(/[^A-Z0-9_-]/g, "") || null;
-  return { lines, email: /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email) ? email : null, visitorId, code };
+  const variant = clean(b.variant, 10).replace(/[^a-z0-9]/gi, "") || null;
+  return { lines, email: /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email) ? email : null, visitorId, code, variant };
 }
 
 /** Sätter pris på varje rad utifrån katalogen. Okända eller slutsålda varor ger fel. */
@@ -86,6 +91,18 @@ export async function priceLines(lines: CheckoutLine[]): Promise<PricedLine[]> {
     if (!isInStock(product) || (product.trackStock && product.stock < line.qty)) {
       throw new Error(`${product.name} är slutsåld i det antal du valt.`);
     }
+    if (line.plan === "gift") {
+      // Gåvan kräver ett flerpack i samma korg som ger rätt till just den gåvan
+      let qualifies = false;
+      for (const other of lines) {
+        if (other.kind !== "product" || other.plan !== "sub") continue;
+        const p = await getProduct(other.slug);
+        if (p && p.offerEnabled && other.qty >= p.offerPackQty && offerGiftSlugs(p).includes(line.slug)) qualifies = true;
+      }
+      if (!qualifies) throw new Error(`Gåvan ${product.name} kräver ett flerpack med prenumeration i varukorgen.`);
+      out.push({ ...line, qty: 1, name: product.name, unitPrice: 0, image: product.images[0] ?? null, freeShipping: true });
+      continue;
+    }
     const unitPrice =
       line.plan === "sub"
         ? Math.round(product.price * (1 - site.subscriptionDiscount / 100))
@@ -108,7 +125,7 @@ export function buildLineItems(priced: PricedLine[], origin: string): Stripe.Che
       unit_amount: sek(l.unitPrice),
       tax_behavior: "inclusive",
       product_data: {
-        name: l.plan === "sub" ? `${l.name} – prenumeration var ${l.intervalDays ?? 30}:e dag` : l.name,
+        name: l.plan === "sub" ? `${l.name} – prenumeration var ${l.intervalDays ?? 30}:e dag` : l.plan === "gift" ? `Gåva – ${l.name}` : l.name,
         images: l.image ? [`${origin}${l.image}`] : [],
         metadata: { slug: l.slug, kind: l.kind, plan: l.plan },
       },

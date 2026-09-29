@@ -58,7 +58,7 @@ export type OrderItemRecord = {
   line_total: number;
 };
 
-type CartMeta = { k: "product" | "bundle"; s: string; q: number; p: "once" | "sub"; i: number | null };
+type CartMeta = { k: "product" | "bundle"; s: string; q: number; p: "once" | "sub" | "gift"; i: number | null };
 
 /** Meta-katalogens id per korgrad (artikelnummer i första hand). */
 export const metaIdsFor = (meta: Pick<CartMeta, "k" | "s">[]): Promise<string[]> =>
@@ -134,9 +134,9 @@ export async function saveOrderFromSession(sessionId: string): Promise<{ order: 
     const qty = li.quantity ?? m.q;
     items.push({
       product_slug: m.s,
-      name: name.replace(/ – prenumeration var \d+:e dag$/, ""),
+      name: name.replace(/ – prenumeration var \d+:e dag$/, "").replace(/^Gåva – /, ""),
       qty,
-      plan: m.p === "sub" ? `sub:${m.i ?? 30}` : "once",
+      plan: m.p === "sub" ? `sub:${m.i ?? 30}` : m.p === "gift" ? "gift" : "once",
       unit_price: kr(li.amount_subtotal) / qty,
       line_total: kr(li.amount_total),
     });
@@ -177,6 +177,7 @@ export async function saveOrderFromSession(sessionId: string): Promise<{ order: 
       kind: isGiftCard ? "giftcard" : "checkout",
       locale: "sv",
       discount_code: session.discounts?.[0]?.promotion_code ? String(session.discounts[0].promotion_code) : null,
+      experiment_variant: session.metadata?.ab || null,
       // Affiliateklicket frystes i kassan; kursen sparas så att provisionen kan räknas om senare
       affiliate_source: session.metadata?.aff_click ? (session.metadata?.aff_src || AFFILIATE_SOURCE) : null,
       affiliate_click_id: session.metadata?.aff_click || null,

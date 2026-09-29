@@ -11,7 +11,9 @@ import { cheapestSwedenRate } from "@/lib/shipping";
 import { company, site } from "@/lib/site";
 import { Accordion } from "@/components/Accordion";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
-import { ProductBuyBox } from "@/components/cart/AddToCart";
+import { BuyBoxSwitch } from "@/components/cart/BuyBoxSwitch";
+import { getExperimentSettings } from "@/lib/experiments";
+import { offerGiftSlugs } from "@/lib/products";
 import { CheckIcon, FlaskIcon, LeafIcon, ShieldIcon } from "@/components/icons";
 import { JsonLd } from "@/components/JsonLd";
 import { MetaViewContent } from "@/components/consent/MetaEvents";
@@ -55,6 +57,12 @@ export default async function ProductPage({ params }: PageProps<"/sv/produkt/[sl
   const inStock = isInStock(product);
   const lowStock = isLowStock(product);
   const images = imagesFor(product);
+  // Erbjudandet (variant B i A/B-testet): gåvor som finns i lager, och testets läge
+  const [experiment, allProducts] = await Promise.all([getExperimentSettings().catch(() => ({ mode: "off" as const, split: 50 })), getProducts()]);
+  const gifts = offerGiftSlugs(product)
+    .map((s) => allProducts.find((p) => p.slug === s))
+    .filter((g): g is NonNullable<typeof g> => Boolean(g && g.isActive && isInStock(g) && g.slug !== product.slug))
+    .map((g) => ({ slug: g.slug, name: g.name, price: g.price, image: g.images[0] ?? "/media/placeholder.svg" }));
   const media: Media[] = images.map((src) => ({ type: "image" as const, src }));
   if (product.videoUrl) {
     media.splice(1, 0, { type: "video", src: product.videoUrl, poster: product.videoPosterUrl ?? images[0]! });
@@ -161,7 +169,7 @@ export default async function ProductPage({ params }: PageProps<"/sv/produkt/[sl
             </div>
 
             <div className="mt-6">
-              <ProductBuyBox product={product} inStock={inStock} />
+              <BuyBoxSwitch product={product} inStock={inStock} gifts={gifts} mode={experiment.mode} split={experiment.split} />
             </div>
 
             <div className="mt-5 space-y-1.5 text-sm">

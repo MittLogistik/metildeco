@@ -112,6 +112,10 @@ export async function saveProduct(formData: FormData): Promise<ActionResult> {
     video_url: str(formData, "video_url", 500) || null,
     video_poster_url: str(formData, "video_poster_url", 500) || null,
     countries: list(formData, "countries").map((c) => c.toUpperCase()),
+    offer_enabled: bool(formData, "offer_enabled"),
+    offer_pack_qty: Math.min(6, Math.max(2, Math.floor(num(formData, "offer_pack_qty") ?? 3))),
+    offer_gift_slug: str(formData, "offer_gift_slug", 120).toLowerCase() || null,
+    offer_gift_choices: list(formData, "offer_gift_choices").map((s) => s.toLowerCase()),
   };
 
   if (isNew) {

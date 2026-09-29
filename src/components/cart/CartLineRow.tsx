@@ -15,6 +15,35 @@ export function CartLineRow({ line, onNavigate, compact = false }: { line: Resol
   const subUnit = line.product ? Math.round(line.product.price * (1 - site.subscriptionDiscount / 100)) : null;
   const size = compact ? "h-20 w-20" : "h-24 w-24";
 
+  if (line.plan === "gift") {
+    return (
+      <li className="flex gap-4 py-4">
+        <div className={`relative ${size} shrink-0 overflow-hidden rounded-xl bg-sand`}>
+          <Image src={line.image} alt="" fill sizes="96px" className="object-contain p-1" />
+          <span className="absolute left-1 top-1 rounded-full bg-primary px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-primary-fg">Gåva</span>
+        </div>
+        <div className="min-w-0 flex-1">
+          <div className="flex items-start justify-between gap-3">
+            <Link href={routes.product(line.slug)} onClick={onNavigate} className="line-clamp-2 text-sm font-medium hover:underline">
+              {line.name}
+            </Link>
+            <button type="button" onClick={() => cart.remove(line.key)} className="shrink-0 text-xs text-muted hover:text-foreground">
+              Ta bort
+            </button>
+          </div>
+          <p className="mt-1 text-xs text-muted">Följer med ditt flerpack i första leveransen.</p>
+          <div className="mt-2.5 flex items-center justify-between">
+            <span className="text-sm text-muted">1 st</span>
+            <div className="text-right">
+              <p className="text-sm font-semibold tabular-nums">0 kr</p>
+              <p className="text-xs text-muted line-through tabular-nums">{formatPrice(line.listPrice)}</p>
+            </div>
+          </div>
+        </div>
+      </li>
+    );
+  }
+
   return (
     <li className="flex gap-4 py-4">
       <div className={`relative ${size} shrink-0 overflow-hidden rounded-xl bg-sand`}>
