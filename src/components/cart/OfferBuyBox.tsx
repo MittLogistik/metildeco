@@ -94,7 +94,7 @@ export function OfferBuyBox({ product, inStock, gifts }: { product: Product; inS
             { text: "Avsluta när du vill" },
           ]}
           visual={
-            <span className="relative block h-[68px] w-[68px] sm:h-[84px] sm:w-[84px]">
+            <span className="relative block h-[68px] w-[64px] -translate-x-1.5 sm:h-[84px] sm:w-[80px]">
               {pack ? (
                 <Art src={pack} className="absolute inset-0" />
               ) : (
@@ -105,8 +105,9 @@ export function OfferBuyBox({ product, inStock, gifts }: { product: Product; inS
                 </>
               )}
               {gift ? (
-                <span className="absolute -bottom-1 -right-1 block h-10 w-7 drop-shadow-md sm:h-[48px] sm:w-9">
+                <span className="absolute -bottom-2 -right-3 block h-[54px] w-10 drop-shadow-lg sm:-right-4 sm:h-[66px] sm:w-12">
                   <Art src={artworkFor(gift.slug, gift.image)} className="absolute inset-0" />
+                  <span className="absolute -top-1.5 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-success px-1.5 py-0.5 text-[9px] font-bold uppercase leading-none tracking-wide text-white shadow">Gåva</span>
                 </span>
               ) : null}
               <span className="absolute -left-1 bottom-0 rounded-full bg-foreground px-1.5 py-0.5 text-[10px] font-bold leading-none text-white">×{packQty}</span>

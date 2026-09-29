@@ -20,9 +20,9 @@ type Sort = "utvald" | "pris-lag" | "pris-hog" | "namn";
 
 const sorts: { id: Sort; label: string }[] = [
   { id: "utvald", label: "Utvald" },
-  { id: "pris-lag", label: "Pris: lägst först" },
-  { id: "pris-hog", label: "Pris: högst först" },
-  { id: "namn", label: "Namn A–Ö" },
+  { id: "pris-lag", label: "Lägsta pris" },
+  { id: "pris-hog", label: "Högsta pris" },
+  { id: "namn", label: "A–Ö" },
 ];
 
 export default async function ProductsPage({ searchParams }: PageProps<"/sv/produkter">) {
@@ -94,14 +94,14 @@ export default async function ProductsPage({ searchParams }: PageProps<"/sv/prod
           ) : null}
         </nav>
         {!showBundles ? (
-          <div className="flex shrink-0 items-center gap-2 text-sm">
-            <span className="text-muted">Sortera:</span>
-            <div className="flex gap-1">
+          <div className="-mx-4 flex min-w-0 items-center gap-2 overflow-x-auto px-4 text-sm scrollbar-none lg:mx-0 lg:shrink-0 lg:px-0">
+            <span className="shrink-0 text-muted">Sortera:</span>
+            <div className="flex gap-1.5">
               {sorts.map((s) => (
                 <Link
                   key={s.id}
                   href={href({ sortera: s.id === "utvald" ? null : s.id })}
-                  className={`rounded-full px-3 py-1.5 ${sort === s.id ? "bg-sand font-medium" : "text-muted hover:text-foreground"}`}
+                  className={`shrink-0 whitespace-nowrap rounded-full border px-3 py-1.5 text-[13px] ${sort === s.id ? "border-foreground bg-foreground font-medium text-white" : "border-line text-muted hover:text-foreground"}`}
                 >
                   {s.label}
                 </Link>
