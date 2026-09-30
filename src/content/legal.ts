@@ -272,7 +272,7 @@ const cookies: LegalDoc = {
     { type: "h2", text: "Tredje parter" },
     {
       type: "p",
-      text: "Analys- och marknadsföringscookies sätts av Google och Meta som självständiga leverantörer. De behandlar uppgifter enligt sina egna policyer och aktiveras först efter ditt samtycke.",
+      text: "Analys- och marknadsföringscookies sätts av Google och Meta som självständiga leverantörer. De behandlar uppgifter enligt sina egna policyer och aktiveras först efter ditt samtycke. Googles annonstagg använder samtyckesläge (Consent Mode): utan ditt samtycke sätter den inga cookies och skickar bara anonyma signaler om sidvisningar och köp, utan personuppgifter som e-post, som Google använder för att uppskatta annonsernas resultat.",
     },
     { type: "h2", text: "Hantera cookies i webbläsaren" },
     {
