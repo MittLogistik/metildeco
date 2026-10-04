@@ -55,7 +55,7 @@ export default function ContactPage() {
                     <a href={company.phoneHref} className="font-medium hover:underline">
                       {company.phone}
                     </a>
-                    <span className="block text-muted">{company.hours}</span>
+                    <span className="block text-muted">{company.hours} (svensk tid)</span>
                   </dd>
                 </div>
               </div>

@@ -170,7 +170,7 @@ const terms: LegalDoc = {
         "Alla priser visas i svenska kronor (SEK) och inkluderar moms. Totalsumman inklusive frakt visas innan du bekräftar ordern.",
         "Betalsätt som accepteras: Klarna, Visa, Mastercard, American Express, Apple Pay och Google Pay.",
         "Vid engångsköp dras betalningen när ordern läggs.",
-        "Tull tillkommer inte inom EU. Leveranser utanför EU kan medföra lokala avgifter som betalas av mottagaren.",
+        "Vi levererar för närvarande bara till adresser i Sverige. Tull eller importavgifter tillkommer därför aldrig.",
       ],
     },
     { type: "h2", text: "Leverans" },
@@ -327,10 +327,10 @@ const quality: LegalDoc = {
       type: "p",
       text: "Varje förpackning har ett batchnummer och bäst före-datum. Med batchnumret kan vi spåra produkten tillbaka till råvarubatch, tillverkningsdatum och testresultat. Mejla oss batchnumret så skickar vi analyscertifikatet för just den batchen.",
     },
-    { type: "h2", text: "Löfte om öppnad förpackning" },
+    { type: "h2", text: "Om du inte är nöjd" },
     {
       type: "p",
-      text: "Om du inte är nöjd med en produkt – hör av dig inom 30 dagar från leverans, även om förpackningen är öppnad. Vi ersätter produkten eller återbetalar dig, och vi frågar alltid vad som inte fungerade så att vi kan bli bättre.",
+      text: "Oöppnade produkter kan returneras inom 30 dagar enligt våra villkor för returer och byten. Är en produkt felaktig eller skadad gäller reklamationsrätten, även om förpackningen är öppnad. Hör av dig om något inte känns rätt, så går vi igenom det tillsammans.",
     },
     { type: "h2", text: "Regelverk" },
     {
@@ -351,7 +351,7 @@ const shipping: LegalDoc = {
     "Beställningar lagda före kl. 12.00 på vardagar packas och skickas samma dag från vårt lager i Sverige. Fri frakt på alla ordrar över 499 kr.",
   metaTitle: "Frakt & leverans – fraktpriser, leveranstider och spårning",
   metaDescription:
-    "Metildes fraktpriser och leveranstider i Sverige och EU, fri frakt över 499 kr, spårning, outlösta paket och vad som gäller vid skadad leverans.",
+    "Metildes fraktpriser och leveranstider i Sverige, fri frakt över 499 kr, spårning, outlösta paket och vad som gäller vid skadad leverans.",
   blocks: [
     { type: "h2", text: "Handläggningstid" },
     {
@@ -362,7 +362,7 @@ const shipping: LegalDoc = {
     { type: "shippingTable" },
     {
       type: "p",
-      text: "Alla priser visas inklusive moms. Leveranser till Norge ligger utanför EU:s tullunion; importmoms och eventuella tullavgifter hanteras av transportören och betalas av mottagaren.",
+      text: "Alla priser visas inklusive moms. Vi levererar för närvarande bara till adresser i Sverige. Paketen skickas med PostNord från vårt lager i Timrå.",
     },
     { type: "h2", text: "Spåra din order" },
     {
@@ -409,7 +409,7 @@ const returns: LegalDoc = {
       type: "ul",
       items: [
         `Anmäl returen genom att mejla ${company.email} med ordernummer och vilka varor det gäller.`,
-        "Du får retursedel och instruktioner inom en arbetsdag.",
+        "Du får retursedel och instruktioner inom en arbetsdag. Returer skickas till Swedish Treats AB, Plåtslagarvägen 19, 861 36 Timrå.",
         "Packa produkterna i originalförpackningen eller motsvarande skyddande emballage.",
         "Lämna paketet hos närmaste ombud och spara kvittot tills återbetalningen är klar.",
       ],
@@ -427,7 +427,7 @@ const returns: LegalDoc = {
     },
     {
       type: "p",
-      text: "Återbetalning sker med samma betalmetod som vid köpet inom 14 dagar från att vi tagit emot och godkänt returen, normalt inom 2–5 bankdagar.",
+      text: "Återbetalning sker med samma betalmetod som vid köpet inom 14 dagar från att vi tagit emot och godkänt returen, normalt inom 2–5 bankdagar. Vi tar ingen returavgift utöver returfrakten i tabellen ovan.",
     },
     { type: "h2", text: "Reklamation" },
     {

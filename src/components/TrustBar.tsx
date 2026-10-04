@@ -7,7 +7,7 @@ const items = [
   { icon: FlaskIcon, title: "Tredjepartstestat", text: "Varje batch analyseras av oberoende labb.", href: routes.quality },
   { icon: LeafIcon, title: "Utan onödiga tillsatser", text: "Extrakt och kapselskal – inget annat.", href: routes.quality },
   { icon: TruckIcon, title: `Fri frakt över ${site.freeShippingOver} kr`, text: "Skickas samma dag vid order före 12.", href: routes.shipping },
-  { icon: RefreshIcon, title: "30 dagars öppet köp", text: "Ångra köpet – längre än lagen kräver.", href: routes.returns },
+  { icon: RefreshIcon, title: "30 dagars ångerrätt", text: "På oöppnade produkter – längre än lagens 14 dagar.", href: routes.returns },
 ];
 
 /** Fyra löften som återkommer på start- och produktsidor. */

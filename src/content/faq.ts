@@ -41,7 +41,7 @@ export const faqGroups: FaqGroup[] = [
       },
       {
         q: "Levererar ni utanför Sverige?",
-        a: "Ja, till Norden, EU, Storbritannien och USA. Fraktpris och leveranstid beror på zon och visas i kassan.",
+        a: "Inte just nu. Vi levererar bara till adresser i Sverige, med PostNord från vårt lager i Timrå.",
       },
       {
         q: "Hur spårar jag mitt paket?",

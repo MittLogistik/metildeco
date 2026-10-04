@@ -73,7 +73,7 @@ export default async function HomePage() {
                 <CheckIcon size={15} className="text-primary" /> Fri frakt över {site.freeShippingOver} kr
               </li>
               <li className="flex items-center gap-1.5">
-                <CheckIcon size={15} className="text-primary" /> 30 dagars öppet köp
+                <CheckIcon size={15} className="text-primary" /> 30 dagars ångerrätt
               </li>
             </ul>
           </div>

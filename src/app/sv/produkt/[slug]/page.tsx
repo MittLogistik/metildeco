@@ -184,7 +184,7 @@ export default async function ProductPage({ params }: PageProps<"/sv/produkt/[sl
                 </Link>
                 .{" "}
                 <Link href={routes.returns} className="underline underline-offset-2 hover:text-foreground">
-                  30 dagars öppet köp
+                  30 dagars ångerrätt
                 </Link>
                 .
               </p>
