@@ -43,7 +43,7 @@ export const site = {
   // Av tills formuläret faktiskt sparar adressen och skickar koden (Merchant Center: löfte som inte hålls)
   newsletterDiscount: null as number | null,
   social: {
-    facebook: "https://www.facebook.com/profile.php?id=61561213820809",
+    facebook: "https://www.facebook.com/metilde",
   },
   /**
    * Kampanjbadge i hero. Lämna null när ingen kampanj pågår –
