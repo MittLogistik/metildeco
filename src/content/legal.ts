@@ -220,7 +220,7 @@ const terms: LegalDoc = {
     { type: "h2", text: "Tvist" },
     {
       type: "p",
-      text: "Om vi inte kommer överens kan du vända dig till Allmänna reklamationsnämnden (ARN), Box 174, 101 23 Stockholm, arn.se, eller EU:s plattform för tvistlösning online på ec.europa.eu/odr. Vi följer ARN:s rekommendationer. Svensk lag tillämpas på avtalet.",
+      text: "Om vi inte kommer överens kan du vända dig till Allmänna reklamationsnämnden (ARN), Box 174, 101 23 Stockholm, arn.se. Vi följer ARN:s rekommendationer. Svensk lag tillämpas på avtalet.",
     },
   ],
 };
@@ -248,19 +248,13 @@ const cookies: LegalDoc = {
       type: "table",
       head: ["Cookie", "Ändamål", "Lagringstid"],
       rows: [
-        ["metilde_cart", "Håller din varukorg", "12 månader"],
         ["metilde_consent", "Sparar dina cookieval", "12 månader"],
         ["sb-access-token", "Håller dig inloggad på Mitt konto", "1 timme"],
       ],
     },
-    { type: "h3", text: "Analys (kräver samtycke)" },
     {
-      type: "table",
-      head: ["Cookie", "Ändamål", "Lagringstid"],
-      rows: [
-        ["_ga", "Skiljer besökare åt för aggregerad statistik", "24 månader"],
-        ["_ga_*", "Håller analyssessionens status", "24 månader"],
-      ],
+      type: "p",
+      text: "Varukorgen sparas i webbläsarens lokala lagring (metilde_cart), inte i en cookie. Vi använder ingen separat analystjänst; besöksstatistiken räknas på vår egen server utan cookies.",
     },
     { type: "h3", text: "Marknadsföring (kräver samtycke)" },
     {
@@ -295,7 +289,7 @@ const quality: LegalDoc = {
     "Varje batch tredjepartstestas innan den når dig. Rena formler utan onödiga tillsatser och full spårbarhet från råvara till färdig förpackning.",
   metaTitle: "Kvalitetsgaranti – tredjepartstestat, spårbart, utan tillsatser",
   metaDescription:
-    "Så säkrar Metilde kvaliteten: tredjepartstestade batcher, dokumenterade råvaror, batchspårning och ett löfte om öppnad förpackning.",
+    "Så säkrar Metilde kvaliteten: tredjepartstestade batcher, dokumenterade råvaror, batchspårning och vad som gäller om du inte är nöjd.",
   blocks: [
     { type: "h2", text: "Våra fyra löften" },
     {
@@ -448,7 +442,7 @@ const returns: LegalDoc = {
     { type: "h2", text: "Tvistlösning" },
     {
       type: "p",
-      text: "Om vi inte kommer överens kan du vända dig till Allmänna reklamationsnämnden (ARN), Box 174, 101 23 Stockholm, arn.se, eller använda EU:s onlineplattform för tvistlösning. Vi följer ARN:s rekommendationer.",
+      text: "Om vi inte kommer överens kan du vända dig till Allmänna reklamationsnämnden (ARN), Box 174, 101 23 Stockholm, arn.se. Vi följer ARN:s rekommendationer.",
     },
     ...helpBlock,
   ],

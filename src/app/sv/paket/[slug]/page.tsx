@@ -94,7 +94,7 @@ export default async function BundlePage({ params }: PageProps<"/sv/paket/[slug]
             <dl className="mt-6 space-y-1.5 text-sm">
               <div className="flex justify-between text-muted">
                 <dt>Värde styckvis</dt>
-                <dd className="line-through tabular-nums">{formatPrice(bundle.value)}</dd>
+                <dd className="tabular-nums">{formatPrice(bundle.value)}</dd>
               </div>
               <div className="flex justify-between text-lg font-semibold">
                 <dt>Paketpris</dt>
@@ -116,7 +116,7 @@ export default async function BundlePage({ params }: PageProps<"/sv/paket/[slug]
                 <CheckIcon size={15} className="text-primary" /> {bundle.freeShipping ? "Fri frakt på detta paket" : `Fri frakt över ${site.freeShippingOver} kr`}
               </li>
               <li className="flex items-center gap-2">
-                <CheckIcon size={15} className="text-primary" /> Skickas inom 1–2 dagar
+                <CheckIcon size={15} className="text-primary" /> Skickas samma dag vid order före 12
               </li>
             </ul>
             <div className="mt-8 border-t border-line pt-6">

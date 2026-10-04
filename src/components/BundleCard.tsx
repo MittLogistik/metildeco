@@ -34,7 +34,7 @@ export function BundleCard({ bundle }: { bundle: Bundle }) {
           <p className="text-base font-semibold tabular-nums">{formatPrice(bundle.price)}</p>
           {bundle.value > bundle.price ? (
             <p className="text-xs text-muted tabular-nums">
-              Värde styckvis <span className="line-through">{formatPrice(bundle.value)}</span>
+              Köpta styckvis {formatPrice(bundle.value)}
             </p>
           ) : null}
         </div>

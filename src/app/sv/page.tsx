@@ -99,7 +99,7 @@ export default async function HomePage() {
                 <Image src={hero.images[0] ?? "/media/placeholder.svg"} alt="" fill sizes="56px" className="object-contain p-1" />
               </span>
               <span className="min-w-0">
-                <span className="block text-[11px] font-semibold uppercase tracking-wider text-primary">Bästsäljare</span>
+                <span className="block text-[11px] font-semibold uppercase tracking-wider text-primary">Vårt original</span>
                 <span className="block truncate text-sm font-medium">{hero.name}</span>
                 <span className="block text-xs text-muted">{hero.short}</span>
               </span>

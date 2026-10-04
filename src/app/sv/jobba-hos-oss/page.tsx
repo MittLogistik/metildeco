@@ -34,11 +34,11 @@ export default function CareersPage() {
           I dagsläget har vi inga lediga tjänster och tar inte emot ansökningar eller spontanansökningar. Vi vill vara ärliga med det i stället för att låta ansökningar bli liggande.
         </p>
         <p className="mt-3 text-muted">
-          Håll gärna utkik – så fort vi öppnar upp en roll publiceras den här på sidan och i vårt nyhetsbrev. Alla tjänster annonseras öppet.
+          Håll gärna utkik – så fort vi öppnar upp en roll publiceras den här på sidan. Alla tjänster annonseras öppet.
         </p>
         <div className="mt-5 flex flex-wrap gap-3">
-          <ButtonLink href={routes.home + "#nyhetsbrev"} variant="outline">
-            Håll utkik via nyhetsbrevet
+          <ButtonLink href={routes.contact} variant="outline">
+            Skicka en spontanansökan
           </ButtonLink>
           <ButtonLink href="/sv/samarbeten" variant="ghost">
             Vill du samarbeta i stället?

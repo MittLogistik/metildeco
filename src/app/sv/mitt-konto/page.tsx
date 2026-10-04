@@ -135,7 +135,7 @@ export default async function AccountPage({ searchParams }: PageProps<"/sv/mitt-
         )}
         <form action={openBillingPortal} className="mt-4">
           <button type="submit" className="text-sm font-medium underline underline-offset-2">
-            Ändra betalsätt, adress eller se kvitton
+            Ändra betalsätt eller se kvitton
           </button>
           <span className="ml-1 text-xs text-muted">(öppnas hos Stripe)</span>
         </form>

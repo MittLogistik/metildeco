@@ -35,7 +35,7 @@ const benefits = [
 
 const faq = [
   { q: "Hur avslutar jag min prenumeration?", a: "Logga in på Mitt konto, gå till Prenumerationer och välj Avsluta. Inga fler dragningar görs och prenumerationen upphör när den period du redan betalat är slut. Du kan också mejla kundservice så avslutar vi den åt dig och bekräftar skriftligen." },
-  { q: "Kan jag ändra leveransintervall eller adress?", a: "Adress och betalsätt ändrar du själv under Mitt konto. Vill du byta intervall, antal eller produkt mejlar du kundservice så ordnar vi det före nästa dragning." },
+  { q: "Kan jag ändra leveransintervall eller adress?", a: "Betalsätt ändrar du själv under Mitt konto. Flyttar du, eller vill du byta intervall, antal eller produkt, mejlar du kundservice så ordnar vi det före nästa leverans." },
   { q: "Kan jag ha flera produkter i samma prenumeration?", a: "Ja. Lägger du flera produkter med samma intervall i samma köp ingår de i samma prenumeration och kommer i samma paket." },
   { q: "När dras pengarna?", a: "Första leveransen betalas vid köpet. Därefter dras betalningen automatiskt när en ny period börjar, var 30:e, 60:e eller 90:e dag räknat från köpet. Paketet skickas några dagar efter dragningen och du får ett mejl med beräknad leveransdag." },
 ];
