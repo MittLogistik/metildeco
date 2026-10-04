@@ -24,8 +24,8 @@ export const productHooks: Record<string, string[]> = {
     "200 delar torkad rot blir 1 del extrakt. 450 mg per kapsel, 60 kapslar per burk.",
   ],
   "tongkat-premium": [
-    "200:1-rotextrakt standardiserat till 4 % eurycomanon, 500 mg per kapsel.",
-    "Ultra 4 % är den högsta standardiseringen i vårt sortiment: 20 mg eurycomanon per kapsel.",
+    "200:1-rotextrakt av Eurycoma longifolia, 520 mg per kapsel varav 20 mg eurycomanon.",
+    "Ultra har mest eurycomanon i vårt sortiment: 20 mg per kapsel, 60 kapslar per burk.",
   ],
   "black-tongkat": [
     "Black Tongkat är Eurycoma longifolia på mörk rot: 200:1-rotextrakt, 500 mg per kapsel, 1–2 kapslar om dagen.",
