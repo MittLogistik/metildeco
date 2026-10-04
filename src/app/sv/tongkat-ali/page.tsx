@@ -20,7 +20,7 @@ const faq = [
   { q: "Vilken variant ska jag börja med?", a: "Är det första gången rekommenderar vi Elite. Har du använt Tongkat Ali tidigare passar Ultra 4% eller Black, som har en högre koncentration per dagsdos." },
   { q: "Hur tar jag kapslarna?", a: "Följ doseringen på förpackningen, vanligtvis en dagsdos på morgonen tillsammans med mat och vatten." },
   { q: "Hur snabbt får jag min order?", a: "Ordrar packas normalt samma eller nästa arbetsdag. Leveranstiden inom Sverige är 1–3 arbetsdagar." },
-  { q: "Vad är skillnaden mellan gul och svart Tongkat Ali?", a: "Det är två olika växter. Gul Tongkat Ali är Eurycoma longifolia, Black Tongkat Ali är Polyalthia bullata. Vi anger alltid det latinska namnet på förpackningen." },
+  { q: "Vad är skillnaden mellan gul och svart Tongkat Ali?", a: "Båda är Eurycoma longifolia. Black Tongkat Ali görs på mörk rot och doseras 1–2 kapslar om dagen. Vi anger alltid det latinska namnet på förpackningen." },
 ];
 
 export default async function TongkatPage() {

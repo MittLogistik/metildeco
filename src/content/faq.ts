@@ -95,7 +95,7 @@ export const faqGroups: FaqGroup[] = [
     items: [
       {
         q: "Var tillverkas era produkter?",
-        a: "I Sverige, i små batcher enligt europeiska tillverkningskrav. Råvarorna kommer från odlare med dokumenterat ursprung.",
+        a: "Kapslarna tillverkas i Sverige, i små batcher enligt europeiska tillverkningskrav. Själva rotextrakten kommer från länderna där växterna hör hemma, till exempel Tongkat Ali från Sydostasien och maca från Anderna.",
       },
       {
         q: "Testas produkterna av tredje part?",
@@ -107,7 +107,7 @@ export const faqGroups: FaqGroup[] = [
       },
       {
         q: "Hur förvarar jag produkterna?",
-        a: "Torrt i rumstemperatur, med påsen återförsluten efter varje användning och utom räckhåll för små barn.",
+        a: "Torrt i rumstemperatur, med locket väl påskruvat efter varje användning och utom räckhåll för små barn.",
       },
     ],
   },

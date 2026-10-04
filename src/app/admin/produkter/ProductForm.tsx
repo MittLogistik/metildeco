@@ -5,7 +5,7 @@ import { Card, Checkbox, Field, Input, Textarea } from "../_components/fields";
 import { ImageManager } from "../_components/ImageManager";
 import { GiftPicker, type GiftCandidate } from "./GiftPicker";
 
-const categories = ["Tongkat Ali", "Träning", "Lugn & sömn", "Örter", "Hud & hår", "Svampextrakt", "Adaptogener", "Maghälsa", "Vitaminer", "Mineraler", "Omega-3", "Elektrolyter"];
+const categories = ["Tongkat Ali", "Örter", "Växtextrakt", "Svampextrakt", "Adaptogener", "Vitaminer", "Mineraler", "Omega-3", "Elektrolyter"];
 
 export function ProductForm({ product, giftCandidates = [] }: { product: Product | null; giftCandidates?: GiftCandidate[] }) {
   const p = product;

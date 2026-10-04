@@ -44,7 +44,7 @@ const values = [
   ["Inget krångel", "Vi listar exakt vad varje produkt innehåller. Ingen fluff, inga dolda tillsatser."],
   ["Du får vad du betalar för", "Råvaror, kapslar, förpackning. Det är där vi lägger pengarna – inte på dyra reklamkampanjer."],
   ["Prenumeration på riktigt", "15 % rabatt, fri frakt och full kontroll. Pausa, byt eller avsluta när du vill."],
-  ["Svensk tillverkning", "Extrakten tillverkas i Sverige i små batcher enligt europeiska krav på renhet och spårbarhet."],
+  ["Svensk tillverkning", "Kapslarna tillverkas i Sverige i små batcher enligt europeiska krav på renhet och spårbarhet."],
 ];
 
 export default function StoryPage() {

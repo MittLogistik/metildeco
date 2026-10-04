@@ -20,14 +20,16 @@ export type Goal = {
 };
 
 export const goals: Goal[] = [
-  { id: "energy", label: "Energi", description: "För dagar som kräver mer av dig." },
-  { id: "sleep", label: "Sömn & lugn", description: "Rutiner för kvällen och nedvarvning." },
-  { id: "immune", label: "Immunförsvar", description: "Basen genom årets mörkare månader." },
-  { id: "training", label: "Träning & återhämtning", description: "Stöd runt pass och vilodagar." },
-  { id: "skin", label: "Hud & hår", description: "Rena råvaror för det yttre." },
-  { id: "focus", label: "Fokus", description: "För arbetsdagar som kräver skärpa." },
-  { id: "gut", label: "Maghälsa", description: "Örtkurer och basen i magen." },
-  { id: "vitality", label: "Vitalitet", description: "Klassiska örter för helheten." },
+  // Grupperna beskriver råvara och tidpunkt, aldrig vad produkten gör med kroppen (Merchant Center, livsmedelslagen).
+  // Id:na är kvar från den gamla indelningen så att länkar (?mal=) och quizet fortsätter fungera.
+  { id: "vitality", label: "Tongkat Ali", description: "Rotextrakt av Eurycoma longifolia i fyra varianter." },
+  { id: "energy", label: "Morgon", description: "Extrakt som passar att ta till frukosten." },
+  { id: "sleep", label: "Kväll", description: "Extrakt som många väljer att ta på kvällen." },
+  { id: "training", label: "Kring träningen", description: "Extrakt som passar in i en vardag med träning." },
+  { id: "focus", label: "Rötter & örter", description: "Klassiska rot- och örtextrakt som maca, fadogia och cistanche." },
+  { id: "immune", label: "Svampextrakt", description: "Reishi, chaga, lion's mane, cordyceps och turkey tail." },
+  { id: "skin", label: "Blad, frön & alger", description: "Druvkärna, quercetin, nässla och spirulina." },
+  { id: "gut", label: "Kurer", description: "Örtblandningar som tas under en begränsad period." },
 ];
 
 export const getGoal = (id: string) => goals.find((g) => g.id === id);
@@ -35,28 +37,28 @@ export const getGoal = (id: string) => goals.find((g) => g.id === id);
 export const isGoalId = (v: string): v is GoalId => goals.some((g) => g.id === v);
 
 const productGoals: Record<string, GoalId[]> = {
-  "tongkat-ali-elite": ["energy", "training", "vitality"],
-  "tongkat-premium": ["energy", "training", "vitality"],
-  "tongkat-ali-ruby": ["energy", "training", "vitality"],
-  "black-tongkat": ["training", "vitality", "energy"],
-  "cistanche-tubulosa": ["vitality", "energy", "skin"],
-  "fadogia-agrestis": ["training", "vitality"],
-  "blue-lotus": ["sleep", "focus"],
+  "tongkat-ali-elite": ["vitality", "energy", "training"],
+  "tongkat-premium": ["vitality", "energy", "training"],
+  "tongkat-ali-ruby": ["vitality", "energy", "training"],
+  "black-tongkat": ["vitality", "energy", "training"],
+  "cistanche-tubulosa": ["focus", "energy"],
+  "fadogia-agrestis": ["focus", "training"],
+  "blue-lotus": ["focus", "sleep"],
   "parasite-support": ["gut"],
   "parasite-cleanse": ["gut"],
-  "turkey-tail": ["immune", "gut"],
-  "horny-goat-weed": ["vitality", "energy"],
-  akarkara: ["vitality", "focus"],
-  maca: ["energy", "vitality"],
-  mariatistel: ["gut"],
-  nasselblad: ["skin", "immune"],
+  "turkey-tail": ["immune"],
+  "horny-goat-weed": ["focus"],
+  akarkara: ["focus"],
+  maca: ["focus", "energy"],
+  mariatistel: ["focus"],
+  nasselblad: ["skin"],
   druvkarneextrakt: ["skin"],
-  quercetin: ["immune", "skin"],
-  reishi: ["sleep", "immune"],
-  chaga: ["immune"],
-  "lions-mane": ["focus"],
-  cordyceps: ["energy", "training"],
-  spirulina: ["energy", "immune"],
+  quercetin: ["skin"],
+  reishi: ["immune", "sleep"],
+  chaga: ["immune", "energy"],
+  "lions-mane": ["immune", "energy"],
+  cordyceps: ["immune", "training"],
+  spirulina: ["skin", "energy"],
 };
 
 export const goalsFor = (slug: string): GoalId[] => productGoals[slug] ?? [];

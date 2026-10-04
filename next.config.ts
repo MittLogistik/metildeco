@@ -29,6 +29,8 @@ const nextConfig: NextConfig = {
     return [
       // Gamla adresser från förra butiken – behåll länkkraft och undvik 404 vid domänbytet
       { source: "/sv/products", destination: "/sv/produkter", permanent: true },
+      // Quizet frågar om sömn och fokus och rekommenderar produkter utifrån det (antydda effekter) – av tills det byggts om
+      { source: "/sv/quiz", destination: "/sv/mal", permanent: false },
       // Övriga språk aktiveras ett i taget – tills dess svenska (tillfällig omdirigering)
       ...pendingLocales.flatMap((l) => [
         { source: `/${l}`, destination: "/sv", permanent: false },

@@ -470,7 +470,7 @@ const sustainability: LegalDoc = {
       type: "ul",
       items: [
         "Ytterkartong och fyllnadsmaterial är gjorda av returpapper och återvinns som papper.",
-        "Våra påsar är återförslutningsbara och pappersbaserade, vilket använder mindre material per portion än burkar.",
+        "Kapslarna levereras i plastburkar med skruvlock som skyddar mot fukt och ljus. Burken sorteras som plastförpackning.",
         "Ingen plastfilm runt ytterförpackningen och inga tryckta pappersinlagor du inte bett om.",
       ],
     },

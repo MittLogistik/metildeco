@@ -28,7 +28,7 @@ export const productHooks: Record<string, string[]> = {
     "Ultra 4 % är den högsta standardiseringen i vårt sortiment: 20 mg eurycomanon per kapsel.",
   ],
   "black-tongkat": [
-    "Black Tongkat är en annan växt än klassisk Tongkat Ali: Polyalthia bullata, 200:1-rotextrakt, 500 mg per kapsel.",
+    "Black Tongkat är Eurycoma longifolia på mörk rot: 200:1-rotextrakt, 500 mg per kapsel, 1–2 kapslar om dagen.",
     "Handskördad svart rot, koncentrerad 200:1. Vegetabiliskt kapselskal, inga fyllnadsmedel.",
   ],
   "fadogia-agrestis": ["20:1-extrakt av Fadogia agrestis, 450 mg per kapsel.", "Fadogia agrestis som 20:1-extrakt i vegansk kapsel, 60 kapslar per burk."],

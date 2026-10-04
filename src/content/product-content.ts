@@ -57,7 +57,7 @@ export const productContent: Record<string, ProductContent> = {
       {
         heading: "Tillverkad i Sverige",
         body:
-          "Produktionen sker i Sverige enligt europeiska tillverkningskrav, med kontroll av råvara och batch. Förpackningen är en återförslutningsbar, återvinningsbar pappersbaserad påse som håller innehållet torrt mellan doserna.",
+          "Produktionen sker i Sverige enligt europeiska tillverkningskrav, med kontroll av råvara och batch. Förpackningen är en plastburk med skruvlock som håller innehållet torrt mellan doserna.",
       },
     ],
     specs: [
@@ -84,7 +84,7 @@ export const productContent: Record<string, ProductContent> = {
         a: "Att 200 delar torkad rot koncentrerats till 1 del extrakt. Det är ett mått på koncentration, inget annat.",
       },
       {
-        q: "Hur länge räcker en påse?",
+        q: "Hur länge räcker en burk?",
         a: "60 kapslar och 1 kapsel dagligen ger 60 dagar.",
       },
       {
@@ -100,14 +100,14 @@ export const productContent: Record<string, ProductContent> = {
 
 
   "tongkat-premium": {
-    eyebrow: "Eurycoma longifolia · 200:1, 4 % eurycomanon",
-    headline: "Vår starkaste standardisering",
+    eyebrow: "Eurycoma longifolia · 200:1, 20 mg eurycomanon",
+    headline: "Standardiserad på eurycomanon",
     intro:
-      "Tongkat Ali Ultra 4% är ett 200:1-rotextrakt standardiserat till 4 % eurycomanon – 500 mg per kapsel, varav 20 mg eurycomanon. Ett koncentrat för den som vill ha högsta styrkan. Ta inte på tom mage.",
+      "Tongkat Ali Ultra 4% är ett 200:1-rotextrakt av Eurycoma longifolia – 520 mg per kapsel, varav 20 mg eurycomanon. 60 kapslar per burk. Ta inte på tom mage.",
     highlights: [
-      { label: "Extrakt", value: "200:1 · 4 %" },
-      { label: "Per kapsel", value: "500 mg" },
-      { label: "Kapslar", value: "30 st" },
+      { label: "Extrakt", value: "200:1" },
+      { label: "Per kapsel", value: "520 mg" },
+      { label: "Kapslar", value: "60 st" },
     ],
     story: [
       {
@@ -116,28 +116,29 @@ export const productContent: Record<string, ProductContent> = {
           "Vi utgår från noggrant utvalda rötter av Eurycoma longifolia – även kallad Malaysian Ginseng eller Longjack – en botanisk råvara med lång tradition i Sydostasien. Roten koncentreras till ett 200:1-extrakt.",
       },
       {
-        heading: "Standardiserad till 4 %",
+        heading: "20 mg eurycomanon per kapsel",
         body:
-          "Varje batch standardiseras till 4 % eurycomanon, vilket ger 20 mg eurycomanon per kapsel. Det är en tydligt högre standardisering än vanliga rotextrakt – och därför räcker en kapsel om dagen.",
+          "Varje batch standardiseras på halten eurycomanon, så att varje kapsel på 520 mg innehåller 20 mg eurycomanon. Det gör styrkan jämn mellan batcher. En kapsel om dagen.",
       },
       {
         heading: "Tillverkad i Sverige",
         body:
-          "Tillverkad i Sverige i små batcher enligt europeiska kvalitets- och säkerhetskrav. Förpackad i en återförslutningsbar, återvinningsbar pappersbaserad påse som håller innehållet torrt mellan doserna.",
+          "Tillverkad i Sverige i små batcher enligt europeiska kvalitets- och säkerhetskrav. Förpackad i en plastburk med skruvlock som håller innehållet torrt mellan doserna.",
       },
     ],
     specs: [
       { label: "Latinskt namn", value: "Eurycoma longifolia" },
       { label: "Använd växtdel", value: "Rot" },
-      { label: "Extraktstyrka", value: "200:1, standardiserad till 4 % eurycomanon" },
-      { label: "Per kapsel", value: "500 mg rotextrakt (20 mg eurycomanon)" },
+      { label: "Extraktstyrka", value: "200:1, standardiserad på eurycomanon" },
+      { label: "Per kapsel", value: "520 mg rotextrakt (20 mg eurycomanon)" },
       { label: "Dagsdos", value: "1 kapsel dagligen" },
-      { label: "Innehåll", value: "30 kapslar – 30 dagar" },
+      { label: "Innehåll", value: "60 kapslar – 60 dagar" },
+      { label: "Förpackning", value: "Plastburk med skruvlock" },
       { label: "Kapsel", value: "Vegansk (HPMC)" },
       { label: "Tillverkad i", value: "Sverige" },
     ],
     ingredients:
-      "Tongkat Ali-extrakt (Eurycoma longifolia, rot) 200:1, standardiserat till 4 % eurycomanon, kapselskal (HPMC). Innehåll per kapsel: Tongkat Ali-extrakt (200:1) 500 mg, varav eurycomanon 20 mg.",
+      "Tongkat Ali-extrakt (Eurycoma longifolia, rot) 200:1, kapselskal (HPMC). Innehåll per kapsel: Tongkat Ali-extrakt (200:1) 520 mg, varav eurycomanon 20 mg.",
     usage: [
       "1 kapsel dagligen med ett glas vatten.",
       "Ta inte på fastande mage – extraktet är mycket starkt.",
@@ -147,16 +148,16 @@ export const productContent: Record<string, ProductContent> = {
     ],
     faq: [
       {
-        q: "Vad betyder 4 % eurycomanon?",
-        a: "Att extraktet standardiserats så att 4 % utgörs av eurycomanon – 20 mg per kapsel. Det gör styrkan jämn mellan batcher.",
+        q: "Hur mycket eurycomanon innehåller en kapsel?",
+        a: "20 mg eurycomanon i 520 mg extrakt. Halten kontrolleras i varje batch så att styrkan är jämn.",
       },
       {
         q: "Vad skiljer Ultra 4% från Elite?",
-        a: "Elite är ett 200:1-rotextrakt på 450 mg per kapsel utan procentstandardisering. Ultra 4% är standardiserat till 4 % eurycomanon och innehåller 500 mg per kapsel.",
+        a: "Elite är ett 200:1-rotextrakt på 450 mg per kapsel utan standardisering på eurycomanon. Ultra 4% innehåller 520 mg per kapsel, varav 20 mg eurycomanon.",
       },
       {
-        q: "Hur länge räcker en påse?",
-        a: "30 kapslar och 1 kapsel dagligen ger 30 dagar.",
+        q: "Hur länge räcker en burk?",
+        a: "60 kapslar och 1 kapsel dagligen ger 60 dagar.",
       },
       {
         q: "Innehåller den fyllnadsmedel?",
@@ -242,7 +243,7 @@ export const productContent: Record<string, ProductContent> = {
       {
         heading: "Tillverkad i Sverige",
         body:
-          "Producerad i små batcher i Sverige med noggrann kvalitetskontroll och europeiska säkerhetskrav. Förpackad i en återförslutningsbar, återvinningsbar pappersbaserad påse som håller innehållet fräscht mellan doserna.",
+          "Producerad i små batcher i Sverige med noggrann kvalitetskontroll och europeiska säkerhetskrav. Förpackad i en plastburk med skruvlock som håller innehållet torrt mellan doserna.",
       },
     ],
     specs: [
@@ -272,7 +273,7 @@ export const productContent: Record<string, ProductContent> = {
         a: "Många gör det. Följ rekommenderad dagsdos för respektive produkt.",
       },
       {
-        q: "Hur länge räcker en påse?",
+        q: "Hur länge räcker en burk?",
         a: "60 kapslar och 1 kapsel dagligen ger 60 dagar.",
       },
       {
@@ -400,51 +401,47 @@ export const productContent: Record<string, ProductContent> = {
   },
 
   "black-tongkat": {
-    eyebrow: "Polyalthia bullata · Borneos svarta rot",
-    headline: "Den svarta roten – 200:1, en månads kur",
+    eyebrow: "Eurycoma longifolia · mörk rot, 200:1",
+    headline: "Den mörka roten – 200:1 i vegansk kapsel",
     intro:
-      "Black Tongkat Ali är inte samma växt som den gula. Den kommer från Polyalthia bullata, en långsamt växande regnskogsväxt vars mörka rot skördas för hand och koncentreras 200:1. Två kapslar om dagen – 1 000 mg, inget annat.",
+      "Black Tongkat Ali är ett 200:1-rotextrakt av Eurycoma longifolia, samma art som vår gula Tongkat Ali, gjort på mörk rot. 500 mg per kapsel. Rekommenderad dos är 1–2 kapslar om dagen.",
     highlights: [
       { label: "Extrakt", value: "200:1" },
       { label: "Per kapsel", value: "500 mg" },
-      { label: "Dosering", value: "2 kapslar/dag" },
+      { label: "Dosering", value: "1–2 kapslar/dag" },
     ],
     story: [
       {
-        heading: "En helt egen växt",
+        heading: "Samma art, mörkare rot",
         body:
-          "Gul Tongkat Ali är Eurycoma longifolia. Black Tongkat Ali är Polyalthia bullata – en annan art, med en märkbart mörkare, nästan svart rotved. Namnlikheten har gjort att de ofta blandas ihop; vi anger alltid det latinska namnet på burken så att du vet exakt vad du köper.",
+          "Black Tongkat Ali är Eurycoma longifolia, precis som den gula. Skillnaden ligger i råvaran: extraktet görs på mörk rot. Vi anger alltid det latinska namnet på burken så att du vet exakt vad du köper.",
       },
       {
-        heading: "Handskördad rot, 200:1",
+        heading: "Rot, koncentrerad 200:1",
         body:
-          "Roten skördas för hand från äldre plantor i Sydostasiens regnskog, tvättas, torkas i skugga och males innan extraktionen. 200 delar torkad rot koncentreras till en del extrakt. Ingen bark, ingen stam, inga blad.",
+          "200 delar torkad rot koncentreras till en del extrakt. Bara rot används – ingen bark, ingen stam, inga blad. Rotextraktet kommer från Sydostasien där växten hör hemma; kapslarna tillverkas i Sverige.",
       },
       {
         heading: "Ren kapsel, tydlig dosering",
         body:
-          "Varje kapsel innehåller 500 mg extrakt i ett växtbaserat skal (HPMC). Inga fyllnadsmedel, inga flytmedel, inga färgämnen – och en dosering som är lätt att hålla: två kapslar om dagen.",
-      },
-      {
-        heading: "Testad innan den släpps",
-        body:
-          "Varje parti analyseras av oberoende laboratorium för tungmetaller och mikrobiologi innan det godkänns och packas. Batchnumret på burkens undersida hör ihop med ett specifikt analysprotokoll.",
+          "Varje kapsel innehåller 500 mg extrakt i ett växtbaserat skal (HPMC). Inga fyllnadsmedel, inga flytmedel, inga färgämnen. Rekommenderad dos är 1–2 kapslar om dagen.",
       },
     ],
     specs: [
-      { label: "Latinskt namn", value: "Polyalthia bullata" },
+      { label: "Latinskt namn", value: "Eurycoma longifolia" },
       { label: "Använd växtdel", value: "Rot" },
       { label: "Extraktstyrka", value: "200:1" },
       { label: "Per kapsel", value: "500 mg extrakt" },
-      { label: "Dagsdos", value: "2 kapslar (1 000 mg)" },
-      { label: "Innehåll", value: "60 kapslar – 30 dagar" },
+      { label: "Dagsdos", value: "1–2 kapslar (500–1 000 mg)" },
+      { label: "Innehåll", value: "60 kapslar – 30 till 60 dagar" },
       { label: "Kapselskal", value: "Vegetabiliskt (HPMC)" },
-      { label: "Förvaring", value: "Torrt i rumstemperatur" },
+      { label: "Förpackning", value: "Plastburk med skruvlock" },
+      { label: "Tillverkad i", value: "Sverige" },
     ],
     ingredients:
-      "Black Tongkat Ali-extrakt (Polyalthia bullata, rot) 200:1, kapselskal (HPMC). Innehåll per kapsel: Black Tongkat Ali-extrakt (200:1) 500 mg.",
+      "Tongkat Ali-extrakt (Eurycoma longifolia, rot) 200:1, kapselskal (HPMC). Innehåll per kapsel: Tongkat Ali-extrakt (200:1) 500 mg.",
     usage: [
-      "2 kapslar dagligen med ett glas vatten.",
+      "1–2 kapslar dagligen med ett glas vatten.",
       "Tas med fördel i samband med måltid, vid samma tidpunkt varje dag.",
       "Överskrid inte rekommenderad dagsdos.",
       "Förvaras torrt i rumstemperatur och utom räckhåll för små barn.",
@@ -452,7 +449,7 @@ export const productContent: Record<string, ProductContent> = {
     faq: [
       {
         q: "Vad är skillnaden mot vanlig (gul) Tongkat Ali?",
-        a: "Det är två olika växter. Gul Tongkat Ali är Eurycoma longifolia, Black Tongkat Ali är Polyalthia bullata. Roten är mörkare och råvaran mer sällsynt.",
+        a: "Båda är Eurycoma longifolia. Black Tongkat Ali görs på mörk rot och doseras 1–2 kapslar om dagen. Vår gula Elite är 450 mg per kapsel och 1 kapsel om dagen.",
       },
       {
         q: "Vad betyder 200:1?",
@@ -460,15 +457,11 @@ export const productContent: Record<string, ProductContent> = {
       },
       {
         q: "Hur många kapslar ska jag ta?",
-        a: "2 kapslar dagligen. En burk med 60 kapslar räcker därmed i 30 dagar – en månads kur.",
+        a: "1–2 kapslar dagligen. En burk med 60 kapslar räcker 30 dagar med 2 kapslar om dagen, eller 60 dagar med 1.",
       },
       {
         q: "Innehåller den fyllnadsmedel eller är den vegansk?",
         a: "Inga fyllnadsmedel. Kapseln innehåller rotextrakt och ett växtbaserat kapselskal av HPMC, vilket gör den vegansk.",
-      },
-      {
-        q: "Varför är den dyrare än vår gula Tongkat?",
-        a: "Råvaran växer långsamt, skördas för hand och finns i mindre volymer.",
       },
     ],
   },
@@ -605,7 +598,7 @@ export const productContent: Record<string, ProductContent> = {
       {
         heading: "Doserad och testad",
         body:
-          "Varje batch testas för tungmetaller och mikrobiologi innan den packas i Norden.",
+          "Varje batch testas för tungmetaller och mikrobiologi innan den packas i Sverige.",
       },
     ],
     specs: [
@@ -613,7 +606,7 @@ export const productContent: Record<string, ProductContent> = {
       { label: "Använd växtdel", value: "Rot" },
       { label: "Dagsdos", value: "2 kapslar (500 mg extrakt)" },
       { label: "Innehåll", value: "60 kapslar – 30 dagar" },
-      { label: "Packat i", value: "Norden" },
+      { label: "Tillverkad i", value: "Sverige" },
     ],
     ingredients:
       "Akarkara rotextrakt (Anacyclus pyrethrum), kapselskal (hydroxipropylmetylcellulosa).",
@@ -658,7 +651,7 @@ export const productContent: Record<string, ProductContent> = {
       {
         heading: "Tillverkad i Sverige",
         body:
-          "Produktionen sker i Sverige i små batcher enligt europeiska tillverkningskrav, med kontroll av råvara och batch. Förpackningen är en återförslutningsbar, återvinningsbar pappersbaserad påse som håller innehållet torrt mellan doserna.",
+          "Produktionen sker i Sverige i små batcher enligt europeiska tillverkningskrav, med kontroll av råvara och batch. Förpackningen är en plastburk med skruvlock som håller innehållet torrt mellan doserna.",
       },
     ],
     specs: [
@@ -685,7 +678,7 @@ export const productContent: Record<string, ProductContent> = {
         a: "Att 20 delar torkad macarot koncentrerats till 1 del extrakt. Det är ett mått på koncentration, inget annat.",
       },
       {
-        q: "Hur länge räcker en påse?",
+        q: "Hur länge räcker en burk?",
         a: "60 kapslar och 2 kapslar dagligen ger 30 dagar.",
       },
       {
@@ -723,7 +716,7 @@ export const productContent: Record<string, ProductContent> = {
       {
         heading: "Tillverkad i Sverige",
         body:
-          "Produktionen sker i Sverige i små batcher enligt europeiska tillverkningskrav, med kontroll av råvara och batch. Förpackningen är en återförslutningsbar, återvinningsbar pappersbaserad påse som håller innehållet torrt mellan doserna.",
+          "Produktionen sker i Sverige i små batcher enligt europeiska tillverkningskrav, med kontroll av råvara och batch. Förpackningen är en plastburk med skruvlock som håller innehållet torrt mellan doserna.",
       },
     ],
     specs: [
@@ -759,7 +752,7 @@ export const productContent: Record<string, ProductContent> = {
         a: "Ja. Kapselskalet är växtbaserat pullulan och produkten är glutenfri och utan GMO.",
       },
       {
-        q: "Hur länge räcker en påse?",
+        q: "Hur länge räcker en burk?",
         a: "60 kapslar och 1 kapsel dagligen ger 60 dagar.",
       },
     ],
@@ -789,7 +782,7 @@ export const productContent: Record<string, ProductContent> = {
       {
         heading: "Tillverkad i Sverige",
         body:
-          "Produktionen sker i Sverige enligt europeiska krav på säkerhet, kvalitet och hållbarhet. Förpackningen är en återförslutningsbar, återvinningsbar pappersbaserad påse som håller innehållet torrt mellan doserna.",
+          "Produktionen sker i Sverige enligt europeiska krav på säkerhet, kvalitet och hållbarhet. Förpackningen är en plastburk med skruvlock som håller innehållet torrt mellan doserna.",
       },
     ],
     specs: [
@@ -824,7 +817,7 @@ export const productContent: Record<string, ProductContent> = {
         a: "Ja. Kapselskalet är växtbaserat och produkten är glutenfri och utan GMO.",
       },
       {
-        q: "Hur länge räcker en påse?",
+        q: "Hur länge räcker en burk?",
         a: "60 kapslar och 1 kapsel dagligen ger 60 dagar.",
       },
     ],
@@ -854,7 +847,7 @@ export const productContent: Record<string, ProductContent> = {
       {
         heading: "Tillverkad i Sverige",
         body:
-          "Produktionen sker i Sverige i små batcher enligt europeiska krav på säkerhet, kvalitet och hållbarhet. Förpackningen är en återförslutningsbar, återvinningsbar pappersbaserad påse som håller innehållet torrt mellan doserna.",
+          "Produktionen sker i Sverige i små batcher enligt europeiska krav på säkerhet, kvalitet och hållbarhet. Förpackningen är en plastburk med skruvlock som håller innehållet torrt mellan doserna.",
       },
     ],
     specs: [
@@ -889,7 +882,7 @@ export const productContent: Record<string, ProductContent> = {
         a: "Ja. Kapselskalet är växtbaserat och produkten är glutenfri och utan GMO.",
       },
       {
-        q: "Hur länge räcker en påse?",
+        q: "Hur länge räcker en burk?",
         a: "60 kapslar räcker 30 dagar vid 2 kapslar dagligen och 60 dagar vid 1 kapsel dagligen.",
       },
     ],
@@ -918,7 +911,7 @@ export const productContent: Record<string, ProductContent> = {
       {
         heading: "Tillverkad i Sverige",
         body:
-          "Produktionen sker i Sverige i små batcher enligt europeiska krav på säkerhet och kvalitet. Förpackningen är en återförslutningsbar, återvinningsbar pappersbaserad påse som håller innehållet torrt mellan doserna.",
+          "Produktionen sker i Sverige i små batcher enligt europeiska krav på säkerhet och kvalitet. Förpackningen är en plastburk med skruvlock som håller innehållet torrt mellan doserna.",
       },
     ],
     specs: [
@@ -952,7 +945,7 @@ export const productContent: Record<string, ProductContent> = {
         a: "Ja. Kapselskalet är växtbaserat och produkten är glutenfri och utan GMO.",
       },
       {
-        q: "Hur länge räcker en påse?",
+        q: "Hur länge räcker en burk?",
         a: "60 kapslar räcker 60 dagar vid 1 kapsel dagligen.",
       },
     ],
@@ -981,7 +974,7 @@ export const productContent: Record<string, ProductContent> = {
       {
         heading: "Tillverkad i Sverige",
         body:
-          "Produktionen sker i Sverige i små batcher enligt europeiska krav på säkerhet och kvalitet. Förpackningen är en återförslutningsbar, återvinningsbar pappersbaserad påse som håller innehållet torrt mellan doserna.",
+          "Produktionen sker i Sverige i små batcher enligt europeiska krav på säkerhet och kvalitet. Förpackningen är en plastburk med skruvlock som håller innehållet torrt mellan doserna.",
       },
     ],
     specs: [
@@ -1015,7 +1008,7 @@ export const productContent: Record<string, ProductContent> = {
         a: "Ja. Kapselskalet är växtbaserat och produkten är glutenfri och utan GMO.",
       },
       {
-        q: "Hur länge räcker en påse?",
+        q: "Hur länge räcker en burk?",
         a: "60 kapslar räcker 60 dagar vid 1 kapsel dagligen.",
       },
     ],
@@ -1044,7 +1037,7 @@ export const productContent: Record<string, ProductContent> = {
       {
         heading: "Tillverkad i Sverige",
         body:
-          "Produktionen sker i Sverige i små batcher enligt europeiska krav på säkerhet och hållbarhet. Förpackningen är en återförslutningsbar, återvinningsbar pappersbaserad påse som håller innehållet torrt mellan doserna.",
+          "Produktionen sker i Sverige i små batcher enligt europeiska krav på säkerhet och hållbarhet. Förpackningen är en plastburk med skruvlock som håller innehållet torrt mellan doserna.",
       },
     ],
     specs: [
@@ -1079,7 +1072,7 @@ export const productContent: Record<string, ProductContent> = {
         a: "Ja. Kapselskalet är växtbaserat och produkten är glutenfri och utan GMO.",
       },
       {
-        q: "Hur länge räcker en påse?",
+        q: "Hur länge räcker en burk?",
         a: "60 kapslar räcker 60 dagar vid 1 kapsel dagligen.",
       },
     ],
@@ -1108,7 +1101,7 @@ export const productContent: Record<string, ProductContent> = {
       {
         heading: "Tillverkad i Sverige",
         body:
-          "Produktionen sker i Sverige i små batcher enligt europeiska krav på säkerhet och kvalitet. Förpackningen är en återförslutningsbar, återvinningsbar pappersbaserad påse som håller innehållet torrt mellan doserna.",
+          "Produktionen sker i Sverige i små batcher enligt europeiska krav på säkerhet och kvalitet. Förpackningen är en plastburk med skruvlock som håller innehållet torrt mellan doserna.",
       },
     ],
     specs: [
@@ -1143,7 +1136,7 @@ export const productContent: Record<string, ProductContent> = {
         a: "Ja. Kapselskalet är växtbaserat och produkten är glutenfri och utan GMO.",
       },
       {
-        q: "Hur länge räcker en påse?",
+        q: "Hur länge räcker en burk?",
         a: "60 kapslar räcker 60 dagar vid 1 kapsel dagligen.",
       },
     ],
@@ -1172,7 +1165,7 @@ export const productContent: Record<string, ProductContent> = {
       {
         heading: "Tillverkad i Sverige",
         body:
-          "Produktionen sker i Sverige i små batcher enligt europeiska krav på säkerhet och hållbarhet. Förpackningen är en återförslutningsbar, återvinningsbar pappersbaserad påse som håller innehållet torrt mellan doserna.",
+          "Produktionen sker i Sverige i små batcher enligt europeiska krav på säkerhet och hållbarhet. Förpackningen är en plastburk med skruvlock som håller innehållet torrt mellan doserna.",
       },
     ],
     specs: [
@@ -1207,7 +1200,7 @@ export const productContent: Record<string, ProductContent> = {
         a: "Ja. Kapselskalet är växtbaserat och produkten är glutenfri och utan GMO.",
       },
       {
-        q: "Hur länge räcker en påse?",
+        q: "Hur länge räcker en burk?",
         a: "60 kapslar räcker 60 dagar vid 1 kapsel dagligen.",
       },
     ],
