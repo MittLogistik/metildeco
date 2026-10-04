@@ -98,6 +98,7 @@ ${tag("g:condition", "new")}
 ${tag("g:google_product_category", GOOGLE_CATEGORY)}
 ${tag("g:product_type", "Paket")}
 ${tag("g:is_bundle", "yes")}
+${b.freeShipping ? tag("g:shipping_label", "paket") : ""}
 ${unitPricing(bundleCount(b))}
 ${tag("g:adult", "no")}
 </item>`;
