@@ -15,9 +15,7 @@ export function ProductCard({ product, priority = false }: { product: Product; p
     ? { tone: "danger" as const, label: "Slutsåld" }
     : off
       ? { tone: "accent" as const, label: `−${off} %` }
-      : product.tags.includes("Bästsäljare")
-        ? { tone: "primary" as const, label: "Bästsäljare" }
-        : product.tags.includes("Nyhet")
+      : product.tags.includes("Nyhet")
           ? { tone: "neutral" as const, label: "Nyhet" }
           : null;
 

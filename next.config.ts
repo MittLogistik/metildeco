@@ -21,6 +21,10 @@ const nextConfig: NextConfig = {
     qualities: [70, 80],
     remotePatterns: [{ protocol: "https", hostname: "*.supabase.co", pathname: "/storage/v1/object/public/**" }],
   },
+  // Förhandsdomänerna hos Vercel får aldrig indexeras: de är kopior av butiken och kan läsas som dubbletter
+  async headers() {
+    return [{ source: "/:path*", has: [{ type: "host", value: "(?<host>.*\.vercel\.app)" }], headers: [{ key: "X-Robots-Tag", value: "noindex, nofollow" }] }];
+  },
   async redirects() {
     return [
       // Gamla adresser från förra butiken – behåll länkkraft och undvik 404 vid domänbytet

@@ -73,7 +73,7 @@ const privacy: LegalDoc = {
       type: "ul",
       items: [
         "Orderuppgifter: namn, leverans- och fakturaadress, e-post, telefonnummer, orderinnehåll, orderhistorik och returer.",
-        "Kontouppgifter: e-postadress, lösenord (sparas hashat), språk- och marknadsval samt prenumerationsinställningar.",
+        "Kontouppgifter: e-postadress och prenumerationsinställningar. Du loggar in med en engångskod som skickas till din e-post, så vi lagrar inget lösenord.",
         "Betaluppgifter: betalsätt, transaktions-ID och betalstatus. Fullständiga kortnummer lagras aldrig av oss utan hanteras av vår betalleverantör.",
         "Supportuppgifter: meddelanden, ärenden och bilagor du skickar till kundservice.",
         "Marknadsföringsuppgifter: e-postadress och samtyckesstatus om du prenumererar på nyhetsbrevet.",
@@ -106,7 +106,9 @@ const privacy: LegalDoc = {
         "Betalleverantörer, för betalning och bedrägerikontroll.",
         "Logistikpartners och fraktbolag, för leverans och returer.",
         "Leverantörer av drift, databas och e-post, för att driva sajten och skicka orderrelaterad e-post.",
-        "Analysleverantörer, endast om du accepterar analyscookies.",
+        "Betalning via Stripe (kort, Klarna, Apple Pay, Google Pay), lager och frakt via MittLogistik och PostNord, e-post via Resend, drift och databas via Vercel och Supabase.",
+        "Meta (Facebook, Instagram) och Google Ads, för att mäta våra annonser. Med ditt samtycke till marknadsföringscookies får de uppgifter om ditt besök och köp, och e-post i hashad form för att koppla köpet till en annons. Utan samtycke skickar Googles tagg bara anonyma signaler utan cookies.",
+        "AddRevenue, när du kommit till oss via en affiliatelänk: ordernummer och ordervärde, för att betala ut provision till den som länkade.",
         "Myndigheter, när vi enligt lag är skyldiga att lämna ut information.",
       ],
     },
@@ -133,7 +135,7 @@ const privacy: LegalDoc = {
     { type: "h2", text: "Säkerhet" },
     {
       type: "p",
-      text: "Sajten levereras över TLS, lösenord lagras hashade, åtkomsten till personuppgifter är begränsad till personal som behöver den, och våra system skyddas av loggning och rollbaserad behörighet.",
+      text: "Sajten levereras över TLS, inloggning sker med engångskoder, åtkomsten till personuppgifter är begränsad till personal som behöver den, och våra system skyddas av loggning och rollbaserad behörighet.",
     },
     { type: "h2", text: "Barn" },
     { type: "p", text: "Butiken riktar sig inte till barn. Du måste vara 18 år eller äldre för att handla eller skapa konto." },

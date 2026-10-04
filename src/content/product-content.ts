@@ -286,7 +286,7 @@ export const productContent: Record<string, ProductContent> = {
     eyebrow: "Nymphaea caerulea · 200:1 extrakt",
     headline: "Nilens heliga blomma, 400 mg per kapsel",
     intro:
-      "Ett extremt högkoncentrerat 200:1-extrakt av Blue Lotus – en av marknadens högsta koncentrationer. Ren råvara utan tillsatser, fyllmedel eller konstgjorda ämnen, i vegansk kapsel.",
+      "Ett koncentrerat 200:1-extrakt av Blue Lotus. Ren råvara utan tillsatser, fyllmedel eller konstgjorda ämnen, i vegansk kapsel.",
     highlights: [
       { label: "Extrakt", value: "200:1" },
       { label: "Per kapsel", value: "400 mg" },

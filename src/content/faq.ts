@@ -73,19 +73,19 @@ export const faqGroups: FaqGroup[] = [
     items: [
       {
         q: "Hur fungerar prenumerationen?",
-        a: "Välj Prenumerera på produktsidan så får du 15 % rabatt och fri frakt på varje leverans. Du väljer intervall (30, 60 eller 90 dagar) och kan pausa, ändra eller avsluta när du vill.",
+        a: "Välj Prenumerera på produktsidan så får du 15 % rabatt och fri frakt på varje leverans. Du väljer intervall (30, 60 eller 90 dagar) och kan pausa eller avsluta när du vill.",
       },
       {
         q: "När dras pengarna?",
-        a: "Första leveransen betalas direkt vid köpet. Därefter dras betalningen automatiskt vid varje förnyelse, samma dag som leveransen skickas.",
+        a: "Första leveransen betalas vid köpet. Därefter dras betalningen automatiskt när en ny period börjar, var 30:e, 60:e eller 90:e dag räknat från köpet. Paketet skickas några dagar efter dragningen och du får ett mejl med beräknad leveransdag.",
       },
       {
         q: "Hur pausar eller avslutar jag min prenumeration?",
-        a: "Logga in på Mitt konto och välj Pausa eller Avsluta på prenumerationen. Det gäller direkt, utan bindningstid eller avgift.",
+        a: "Logga in på Mitt konto och välj Pausa eller Avsluta. En paus gäller direkt och inga pengar dras förrän du återupptar. Avslutar du görs inga fler dragningar och prenumerationen upphör när den betalda perioden är slut. Ingen bindningstid och ingen avgift. Kommer du inte in, mejla kundservice så hjälper vi dig.",
       },
       {
         q: "Kan jag byta produkt eller intervall?",
-        a: "Ja, under Mitt konto kan du ändra intervall, antal och produkt fram till dagen före nästa utskick.",
+        a: "Ja. Mejla kundservice så byter vi intervall, antal eller produkt före nästa dragning. Adress och betalsätt ändrar du själv under Mitt konto.",
       },
     ],
   },
@@ -121,7 +121,7 @@ export const faqGroups: FaqGroup[] = [
       },
       {
         q: "Hur hanterar ni mina personuppgifter?",
-        a: "Vi använder dina uppgifter bara för att hantera din order och ditt konto, och delar dem aldrig med tredje part i marknadsföringssyfte. Läs mer i vår integritetspolicy.",
+        a: "Vi använder dina uppgifter för att hantera din order och ditt konto. Har du godkänt marknadsföringscookies delar vi även viss information med Meta och Google för att mäta våra annonser. Vi säljer aldrig dina uppgifter. Läs mer i vår integritetspolicy.",
       },
     ],
   },

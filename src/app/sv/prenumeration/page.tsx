@@ -20,31 +20,32 @@ export const metadata: Metadata = {
 const steps = [
   ["Välj produkt", "Välj de extrakt du använder regelbundet och klicka i Prenumerera på produktsidan."],
   ["Välj intervall", "Leverans var 30:e, 60:e eller 90:e dag – anpassa efter hur snabbt din förpackning tar slut."],
-  ["Få hem den automatiskt", "Du får kvitto via e-post vid varje leverans. Alltid fri frakt, oavsett ordervärde."],
-  ["Ändra eller avsluta", "Pausa, byt intervall, hoppa över en leverans eller avsluta – helt utan bindningstid."],
+  ["Få hem den automatiskt", "Vid varje ny period dras betalningen och du får ett mejl med beräknad leveransdag. Alltid fri frakt, oavsett ordervärde."],
+  ["Pausa eller avsluta", "Pausa, återuppta eller avsluta på Mitt konto – helt utan bindningstid. Vill du byta intervall eller produkt hjälper kundservice dig."],
 ];
 
 const benefits = [
   ["15 % rabatt varje gång", "Rabatten gäller så länge prenumerationen är aktiv – inte bara första ordern."],
   ["Alltid fri frakt", "Ingen fraktavgift på prenumerationsordrar, oavsett hur liten ordern är."],
   ["Ingen bindningstid", "Avsluta när du vill. Inga avgifter, ingen uppsägningstid."],
-  ["Pausa vid behov", "Åker du bort eller har en förpackning kvar? Skjut upp leveransen eller pausa i upp till 3 månader."],
-  ["Prisgaranti", "Ditt pris ligger fast under hela prenumerationen. Vi meddelar alltid i förväg vid ändring."],
+  ["Pausa vid behov", "Åker du bort eller har en förpackning kvar? Pausa prenumerationen på Mitt konto. Inga pengar dras förrän du återupptar den."],
+  ["Inga överraskningar", "Vi ändrar aldrig priset på en pågående prenumeration utan att meddela dig i förväg, och du kan alltid avsluta innan ändringen gäller."],
   ["Trygg betalning", "Betala tryggt med kort, Klarna, Apple Pay eller Google Pay. Kvitto via e-post vid varje leverans."],
 ];
 
 const faq = [
-  { q: "Hur avslutar jag min prenumeration?", a: "Logga in på Mitt konto, gå till Prenumerationer och välj Avsluta. Det gäller direkt och du kan alltid starta om senare. Du kan även höra av dig till kundservice så hjälper vi dig." },
-  { q: "Kan jag ändra leveransintervall eller adress?", a: "Ja. Under Mitt konto kan du ändra intervall, adress, betalsätt och antal fram till dagen innan nästa leverans." },
-  { q: "Kan jag ha flera produkter i samma prenumeration?", a: "Ja, dina prenumerationer samlas i samma leverans när intervallen matchar – då får du allt i ett paket." },
-  { q: "När dras pengarna?", a: "Första leveransen betalas direkt vid köpet. Därefter dras betalningen automatiskt vid varje förnyelse, samma dag som leveransen skickas." },
+  { q: "Hur avslutar jag min prenumeration?", a: "Logga in på Mitt konto, gå till Prenumerationer och välj Avsluta. Inga fler dragningar görs och prenumerationen upphör när den period du redan betalat är slut. Du kan också mejla kundservice så avslutar vi den åt dig och bekräftar skriftligen." },
+  { q: "Kan jag ändra leveransintervall eller adress?", a: "Adress och betalsätt ändrar du själv under Mitt konto. Vill du byta intervall, antal eller produkt mejlar du kundservice så ordnar vi det före nästa dragning." },
+  { q: "Kan jag ha flera produkter i samma prenumeration?", a: "Ja. Lägger du flera produkter med samma intervall i samma köp ingår de i samma prenumeration och kommer i samma paket." },
+  { q: "När dras pengarna?", a: "Första leveransen betalas vid köpet. Därefter dras betalningen automatiskt när en ny period börjar, var 30:e, 60:e eller 90:e dag räknat från köpet. Paketet skickas några dagar efter dragningen och du får ett mejl med beräknad leveransdag." },
 ];
 
 export default async function SubscriptionPage() {
   const products = await getProducts();
   const example = products.find((p) => p.slug === "tongkat-ali-elite") ?? products[0]!;
   const subPrice = Math.round(example.price * (1 - site.subscriptionDiscount / 100));
-  const yearly = (example.price - subPrice) * 12;
+  // Leveranser per år med en förpackning per leverans och ett intervall som räcker hela förpackningen (60 kapslar = 60 dagar)
+  const yearly = (example.price - subPrice) * 6;
   const popular = products.filter(isInStock).slice(0, 4);
 
   return (
@@ -128,7 +129,7 @@ export default async function SubscriptionPage() {
                 <dd className="tabular-nums">0 kr</dd>
               </div>
               <div className="flex justify-between border-t border-line pt-3 text-base font-semibold">
-                <dt>Du sparar per år (12 leveranser)</dt>
+                <dt>Du sparar per år (6 leveranser, var 60:e dag)</dt>
                 <dd className="tabular-nums">{formatPrice(yearly)}</dd>
               </div>
             </dl>

@@ -91,8 +91,7 @@ ${tag("link", abs(routes.bundle(b.slug)))}
 ${tag("g:image_link", images[0])}
 ${images.slice(1, 11).map((src) => tag("g:additional_image_link", src)).join("\n")}
 ${tag("g:availability", bundleInStock(b) ? "in_stock" : "out_of_stock")}
-${tag("g:price", money(b.value))}
-${tag("g:sale_price", money(b.price))}
+${tag("g:price", money(b.price))}
 ${tag("g:brand", "Metilde")}
 ${tag("g:identifier_exists", "no")}
 ${tag("g:condition", "new")}
@@ -164,8 +163,7 @@ ${tag("link", abs(routes.bundle(b.slug)))}
 ${tag("g:image_link", images[0])}
 ${images.slice(1, 11).map((src) => tag("g:additional_image_link", src)).join("\n")}
 ${tag("g:availability", bundleInStock(b) ? "in stock" : "out of stock")}
-${tag("g:price", money(b.value))}
-${tag("g:sale_price", money(b.price))}
+${tag("g:price", money(b.price))}
 ${tag("g:brand", "Metilde")}
 ${tag("g:condition", "new")}
 ${tag("g:fb_product_category", META_CATEGORY)}

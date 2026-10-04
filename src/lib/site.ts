@@ -40,7 +40,8 @@ export const site = {
   /** Rabatt på prenumeration i procent. */
   subscriptionDiscount: 15,
   /** Rabatt i nyhetsbrevet – sätt till null för att dölja blocket. */
-  newsletterDiscount: 15 as number | null,
+  // Av tills formuläret faktiskt sparar adressen och skickar koden (Merchant Center: löfte som inte hålls)
+  newsletterDiscount: null as number | null,
   social: {
     facebook: "https://www.facebook.com/metilde",
   },
