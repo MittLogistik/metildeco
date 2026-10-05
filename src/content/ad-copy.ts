@@ -43,13 +43,13 @@ export const productHooks: Record<string, string[]> = {
 export const angles: AdAngle[] = [
   {
     id: "extrakt",
-    text: "{hook}\n\n{name} tillverkas i Sverige och varje batch analyseras av oberoende labb innan den packas. Inga bindemedel, fyllnadsmedel eller färgämnen.",
+    text: "{hook}\n\n{name} tillverkas i Sverige och packas i plastburk. Inga bindemedel, fyllnadsmedel eller färgämnen.",
     headline: "{name}",
-    description: "Tillverkad i Sverige · Tredjepartstestad",
+    description: "Tillverkad i Sverige · Vegansk kapsel",
   },
   {
     id: "jamfor",
-    text: "Alla extrakt är inte likadana.\n\nVi visar extraktstyrka, dos per kapsel och analysresultat öppet, så att du kan jämföra innehållet i stället för etiketten.\n\n{hook}",
+    text: "Alla extrakt är inte likadana.\n\nVi visar extraktstyrka och dos per kapsel öppet, så att du kan jämföra innehållet i stället för etiketten.\n\n{hook}",
     headline: "Jämför innehållet, inte etiketten",
     description: "{name} från Metilde",
   },
@@ -86,9 +86,9 @@ export const retargetingAngles: AdAngle[] = [
   },
   {
     id: "paminnelse",
-    text: "Du tittade på {name} hos oss.\n\n{hook}\n\nVill du veta mer? Extraktstyrka, dos och analysresultat står öppet på produktsidan. Prenumerera och spara 15 % på varje leverans.",
+    text: "Du tittade på {name} hos oss.\n\n{hook}\n\nVill du veta mer? Extraktstyrka och dos står öppet på produktsidan. Prenumerera och spara 15 % på varje leverans.",
     headline: "Fortfarande nyfiken på {name}?",
-    description: "Tillverkad i Sverige · Tredjepartstestad",
+    description: "Tillverkad i Sverige · Vegansk kapsel",
   },
 ];
 

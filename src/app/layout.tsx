@@ -24,7 +24,7 @@ export const metadata: Metadata = {
     template: "%s | Metilde",
   },
   description:
-    "Standardiserade örtextrakt och svampextrakt utan onödiga tillsatser. Tredjepartstestat, tillverkat i Sverige. Fri frakt över 499 kr.",
+    "Standardiserade örtextrakt och svampextrakt utan fyllnadsmedel, tillverkade i Sverige. Fri frakt över 499 kr.",
   openGraph: {
     siteName: "Metilde",
     type: "website",

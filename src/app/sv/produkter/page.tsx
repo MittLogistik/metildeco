@@ -64,7 +64,7 @@ export default async function ProductsPage({ searchParams }: PageProps<"/sv/prod
       <Breadcrumbs items={category || showBundles ? [{ href: routes.products, label: "Produkter" }, { label: title }] : [{ label: "Produkter" }]} />
       <h1 className="mt-6 font-display text-4xl font-medium tracking-tight sm:text-5xl">{title}</h1>
       <p className="mt-3 max-w-2xl text-muted">
-        Standardiserade extrakt i vegansk kapsel, tillverkade i Sverige och tredjepartstestade batch för batch.
+        Standardiserade extrakt i vegansk kapsel, tillverkade i Sverige och packade i plastburk.
       </p>
 
       <div className="mt-8 flex flex-col gap-4 border-y border-line py-4 lg:flex-row lg:items-center lg:justify-between">

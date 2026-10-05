@@ -18,7 +18,7 @@ import { ButtonLink, Container, Eyebrow, SectionHeading } from "@/components/ui"
 export const metadata: Metadata = {
   title: "Metilde – Rena botaniska kosttillskott tillverkade i Sverige",
   description:
-    "Tongkat Ali, Fadogia Agrestis, Blue Lotus och funktionella svampar som standardiserade extrakt utan onödiga tillsatser. Tredjepartstestat, tillverkat i Sverige. Fri frakt över 499 kr.",
+    "Tongkat Ali, Fadogia Agrestis, Blue Lotus och funktionella svampar som standardiserade extrakt i vegansk kapsel, tillverkade i Sverige. Fri frakt över 499 kr.",
   alternates: { canonical: `${site.url}/sv` },
 };
 
@@ -42,14 +42,14 @@ export default async function HomePage() {
                 {site.campaign.label} <ArrowRight size={14} />
               </Link>
             ) : (
-              <Eyebrow>Tillverkat i Sverige · Tredjepartstestat</Eyebrow>
+              <Eyebrow>Tillverkat i Sverige · Vegansk kapsel</Eyebrow>
             )}
             <h1 className="mt-5 font-display text-4xl font-medium leading-[1.08] tracking-tight sm:text-5xl lg:text-6xl">
               Rena botaniska extrakt <span className="text-primary">för en stark vardag</span>
             </h1>
             <p className="mt-6 text-lg leading-relaxed text-muted">
               Standardiserade ört- och svampextrakt i vegansk kapsel – utan bindemedel, fyllnadsmedel eller färgämnen.
-              Varje batch analyseras av oberoende labb innan den packas.
+              Extraktstyrka och dos per kapsel står på varje burk.
             </p>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
               <ButtonLink href={routes.products} size="lg">
@@ -191,7 +191,7 @@ export default async function HomePage() {
           <dl className="grid grid-cols-2 gap-6">
             {[
               ["Standardiserat", "Samma innehåll i varje batch – mätt på markörsubstans eller extraktstyrka."],
-              ["Testat", "Identitet, tungmetaller och mikrobiologi analyseras av oberoende laboratorium."],
+              ["Spårbart", "Varje burk har batchnummer och bäst före-datum."],
               ["Veganskt", "Växtbaserat kapselskal (HPMC eller pullulan). Glutenfritt, utan GMO."],
               ["Svenskt", "Tillverkat i små batcher i Sverige enligt europeiska tillverkningskrav."],
             ].map(([t, d]) => (

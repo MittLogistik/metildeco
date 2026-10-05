@@ -286,42 +286,25 @@ const quality: LegalDoc = {
   title: "Kvalitetsgaranti",
   updated,
   intro:
-    "Varje batch tredjepartstestas innan den når dig. Rena formler utan onödiga tillsatser och full spårbarhet från råvara till färdig förpackning.",
-  metaTitle: "Kvalitetsgaranti – tredjepartstestat, spårbart, utan tillsatser",
+    "Så tillverkas och märks våra kapslar, och vad som gäller om du inte är nöjd.",
+  metaTitle: "Kvalitetsgaranti – tillverkning, märkning och returer",
   metaDescription:
-    "Så säkrar Metilde kvaliteten: tredjepartstestade batcher, dokumenterade råvaror, batchspårning och vad som gäller om du inte är nöjd.",
+    "Metildes kapslar tillverkas i Sverige, märks med extraktstyrka, dos och batchnummer och kan returneras oöppnade inom 30 dagar.",
   blocks: [
-    { type: "h2", text: "Våra fyra löften" },
+    { type: "h2", text: "Det här gäller för alla våra kapslar" },
     {
       type: "ul",
       items: [
-        "Inga onödiga tillsatser – inga konstgjorda färgämnen, sötningsmedel eller fyllnadsmedel vi inte kan motivera.",
-        "Väldokumenterade råvaror, valda efter form och standardisering snarare än lägsta pris.",
-        "Tredjepartstestade batcher med analyscertifikat.",
-        "Tillverkat i Sverige enligt europeiska tillverkningskrav.",
-      ],
-    },
-    { type: "h2", text: "Råvaruval" },
-    {
-      type: "p",
-      text: "Vi väljer leverantörer med dokumenterat ursprung, standardiserade extrakt där det är relevant och en stabil produktionshistorik. Varje leverantör utvärderas på specifikation, revisionshistorik och förmågan att leverera jämna batcher över tid.",
-    },
-    { type: "h2", text: "Tester" },
-    {
-      type: "table",
-      head: ["Test", "Vad vi kontrollerar", "När"],
-      rows: [
-        ["Identitet och halt", "Att råvaran är den den utger sig för, samt deklarerad mängd", "Varje batch"],
-        ["Tungmetaller", "Bly, kadmium, kvicksilver, arsenik mot EU:s gränsvärden", "Varje batch"],
-        ["Mikrobiologi", "Totalantal, jäst, mögel, salmonella, E. coli", "Varje batch"],
-        ["Bekämpningsmedel och lösningsmedel", "Rester från odling och extraktion", "Riskbaserat per råvara"],
-        ["Stabilitet", "Halt och kvalitet över hållbarhetstiden", "Per produkt och receptändring"],
+        "Vegansk kapsel utan fyllnadsmedel.",
+        "Extraktstyrka, mängd per kapsel och latinskt namn står på burken.",
+        "Kapslarna tillverkas och packas i plastburk i Sverige. Råvarorna kommer från länderna där växterna hör hemma.",
+        "Batchnummer och bäst före-datum på varje burk.",
       ],
     },
     { type: "h2", text: "Spårbarhet" },
     {
       type: "p",
-      text: "Varje förpackning har ett batchnummer och bäst före-datum. Med batchnumret kan vi spåra produkten tillbaka till råvarubatch, tillverkningsdatum och testresultat. Mejla oss batchnumret så skickar vi analyscertifikatet för just den batchen.",
+      text: "Varje burk har ett batchnummer och ett bäst före-datum. Ange batchnumret om du kontaktar oss om en produkt, så kan vi spåra vilken tillverkning den kommer från.",
     },
     { type: "h2", text: "Om du inte är nöjd" },
     {
@@ -331,7 +314,7 @@ const quality: LegalDoc = {
     { type: "h2", text: "Regelverk" },
     {
       type: "p",
-      text: "Våra produkter är kosttillskott, anmälda till berörda svenska myndigheter och märkta enligt EU:s regelverk. Kosttillskott ersätter inte en varierad kost och hälsosam livsstil och är inte avsedda att diagnostisera, behandla eller bota sjukdom. Rådgör med läkare om du är gravid, ammar eller använder läkemedel.",
+      text: "Våra produkter är kosttillskott och märks enligt EU:s regler för kosttillskott. Kosttillskott ersätter inte en varierad kost och hälsosam livsstil och är inte avsedda att diagnostisera, behandla eller bota sjukdom. Rådgör med läkare om du är gravid, ammar eller använder läkemedel.",
     },
     ...helpBlock,
   ],

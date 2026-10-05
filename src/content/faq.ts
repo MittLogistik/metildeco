@@ -98,8 +98,8 @@ export const faqGroups: FaqGroup[] = [
         a: "Kapslarna tillverkas i Sverige, i små batcher enligt europeiska tillverkningskrav. Själva rotextrakten kommer från länderna där växterna hör hemma, till exempel Tongkat Ali från Sydostasien och maca från Anderna.",
       },
       {
-        q: "Testas produkterna av tredje part?",
-        a: "Ja. Varje batch analyseras av ett oberoende laboratorium för identitet, tungmetaller och mikrobiologi. Mejla oss batchnumret så skickar vi analyscertifikatet.",
+        q: "Hur vet jag vilken batch jag har fått?",
+        a: "Batchnummer och bäst före-datum står på burken. Ange batchnumret om du kontaktar oss om en produkt, så kan vi spåra den.",
       },
       {
         q: "Innehåller produkterna onödiga tillsatser?",

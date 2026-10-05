@@ -146,7 +146,7 @@ DET DU SÄLJER PÅ I STÄLLET, och det räcker långt:
 - Råvaran och botaniken: vilken växt, vilken del, var den kommer ifrån.
 - Extraktstyrkan och dosen per kapsel, öppet redovisad. Att kunna jämföra innehåll mot innehåll.
 - Renheten: inga fyllnadsmedel, bindemedel eller färgämnen. Vegansk kapsel.
-- Tillverkning i Sverige och att varje batch analyseras av oberoende labb.
+- Tillverkning i Sverige, vegansk kapsel utan fyllnadsmedel. Skriv ALDRIG att produkterna är tredjepartstestade, labbtestade eller certifierade.
 - Rutinen: en kapsel om dagen.
 - Villkoren: pris, fri frakt, ångerrätt på oöppnade produkter, prenumeration med rabatt, pausa när du vill.
 - Nyfikenhet och hantverk: att det här är för den som läser innehållsförteckningen.
@@ -171,7 +171,7 @@ const productBrief = (product: Product, hook: string, angle: AdAngle) =>
 
 /** Vad varje vinkel ska handla om, så att de fem annonserna i en kampanj blir olika. */
 const angleBrief: Record<string, string> = {
-  extrakt: "Råvaran och extraktstyrkan. Visa hur koncentrerat det är och att varje batch testas av oberoende labb.",
+  extrakt: "Råvaran och extraktstyrkan. Visa hur koncentrerat det är och hur mycket som finns per kapsel.",
   jamfor: "Utmana läsaren att jämföra innehållsförteckningar. Vi redovisar styrka och dos öppet, många gör det inte.",
   rutin: "Enkelheten. En kapsel om dagen, vegansk, inga tillsatser. Passa in i vardagen utan krångel.",
   prenumeration: "Erbjudandet. Prenumerera och spara, välj intervall, pausa eller avsluta när du vill.",

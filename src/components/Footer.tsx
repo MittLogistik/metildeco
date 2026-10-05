@@ -51,7 +51,7 @@ export function Footer() {
             <span className="font-display text-2xl font-medium tracking-tight">Metilde</span>
           </Link>
           <p className="mt-4 max-w-sm text-sm leading-relaxed text-muted">
-            Standardiserade ört- och svampextrakt tillverkade i Sverige. Utan onödiga tillsatser, tredjepartstestat batch för batch.
+            Standardiserade ört- och svampextrakt tillverkade i Sverige. I vegansk kapsel utan fyllnadsmedel.
           </p>
           <address className="mt-6 space-y-2 text-sm not-italic">
             <p className="flex items-center gap-2">

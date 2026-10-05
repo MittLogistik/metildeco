@@ -12,7 +12,7 @@ import { ButtonLink, Container, Eyebrow, SectionHeading } from "@/components/ui"
 export const metadata: Metadata = {
   title: "Tongkat Ali – rot, renhet och rätt styrka",
   description:
-    "Tongkat Ali (Eurycoma longifolia) som standardiserat 200:1-rotextrakt, tillverkat i Sverige och tredjepartstestat. Jämför Elite, Ultra 4% och Black.",
+    "Tongkat Ali (Eurycoma longifolia) som standardiserat 200:1-rotextrakt, tillverkat i Sverige. Jämför Elite, Ultra 4% och Black.",
   alternates: { canonical: `${site.url}/sv/tongkat-ali` },
 };
 
@@ -34,10 +34,10 @@ export default async function TongkatPage() {
             <Eyebrow>Örtextrakt · Eurycoma longifolia</Eyebrow>
             <h1 className="mt-3 font-display text-4xl font-medium leading-[1.1] tracking-tight sm:text-5xl">Tongkat Ali – rot, renhet och rätt styrka för dig</h1>
             <p className="mt-5 text-lg leading-relaxed text-muted">
-              Eurycoma longifolia, eller Tongkat Ali, är en av Sydostasiens mest använda rötter. Vi använder enbart roten, vattenbaserad extraktion och standardiserade extrakt som testas av tredje part inför varje batch.
+              Eurycoma longifolia, eller Tongkat Ali, är en rot från Sydostasien. Vi använder enbart roten, som 200:1-extrakt i vegansk kapsel.
             </p>
             <ul className="mt-6 grid gap-2 text-sm sm:grid-cols-2">
-              {["Standardiserat rotextrakt", "Tredjepartstestat varje batch", "Inga fyllnadsmedel", `Fri frakt över ${site.freeShippingOver} kr`].map((t) => (
+              {["Standardiserat rotextrakt", "Vegansk kapsel", "Inga fyllnadsmedel", `Fri frakt över ${site.freeShippingOver} kr`].map((t) => (
                 <li key={t} className="flex items-center gap-2">
                   <CheckIcon size={15} className="text-primary" /> {t}
                 </li>
@@ -63,10 +63,10 @@ export default async function TongkatPage() {
         <Container className="grid gap-10 py-16 lg:grid-cols-2">
           <SectionHeading eyebrow="Råvaran" title="Så jobbar vi med råvaran" />
           <div className="space-y-4 text-muted">
-            <p>Roten skördas i Sydostasien och extraheras med vatten – utan lösningsmedel och utan onödiga tillsatser. Det ger ett extrakt som ligger nära den traditionella användningen.</p>
-            <p>Varje batch analyseras av ett oberoende laboratorium för tungmetaller, mikrobiologi och standardisering innan den packas och skickas.</p>
+            <p>Roten kommer från Sydostasien. Extraktet kapslas och packas i Sverige, utan fyllnadsmedel.</p>
+            <p>Extraktstyrka, mängd per kapsel och latinskt namn står på varje burk, tillsammans med batchnummer och bäst före-datum.</p>
             <ul className="flex flex-wrap gap-x-6 gap-y-2 pt-2 text-sm text-foreground">
-              {["Tredjepartstestat", "Vegansk kapsel", "Snabb leverans"].map((t) => (
+              {["Tillverkat i Sverige", "Vegansk kapsel", "Plastburk med 60 kapslar"].map((t) => (
                 <li key={t} className="flex items-center gap-1.5">
                   <CheckIcon size={15} className="text-primary" /> {t}
                 </li>

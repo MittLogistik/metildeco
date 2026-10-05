@@ -303,9 +303,9 @@ export default async function ProductPage({ params }: PageProps<"/sv/produkt/[sl
               <h3 className="text-center font-display text-3xl font-medium">Så säkrar vi kvaliteten</h3>
               <ul className="mx-auto mt-10 grid max-w-4xl gap-6 sm:grid-cols-3">
                 {[
-                  { icon: LeafIcon, t: "Verifierad råvara", d: "Botanisk kontroll av art och växtdel innan råvaran godkänns." },
-                  { icon: FlaskIcon, t: "Tredjepartstestat", d: "Analys av tungmetaller och mikrobiologi på varje batch." },
-                  { icon: ShieldIcon, t: "Ren sammansättning", d: "Inga onödiga tillsatser, färgämnen eller fyllnadsmedel." },
+                  { icon: LeafIcon, t: "Latinskt namn", d: "Art och växtdel anges på varje burk." },
+                  { icon: FlaskIcon, t: "Tydlig dosering", d: "Extraktstyrka och mängd per kapsel står på etiketten." },
+                  { icon: ShieldIcon, t: "Tillverkat i Sverige", d: "Vegansk kapsel utan fyllnadsmedel, packad i plastburk." },
                 ].map((it) => (
                   <li key={it.t} className="rounded-card border border-line p-6 text-center">
                     <span className="mx-auto inline-flex h-12 w-12 items-center justify-center rounded-full bg-primary-soft text-primary">

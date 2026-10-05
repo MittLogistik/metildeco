@@ -596,9 +596,9 @@ export const productContent: Record<string, ProductContent> = {
           "Vi använder enbart roten, torkad och malen, och extraherar den utan lösningsmedel. Inga fyllnadsmedel tillsätts.",
       },
       {
-        heading: "Doserad och testad",
+        heading: "Doserad och märkt",
         body:
-          "Varje batch testas för tungmetaller och mikrobiologi innan den packas i Sverige.",
+          "Mängd per kapsel och rekommenderad dos står på burken, tillsammans med batchnummer och bäst före-datum.",
       },
     ],
     specs: [
@@ -1383,7 +1383,6 @@ for (const flavorKey of Object.keys(electrolyteFlavorText)) {
         { label: "Portioner", value: "50" },
         { label: "Smak", value: f.note },
         { label: "Tillsatt socker", value: "Nej" },
-        { label: "Tredjepartstestad", value: "Ja, varje batch" },
       ],
       ingredients:
         "Natriumklorid (havssalt), natriumcitrat, kaliumcitrat, magnesiummalat, syra (citronsyra), naturlig arom, sötningsmedel (steviolglykosider).",

@@ -1,4 +1,4 @@
-import "server-only";
+﻿import "server-only";
 import { unstable_cache } from "next/cache";
 import { cache } from "react";
 import productsJson from "../../data/products.json";
@@ -11,9 +11,9 @@ import { productFromRow, slimProduct, type Product, type ProductRow, type SlimPr
 import { supabaseAdmin, supabaseConfigured } from "./supabase";
 
 /**
- * Katalogen: produkter och paket. Hämtas från Supabase och cachas tills admin
- * sparar något (revalidateTag(CATALOG_TAG)) eller som längst en timme.
- * Saknas databaskoppling (t.ex. lokalt utan nycklar) används exporten i data/.
+ * Katalogen: produkter och paket. HÃ¤mtas frÃ¥n Supabase och cachas tills admin
+ * sparar nÃ¥got (revalidateTag(CATALOG_TAG)) eller som lÃ¤ngst en timme.
+ * Saknas databaskoppling (t.ex. lokalt utan nycklar) anvÃ¤nds exporten i data/.
  */
 export const CATALOG_TAG = "catalog";
 
@@ -54,7 +54,7 @@ const fromDb = async (): Promise<RawCatalog> => {
   };
 };
 
-const loadRaw = unstable_cache(async () => (supabaseConfigured() ? fromDb() : fromJson()), ["catalog-raw-20261004"], {
+const loadRaw = unstable_cache(async () => (supabaseConfigured() ? fromDb() : fromJson()), ["catalog-raw-20261005"], {
   tags: [CATALOG_TAG],
   revalidate: 3600,
 });
@@ -62,14 +62,14 @@ const loadRaw = unstable_cache(async () => (supabaseConfigured() ? fromDb() : fr
 export type Catalog = {
   /** Alla produkter inkl. inaktiva (admin, feeds). */
   allProducts: Product[];
-  /** Produkter som säljs just nu. */
+  /** Produkter som sÃ¤ljs just nu. */
   products: Product[];
   bundles: Bundle[];
   /** Alla paket inkl. dolda (admin). */
   allBundles: Bundle[];
 };
 
-/** Katalogen för aktuell request (dedupliceras med React cache). */
+/** Katalogen fÃ¶r aktuell request (dedupliceras med React cache). */
 export const getCatalog = cache(async (): Promise<Catalog> => {
   const raw = await loadRaw();
   const sek = new Map<string, PriceRow>();
@@ -90,7 +90,7 @@ export const getBundle = async (slug: string) => (await getCatalog()).bundles.fi
 
 export type CatalogSnapshot = { products: SlimProduct[]; bundles: SlimBundle[] };
 
-/** Liten variant av katalogen som skickas till klienten för varukorgen. */
+/** Liten variant av katalogen som skickas till klienten fÃ¶r varukorgen. */
 export const getCatalogSnapshot = async (): Promise<CatalogSnapshot> => {
   const c = await getCatalog();
   return { products: c.products.map(slimProduct), bundles: c.bundles.map(slimBundle) };
