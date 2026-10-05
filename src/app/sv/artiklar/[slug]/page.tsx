@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
+import Link from "next/link";
+import type { ReactNode } from "react";
 import { notFound } from "next/navigation";
 import { articles, getArticle, type ArticleBlock } from "@/lib/articles";
 import { formatDate } from "@/lib/format";
@@ -29,24 +31,63 @@ export async function generateMetadata({ params }: PageProps<"/sv/artiklar/[slug
   };
 }
 
+/** Artiklarnas text har länkar i markdown-form: [text](product:slug), [text](/sv/...) eller [text](https://...), och *kursiv*. */
+function Inline({ text }: { text: string }) {
+  const out: ReactNode[] = [];
+  const re = /\[([^\]]+)\]\(([^)\s]+)\)|\*([^*\n]+)\*/g;
+  let last = 0;
+  let m: RegExpExecArray | null;
+  let k = 0;
+  while ((m = re.exec(text))) {
+    if (m.index > last) out.push(text.slice(last, m.index));
+    if (m[3] !== undefined) {
+      out.push(<em key={k++}>{m[3]}</em>);
+    } else {
+      const href = m[2].startsWith("product:") ? routes.product(m[2].slice(8)) : m[2];
+      out.push(
+        href.startsWith("/") ? (
+          <Link key={k++} href={href}>
+            {m[1]}
+          </Link>
+        ) : (
+          <a key={k++} href={href} target="_blank" rel="noopener">
+            {m[1]}
+          </a>
+        ),
+      );
+    }
+    last = m.index + m[0].length;
+  }
+  if (last < text.length) out.push(text.slice(last));
+  return <>{out}</>;
+}
+
 function Block({ block, products }: { block: ArticleBlock; products: Product[] }) {
   switch (block.type) {
     case "heading":
       return <h2>{block.text}</h2>;
     case "paragraph":
-      return <p>{block.text}</p>;
+      return (
+        <p>
+          <Inline text={block.text} />
+        </p>
+      );
     case "list":
       return (
         <ul>
           {block.items.map((it, i) => (
-            <li key={i}>{it}</li>
+            <li key={i}>
+              <Inline text={it} />
+            </li>
           ))}
         </ul>
       );
     case "quote":
       return (
         <blockquote>
-          <p>{block.text}</p>
+          <p>
+            <Inline text={block.text} />
+          </p>
           {block.source ? <footer className="mt-2 text-sm not-italic text-muted">– {block.source}</footer> : null}
         </blockquote>
       );

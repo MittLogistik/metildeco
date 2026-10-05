@@ -1224,7 +1224,7 @@ export const productContent: Record<string, ProductContent> = {
       {
         heading: "Standardiserat till 10 %",
         body:
-          "Withanolider är de ämnen som mäts i ett ashwagandhaextrakt. Vårt är standardiserat till 10 %, en av de högsta standardiseringarna som finns i kapselform. 400 mg extrakt motsvarar 40 mg withanolider i varje kapsel.",
+          "Withanolider är de ämnen som mäts i ett ashwagandhaextrakt. Vårt är standardiserat till 10 %. 400 mg extrakt motsvarar 40 mg withanolider i varje kapsel.",
       },
       {
         heading: "Ren sammansättning",

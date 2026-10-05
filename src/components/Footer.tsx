@@ -22,7 +22,7 @@ const columns = [
     title: "Om Metilde",
     links: [
       { href: routes.story, label: "Vår historia" },
-      { href: routes.quality, label: "Kvalitetsgaranti" },
+      { href: routes.quality, label: "Kvalitet" },
       { href: routes.sustainability, label: "Hållbarhet" },
       { href: routes.terms, label: "Köpvillkor" },
       { href: routes.privacy, label: "Integritetspolicy" },
@@ -32,7 +32,7 @@ const columns = [
     title: "Handla",
     links: [
       { href: routes.products, label: "Alla produkter" },
-      { href: routes.goals, label: "Handla efter mål" },
+      { href: routes.goals, label: "Hitta ditt extrakt" },
       { href: routes.subscription, label: "Prenumeration" },
       { href: routes.category("Tongkat Ali"), label: "Tongkat Ali" },
       { href: routes.articles, label: "Journalen" },

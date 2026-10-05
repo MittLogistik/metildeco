@@ -185,7 +185,7 @@ function PlanOption({
       </span>
       {highlight ? (
         <span className="absolute -top-2 right-3 rounded-full bg-primary px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-primary-fg">
-          Populärt
+          Fri frakt
         </span>
       ) : null}
     </button>

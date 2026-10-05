@@ -56,7 +56,7 @@ export default async function HomePage() {
                 Handla nu
               </ButtonLink>
               <ButtonLink href={routes.goals} size="lg" variant="outline">
-                Handla efter mål
+                Hitta ditt extrakt
               </ButtonLink>
             </div>
             <ul className="mt-8 flex flex-wrap gap-x-6 gap-y-2 text-sm text-muted">
@@ -127,7 +127,7 @@ export default async function HomePage() {
       <section>
         <Container className="py-16">
           <div className="flex items-end justify-between gap-4">
-            <SectionHeading eyebrow="Sortimentet" title="Populära just nu" />
+            <SectionHeading eyebrow="Sortimentet" title="Våra extrakt" />
             <Link href={routes.products} className="hidden items-center gap-1 text-sm font-medium hover:underline sm:inline-flex">
               Alla produkter <ArrowRight size={16} />
             </Link>
@@ -185,7 +185,7 @@ export default async function HomePage() {
               flytmedel, inga färgämnen – och batchnumret på förpackningen hör ihop med ett specifikt analysprotokoll.
             </p>
             <ButtonLink href={routes.quality} variant="white" className="mt-8">
-              Läs om vår kvalitetsgaranti
+              Läs om kvalitet och märkning
             </ButtonLink>
           </div>
           <dl className="grid grid-cols-2 gap-6">
@@ -204,16 +204,16 @@ export default async function HomePage() {
         </Container>
       </section>
 
-      {/* Handla efter mål */}
+      {/* Hitta ditt extrakt */}
       <section>
         <Container className="py-16">
           <SectionHeading
             eyebrow="Personligt"
-            title="Handla efter mål"
-            intro="Välj vad du vill fokusera på så visar vi de produkter i sortimentet som passar. Kombinera gärna flera mål."
+            title="Hitta ditt extrakt"
+            intro="Sortera sortimentet efter råvara och tid på dagen."
           />
           <ul className="mt-10 grid grid-cols-2 gap-3 sm:grid-cols-4">
-            {goals.map((g) => {
+            {goals.filter((g) => goalProductCount(g.id, products) > 0).map((g) => {
               const n = goalProductCount(g.id, products);
               return (
                 <li key={g.id}>

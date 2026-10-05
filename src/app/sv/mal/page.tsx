@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { goalProductCount, goals, isGoalId, productsByGoals, type GoalId } from "@/content/goals";
+import { goalProductCount, goals, productsByGoals, resolveGoalId, type GoalId } from "@/content/goals";
 import { getProducts } from "@/lib/catalog";
 import { routes } from "@/lib/routes";
 import { site } from "@/lib/site";
@@ -10,16 +10,16 @@ import { ProductCard } from "@/components/ProductCard";
 import { Container, SectionHeading } from "@/components/ui";
 
 export const metadata: Metadata = {
-  title: "Handla efter mål",
+  title: "Hitta ditt extrakt",
   description:
-    "Välj vad du vill fokusera på – energi, sömn, träning, fokus eller vitalitet – så visar vi de produkter i sortimentet som passar dina val.",
+    "Sortera sortimentet efter råvara och tid på dagen: Tongkat Ali, morgon, kväll, kring träningen, rötter och örter, svampextrakt med mera.",
   alternates: { canonical: `${site.url}${routes.goals}` },
 };
 
 export default async function GoalsPage({ searchParams }: PageProps<"/sv/mal">) {
   const sp = await searchParams;
   const raw = typeof sp.mal === "string" ? sp.mal.split(",") : Array.isArray(sp.mal) ? sp.mal : [];
-  const selected = raw.filter(isGoalId) as GoalId[];
+  const selected = Array.from(new Set(raw.map(resolveGoalId).filter((g): g is GoalId => g !== null)));
   const products = await getProducts();
   const list = productsByGoals(selected, products);
 
@@ -30,16 +30,16 @@ export default async function GoalsPage({ searchParams }: PageProps<"/sv/mal">) 
 
   return (
     <Container className="py-8 sm:py-12">
-      <Breadcrumbs items={[{ label: "Handla efter mål" }]} />
+      <Breadcrumbs items={[{ label: "Hitta ditt extrakt" }]} />
       <SectionHeading
         as="h1"
-        eyebrow="Personligt"
-        title="Handla efter mål"
-        intro="Markera det du vill fokusera på just nu. Vi visar sortimentet som passar dina val – kombinera gärna flera mål. Det här är en sorteringshjälp, inga hälsopåståenden."
+        eyebrow="Sortimentet"
+        title="Hitta ditt extrakt"
+        intro="Sortera sortimentet efter råvara och tid på dagen. Kombinera gärna flera grupper."
         className="mt-6"
       />
       <ul className="mt-10 grid grid-cols-2 gap-3 sm:grid-cols-4">
-        {goals.map((g, i) => {
+        {goals.filter((g) => goalProductCount(g.id, products) > 0).map((g, i) => {
           const active = selected.includes(g.id);
           const n = goalProductCount(g.id, products);
           return (
@@ -67,8 +67,8 @@ export default async function GoalsPage({ searchParams }: PageProps<"/sv/mal">) 
       <div className="mt-10 flex flex-wrap items-center justify-between gap-3 border-t border-line pt-6 text-sm">
         <p className="text-muted">
           {selected.length === 0
-            ? "Inget mål valt – visar hela sortimentet."
-            : `Valda mål: ${selected.length} · ${list.length} produkter`}
+            ? "Ingen grupp vald – visar hela sortimentet."
+            : `Valda grupper: ${selected.length} · ${list.length} produkter`}
         </p>
         {selected.length > 0 ? (
           <Link href={routes.goals} className="font-medium underline underline-offset-2">
@@ -80,7 +80,7 @@ export default async function GoalsPage({ searchParams }: PageProps<"/sv/mal">) 
       {list.length === 0 ? (
         <div className="py-16 text-center">
           <h2 className="font-display text-2xl font-medium">Ingen produkt matchar alla dina val</h2>
-          <p className="mt-2 text-muted">Prova att välja färre mål.</p>
+          <p className="mt-2 text-muted">Prova att välja färre grupper.</p>
         </div>
       ) : (
         <div className="mt-8 grid grid-cols-2 gap-x-4 gap-y-10 md:grid-cols-3 lg:grid-cols-4 lg:gap-x-6">

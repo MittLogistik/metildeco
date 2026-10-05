@@ -179,15 +179,15 @@ const terms: LegalDoc = {
     { type: "shippingTable" },
     {
       type: "p",
-      text: "Order som läggs före kl. 12.00 en vardag skickas normalt samma dag från vårt lager i Sverige. Du får en spårningslänk via e-post så snart paketet lämnar oss. Outlöst paket debiteras den faktiska returfraktkostnaden.",
+      text: "Order som läggs före kl. 12.00 en vardag skickas normalt samma dag från vårt lager i Sverige. Du får en spårningslänk via e-post så snart paketet lämnar oss. Outlöst paket debiteras den faktiska kostnaden för frakt tur och retur.",
     },
     { type: "h2", text: "Prenumeration" },
     {
       type: "ul",
       items: [
         "Prenumeration ger 15 % rabatt på ordinarie pris och levereras med det intervall du väljer.",
-        "Första leveransen betalas direkt vid köpet. Därefter dras betalningen automatiskt vid varje förnyelse, och leveransen skickas samma dag.",
-        "Du kan pausa, ändra intervall eller avsluta när som helst fram till dagen före nästa förnyelse, via Mitt konto eller genom att mejla kundservice. Ändringar som görs senare gäller från nästa leverans.",
+        "Första leveransen betalas direkt vid köpet. Därefter dras betalningen automatiskt när en ny period börjar, var 30:e, 60:e eller 90:e dag räknat från köpet. Paketet skickas några dagar efter dragningen och du får ett mejl med beräknad leveransdag.",
+        "Du kan pausa eller avsluta när som helst fram till dagen före nästa förnyelse, själv under Mitt konto eller genom att mejla kundservice. Vill du ändra intervall, antal eller produkt mejlar du kundservice. Ändringar som görs senare gäller från nästa leverans.",
         "Prenumerationen löper tills du avslutar den. Ingen bindningstid och ingen avgift för att avsluta.",
       ],
     },
@@ -283,11 +283,11 @@ const cookies: LegalDoc = {
 
 const quality: LegalDoc = {
   slug: "kvalitetsgaranti",
-  title: "Kvalitetsgaranti",
+  title: "Kvalitet och märkning",
   updated,
   intro:
     "Så tillverkas och märks våra kapslar, och vad som gäller om du inte är nöjd.",
-  metaTitle: "Kvalitetsgaranti – tillverkning, märkning och returer",
+  metaTitle: "Kvalitet och märkning – tillverkning, märkning och returer",
   metaDescription:
     "Metildes kapslar tillverkas i Sverige, märks med extraktstyrka, dos och batchnummer och kan returneras oöppnade inom 30 dagar.",
   blocks: [
@@ -418,7 +418,6 @@ const returns: LegalDoc = {
       type: "ul",
       items: [
         "Öppnade kosttillskott eller produkter med bruten försegling, av hygien- och livsmedelsskäl.",
-        "Digitala presentkort som redan skickats till mottagaren.",
         "Produkter där bäst före-datum passerat medan de varit i din ägo.",
       ],
     },

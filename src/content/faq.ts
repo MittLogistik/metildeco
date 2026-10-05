@@ -85,7 +85,7 @@ export const faqGroups: FaqGroup[] = [
       },
       {
         q: "Kan jag byta produkt eller intervall?",
-        a: "Ja. Mejla kundservice så byter vi intervall, antal, produkt eller leveransadress före nästa leverans. Betalsätt ändrar du själv under Mitt konto.",
+        a: "Ja. Mejla kundservice så byter vi intervall, antal, produkt eller leveransadress före nästa leverans. Pausa och avsluta kan du göra själv under Mitt konto.",
       },
     ],
   },

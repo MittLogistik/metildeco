@@ -12,10 +12,10 @@ import { Container } from "@/components/ui";
 
 const nav = [
   { href: routes.products, label: "Produkter" },
-  { href: routes.goals, label: "Handla efter mål" },
+  { href: routes.goals, label: "Hitta ditt extrakt" },
   { href: routes.subscription, label: "Prenumeration" },
   { href: routes.articles, label: "Journalen" },
-  { href: routes.quality, label: "Kvalitetsgaranti" },
+  { href: routes.quality, label: "Kvalitet" },
 ];
 
 export function Header() {

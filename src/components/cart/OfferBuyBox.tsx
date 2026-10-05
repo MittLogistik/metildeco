@@ -66,7 +66,7 @@ export function OfferBuyBox({ product, inStock, gifts }: { product: Product; inS
         <OptionCard
           active={option === "sub1"}
           onClick={() => setOption("sub1")}
-          badge="Populärt"
+          badge="Fri frakt"
           title="Prenumerera på 1 förpackning"
           sub={`1 månads förbrukning${perPack ? ` · ${perPack} kapslar` : ""}`}
           pct={site.subscriptionDiscount}

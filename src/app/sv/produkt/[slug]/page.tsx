@@ -117,7 +117,8 @@ export default async function ProductPage({ params }: PageProps<"/sv/produkt/[sl
         returnPolicyCategory: "https://schema.org/MerchantReturnFiniteReturnWindow",
         merchantReturnDays: 30,
         returnMethod: "https://schema.org/ReturnByMail",
-        returnFees: "https://schema.org/ReturnFeesCustomerResponsibility",
+        returnFees: "https://schema.org/ReturnShippingFees",
+        returnShippingFeesAmount: { "@type": "MonetaryAmount", value: 79, currency: "SEK" },
       },
     },
   };
