@@ -192,7 +192,7 @@ export async function suggestCopy(catalogId: string): Promise<{ primaryText: str
   const copy = await writeCatalogText({
     products,
     angle:
-      "Presentera sortimentet som en samling att välja ur. Lyft att extraktstyrka och dos står öppet på varje burk, att de tillverkas i Sverige. Uppmana att svepa och välja sin.",
+      "Presentera sortimentet som en samling att välja ur. Lyft att extraktstyrka och dos står öppet på varje burk, att Metilde är ett svenskt varumärke. Uppmana att svepa och välja sin.",
   });
   return { primaryText: copy.primaryText, headline: copy.headline, source: copy.source };
 }

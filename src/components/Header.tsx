@@ -33,7 +33,7 @@ export function Header() {
           <p>
             Fri frakt över {site.freeShippingOver} kr <span className="mx-2 opacity-50">·</span> Skickas samma dag vid order före 12
             <span className="mx-2 hidden opacity-50 sm:inline">·</span>
-            <span className="hidden sm:inline">Tillverkat i Sverige</span>
+            <span className="hidden sm:inline">Utvecklat i Sverige</span>
           </p>
         </Container>
       </div>

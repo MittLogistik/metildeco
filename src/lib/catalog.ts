@@ -54,7 +54,7 @@ const fromDb = async (): Promise<RawCatalog> => {
   };
 };
 
-const loadRaw = unstable_cache(async () => (supabaseConfigured() ? fromDb() : fromJson()), ["catalog-raw-20261005c"], {
+const loadRaw = unstable_cache(async () => (supabaseConfigured() ? fromDb() : fromJson()), ["catalog-raw-20261005d"], {
   tags: [CATALOG_TAG],
   revalidate: 3600,
 });

@@ -30,7 +30,7 @@ export default function GiftCardPage() {
           <div className="relative aspect-[4/3] overflow-hidden rounded-card bg-primary p-8 text-primary-fg sm:p-12">
             <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-primary-fg/70">Presentkort</p>
             <p className="mt-3 font-display text-4xl font-medium sm:text-5xl">Metilde</p>
-            <p className="mt-2 max-w-sm text-primary-fg/80">Rena botaniska extrakt, tillverkade i Sverige. Låt mottagaren välja själv.</p>
+            <p className="mt-2 max-w-sm text-primary-fg/80">Rena botaniska extrakt, utvecklade i Sverige. Låt mottagaren välja själv.</p>
             <p className="absolute bottom-8 left-8 font-mono text-sm tracking-widest text-primary-fg/60 sm:bottom-12 sm:left-12">GIFT-XXXX-XXXX</p>
           </div>
           <h2 className="mt-10 font-display text-2xl font-medium">Produkt i korthet</h2>

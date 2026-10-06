@@ -165,7 +165,7 @@ export function ProductForm({ product, giftCandidates = [] }: { product: Product
           <>
             <ImageManager title="Produktbilder" hint="Första bilden är huvudbild. PNG med transparent bakgrund fungerar bäst." slug={p.slug} field="images" images={p.images} upload={uploadProductImage} edit={editProductImage} />
             <ImageManager title="Toppbild på landningssidan" hint="Bred livsstilsbild överst i produktens berättelse." slug={p.slug} field="story_hero_image" images={p.storyHeroImage ? [p.storyHeroImage] : []} single upload={uploadProductImage} edit={editProductImage} />
-            <ImageManager title="Bilder i berättelsen" hint="En bild per avsnitt (Roten, Ren sammansättning, Tillverkad i Sverige …)." slug={p.slug} field="story_images" images={p.storyImages} upload={uploadProductImage} edit={editProductImage} />
+            <ImageManager title="Bilder i berättelsen" hint="En bild per avsnitt (Roten, Ren sammansättning, Utvecklad i Sverige …)." slug={p.slug} field="story_images" images={p.storyImages} upload={uploadProductImage} edit={editProductImage} />
           </>
         )}
       </div>

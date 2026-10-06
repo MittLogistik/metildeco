@@ -94,8 +94,8 @@ export const faqGroups: FaqGroup[] = [
     title: "Produkter & kvalitet",
     items: [
       {
-        q: "Var tillverkas era produkter?",
-        a: "Kapslarna tillverkas i Sverige, i små batcher enligt europeiska tillverkningskrav. Själva rotextrakten kommer från länderna där växterna hör hemma, till exempel Tongkat Ali från Sydostasien och maca från Anderna.",
+        q: "Var kommer era produkter ifrån?",
+        a: "Metilde är ett svenskt varumärke och sortimentet tas fram i Sverige. Råvarorna och extrakten kommer från länderna där växterna hör hemma, till exempel Tongkat Ali från Sydostasien och maca från Anderna.",
       },
       {
         q: "Hur vet jag vilken batch jag har fått?",

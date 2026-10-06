@@ -306,7 +306,7 @@ export default async function ProductPage({ params }: PageProps<"/sv/produkt/[sl
                 {[
                   { icon: LeafIcon, t: "Latinskt namn", d: "Art och växtdel anges på varje burk." },
                   { icon: FlaskIcon, t: "Tydlig dosering", d: "Extraktstyrka och mängd per kapsel står på etiketten." },
-                  { icon: ShieldIcon, t: "Tillverkat i Sverige", d: "Vegansk kapsel utan fyllnadsmedel, packad i plastburk." },
+                  { icon: ShieldIcon, t: "Utvecklat i Sverige", d: "Vegansk kapsel utan fyllnadsmedel, packad i plastburk." },
                 ].map((it) => (
                   <li key={it.t} className="rounded-card border border-line p-6 text-center">
                     <span className="mx-auto inline-flex h-12 w-12 items-center justify-center rounded-full bg-primary-soft text-primary">

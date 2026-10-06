@@ -286,10 +286,10 @@ const quality: LegalDoc = {
   title: "Kvalitet och märkning",
   updated,
   intro:
-    "Så tillverkas och märks våra kapslar, och vad som gäller om du inte är nöjd.",
-  metaTitle: "Kvalitet och märkning – tillverkning, märkning och returer",
+    "Så märks våra kapslar, och vad som gäller om du inte är nöjd.",
+  metaTitle: "Kvalitet och märkning – innehåll, märkning och returer",
   metaDescription:
-    "Metildes kapslar tillverkas i Sverige, märks med extraktstyrka, dos och batchnummer och kan returneras oöppnade inom 30 dagar.",
+    "Metildes kapslar märks med extraktstyrka, dos och batchnummer och kan returneras oöppnade inom 30 dagar.",
   blocks: [
     { type: "h2", text: "Det här gäller för alla våra kapslar" },
     {
@@ -297,7 +297,7 @@ const quality: LegalDoc = {
       items: [
         "Vegansk kapsel utan fyllnadsmedel.",
         "Extraktstyrka, mängd per kapsel och latinskt namn står på burken.",
-        "Kapslarna tillverkas och packas i plastburk i Sverige. Råvarorna kommer från länderna där växterna hör hemma.",
+        "Kapslarna levereras i plastburk. Metilde är ett svenskt varumärke; råvarorna kommer från länderna där växterna hör hemma.",
         "Batchnummer och bäst före-datum på varje burk.",
       ],
     },
@@ -466,7 +466,7 @@ const sustainability: LegalDoc = {
       type: "ul",
       items: [
         "Leverantörer ska dokumentera ursprung och följa tillämplig arbets- och miljölagstiftning.",
-        "Vi tillverkar i Sverige och köper råvara från odlare med dokumenterade skörderutiner.",
+        "Vi köper råvara från odlare med dokumenterade skörderutiner.",
         "Botaniska råvaror som bara växer utanför Europa köps i så stora partier som möjligt för att minska antalet transporter.",
       ],
     },

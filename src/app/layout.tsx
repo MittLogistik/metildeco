@@ -20,11 +20,11 @@ const figtree = Figtree({
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
   title: {
-    default: "Metilde – Rena botaniska kosttillskott tillverkade i Sverige",
+    default: "Metilde – Rena botaniska kosttillskott utvecklade i Sverige",
     template: "%s | Metilde",
   },
   description:
-    "Standardiserade örtextrakt och svampextrakt utan fyllnadsmedel, tillverkade i Sverige. Fri frakt över 499 kr.",
+    "Standardiserade örtextrakt och svampextrakt utan fyllnadsmedel, utvecklade i Sverige. Fri frakt över 499 kr.",
   openGraph: {
     siteName: "Metilde",
     type: "website",

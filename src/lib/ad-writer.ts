@@ -146,7 +146,7 @@ DET DU SÄLJER PÅ I STÄLLET, och det räcker långt:
 - Råvaran och botaniken: vilken växt, vilken del, var den kommer ifrån.
 - Extraktstyrkan och dosen per kapsel, öppet redovisad. Att kunna jämföra innehåll mot innehåll.
 - Renheten: inga fyllnadsmedel, bindemedel eller färgämnen. Vegansk kapsel.
-- Tillverkning i Sverige, vegansk kapsel utan fyllnadsmedel. Skriv ALDRIG att produkterna är tredjepartstestade, labbtestade eller certifierade.
+- Svenskt varumärke, utvecklat i Sverige. Vegansk kapsel utan fyllnadsmedel. Skriv ALDRIG att produkterna tillverkas, produceras, kapslas eller packas i Sverige. Skriv ALDRIG att produkterna är tredjepartstestade, labbtestade eller certifierade.
 - Rutinen: en kapsel om dagen.
 - Villkoren: pris, fri frakt, ångerrätt på oöppnade produkter, prenumeration med rabatt, pausa när du vill.
 - Nyfikenhet och hantverk: att det här är för den som läser innehållsförteckningen.
@@ -175,7 +175,7 @@ const angleBrief: Record<string, string> = {
   jamfor: "Utmana läsaren att jämföra innehållsförteckningar. Vi redovisar styrka och dos öppet, många gör det inte.",
   rutin: "Enkelheten. En kapsel om dagen, vegansk, inga tillsatser. Passa in i vardagen utan krångel.",
   prenumeration: "Erbjudandet. Prenumerera och spara, välj intervall, pausa eller avsluta när du vill.",
-  svenskt: "Svensk tillverkning och trygga villkor: skickas samma dag, fri frakt, 30 dagars ångerrätt på oöppnade produkter.",
+  svenskt: "Svenskt varumärke och trygga villkor: skickas samma dag, fri frakt, 30 dagars ångerrätt på oöppnade produkter.",
   varukorg: "Retargeting till någon som lagt varan i varukorgen men inte köpt. Vänlig påminnelse, sänk tröskeln med villkoren (snabb leverans, fri frakt, ångerrätt). Inget tjat, ingen brådska som inte är sann.",
   paminnelse: "Retargeting till någon som besökt produktsidan. Påminn om produkten, peka på det som går att kontrollera (styrka, dos, analyser) och nämn prenumerationsrabatten. Ingen brådska.",
 };
@@ -313,9 +313,9 @@ export async function writeCatalogText(o: { products: Product[]; angle: string; 
     .map((p) => `- ${p.name.replace(/ \|.*$/, "")}: ${p.bullets.filter((b) => b.length <= 46).slice(0, 2).join("; ") || p.short}`)
     .join("\n");
   const fallback = (): AdCopy => ({
-    primaryText: `${o.products.length} botaniska extrakt från Metilde 🌿\n\n${o.products.map((p) => `• ${p.name.replace(/ \|.*$/, "")}`).join("\n")}\n\nExtraktstyrka och dos står på varje burk. Tillverkade i Sverige, analyserade batch för batch. 📦 Fri frakt över ${site.freeShippingOver} kr.\n\nSvep och välj din.`,
+    primaryText: `${o.products.length} botaniska extrakt från Metilde 🌿\n\n${o.products.map((p) => `• ${p.name.replace(/ \|.*$/, "")}`).join("\n")}\n\nExtraktstyrka och dos står på varje burk. Utvecklade i Sverige. 📦 Fri frakt över ${site.freeShippingOver} kr.\n\nSvep och välj din.`,
     headline: "Hela sortimentet",
-    description: "Tillverkat i Sverige",
+    description: "Utvecklat i Sverige",
     source: "mall",
   });
   if (!copyAiConfigured()) return fallback();

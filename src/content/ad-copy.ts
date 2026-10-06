@@ -43,9 +43,9 @@ export const productHooks: Record<string, string[]> = {
 export const angles: AdAngle[] = [
   {
     id: "extrakt",
-    text: "{hook}\n\n{name} tillverkas i Sverige och packas i plastburk. Inga bindemedel, fyllnadsmedel eller färgämnen.",
+    text: "{hook}\n\n{name} kommer i plastburk från ett svenskt varumärke. Inga bindemedel, fyllnadsmedel eller färgämnen.",
     headline: "{name}",
-    description: "Tillverkad i Sverige · Vegansk kapsel",
+    description: "Utvecklad i Sverige · Vegansk kapsel",
   },
   {
     id: "jamfor",
@@ -67,8 +67,8 @@ export const angles: AdAngle[] = [
   },
   {
     id: "svenskt",
-    text: "{hook}\n\nTillverkad i Sverige, skickas samma dag vid order före 12. Fri frakt över 499 kr och 30 dagars ångerrätt på oöppnade produkter.",
-    headline: "Tillverkad i Sverige",
+    text: "{hook}\n\nSvenskt varumärke, skickas samma dag vid order före 12. Fri frakt över 499 kr och 30 dagars ångerrätt på oöppnade produkter.",
+    headline: "Utvecklad i Sverige",
     description: "Skickas samma dag · 30 dagars ångerrätt",
   },
 ];
@@ -88,7 +88,7 @@ export const retargetingAngles: AdAngle[] = [
     id: "paminnelse",
     text: "Du tittade på {name} hos oss.\n\n{hook}\n\nVill du veta mer? Extraktstyrka och dos står öppet på produktsidan. Prenumerera och spara 15 % på varje leverans.",
     headline: "Fortfarande nyfiken på {name}?",
-    description: "Tillverkad i Sverige · Vegansk kapsel",
+    description: "Utvecklad i Sverige · Vegansk kapsel",
   },
 ];
 

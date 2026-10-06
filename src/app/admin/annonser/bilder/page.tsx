@@ -46,7 +46,7 @@ export default async function AdImagesPage({ searchParams }: PageProps<"/admin/a
   const mediaBase = site.indexable ? site.url : "https://metildeco.vercel.app";
   // Godkända rubriker för text på bild: vinklarnas rubriker + produktfakta
   const headlineOptions = product
-    ? Array.from(new Set([...angles.map((a) => fillCopy(a.headline, { name: product.name.replace(/ \|.*$/, ""), hook: product.short })), "Tillverkad i Sverige", "Vegansk kapsel utan fyllnadsmedel", "Fri frakt över 499 kr"])).map((h) => ({ value: h, label: h }))
+    ? Array.from(new Set([...angles.map((a) => fillCopy(a.headline, { name: product.name.replace(/ \|.*$/, ""), hook: product.short })), "Utvecklad i Sverige", "Vegansk kapsel utan fyllnadsmedel", "Fri frakt över 499 kr"])).map((h) => ({ value: h, label: h }))
     : [];
   const presetOptions = [{ value: "", label: "Egen scen (våra prompts, produkten i miljö)" }]
     .concat(adStyles.map((s) => ({ value: `style:${s.id}`, label: `Stil: ${s.label} – ${s.description}` })))

@@ -115,7 +115,7 @@ export async function buildGoogleFeed(): Promise<string> {
 <channel>
 <title>Metilde</title>
 <link>${esc(site.url)}</link>
-<description>Botaniska extrakt och svampextrakt i kapselform, tillverkade i Sverige.</description>
+<description>Botaniska extrakt och svampextrakt i kapselform, utvecklade i Sverige.</description>
 ${items.join("\n")}
 </channel>
 </rss>
@@ -184,7 +184,7 @@ export async function buildMetaFeed(): Promise<string> {
 <channel>
 <title>Metilde</title>
 <link>${esc(site.url)}</link>
-<description>Botaniska extrakt och svampextrakt i kapselform, tillverkade i Sverige.</description>
+<description>Botaniska extrakt och svampextrakt i kapselform, utvecklade i Sverige.</description>
 ${items.join("\n")}
 </channel>
 </rss>

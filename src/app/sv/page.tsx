@@ -16,9 +16,9 @@ import { TrustBar } from "@/components/TrustBar";
 import { ButtonLink, Container, Eyebrow, SectionHeading } from "@/components/ui";
 
 export const metadata: Metadata = {
-  title: "Metilde – Rena botaniska kosttillskott tillverkade i Sverige",
+  title: "Metilde – Rena botaniska kosttillskott utvecklade i Sverige",
   description:
-    "Tongkat Ali, Fadogia Agrestis, Blue Lotus och funktionella svampar som standardiserade extrakt i vegansk kapsel, tillverkade i Sverige. Fri frakt över 499 kr.",
+    "Tongkat Ali, Fadogia Agrestis, Blue Lotus och funktionella svampar som standardiserade extrakt i vegansk kapsel, utvecklade i Sverige. Fri frakt över 499 kr.",
   alternates: { canonical: `${site.url}/sv` },
 };
 
@@ -42,7 +42,7 @@ export default async function HomePage() {
                 {site.campaign.label} <ArrowRight size={14} />
               </Link>
             ) : (
-              <Eyebrow>Tillverkat i Sverige · Vegansk kapsel</Eyebrow>
+              <Eyebrow>Utvecklat i Sverige · Vegansk kapsel</Eyebrow>
             )}
             <h1 className="mt-5 font-display text-4xl font-medium leading-[1.08] tracking-tight sm:text-5xl lg:text-6xl">
               Rena botaniska extrakt <span className="text-primary">för en stark vardag</span>
@@ -193,7 +193,7 @@ export default async function HomePage() {
               ["Standardiserat", "Samma innehåll i varje batch – mätt på markörsubstans eller extraktstyrka."],
               ["Spårbart", "Varje burk har batchnummer och bäst före-datum."],
               ["Veganskt", "Växtbaserat kapselskal (HPMC eller pullulan). Glutenfritt, utan GMO."],
-              ["Svenskt", "Tillverkat i små batcher i Sverige enligt europeiska tillverkningskrav."],
+              ["Svenskt", "Utvecklat i Sverige och skickat från vårt lager i Timrå."],
             ].map(([t, d]) => (
               <div key={t} className="rounded-2xl bg-white/10 p-5">
                 <dt className="font-display text-lg font-medium">{t}</dt>
