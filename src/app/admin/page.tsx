@@ -3,7 +3,10 @@ import { requireAdmin } from "@/lib/auth";
 import { getCatalog } from "@/lib/catalog";
 import { formatPrice } from "@/lib/format";
 import { site } from "@/lib/site";
+import { customerHref } from "@/lib/customers";
+import { RENEWAL_DELIVERY_LEAD_DAYS } from "@/lib/orders";
 import { getStats, periods, type Env, type Period, type Series } from "@/lib/stats";
+import { CHARGE_WINDOW_DAYS, getSubscriptionOverview, UPCOMING_DAYS, type SubscriptionOverview, type UpcomingShipment } from "@/lib/subscription-stats";
 import { supabaseAdmin } from "@/lib/supabase";
 import { StatusBadge } from "./_components/fields";
 import { TrendChart } from "./_components/TrendChart";
@@ -11,6 +14,102 @@ import { TrendChart } from "./_components/TrendChart";
 type OrderRow = { id: string; order_number: string; created_at: string; email: string | null; shipping_name: string | null; total: number; status: string; kind: string };
 
 const fmtCount = (v: number) => new Intl.NumberFormat("sv-SE").format(Math.round(v));
+const fmtDay = (iso: string) => new Date(iso).toLocaleDateString("sv-SE", { day: "numeric", month: "short", timeZone: "Europe/Stockholm" });
+
+function Tile({ label, value, note, tone }: { label: string; value: string; note: string; tone?: "danger" }) {
+  return (
+    <div className={`rounded-2xl border p-4 ${tone === "danger" ? "border-danger/40 bg-danger/5" : "border-line bg-white"}`}>
+      <p className="text-xs text-muted">{label}</p>
+      <p className={`mt-1 font-display text-2xl font-medium tabular-nums ${tone === "danger" ? "text-danger" : ""}`}>{value}</p>
+      <p className="text-xs text-muted">{note}</p>
+    </div>
+  );
+}
+
+function PaymentBadge({ s }: { s: UpcomingShipment }) {
+  if (s.state === "paid") return <span className="inline-flex rounded-full bg-accent-soft px-2.5 py-0.5 text-xs font-semibold text-accent">Betald {fmtDay(s.chargeAt)}</span>;
+  if (s.state === "failed") return <span className="inline-flex rounded-full bg-danger/10 px-2.5 py-0.5 text-xs font-semibold text-danger">Misslyckades {fmtDay(s.chargeAt)}</span>;
+  return <span className="inline-flex rounded-full bg-sand px-2.5 py-0.5 text-xs font-semibold text-muted">Dras {fmtDay(s.chargeAt)}</span>;
+}
+
+function SubscriptionSection({ overview: o, env, productName }: { overview: SubscriptionOverview; env: Env; productName: (slug: string | null) => string }) {
+  const paidCount = o.upcoming.filter((s) => s.state === "paid").length;
+  return (
+    <section className="space-y-4 rounded-2xl border border-line bg-white p-5">
+      <div className="flex flex-wrap items-baseline justify-between gap-2">
+        <h2 className="font-display text-lg font-medium">Prenumerationer{env === "sandbox" ? " (test)" : ""}</h2>
+        <Link href="/admin/kunder" className="text-sm underline underline-offset-2">
+          Alla kunder
+        </Link>
+      </div>
+
+      <div className="grid grid-cols-2 gap-3 md:grid-cols-5">
+        <Tile label="Aktiva prenumeranter" value={fmtCount(o.active)} note="dras och skickas som vanligt" />
+        <Tile label="Återkommande värde" value={formatPrice(Math.round(o.recurring30))} note="per 30 dagar, inkl. moms" />
+        <Tile label="Pausade" value={fmtCount(o.paused)} note="inga dragningar just nu" />
+        <Tile label="Avslutas" value={fmtCount(o.ending)} note="sista perioden pågår" />
+        <Tile label="Misslyckade dragningar" value={fmtCount(o.failed)} note={o.failed ? "Stripe försöker igen" : "allt betalt"} tone={o.failed ? "danger" : undefined} />
+      </div>
+
+      <div className={`rounded-xl px-4 py-3 text-sm ${o.missingRenewals.length ? "bg-danger/10 text-danger" : "bg-sand"}`}>
+        <p>
+          <strong className="font-semibold">{fmtCount(o.charges.count)} dragningar</strong> på {formatPrice(Math.round(o.charges.sum))} de senaste {CHARGE_WINDOW_DAYS} dagarna.
+          {" "}En förnyelse blir en planerad order först när Stripe har bekräftat betalningen, så allt märkt <em>Betald</em> nedan är betalt innan det packas.
+        </p>
+        {o.missingRenewals.length ? (
+          <ul className="mt-2 list-disc pl-5">
+            {o.missingRenewals.map((m) => (
+              <li key={m.stripeSubscriptionId}>
+                {m.email ?? m.stripeSubscriptionId}: förnyad i Stripe {fmtDay(m.periodStart)} men ingen förnyelseorder här. Kontrollera fakturan i Stripe och webhooken.
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p className="mt-1 text-xs text-muted">Avstämning: alla aktiva prenumerationer som förnyats har en betald förnyelseorder.</p>
+        )}
+      </div>
+
+      <div>
+        <div className="flex flex-wrap items-baseline justify-between gap-2">
+          <h3 className="font-medium">Kommande utskick</h3>
+          <p className="text-xs text-muted">
+            {o.upcoming.length} de närmaste {UPCOMING_DAYS} dagarna · {paidCount} redan betalda
+          </p>
+        </div>
+        {o.upcoming.length === 0 ? (
+          <p className="mt-2 text-sm text-muted">Inga utskick planerade de närmaste {UPCOMING_DAYS} dagarna.</p>
+        ) : (
+          <ul className="mt-2 divide-y divide-line text-sm">
+            {o.upcoming.map((s) => {
+              const who = s.name ?? s.email ?? "Okänd kund";
+              const href = s.orderId ? `/admin/ordrar/${s.orderId}` : customerHref(s.email);
+              return (
+                <li key={s.key} className="grid grid-cols-[4.5rem_minmax(0,1fr)_auto] items-center gap-3 py-2.5">
+                  <span className="tabular-nums font-medium">{fmtDay(s.deliverAt)}</span>
+                  <span className="min-w-0">
+                    {href ? (
+                      <Link href={href} className="hover:underline">
+                        {who}
+                      </Link>
+                    ) : (
+                      who
+                    )}
+                    <span className="block truncate text-xs text-muted">
+                      {s.qty > 1 ? `${s.qty} × ` : ""}
+                      {productName(s.productSlug)} · {formatPrice(s.amount, s.currency)}
+                    </span>
+                  </span>
+                  <PaymentBadge s={s} />
+                </li>
+              );
+            })}
+          </ul>
+        )}
+        <p className="mt-2 text-xs text-muted">Datumet är planerad leverans. Stripe drar pengarna vid periodens slut och leveransen planeras {RENEWAL_DELIVERY_LEAD_DAYS} dagar senare.</p>
+      </div>
+    </section>
+  );
+}
 
 function StatCard({ s, env }: { s: Series; env?: Env }) {
   return (
@@ -34,11 +133,14 @@ export default async function AdminDashboard({ searchParams }: PageProps<"/admin
   const env: Env = sp.env === "test" ? "sandbox" : "live";
   const stats = await getStats(period, env);
   const db = supabaseAdmin();
-  const [latest, catalog] = await Promise.all([
+  const [latest, catalog, subs] = await Promise.all([
     db.from("orders").select("id,order_number,created_at,email,shipping_name,total,status,kind").eq("environment", env).order("created_at", { ascending: false }).limit(6),
     getCatalog(),
+    getSubscriptionOverview(env),
   ]);
   const orders = (latest.data ?? []) as OrderRow[];
+  const names = new Map<string, string>([...catalog.allProducts, ...catalog.allBundles].map((p) => [p.slug, p.name]));
+  const productName = (slug: string | null) => (slug ? (names.get(slug) ?? slug) : "–");
   const lowStock = catalog.allProducts.filter((p) => p.isActive && p.trackStock && p.stock <= 10).sort((a, b) => a.stock - b.stock);
   const href = (p: Period, e: Env) => `/admin?period=${p}${e === "sandbox" ? "&env=test" : ""}`;
   const today = new Date().toLocaleDateString("sv-SE", { weekday: "long", day: "numeric", month: "long" });
@@ -116,6 +218,8 @@ export default async function AdminDashboard({ searchParams }: PageProps<"/admin
           </>
         ) : null}
       </p>
+
+      <SubscriptionSection overview={subs} env={env} productName={productName} />
 
       <div className="grid gap-4 lg:grid-cols-[minmax(0,3fr)_minmax(0,2fr)]">
         <section className="rounded-2xl border border-line bg-white p-5">
