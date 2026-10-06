@@ -290,6 +290,12 @@ export type CreativeSpec = {
   callToAction?: "SHOP_NOW" | "LEARN_MORE";
 };
 
+/**
+ * Läggs på alla länkar i annonsen så att ordern kan knytas till Meta Ads (lib/attribution).
+ * Meta fyller i kampanj- och annonsnamnet själv.
+ */
+export const META_URL_TAGS = "utm_source=meta&utm_medium=paid&utm_campaign={{campaign.name}}&utm_content={{ad.name}}";
+
 /** Bild- eller videoannons med länk till produktsidan. */
 export const createCreative = (c: CreativeSpec) => {
   const cta = { type: c.callToAction ?? "SHOP_NOW", value: { link: c.link } };
@@ -299,6 +305,7 @@ export const createCreative = (c: CreativeSpec) => {
     : { page_id: c.pageId, instagram_user_id: c.instagramActorId, link_data: { ...base, image_hash: c.imageHash } };
   return call<{ id: string }>("POST", `${adAccount()}/adcreatives`, {
     name: c.name,
+    url_tags: META_URL_TAGS,
     object_story_spec,
   });
 };
@@ -333,6 +340,7 @@ export const createPlacementCreative = (c: PlacementCreativeSpec) => {
     return createCreative({ name: c.name, pageId: c.pageId, instagramActorId: c.instagramActorId, imageHash: c.feedHash, primaryText: c.primaryText, headline: c.headline, description: c.description, link: c.link });
   return call<{ id: string }>("POST", `${adAccount()}/adcreatives`, {
     name: c.name,
+    url_tags: META_URL_TAGS,
     // instagram_user_id krävs för bild per placering; sidans page-backed Instagram-konto duger
     object_story_spec: { page_id: c.pageId, instagram_user_id: c.instagramActorId },
     asset_feed_spec: {
@@ -395,6 +403,7 @@ export const createCarouselCreative = (c: {
   if (c.cards.length < 2) throw new Error("En karusell behöver minst två kort.");
   return call<{ id: string }>("POST", `${adAccount()}/adcreatives`, {
     name: c.name,
+    url_tags: META_URL_TAGS,
     object_story_spec: {
       page_id: c.pageId,
       instagram_user_id: c.instagramActorId,

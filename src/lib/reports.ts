@@ -1,4 +1,5 @@
 import "server-only";
+import { sourceLabel } from "./attribution";
 import { getCatalog } from "./catalog";
 import { countsAsRevenue } from "./customers";
 import type { Env } from "./stats";
@@ -83,6 +84,7 @@ export type ReportOrder = {
   total: number;
   has_subscription: boolean;
   affiliate_source: string | null;
+  source: string | null;
   order_items: { product_slug: string; name: string; qty: number; plan: string; unit_price: number; line_total: number }[];
 };
 
@@ -116,6 +118,8 @@ export type SalesReport = {
   shippingMethods: Row[];
   kinds: Row[];
   discountCodes: Row[];
+  /** Varifrån ordrarna kom (lib/attribution). */
+  sources: Row[];
   orders: ReportOrder[];
 };
 
@@ -155,7 +159,7 @@ async function fetchOrders(range: ReportRange, env: Env): Promise<ReportOrder[]>
     let q = db
       .from("orders")
       .select(
-        "id,order_number,created_at,email,status,kind,currency,subtotal,discount,discount_code,shipping,shipping_method,shipping_country,total,has_subscription,affiliate_source,order_items(product_slug,name,qty,plan,unit_price,line_total)",
+        "id,order_number,created_at,email,status,kind,currency,subtotal,discount,discount_code,shipping,shipping_method,shipping_country,total,has_subscription,affiliate_source,source,order_items(product_slug,name,qty,plan,unit_price,line_total)",
       )
       .eq("environment", env)
       .lt("created_at", toIso)
@@ -230,6 +234,7 @@ export async function getSalesReport(range: ReportRange, env: Env): Promise<Sale
   const methods = new Map<string, Row>();
   const kinds = new Map<string, Row>();
   const codes = new Map<string, Row>();
+  const sources = new Map<string, Row>();
   const bundleParts = new Map(
     catalog.allBundles.map((b) => [b.slug, { name: b.name, sku: b.sku, items: b.items.map((i) => ({ slug: i.product.slug, name: i.product.name, qty: i.qty })) }]),
   );
@@ -278,6 +283,7 @@ export async function getSalesReport(range: ReportRange, env: Env): Promise<Sale
     bump(countries, o.shipping_country ?? "?", countryLabel(o.shipping_country), 1, orderUnits, total);
     bump(methods, o.shipping_method ?? "?", o.shipping_method ?? "Okänt", 1, orderUnits, total);
     bump(kinds, o.kind, kindLabel[o.kind] ?? o.kind, 1, orderUnits, total);
+    bump(sources, o.source ?? "unknown", sourceLabel(o.source), 1, orderUnits, total);
     if (o.discount_code) bump(codes, o.discount_code.toUpperCase(), o.discount_code.toUpperCase(), 1, orderUnits, total);
   }
 
@@ -313,6 +319,7 @@ export async function getSalesReport(range: ReportRange, env: Env): Promise<Sale
     shippingMethods: finish(methods, revenue),
     kinds: finish(kinds, revenue),
     discountCodes: finish(codes, revenue),
+    sources: finish(sources, revenue),
     orders,
   };
 }

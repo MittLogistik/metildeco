@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { channelLabel, isChannel, sourceLabel } from "@/lib/attribution";
 import { requireAdmin } from "@/lib/auth";
 import { formatPrice } from "@/lib/format";
 import { supabaseAdmin } from "@/lib/supabase";
@@ -16,6 +17,8 @@ type OrderRow = {
   kind: string;
   has_subscription: boolean;
   environment: string;
+  source: string | null;
+  source_detail: string | null;
 };
 
 const filters = ["alla", "scheduled", "paid", "packed", "shipped", "delivered", "cancelled"] as const;
@@ -26,10 +29,12 @@ export default async function OrdersPage({ searchParams }: PageProps<"/admin/ord
   const status = typeof sp.status === "string" && (filters as readonly string[]).includes(sp.status) ? sp.status : "alla";
   let q = supabaseAdmin()
     .from("orders")
-    .select("id,order_number,created_at,email,shipping_name,shipping_city,total,status,kind,environment")
+    .select("id,order_number,created_at,email,shipping_name,shipping_city,total,status,kind,environment,source,source_detail")
     .order("created_at", { ascending: false })
     .limit(200);
   if (status !== "alla") q = q.eq("status", status);
+  const source = typeof sp.kalla === "string" && isChannel(sp.kalla) ? sp.kalla : null;
+  if (source) q = source === "unknown" ? q.or("source.is.null,source.eq.unknown") : q.eq("source", source);
   const { data } = await q;
   const orders = (data ?? []) as OrderRow[];
 
@@ -41,7 +46,7 @@ export default async function OrdersPage({ searchParams }: PageProps<"/admin/ord
           {filters.map((f) => (
             <Link
               key={f}
-              href={f === "alla" ? "/admin/ordrar" : `/admin/ordrar?status=${f}`}
+              href={`/admin/ordrar?${new URLSearchParams({ ...(f === "alla" ? {} : { status: f }), ...(source ? { kalla: source } : {}) })}`}
               className={`shrink-0 rounded-full px-3 py-1.5 text-sm ${status === f ? "bg-primary text-primary-fg" : "border border-line bg-white hover:bg-sand"}`}
             >
               {f === "alla" ? "Alla" : statusLabel[f]}
@@ -49,6 +54,17 @@ export default async function OrdersPage({ searchParams }: PageProps<"/admin/ord
           ))}
         </nav>
       </div>
+      <nav className="flex flex-wrap gap-1 text-xs" aria-label="Källa">
+        {[null, ...Object.keys(channelLabel)].map((c) => (
+          <Link
+            key={c ?? "alla"}
+            href={`/admin/ordrar?${new URLSearchParams({ ...(status === "alla" ? {} : { status }), ...(c ? { kalla: c } : {}) })}`}
+            className={`rounded-full px-2.5 py-1 ${source === c ? "bg-foreground text-white" : "border border-line bg-white text-muted hover:text-foreground"}`}
+          >
+            {c ? sourceLabel(c) : "Alla källor"}
+          </Link>
+        ))}
+      </nav>
       <Card>
         {orders.length === 0 ? (
           <p className="text-sm text-muted">Inga ordrar.</p>
@@ -61,6 +77,7 @@ export default async function OrdersPage({ searchParams }: PageProps<"/admin/ord
                   <th className="py-2 pr-3">Datum</th>
                   <th className="py-2 pr-3">Kund</th>
                   <th className="py-2 pr-3">Ort</th>
+                  <th className="py-2 pr-3">Källa</th>
                   <th className="py-2 pr-3 text-right">Summa</th>
                   <th className="py-2">Status</th>
                 </tr>
@@ -83,6 +100,10 @@ export default async function OrdersPage({ searchParams }: PageProps<"/admin/ord
                       <span className="block text-xs text-muted">{o.email}</span>
                     </td>
                     <td className="py-2 pr-3">{o.shipping_city}</td>
+                    <td className="py-2 pr-3">
+                      <span className="block whitespace-nowrap">{sourceLabel(o.source)}</span>
+                      {o.source_detail ? <span className="block max-w-48 truncate text-xs text-muted" title={o.source_detail}>{o.source_detail}</span> : null}
+                    </td>
                     <td className="py-2 pr-3 text-right tabular-nums">{formatPrice(Number(o.total))}</td>
                     <td className="py-2">
                       <StatusBadge status={o.status} />

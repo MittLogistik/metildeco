@@ -225,6 +225,7 @@ export default async function ReportsPage({ searchParams }: PageProps<"/admin/ra
       </div>
 
       <div className="grid gap-4 lg:grid-cols-2">
+        <Breakdown title="Per källa" rows={report.sources} empty="Inga ordrar under perioden." />
         <Breakdown title="Per land" rows={report.countries} empty="Inga ordrar under perioden." />
         <Breakdown title="Per fraktsätt" rows={report.shippingMethods} empty="Inga ordrar under perioden." />
         <Breakdown title="Per ordertyp" rows={report.kinds} empty="Inga ordrar under perioden." />

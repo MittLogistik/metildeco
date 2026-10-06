@@ -1,4 +1,5 @@
 import { getAdminUser } from "@/lib/auth";
+import { sourceLabel } from "@/lib/attribution";
 import { countryLabel, getSalesReport, kindLabel, resolveRange } from "@/lib/reports";
 import type { Env } from "@/lib/stats";
 
@@ -18,7 +19,7 @@ export async function GET(request: Request) {
     rows.push(["produkt", "artikelnummer", "slug", "typ", "ordrar", "antal", "omsattning_sek", "andel_procent"].join(";"));
     for (const r of report.products) rows.push([r.label, r.sku, r.slug, r.isBundle ? "paket" : "produkt", r.orders, r.units, num(r.revenue), num(r.share)].map(esc).join(";"));
   } else {
-    rows.push(["ordernummer", "datum", "status", "typ", "e-post", "land", "fraktsatt", "rabattkod", "varor", "rabatt", "frakt", "total", "valuta", "antal", "prenumeration"].join(";"));
+    rows.push(["ordernummer", "datum", "status", "typ", "e-post", "land", "fraktsatt", "rabattkod", "kalla", "varor", "rabatt", "frakt", "total", "valuta", "antal", "prenumeration"].join(";"));
     for (const o of report.orders) {
       const units = (o.order_items ?? []).reduce((s, i) => s + Number(i.qty), 0);
       rows.push(
@@ -31,6 +32,7 @@ export async function GET(request: Request) {
           countryLabel(o.shipping_country),
           o.shipping_method,
           o.discount_code,
+          sourceLabel(o.source),
           num(Number(o.subtotal)),
           num(Number(o.discount)),
           num(Number(o.shipping)),

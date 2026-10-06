@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
+import { classifyLanding, type SourceState } from "@/lib/attribution";
 
 /**
  * Fångar affiliateklick vid landning. Besökaren får ett id i localStorage som följer med
@@ -36,8 +37,34 @@ export function visitorId(): string | null {
   }
 }
 
+const SOURCE_KEY = "metilde_src";
+
+/** Varifrån besökaren kom (se lib/attribution). Null om lagringen är blockerad. */
+export function storedSource(): SourceState | null {
+  try {
+    const raw = localStorage.getItem(SOURCE_KEY);
+    return raw ? (JSON.parse(raw) as SourceState) : { first: null, last: null };
+  } catch {
+    return null;
+  }
+}
+
+/** Klassar landningen och sparar den: första besöket en gång, senaste icke-direkta varje gång. */
+function recordSource() {
+  try {
+    const state = storedSource();
+    if (!state) return;
+    const touch = classifyLanding(new URL(window.location.href), document.referrer);
+    const next: SourceState = { first: state.first ?? touch ?? { ch: "direct", d: null, t: Date.now() }, last: touch ?? state.last };
+    localStorage.setItem(SOURCE_KEY, JSON.stringify(next));
+  } catch {
+    /* lagring blockerad */
+  }
+}
+
 export function ClickTracker() {
   useEffect(() => {
+    recordSource();
     const params = new URLSearchParams(window.location.search);
     const clickId = findParam(params, CLICK_KEYS);
     const id = visitorId();

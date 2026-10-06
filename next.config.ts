@@ -27,6 +27,9 @@ const nextConfig: NextConfig = {
   },
   async redirects() {
     return [
+      // Rotadressen till svenska butiken. Här och inte i app/page.tsx: en config-omdirigering behåller
+      // parametrarna (gclid, utm_…, clickId), annars tappas annonsklickets källa på vägen.
+      { source: "/", destination: "/sv", permanent: false },
       // Gamla adresser från förra butiken – behåll länkkraft och undvik 404 vid domänbytet
       { source: "/sv/products", destination: "/sv/produkter", permanent: true },
       // Quizet frågar om sömn och fokus och rekommenderar produkter utifrån det (antydda effekter) – av tills det byggts om

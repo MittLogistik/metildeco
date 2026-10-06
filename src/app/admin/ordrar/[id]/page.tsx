@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { ATTRIBUTION_DAYS, sourceLabel } from "@/lib/attribution";
 import { requireAdmin } from "@/lib/auth";
 import { customerHref, intervalLabel, subscriptionStatusLabel, type SubscriptionRecord } from "@/lib/customers";
 import { formatPrice } from "@/lib/format";
@@ -221,6 +222,24 @@ export default async function OrderDetailPage({ params }: PageProps<"/admin/ordr
               ) : null}
             </Card>
           ) : null}
+          <Card title="Källa">
+            <dl className="space-y-2 text-sm">
+              <div>
+                <dt className="text-xs uppercase tracking-wider text-muted">Kom från</dt>
+                <dd>
+                  {sourceLabel(o.source)}
+                  {o.source_detail ? <span className="block text-xs text-muted">{o.source_detail}</span> : null}
+                </dd>
+              </div>
+              {o.first_source && o.first_source !== o.source ? (
+                <div>
+                  <dt className="text-xs uppercase tracking-wider text-muted">Första besöket</dt>
+                  <dd>{sourceLabel(o.first_source)}</dd>
+                </div>
+              ) : null}
+            </dl>
+            <p className="mt-3 text-xs text-muted">Senaste källan som inte var direkt, inom {ATTRIBUTION_DAYS} dagar före köpet.</p>
+          </Card>
           <Card title="Stripe">
             <ul className="space-y-1 text-sm">
               {o.stripe_session_id ? (

@@ -39,6 +39,10 @@ export type OrderRecord = {
   affiliate_source?: string | null;
   affiliate_click_id?: string | null;
   affiliate_click_ref?: string | null;
+  /** Varifrån ordern kom (lib/attribution): kanal, detalj och kanal vid första besöket. */
+  source?: string | null;
+  source_detail?: string | null;
+  first_source?: string | null;
 };
 
 /** Dagar från att Stripe bekräftat förnyelsebetalningen till planerad leverans, och hur många dagar före leverans ordern släpps. */
@@ -182,6 +186,10 @@ export async function saveOrderFromSession(sessionId: string): Promise<{ order: 
       affiliate_source: session.metadata?.aff_click ? (session.metadata?.aff_src || AFFILIATE_SOURCE) : null,
       affiliate_click_id: session.metadata?.aff_click || null,
       affiliate_click_ref: session.metadata?.aff_ref || null,
+      // Källan (lib/attribution) frystes i kassan; ordrar utan den (t.ex. presentkort) blir okänd
+      source: session.metadata?.aff_click ? "affiliate" : session.metadata?.src || "unknown",
+      source_detail: session.metadata?.src_d || null,
+      first_source: session.metadata?.src_f || null,
       exchange_rate_to_sek: await rateToSek(session.currency ?? "sek"),
     })
     .select("*")
@@ -348,6 +356,7 @@ export async function saveRenewalFromInvoice(invoice: Stripe.Invoice): Promise<O
       stripe_customer_id: typeof invoice.customer === "string" ? invoice.customer : (invoice.customer?.id ?? null),
       environment: environment(),
       kind: "renewal",
+      source: "renewal",
       locale: "sv",
       exchange_rate_to_sek: await rateToSek(invoice.currency),
     })

@@ -4,6 +4,7 @@
  * Adress, telefon och fraktval samlas in av Stripe Checkout.
  */
 import type Stripe from "stripe";
+import { isChannel, type Channel } from "./attribution";
 import { getBundle, getProduct } from "./catalog";
 import { isInStock, offerGiftSlugs, tieredUnitPrice } from "./products";
 import { ratesForZone, shippingCost } from "./shipping";
@@ -30,6 +31,8 @@ export type CheckoutRequest = {
   code: string | null;
   /** Vilken köpruta kunden såg (A/B-test), sparas på ordern. */
   variant: string | null;
+  /** Varifrån kunden kom (lib/attribution), sparas på ordern. */
+  source: { ch: Channel; d: string | null; first: Channel | null };
 };
 
 export type PricedLine = CheckoutLine & {
@@ -64,7 +67,9 @@ export function parseCheckoutRequest(body: unknown): CheckoutRequest {
   const visitorId = clean(b.visitorId, 100) || null;
   const code = clean(b.code, 40).toUpperCase().replace(/[^A-Z0-9_-]/g, "") || null;
   const variant = clean(b.variant, 10).replace(/[^a-z0-9]/gi, "") || null;
-  return { lines, email: /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email) ? email : null, visitorId, code, variant };
+  const s = (b.source ?? {}) as Record<string, unknown>;
+  const source = { ch: isChannel(s.ch) ? s.ch : "unknown", d: clean(s.d, 150) || null, first: isChannel(s.first) ? s.first : null } as CheckoutRequest["source"];
+  return { lines, email: /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email) ? email : null, visitorId, code, variant, source };
 }
 
 /** Sätter pris på varje rad utifrån katalogen. Okända eller slutsålda varor ger fel. */

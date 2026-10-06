@@ -42,6 +42,10 @@ export async function POST(request: Request) {
       fbc: fbc.slice(0, 200),
       cart: JSON.stringify(priced.map((l) => ({ k: l.kind, s: l.slug, q: l.qty, p: l.plan, i: l.intervalDays ?? null }))).slice(0, 500),
       ...(click ? { aff_src: click.source, aff_click: click.clickId ?? "", aff_ref: click.clickRef ?? "" } : {}),
+      // Källa: ett giltigt affiliateklick vinner, annars senaste källan från webbläsaren
+      src: click ? "affiliate" : payload.source.ch,
+      src_d: (click ? (click.clickRef ?? payload.source.d ?? "") : (payload.source.d ?? "")).slice(0, 150),
+      src_f: payload.source.first ?? "",
     };
 
     const params: Stripe.Checkout.SessionCreateParams = {
