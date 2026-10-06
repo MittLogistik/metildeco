@@ -108,13 +108,15 @@ export async function applyLogSuggestion(logId: string, o: { mediaBase?: string 
   let message: string;
   switch (row.action) {
     case "pause":
-      await meta.setStatus(target, "PAUSED");
-      message = `${row.name} är pausad.`;
+    case "activate": {
+      // Granskningen loggar samma förslag varje dag tills det utförs. Är annonsen redan ändrad
+      // (från en annan rad eller i Ads Manager) skickas inget nytt anrop – Meta tillåter bara en ändring per 30 sekunder.
+      const wanted = row.action === "pause" ? "PAUSED" : "ACTIVE";
+      const already = (await meta.getStatus(target)) === wanted;
+      if (!already) await meta.setStatus(target, wanted);
+      message = `${row.name} ${already ? "var redan" : "är"} ${row.action === "pause" ? "pausad" : "aktiverad"}.`;
       break;
-    case "activate":
-      await meta.setStatus(target, "ACTIVE");
-      message = `${row.name} är aktiverad.`;
-      break;
+    }
     case "budget": {
       const fromReason = row.reason.match(/→\s*(\d+(?:[.,]\d+)?)\s*$/)?.[1];
       const budget = Number(row.metrics?.budget ?? (fromReason ? fromReason.replace(",", ".") : NaN));
@@ -133,6 +135,11 @@ export async function applyLogSuggestion(logId: string, o: { mediaBase?: string 
       throw new Error(`Förslaget "${row.action}" går inte att utföra automatiskt.`);
   }
   await db.from("ad_log").update({ applied: true, reason: `${row.reason} · utförd från admin` }).eq("id", row.id);
+  // Äldre likadana förslag för samma objekt är inaktuella nu
+  if (row.action === "pause" || row.action === "activate") {
+    const column = row.ad_id ? "ad_id" : row.adset_id ? "adset_id" : "campaign_id";
+    await db.from("ad_log").update({ applied: true }).eq(column, target).eq("action", row.action).eq("applied", false);
+  }
   return message;
 }
 

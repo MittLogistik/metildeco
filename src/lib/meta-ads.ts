@@ -39,7 +39,9 @@ async function call<T = Json>(method: "GET" | "POST" | "DELETE", path: string, p
     throw new Error(`Meta ${method} ${path}: ${res.status} ${text.slice(0, 200)}`);
   }
   if (!res.ok) {
-    const err = (data as { error?: { message?: string; error_user_msg?: string } }).error;
+    const err = (data as { error?: { code?: number; message?: string; error_user_msg?: string } }).error;
+    // 613: Meta tillåter bara en ändring per objekt och 30 sekunder
+    if (err?.code === 613 && method === "POST") throw new Error("Meta tillåter bara en ändring per annons var 30:e sekund. Vänta en halv minut och försök igen.");
     throw new Error(`Meta ${method} ${path}: ${err?.error_user_msg ?? err?.message ?? res.status}`);
   }
   return data as T;
@@ -123,6 +125,9 @@ export const summarize = (i: Insight) => {
 };
 
 export const setStatus = (objectId: string, status: "ACTIVE" | "PAUSED") => call("POST", objectId, { status });
+
+/** Nuvarande inställd status (ACTIVE, PAUSED …) för en kampanj, annonsgrupp eller annons. */
+export const getStatus = (objectId: string) => call<{ status: string }>("GET", objectId, { fields: "status" }).then((r) => r.status);
 
 /** Tar bort en kampanj, annonsgrupp eller annons i Meta. En kampanj tar sina annonsgrupper och annonser med sig. Statistiken finns kvar i Ads Manager. */
 export const deleteObject = (objectId: string) => call("DELETE", objectId);
