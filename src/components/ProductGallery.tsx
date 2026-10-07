@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useState, type SyntheticEvent } from "react";
+import { useEffect, useRef, useState, type SyntheticEvent } from "react";
 import { PlayIcon } from "@/components/icons";
 
 export type Media = { type: "image"; src: string } | { type: "video"; src: string; poster: string };
@@ -29,6 +29,45 @@ const detectFit = (img: HTMLImageElement): Fit => {
   }
 };
 
+/**
+ * Ljudlös video som startar av sig själv. Mobiler blockerar ibland automatisk uppspelning
+ * (Instagrams och Facebooks inbyggda webbläsare, energisparläge på iPhone) – då syns bara
+ * stillbilden. I så fall visas en uppspelningsknapp; ett tryck räknas som användaråtgärd och tillåts alltid.
+ */
+function GalleryVideo({ src, poster }: { src: string; poster: string }) {
+  const ref = useRef<HTMLVideoElement>(null);
+  const [blocked, setBlocked] = useState(false);
+  useEffect(() => {
+    const v = ref.current;
+    if (!v) return;
+    v.muted = true;
+    v.play().catch(() => setBlocked(true));
+    // Vissa webbläsare avvisar inte play() utan står bara still – kontrollera efter en stund
+    const t = window.setTimeout(() => {
+      if (v.paused) setBlocked(true);
+    }, 1500);
+    return () => window.clearTimeout(t);
+  }, []);
+  const start = () => {
+    const v = ref.current;
+    if (!v) return;
+    v.muted = true;
+    void v.play().then(() => setBlocked(false)).catch(() => setBlocked(true));
+  };
+  return (
+    <>
+      <video ref={ref} src={src} poster={poster} className="h-full w-full object-cover" autoPlay muted loop playsInline preload="metadata" disablePictureInPicture onPlaying={() => setBlocked(false)} />
+      {blocked ? (
+        <button type="button" onClick={start} aria-label="Spela upp videon" className="absolute inset-0 flex items-center justify-center bg-black/10">
+          <span className="flex h-16 w-16 items-center justify-center rounded-full bg-white/90 text-foreground shadow-lg">
+            <PlayIcon size={28} />
+          </span>
+        </button>
+      ) : null}
+    </>
+  );
+}
+
 export function ProductGallery({ media, name, bg }: { media: Media[]; name: string; bg: string }) {
   const [index, setIndex] = useState(0);
   const [fit, setFit] = useState<Record<string, Fit>>({});
@@ -48,17 +87,7 @@ export function ProductGallery({ media, name, bg }: { media: Media[]; name: stri
         style={{ backgroundColor: bg || "#f2efe8" }}
       >
         {current.type === "video" ? (
-          <video
-            key={current.src}
-            src={current.src}
-            poster={current.poster}
-            className="h-full w-full object-cover"
-            autoPlay
-            muted
-            loop
-            playsInline
-            disablePictureInPicture
-          />
+          <GalleryVideo key={current.src} src={current.src} poster={current.poster} />
         ) : (
           <Image
             key={current.src}
