@@ -96,12 +96,12 @@ export default function StoryPage() {
       <Container className="py-16">
         <div className="grid gap-10 lg:grid-cols-2">
           <div>
-            <SectionHeading eyebrow="Företaget" title="Om företaget" intro="Metilde drivs av Swedish Treats AB. Här hittar du våra fullständiga företagsuppgifter – vi vill att du alltid ska veta vem du handlar av." />
+            <SectionHeading eyebrow="Företaget" title="Om företaget" intro={`Metilde drivs av ${company.legalName}. Här hittar du våra fullständiga företagsuppgifter – vi vill att du alltid ska veta vem du handlar av.`} />
           </div>
           <dl className="grid grid-cols-1 gap-4 text-sm sm:grid-cols-2">
             {[
               ["Juridiskt namn", company.legalName],
-              ["Organisationsnummer", company.orgNumber],
+              [company.idLabel === "Org.nr" ? "Organisationsnummer" : company.idLabel, company.orgNumber],
               ["Adress", company.address],
               ["E-post", company.email],
               ["Telefon", company.phone],

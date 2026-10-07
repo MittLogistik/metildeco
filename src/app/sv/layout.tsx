@@ -18,7 +18,7 @@ const organization = {
   legalName: company.legalName,
   url: site.url,
   logo: `${site.url}/logo-mark.png`,
-  vatID: `SE${company.orgNumber.replace("-", "")}01`,
+  ...(company.vatId ? { vatID: company.vatId } : {}),
   taxID: company.orgNumber,
   address: {
     "@type": "PostalAddress",

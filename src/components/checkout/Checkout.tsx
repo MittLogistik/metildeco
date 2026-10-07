@@ -222,7 +222,7 @@ export function Checkout() {
             <Link href={routes.privacy} className="underline">
               integritetspolicy
             </Link>
-            . Säljare: {company.legalName}, org.nr {company.orgNumber}. Lämnar du kassan kan vi påminna dig om varukorgen per e-post.
+            . Säljare: {company.legalName}, {company.idLabel.toLowerCase()} {company.orgNumber}. Lämnar du kassan kan vi påminna dig om varukorgen per e-post.
           </p>
         </aside>
       </div>

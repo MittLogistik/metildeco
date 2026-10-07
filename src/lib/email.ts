@@ -67,7 +67,7 @@ export async function sendOrderConfirmation(order: OrderRecord, items: OrderItem
     ${address ? `<p style="margin:20px 0 0;font-size:14px;color:#555"><strong style="color:#222">Levereras till</strong><br>${address}</p>` : ""}
     <p style="margin:20px 0 0;font-size:14px;color:#555">Du får ett mejl med spårningslänk när paketet lämnar oss. Ångerrätt 30 dagar på oöppnade produkter, läs mer på <a href="${site.url}${routes.returns}" style="color:#2f5445">våra retursidor</a>.</p>
   </div>
-  <p style="font-size:12px;color:#888;margin:24px 0 0;line-height:1.6">${company.legalName} · Org.nr ${company.orgNumber} · ${company.address}<br>
+  <p style="font-size:12px;color:#888;margin:24px 0 0;line-height:1.6">${company.legalName} · ${company.idLabel} ${company.orgNumber} · ${company.address}<br>
   Frågor? Svara på det här mejlet eller ring ${company.phone} (${company.hours}).</p>
 </div></body></html>`;
 
@@ -78,7 +78,7 @@ ${rowsText}
 Frakt: ${order.shipping === 0 ? "Fri" : formatPrice(order.shipping)}
 Totalt: ${formatPrice(order.total)}
 
-${company.legalName} · Org.nr ${company.orgNumber} · ${company.address}
+${company.legalName} · ${company.idLabel} ${company.orgNumber} · ${company.address}
 Frågor? Svara på det här mejlet eller ring ${company.phone}.`;
 
   await sendEmail(order.email, subject, html, text);
@@ -108,7 +108,7 @@ export async function sendGiftCardEmail(
     <p style="margin:4px 0 16px;font-size:26px;font-weight:700;letter-spacing:2px;font-family:monospace">${code}</p>
     <p style="margin:0;font-size:14px;color:#555">Skriv in koden i fältet <strong>Lägg till kod</strong> i betalsteget på <a href="${site.url}${routes.products}" style="color:#2f5445">metilde.com</a>. Gäller hela sortimentet, även prenumerationer, till och med ${validTo}. Presentkortet kan inte lösas in mot kontanter.</p>
   </div>
-  <p style="font-size:12px;color:#888;margin:24px 0 0;line-height:1.6">${company.legalName} · Org.nr ${company.orgNumber} · ${company.address}<br>Frågor? Svara på det här mejlet.</p>
+  <p style="font-size:12px;color:#888;margin:24px 0 0;line-height:1.6">${company.legalName} · ${company.idLabel} ${company.orgNumber} · ${company.address}<br>Frågor? Svara på det här mejlet.</p>
 </div></body></html>`;
   const text = `${subject}\n\n${intro}\n${opts.message ? `\n"${opts.message}"\n` : ""}\nKod: ${code}\nSkriv in koden i betalsteget på metilde.com. Gäller till och med ${validTo}.\n\n${company.legalName} · ${company.address}`;
   await sendEmail(to, subject, html, text);
@@ -121,7 +121,7 @@ const frame = (title: string, body: string) => `<!doctype html><html lang="sv"><
     <h1 style="font-size:22px;margin:0 0 8px">${title}</h1>
     ${body}
   </div>
-  <p style="font-size:12px;color:#888;margin:24px 0 0;line-height:1.6">${company.legalName} · Org.nr ${company.orgNumber} · ${company.address}<br>
+  <p style="font-size:12px;color:#888;margin:24px 0 0;line-height:1.6">${company.legalName} · ${company.idLabel} ${company.orgNumber} · ${company.address}<br>
   Frågor? Svara på det här mejlet eller ring ${company.phone} (${company.hours}).</p>
 </div></body></html>`;
 

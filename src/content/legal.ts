@@ -7,7 +7,7 @@
  * hämtas från databasen (blocktypen "shippingTable") så att villkor,
  * fraktsida och kassa alltid visar samma siffror.
  */
-import { company } from "@/lib/site";
+import { company, logistics } from "@/lib/site";
 
 export type LegalBlock =
   | { type: "p"; text: string }
@@ -35,10 +35,14 @@ const contactBlock: LegalBlock[] = [
     type: "ul",
     items: [
       `Juridisk enhet: ${company.legalName}`,
-      `Organisationsnummer: ${company.orgNumber}`,
+      `${company.idLabel === "Org.nr" ? "Organisationsnummer" : company.idLabel}: ${company.orgNumber}`,
+      ...(company.vatId ? [`Momsregistreringsnummer: ${company.vatId}`] : []),
       `Adress: ${company.address}`,
       `E-post: ${company.email}`,
       `Telefon: ${company.phone} (${company.hours})`,
+      ...(company.separateLogistics
+        ? [`Lager, packning, leveranser och returer sköts av ${logistics.legalName} (org.nr ${logistics.orgNumber}), ${logistics.address}, för ${company.legalName}s räkning.`]
+        : []),
     ],
   },
 ];
@@ -388,7 +392,7 @@ const returns: LegalDoc = {
       type: "ul",
       items: [
         `Anmäl returen genom att mejla ${company.email} med ordernummer och vilka varor det gäller.`,
-        "Du får retursedel och instruktioner inom en arbetsdag. Returer skickas till Swedish Treats AB, Plåtslagarvägen 19, 861 36 Timrå.",
+        `Du får retursedel och instruktioner inom en arbetsdag. Returer skickas till ${logistics.legalName}, ${logistics.address.replace(/, Sverige$/, "")}.`,
         "Packa produkterna i originalförpackningen eller motsvarande skyddande emballage.",
         "Lämna paketet hos närmaste ombud och spara kvittot tills återbetalningen är klar.",
       ],

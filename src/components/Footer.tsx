@@ -67,12 +67,14 @@ export function Footer() {
               </a>
               <span className="text-muted">({company.hours})</span>
             </p>
-            <p className="flex items-start gap-2">
-              <PinIcon size={16} className="mt-0.5 shrink-0 text-primary" />
-              <span>
-                {company.legalName}, {company.street}, {company.postalCode} {company.city}
-              </span>
-            </p>
+            {company.addressInFooter ? (
+              <p className="flex items-start gap-2">
+                <PinIcon size={16} className="mt-0.5 shrink-0 text-primary" />
+                <span>
+                  {company.legalName}, {company.street}, {company.postalCode} {company.city}
+                </span>
+              </p>
+            ) : null}
           </address>
         </div>
 
@@ -95,7 +97,7 @@ export function Footer() {
       <div className="border-t border-line">
         <Container className="flex flex-col gap-4 py-6 text-xs text-muted md:flex-row md:items-center md:justify-between">
           <p>
-            © {year} {company.legalName} · Org.nr {company.orgNumber} · Alla rättigheter förbehållna.
+            © {year} {company.legalName} · {company.idLabel} {company.orgNumber} · Alla rättigheter förbehållna.
           </p>
           <PaymentMethods size="sm" />
           <ul className="flex flex-wrap gap-4">

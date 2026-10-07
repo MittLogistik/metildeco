@@ -47,3 +47,6 @@ scripts/_*.mjs
 .vercel
 .env*
 !.env.example
+
+# Personliga Claude Code-inställningar
+.claude/settings.local.json

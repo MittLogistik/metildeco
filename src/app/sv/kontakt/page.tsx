@@ -66,7 +66,7 @@ export default function ContactPage() {
                   <dd>
                     {company.legalName}
                     <br />
-                    Org.nr {company.orgNumber}
+                    {company.idLabel} {company.orgNumber}
                     <br />
                     {company.street}
                     <br />
