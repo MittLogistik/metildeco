@@ -224,7 +224,8 @@ type QueueRow = { id: string; order_id: string | null; order_number: string | nu
 async function postConversion(url: string, payload: Record<string, unknown>): Promise<{ ok: boolean; status: number; body: string }> {
   const res = await fetch(url, {
     method: "POST",
-    headers: { "content-type": "application/json", accept: "application/json" },
+    // Egen user agent så att AddRevenue ser att det är vår server-till-server-spårning och inte en trasig webbläsartagg
+    headers: { "content-type": "application/json", accept: "application/json", "user-agent": "Metilde-S2S/1.0 (+https://metilde.com)" },
     body: JSON.stringify(payload),
   });
   const body = (await res.text()).slice(0, 2000);
