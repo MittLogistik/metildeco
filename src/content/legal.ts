@@ -6,8 +6,11 @@
  * återbetalning samt hantering av personuppgifter. Uppgifter om frakt
  * hämtas från databasen (blocktypen "shippingTable") så att villkor,
  * fraktsida och kassa alltid visar samma siffror.
+ *
+ * Texterna kan skrivas över i admin (/admin/sidor, tabellen page_overrides). Platshållare som
+ * {epost} och {företag} fylls i när sidan visas (lib/page-text), så att sparade texter följer
+ * företagsuppgifterna i lib/site.
  */
-import { company, logistics } from "@/lib/site";
 
 export type LegalBlock =
   | { type: "p"; text: string }
@@ -15,7 +18,9 @@ export type LegalBlock =
   | { type: "h3"; text: string }
   | { type: "ul"; items: string[] }
   | { type: "table"; head: string[]; rows: string[][] }
-  | { type: "shippingTable" };
+  | { type: "shippingTable" }
+  /** Företagsuppgifterna från lib/site – alltid aktuella, redigeras inte här. */
+  | { type: "companyInfo" };
 
 export type LegalDoc = {
   slug: string;
@@ -31,27 +36,14 @@ const updated = "Senast uppdaterad: 17 september 2026";
 
 const contactBlock: LegalBlock[] = [
   { type: "h2", text: "Kontakt- och företagsuppgifter" },
-  {
-    type: "ul",
-    items: [
-      `Juridisk enhet: ${company.legalName}`,
-      `${company.idLabel === "Org.nr" ? "Organisationsnummer" : company.idLabel}: ${company.orgNumber}`,
-      ...(company.vatId ? [`Momsregistreringsnummer: ${company.vatId}`] : []),
-      `Adress: ${company.address}`,
-      `E-post: ${company.email}`,
-      `Telefon: ${company.phone} (${company.hours})`,
-      ...(company.separateLogistics
-        ? [`Lager, packning, leveranser och returer sköts av ${logistics.legalName} (org.nr ${logistics.orgNumber}), ${logistics.address}, för ${company.legalName}s räkning.`]
-        : []),
-    ],
-  },
+  { type: "companyInfo" },
 ];
 
 const helpBlock: LegalBlock[] = [
   { type: "h2", text: "Behöver du hjälp?" },
   {
     type: "p",
-    text: `Mejla ${company.email} eller ring ${company.phone} (${company.hours}). Ange alltid ditt ordernummer så hjälper vi dig snabbare.`,
+    text: `Mejla {epost} eller ring {telefon} ({öppettider}). Ange alltid ditt ordernummer så hjälper vi dig snabbare.`,
   },
 ];
 
@@ -70,7 +62,7 @@ const privacy: LegalDoc = {
     ...contactBlock,
     {
       type: "p",
-      text: `${company.legalName} är personuppgiftsansvarig för behandlingen som beskrivs här. Kontakta oss på ${company.email} om du har frågor eller vill använda dina rättigheter.`,
+      text: `{företag} är personuppgiftsansvarig för behandlingen som beskrivs här. Kontakta oss på {epost} om du har frågor eller vill använda dina rättigheter.`,
     },
     { type: "h2", text: "Uppgifter vi samlar in" },
     {
@@ -134,7 +126,7 @@ const privacy: LegalDoc = {
     },
     {
       type: "p",
-      text: `Mejla ${company.email} för att använda en rättighet. Vi svarar inom 30 dagar. Är du missnöjd med hur vi hanterar dina uppgifter kan du klaga hos Integritetsskyddsmyndigheten (IMY), imy.se.`,
+      text: `Mejla {epost} för att använda en rättighet. Vi svarar inom 30 dagar. Är du missnöjd med hur vi hanterar dina uppgifter kan du klaga hos Integritetsskyddsmyndigheten (IMY), imy.se.`,
     },
     { type: "h2", text: "Säkerhet" },
     {
@@ -198,7 +190,7 @@ const terms: LegalDoc = {
     { type: "h2", text: "Ångerrätt" },
     {
       type: "p",
-      text: `Som konsument har du 14 dagars lagstadgad ångerrätt från den dag du tar emot varan – vi förlänger den till 30 dagar. Kontakta oss på ${company.email} eller använd Konsumentverkets ångerblankett. Varan ska returneras oanvänd och i obruten originalförpackning. Av hygien- och livsmedelsskäl kan kosttillskott med bruten försegling inte returneras.`,
+      text: `Som konsument har du 14 dagars lagstadgad ångerrätt från den dag du tar emot varan – vi förlänger den till 30 dagar. Kontakta oss på {epost} eller använd Konsumentverkets ångerblankett. Varan ska returneras oanvänd och i obruten originalförpackning. Av hygien- och livsmedelsskäl kan kosttillskott med bruten försegling inte returneras.`,
     },
     { type: "h2", text: "Retur och återbetalning" },
     {
@@ -214,7 +206,7 @@ const terms: LegalDoc = {
     { type: "h2", text: "Reklamation och felaktiga varor" },
     {
       type: "p",
-      text: `Du har tre års reklamationsrätt enligt konsumentköplagen. Kontakta ${company.email} med ordernummer och en bild på felet. Godkänd reklamation åtgärdas med ny vara eller återbetalning, och vi betalar returfrakten.`,
+      text: `Du har tre års reklamationsrätt enligt konsumentköplagen. Kontakta {epost} med ordernummer och en bild på felet. Godkänd reklamation åtgärdas med ny vara eller återbetalning, och vi betalar returfrakten.`,
     },
     { type: "h2", text: "Produktinformation" },
     {
@@ -279,7 +271,7 @@ const cookies: LegalDoc = {
       type: "p",
       text: "Du kan blockera eller radera cookies i webbläsarens inställningar. Observera att blockering av nödvändiga cookies gör att varukorg, kassa och inloggning inte fungerar.",
     },
-    { type: "p", text: `Frågor om cookies? Mejla ${company.email}.` },
+    { type: "p", text: `Frågor om cookies? Mejla {epost}.` },
   ],
 };
 
@@ -391,8 +383,8 @@ const returns: LegalDoc = {
     {
       type: "ul",
       items: [
-        `Anmäl returen genom att mejla ${company.email} med ordernummer och vilka varor det gäller.`,
-        `Du får retursedel och instruktioner inom en arbetsdag. Returer skickas till ${logistics.legalName}, ${logistics.address.replace(/, Sverige$/, "")}.`,
+        `Anmäl returen genom att mejla {epost} med ordernummer och vilka varor det gäller.`,
+        `Du får retursedel och instruktioner inom en arbetsdag. Returer skickas till {returadress}.`,
         "Packa produkterna i originalförpackningen eller motsvarande skyddande emballage.",
         "Lämna paketet hos närmaste ombud och spara kvittot tills återbetalningen är klar.",
       ],
@@ -484,7 +476,7 @@ const sustainability: LegalDoc = {
     },
     {
       type: "p",
-      text: `Har du en fråga eller ett förslag kring vårt hållbarhetsarbete? Skriv till ${company.email} – vi läser allt.`,
+      text: `Har du en fråga eller ett förslag kring vårt hållbarhetsarbete? Skriv till {epost} – vi läser allt.`,
     },
   ],
 };

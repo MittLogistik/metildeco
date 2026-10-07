@@ -11,6 +11,7 @@ const nav = [
   { href: "/admin/korgar", label: "Övergivna korgar" },
   { href: "/admin/produkter", label: "Produkter" },
   { href: "/admin/paket", label: "Paket" },
+  { href: "/admin/sidor", label: "Sidor" },
   { href: "/admin/annonser", label: "Annonser" },
   { href: "/admin/affiliate", label: "Affiliate" },
   { href: "/admin/plocky", label: "Plocky" },

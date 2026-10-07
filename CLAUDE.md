@@ -121,6 +121,10 @@ quiz, presentkort, spåra order, mitt konto, samarbeten/jobba hos oss, fler spr�
 - `/` → `/sv` görs i next.config (behåller parametrarna). En `redirect()` i app/page.tsx tappade gclid/utm.
 - Syns i orderlistan (filter `?kalla=`), på ordersidan, i rapporten ("Per källa") och i CSV-exporten.
 
+## Redigerbara sidor (villkor och policyer)
+- `/admin/sidor`: alla sidor i `src/content/legal.ts` (köpvillkor, integritet, cookies, kvalitet, frakt, returer, hållbarhet) kan redigeras block för block. Sparat ligger i tabellen `page_overrides` och vinner över standardtexten; "Återställ standardtext" tar bort raden. `src/lib/pages.ts` (`getPage`, `cleanBlocks`, cache-tagg `PAGES_TAG`). Designen är densamma – `LegalDocView` renderar båda.
+- Platshållare `{företag}`, `{orgnr}`, `{adress}`, `{epost}`, `{telefon}`, `{öppettider}`, `{returadress}` fylls i vid visning (`src/lib/page-text.ts`), så sparade texter följer `company`/`logistics` i site.ts. Blocken `companyInfo` (företagsuppgifter) och `shippingTable` (fraktpriser) är automatiska och redigeras inte.
+
 ## Rapporter (försäljning)
 - `/admin/rapporter` (`src/lib/reports.ts`): vad som sålts per period – denna/förra månaden, i år, förra året, allt eller egna datum (svensk tid). Räknar allt utom `pending`, `cancelled` och `refunded` (`countsAsSale`), skarpt och test var för sig.
 - Visar omsättning (inkl. moms och frakt), varor (`subtotal`, efter rabatt), frakt, rabatt, nya/återkommande kunder, sålt per produkt (paket som egna rader), "burkar som lämnat lagret" (paketinnehåll upplöst), per land, fraktsätt, ordertyp och rabattkod. Diagram per dag upp till 62 dagar, annars per månad (`TrendChart` tolkar nyckeln YYYY-MM).
