@@ -1,4 +1,8 @@
+"use client";
+
 import Image from "next/image";
+import { useI18n } from "@/i18n/client";
+import { layout } from "@/i18n/messages/layout";
 
 export type PaymentMethod = { id: string; name: string; file: string; width: number; height: number };
 
@@ -28,12 +32,13 @@ export function PaymentMethods({
   className?: string;
   label?: string;
 }) {
+  const { locale } = useI18n();
   const list = only ? paymentMethods.filter((m) => only.includes(m.id)) : paymentMethods;
   const h = size === "sm" ? "h-6" : "h-8";
   return (
     <div className={className}>
       {label ? <p className="mb-2 text-center text-xs text-muted">{label}</p> : null}
-      <ul className="flex flex-wrap items-center justify-center gap-2" aria-label="Betalsätt vi tar emot">
+      <ul className="flex flex-wrap items-center justify-center gap-2" aria-label={layout[locale].payments.label}>
         {list.map((m) => (
           <li
             key={m.id}

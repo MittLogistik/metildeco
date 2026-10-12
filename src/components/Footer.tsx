@@ -1,58 +1,63 @@
 import Image from "next/image";
 import Link from "next/link";
-import { routes } from "@/lib/routes";
+import { getI18n } from "@/i18n/server";
+import { layout } from "@/i18n/messages/layout";
+import { hasPage, type RouteKey } from "@/lib/routes";
 import { company, site } from "@/lib/site";
+import { hoursFor } from "@/lib/page-text";
 import { Container } from "@/components/ui";
 import { MailIcon, PhoneIcon, PinIcon } from "@/components/icons";
 import { PaymentMethods } from "@/components/PaymentMethods";
 import { CookieSettingsLink } from "@/components/consent/CookieBanner";
 
-const columns = [
-  {
-    title: "Kundservice",
-    links: [
-      { href: routes.shipping, label: "Frakt & leverans" },
-      { href: routes.returns, label: "Returer & byten" },
-      { href: routes.faq, label: "Vanliga frågor" },
-      { href: routes.trackOrder, label: "Spåra order" },
-      { href: routes.contact, label: "Kontakta oss" },
-    ],
-  },
-  {
-    title: "Om Metilde",
-    links: [
-      { href: routes.story, label: "Vår historia" },
-      { href: routes.quality, label: "Kvalitet" },
-      { href: routes.sustainability, label: "Hållbarhet" },
-      { href: routes.terms, label: "Köpvillkor" },
-      { href: routes.privacy, label: "Integritetspolicy" },
-    ],
-  },
-  {
-    title: "Handla",
-    links: [
-      { href: routes.products, label: "Alla produkter" },
-      { href: routes.goals, label: "Hitta ditt extrakt" },
-      { href: routes.subscription, label: "Prenumeration" },
-      { href: routes.category("Tongkat Ali"), label: "Tongkat Ali" },
-      { href: routes.articles, label: "Journalen" },
-    ],
-  },
-];
+type FooterLink = { href: string; label: string; key?: RouteKey };
 
-export function Footer() {
+export async function Footer() {
+  const { locale, r } = await getI18n();
+  const t = layout[locale].footer;
   const year = new Date().getFullYear();
+  const columns: { title: string; links: FooterLink[] }[] = [
+    {
+      title: t.customerService,
+      links: [
+        { href: r.shipping, label: t.shipping },
+        { href: r.returns, label: t.returns },
+        { href: r.faq, label: t.faq },
+        { href: r.trackOrder, label: t.trackOrder, key: "trackOrder" },
+        { href: r.contact, label: t.contact },
+      ],
+    },
+    {
+      title: t.about,
+      links: [
+        { href: r.story, label: t.story },
+        { href: r.quality, label: t.quality },
+        { href: r.sustainability, label: t.sustainability },
+        { href: r.terms, label: t.terms },
+        { href: r.privacy, label: t.privacy },
+      ],
+    },
+    {
+      title: t.shop,
+      links: [
+        { href: r.products, label: t.allProducts },
+        { href: r.goals, label: t.goals, key: "goals" },
+        { href: r.subscription, label: t.subscription },
+        { href: r.category("Tongkat Ali"), label: "Tongkat Ali" },
+        { href: r.articles, label: t.articles, key: "articles" },
+      ],
+    },
+  ];
+
   return (
     <footer className="border-t border-line bg-sand-soft">
       <Container className="grid grid-cols-1 gap-12 py-14 sm:grid-cols-2 lg:grid-cols-[minmax(0,1.4fr)_repeat(3,minmax(0,1fr))]">
         <div>
-          <Link href={routes.home} className="flex items-center gap-2.5">
+          <Link href={r.home} className="flex items-center gap-2.5">
             <Image src="/logo-mark.png" alt="" width={44} height={32} className="h-8 w-auto" />
             <span className="font-display text-2xl font-medium tracking-tight">Metilde</span>
           </Link>
-          <p className="mt-4 max-w-sm text-sm leading-relaxed text-muted">
-            Standardiserade ört- och svampextrakt utvecklade i Sverige. I vegansk kapsel utan fyllnadsmedel.
-          </p>
+          <p className="mt-4 max-w-sm text-sm leading-relaxed text-muted">{t.blurb}</p>
           <address className="mt-6 space-y-2 text-sm not-italic">
             <p className="flex items-center gap-2">
               <MailIcon size={16} className="text-primary" />
@@ -65,7 +70,7 @@ export function Footer() {
               <a href={company.phoneHref} className="hover:underline">
                 {company.phone}
               </a>
-              <span className="text-muted">({company.hours})</span>
+              <span className="text-muted">({hoursFor(locale)})</span>
             </p>
             {company.addressInFooter ? (
               <p className="flex items-start gap-2">
@@ -82,13 +87,15 @@ export function Footer() {
           <div key={col.title}>
             <h3 className="text-xs font-semibold uppercase tracking-[0.14em]">{col.title}</h3>
             <ul className="mt-4 space-y-2.5 text-sm">
-              {col.links.map((l) => (
-                <li key={l.href + l.label}>
-                  <Link href={l.href} className="text-muted transition-colors hover:text-foreground">
-                    {l.label}
-                  </Link>
-                </li>
-              ))}
+              {col.links
+                .filter((l) => !l.key || hasPage(l.key, locale))
+                .map((l) => (
+                  <li key={l.href + l.label}>
+                    <Link href={l.href} className="text-muted transition-colors hover:text-foreground">
+                      {l.label}
+                    </Link>
+                  </li>
+                ))}
             </ul>
           </div>
         ))}
@@ -97,23 +104,23 @@ export function Footer() {
       <div className="border-t border-line">
         <Container className="flex flex-col gap-4 py-6 text-xs text-muted md:flex-row md:items-center md:justify-between">
           <p>
-            © {year} {company.legalName} · {company.idLabel} {company.orgNumber} · Alla rättigheter förbehållna.
+            © {year} {company.legalName} · {company.idLabel} {company.orgNumber} · {t.rights}
           </p>
           <PaymentMethods size="sm" />
           <ul className="flex flex-wrap gap-4">
             <li>
-              <Link href={routes.privacy} className="hover:text-foreground">
-                Integritetspolicy
+              <Link href={r.privacy} className="hover:text-foreground">
+                {t.privacy}
               </Link>
             </li>
             <li>
-              <Link href={routes.terms} className="hover:text-foreground">
-                Köpvillkor
+              <Link href={r.terms} className="hover:text-foreground">
+                {t.terms}
               </Link>
             </li>
             <li>
-              <Link href={routes.cookies} className="hover:text-foreground">
-                Cookies
+              <Link href={r.cookies} className="hover:text-foreground">
+                {t.cookies}
               </Link>
             </li>
             <li>

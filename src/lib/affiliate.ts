@@ -41,7 +41,8 @@ export const defaultSettings: AffiliateSettings = {
   endpointUrl: "https://addrevenue.io/t",
   apiBaseUrl: "https://addrevenue.io/api/v2",
   attributionDays: 30,
-  vatRates: { SE: 0.12, default: 0.25 },
+  // Livsmedelsmoms (kosttillskott): SE 12 %, FI 13,5 % (sedan 2026-01-01), DK har ingen sänkt sats = default 25 %
+  vatRates: { SE: 0.12, FI: 0.135, DK: 0.25, default: 0.25 },
 };
 
 /** Inställningarna från databasen, med koden som reserv. */

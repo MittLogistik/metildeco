@@ -1,0 +1,96 @@
+/**
+ * Produktsidan. Användning: `const t = product[locale]`.
+ */
+import type { Locale } from "@/lib/i18n";
+
+const sv = {
+  notFound: "Produkten hittades inte",
+  products: "Produkter",
+  vegan: "Vegansk",
+  inclVat: "inkl. moms",
+  soldOut: "Slutsåld – fler är på väg",
+  lowStock: (n: number) => `I lager – endast ${n} kvar`,
+  inStock: "I lager – skickas samma dag vid order före 12",
+  shippingFrom: (from: string, freeOver: string) => `Frakt från ${from}, fri frakt över ${freeOver}.`,
+  deliveryTime: (min: number, max: number) => `Leveranstid ${min}–${max} arbetsdagar`,
+  returnRight: "30 dagars ångerrätt",
+  securePayment: "Trygg betalning med",
+  summary: "Produkt i korthet",
+  description: "Beskrivning",
+  facts: "Fakta",
+  sku: "Artikelnummer",
+  ingredients: "Innehåll",
+  usage: "Så använder du den",
+  qualityTitle: "Så säkrar vi kvaliteten",
+  quality: [
+    { t: "Latinskt namn", d: "Art och växtdel anges på varje burk." },
+    { t: "Tydlig dosering", d: "Extraktstyrka och mängd per kapsel står på etiketten." },
+    { t: "Utvecklat i Sverige", d: "Vegansk kapsel utan fyllnadsmedel, packad i plastburk." },
+  ],
+  faq: "Vanliga frågor",
+  disclaimer:
+    "Kosttillskott ersätter inte en varierad kost och en hälsosam livsstil. Rekommenderat dagligt intag bör inte överskridas. Förvaras utom räckhåll för små barn.",
+  related: "Du kanske också gillar",
+};
+
+export const product: Record<Locale, typeof sv> = {
+  sv,
+  fi: {
+    notFound: "Tuotetta ei löytynyt",
+    products: "Tuotteet",
+    vegan: "Vegaaninen",
+    inclVat: "sis. ALV",
+    soldOut: "Loppuunmyyty – lisää on tulossa",
+    lowStock: (n) => `Varastossa – vain ${n} jäljellä`,
+    inStock: "Varastossa – lähetetään samana päivänä, kun tilaat ennen klo 12 (Ruotsin aikaa) arkipäivinä",
+    shippingFrom: (from, freeOver) => `Toimitus alkaen ${from}, ilmainen toimitus yli ${freeOver} tilauksiin.`,
+    deliveryTime: (min, max) => `Toimitusaika ${min}–${max} arkipäivää`,
+    returnRight: "30 päivän peruutusoikeus",
+    securePayment: "Turvallinen maksu",
+    summary: "Tuote lyhyesti",
+    description: "Kuvaus",
+    facts: "Tiedot",
+    sku: "Tuotenumero",
+    ingredients: "Ainesosat",
+    usage: "Näin käytät sitä",
+    qualityTitle: "Näin varmistamme laadun",
+    quality: [
+      { t: "Latinankielinen nimi", d: "Laji ja kasvinosa on merkitty jokaiseen purkkiin." },
+      { t: "Selkeä annostus", d: "Uutteen vahvuus ja määrä kapselia kohden lukevat etiketissä." },
+      { t: "Kehitetty Ruotsissa", d: "Vegaaninen kapseli ilman täyteaineita, pakattu muovipurkkiin." },
+    ],
+    faq: "Usein kysyttyä",
+    disclaimer:
+      "Ravintolisä ei korvaa monipuolista ruokavaliota ja terveellisiä elämäntapoja. Suositeltua päivittäistä saantia ei pidä ylittää. Säilytä pienten lasten ulottumattomissa.",
+    related: "Saatat pitää myös näistä",
+  },
+  da: {
+    notFound: "Produktet blev ikke fundet",
+    products: "Produkter",
+    vegan: "Vegansk",
+    inclVat: "inkl. moms",
+    soldOut: "Udsolgt – flere er på vej",
+    lowStock: (n) => `På lager – kun ${n} tilbage`,
+    inStock: "På lager – sendes samme dag ved bestilling før kl. 12 (svensk tid) på hverdage",
+    shippingFrom: (from, freeOver) => `Fragt fra ${from}, fri fragt over ${freeOver}.`,
+    deliveryTime: (min, max) => `Leveringstid ${min}–${max} hverdage`,
+    returnRight: "30 dages fortrydelsesret",
+    securePayment: "Sikker betaling med",
+    summary: "Produktet kort fortalt",
+    description: "Beskrivelse",
+    facts: "Fakta",
+    sku: "Varenummer",
+    ingredients: "Indhold",
+    usage: "Sådan bruger du den",
+    qualityTitle: "Sådan sikrer vi kvaliteten",
+    quality: [
+      { t: "Latinsk navn", d: "Art og plantedel står på hver bøtte." },
+      { t: "Tydelig dosering", d: "Ekstraktstyrke og mængde pr. kapsel står på etiketten." },
+      { t: "Udviklet i Sverige", d: "Vegansk kapsel uden fyldstoffer, pakket i plastbøtte." },
+    ],
+    faq: "Ofte stillede spørgsmål",
+    disclaimer:
+      "Kosttilskud bør ikke erstatte en varieret kost og en sund livsstil. Den anbefalede daglige dosis bør ikke overskrides. Opbevares utilgængeligt for små børn.",
+    related: "Du vil måske også synes om",
+  },
+};

@@ -3,6 +3,8 @@
 import Image from "next/image";
 import { useEffect, useRef, useState, type SyntheticEvent } from "react";
 import { PlayIcon } from "@/components/icons";
+import { useI18n } from "@/i18n/client";
+import { catalog } from "@/i18n/messages/catalog";
 
 export type Media = { type: "image"; src: string } | { type: "video"; src: string; poster: string };
 
@@ -37,6 +39,7 @@ const detectFit = (img: HTMLImageElement): Fit => {
 function GalleryVideo({ src, poster }: { src: string; poster: string }) {
   const ref = useRef<HTMLVideoElement>(null);
   const [blocked, setBlocked] = useState(false);
+  const t = catalog[useI18n().locale];
   useEffect(() => {
     const v = ref.current;
     if (!v) return;
@@ -58,7 +61,7 @@ function GalleryVideo({ src, poster }: { src: string; poster: string }) {
     <>
       <video ref={ref} src={src} poster={poster} className="h-full w-full object-cover" autoPlay muted loop playsInline preload="metadata" disablePictureInPicture onPlaying={() => setBlocked(false)} />
       {blocked ? (
-        <button type="button" onClick={start} aria-label="Spela upp videon" className="absolute inset-0 flex items-center justify-center bg-black/10">
+        <button type="button" onClick={start} aria-label={t.playVideo} className="absolute inset-0 flex items-center justify-center bg-black/10">
           <span className="flex h-16 w-16 items-center justify-center rounded-full bg-white/90 text-foreground shadow-lg">
             <PlayIcon size={28} />
           </span>
@@ -69,6 +72,7 @@ function GalleryVideo({ src, poster }: { src: string; poster: string }) {
 }
 
 export function ProductGallery({ media, name, bg }: { media: Media[]; name: string; bg: string }) {
+  const t = catalog[useI18n().locale];
   const [index, setIndex] = useState(0);
   const [fit, setFit] = useState<Record<string, Fit>>({});
   const current = media[index] ?? media[0]!;
@@ -92,7 +96,7 @@ export function ProductGallery({ media, name, bg }: { media: Media[]; name: stri
           <Image
             key={current.src}
             src={current.src}
-            alt={`${name} – bild ${index + 1}`}
+            alt={t.imageAlt(name, index + 1)}
             fill
             priority={index === 0}
             sizes="(max-width: 1024px) 100vw, 50vw"
@@ -104,7 +108,7 @@ export function ProductGallery({ media, name, bg }: { media: Media[]; name: stri
       {media.length > 1 ? (
         <ul
           className="flex min-w-0 gap-2 overflow-x-auto scrollbar-none lg:col-start-1 lg:row-start-1 lg:flex-col lg:overflow-visible"
-          aria-label="Fler bilder"
+          aria-label={t.moreImages}
         >
           {media.map((m, i) => {
             const src = m.type === "video" ? m.poster : m.src;
@@ -113,7 +117,7 @@ export function ProductGallery({ media, name, bg }: { media: Media[]; name: stri
                 <button
                   type="button"
                   onClick={() => setIndex(i)}
-                  aria-label={m.type === "video" ? "Visa video" : `Visa bild ${i + 1}`}
+                  aria-label={m.type === "video" ? t.showVideo : t.showImage(i + 1)}
                   aria-current={i === index}
                   className={`relative h-20 w-20 overflow-hidden rounded-xl border-2 transition-colors ${
                     i === index ? "border-primary" : "border-transparent hover:border-line"

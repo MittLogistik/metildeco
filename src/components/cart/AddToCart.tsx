@@ -4,7 +4,11 @@ import { useState } from "react";
 import { useCart, type Plan } from "./CartProvider";
 import { formatPrice } from "@/lib/format";
 import { site } from "@/lib/site";
-import { tieredUnitPrice, unitCount, type Product } from "@/lib/products";
+import { subscriptionUnitPrice, tieredUnitPrice, unitCount, type Product } from "@/lib/products";
+import { useI18n } from "@/i18n/client";
+import { cart as cartMessages } from "@/i18n/messages/cart";
+
+const useLabels = () => cartMessages[useI18n().locale];
 import { Button } from "@/components/ui";
 import { CheckIcon, MinusIcon, PlusIcon } from "@/components/icons";
 
@@ -15,9 +19,12 @@ export function ProductBuyBox({ product, inStock }: { product: Product; inStock:
   const [interval, setInterval] = useState<30 | 60 | 90>(30);
   const [qty, setQty] = useState(1);
   const [added, setAdded] = useState(false);
+  const t = useLabels();
+  const currency = cart.currency;
+  const fmt = (n: number) => formatPrice(n, currency);
 
-  const subPrice = Math.round(product.price * (1 - site.subscriptionDiscount / 100));
-  const unit = plan === "sub" ? subPrice : tieredUnitPrice(product, qty);
+  const subPrice = subscriptionUnitPrice(product.price, site.subscriptionDiscount, currency);
+  const unit = plan === "sub" ? subPrice : tieredUnitPrice(product, qty, currency);
   const total = unit * qty;
   const listTotal = product.price * qty;
   const perPack = unitCount(product);
@@ -31,20 +38,21 @@ export function ProductBuyBox({ product, inStock }: { product: Product; inStock:
   return (
     <div className="space-y-4">
       <fieldset className="grid grid-cols-1 gap-2 sm:grid-cols-2">
-        <legend className="sr-only">Köpplan</legend>
+        <legend className="sr-only">{t.planLegend}</legend>
         <PlanOption
           active={plan === "once"}
           onClick={() => setPlan("once")}
-          title="Engångsköp"
-          price={formatPrice(product.price)}
-          note="Betala en gång, ingen bindning"
+          title={t.once}
+          price={fmt(product.price)}
+          note={t.onceNote}
         />
         <PlanOption
           active={plan === "sub"}
           onClick={() => setPlan("sub")}
-          title={`Prenumerera – spara ${site.subscriptionDiscount} %`}
-          price={formatPrice(subPrice)}
-          note="Fri frakt, valfritt intervall, avsluta när du vill"
+          title={t.subTitle(site.subscriptionDiscount)}
+          price={fmt(subPrice)}
+          note={t.subNote}
+          badge={t.freeShipping}
           highlight
         />
       </fieldset>
@@ -52,7 +60,7 @@ export function ProductBuyBox({ product, inStock }: { product: Product; inStock:
       {plan === "sub" ? (
         <div>
           <p className="mb-2 text-sm font-medium">
-            Leverans <span className="font-normal text-muted">– hur ofta vill du ha din leverans?</span>
+            {t.delivery} <span className="font-normal text-muted">{t.deliveryHint}</span>
           </p>
           <div className="grid grid-cols-3 gap-2">
             {([30, 60, 90] as const).map((d) => (
@@ -65,7 +73,7 @@ export function ProductBuyBox({ product, inStock }: { product: Product; inStock:
                   interval === d ? "border-primary bg-primary-soft font-semibold" : "border-line hover:border-foreground/40"
                 }`}
               >
-                Var {d}:e dag
+                {t.everyDays(d)}
               </button>
             ))}
           </div>
@@ -75,12 +83,12 @@ export function ProductBuyBox({ product, inStock }: { product: Product; inStock:
       {product.tieredPricing && plan === "once" ? (
         <div>
           <p className="mb-2 text-sm font-medium">
-            Välj antal <span className="font-normal text-muted">– fler förpackningar, lägre pris</span>
+            {t.chooseQty} <span className="font-normal text-muted">{t.chooseQtyHint}</span>
           </p>
           <div className="grid grid-cols-3 gap-2">
             {[1, 2, 3].map((n) => {
-              const u = tieredUnitPrice(product, n);
-              const save = (product.price - u) * n;
+              const u = tieredUnitPrice(product, n, currency);
+              const save = Math.round((product.price - u) * n * 100) / 100;
               return (
                 <button
                   key={n}
@@ -91,10 +99,10 @@ export function ProductBuyBox({ product, inStock }: { product: Product; inStock:
                     qty === n ? "border-primary bg-primary-soft" : "border-line hover:border-foreground/40"
                   }`}
                 >
-                  <p className="text-sm font-semibold">{n} st</p>
-                  {perPack ? <p className="text-xs text-muted">{perPack * n} kapslar</p> : null}
-                  <p className="mt-1 text-sm tabular-nums">{formatPrice(u)}/st</p>
-                  {save > 0 ? <p className="text-xs font-medium text-success">Spara {formatPrice(save)}</p> : null}
+                  <p className="text-sm font-semibold">{t.pcs(n)}</p>
+                  {perPack ? <p className="text-xs text-muted">{t.capsules(perPack * n)}</p> : null}
+                  <p className="mt-1 text-sm tabular-nums">{fmt(u)}{t.perPcs}</p>
+                  {save > 0 ? <p className="text-xs font-medium text-success">{t.save(fmt(save))}</p> : null}
                 </button>
               );
             })}
@@ -106,7 +114,7 @@ export function ProductBuyBox({ product, inStock }: { product: Product; inStock:
         <div className="inline-flex h-13 items-center justify-between rounded-full border border-line px-2 sm:w-36">
           <button
             type="button"
-            aria-label="Minska antal"
+            aria-label={t.decrease}
             onClick={() => setQty((q) => Math.max(1, q - 1))}
             className="rounded-full p-2 hover:bg-sand"
           >
@@ -117,7 +125,7 @@ export function ProductBuyBox({ product, inStock }: { product: Product; inStock:
           </span>
           <button
             type="button"
-            aria-label="Öka antal"
+            aria-label={t.increase}
             onClick={() => setQty((q) => Math.min(10, q + 1))}
             className="rounded-full p-2 hover:bg-sand"
           >
@@ -126,16 +134,16 @@ export function ProductBuyBox({ product, inStock }: { product: Product; inStock:
         </div>
         <Button size="lg" className="w-full sm:flex-1" onClick={add} disabled={!inStock}>
           {!inStock ? (
-            "Slutsåld"
+            t.soldOut
           ) : added ? (
             <>
-              <CheckIcon size={18} /> Tillagd
+              <CheckIcon size={18} /> {t.added}
             </>
           ) : (
             <>
-              Lägg i varukorgen · {formatPrice(total)}
+              {t.addToCart} · {fmt(total)}
               {total < listTotal ? (
-                <span className="text-primary-fg/70 line-through tabular-nums">{formatPrice(listTotal)}</span>
+                <span className="text-primary-fg/70 line-through tabular-nums">{fmt(listTotal)}</span>
               ) : null}
             </>
           )}
@@ -151,6 +159,7 @@ function PlanOption({
   title,
   price,
   note,
+  badge,
   highlight,
 }: {
   active: boolean;
@@ -158,6 +167,7 @@ function PlanOption({
   title: string;
   price: string;
   note: string;
+  badge?: string;
   highlight?: boolean;
 }) {
   return (
@@ -183,9 +193,9 @@ function PlanOption({
           <span className="block text-xs text-muted">{note}</span>
         </span>
       </span>
-      {highlight ? (
+      {highlight && badge ? (
         <span className="absolute -top-2 right-3 rounded-full bg-primary px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-primary-fg">
-          Fri frakt
+          {badge}
         </span>
       ) : null}
     </button>
@@ -193,8 +203,9 @@ function PlanOption({
 }
 
 /** Liten köpknapp på produktkort. */
-export function QuickAddButton({ slug, disabled, label = "Köp" }: { slug: string; disabled?: boolean; label?: string }) {
+export function QuickAddButton({ slug, disabled, label }: { slug: string; disabled?: boolean; label?: string }) {
   const cart = useCart();
+  const t = useLabels();
   return (
     <Button
       size="sm"
@@ -205,7 +216,7 @@ export function QuickAddButton({ slug, disabled, label = "Köp" }: { slug: strin
         cart.addProduct(slug, 1, "once");
       }}
     >
-      {disabled ? "Slutsåld" : label}
+      {disabled ? t.soldOut : (label ?? t.buy)}
     </Button>
   );
 }
@@ -213,6 +224,7 @@ export function QuickAddButton({ slug, disabled, label = "Köp" }: { slug: strin
 export function BundleBuyButton({ slug, inStock, price }: { slug: string; inStock: boolean; price: number }) {
   const cart = useCart();
   const [added, setAdded] = useState(false);
+  const t = useLabels();
   return (
     <Button
       size="lg"
@@ -224,7 +236,7 @@ export function BundleBuyButton({ slug, inStock, price }: { slug: string; inStoc
         setTimeout(() => setAdded(false), 1800);
       }}
     >
-      {!inStock ? "Tillfälligt slut" : added ? "Tillagd i varukorgen" : `Lägg paketet i varukorgen · ${formatPrice(price)}`}
+      {!inStock ? t.tempOut : added ? t.addedToCart : `${t.addBundle} · ${formatPrice(price, cart.currency)}`}
     </Button>
   );
 }

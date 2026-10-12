@@ -1,35 +1,52 @@
+import { info } from "@/i18n/messages/info";
+import type { Locale } from "./i18n";
 import { company, logistics } from "./site";
+
+/** Adresser i site.ts slutar på ", Sverige" – landsnamnet på sidans språk. */
+const localizeCountry = (address: string, locale: Locale) => address.replace(/, Sverige$/, `, ${info[locale].company.sweden}`);
+
+/** Kundtjänstens öppettider på sidans språk (svenska = company.hours). */
+export const hoursFor = (locale: Locale = "sv"): string => (locale === "sv" ? company.hours : info[locale].company.hours);
 
 /**
  * Platshållare i sidtexter (villkor, policyer, informationssidor). Fylls i när sidan visas,
  * så att texter som sparats i admin alltid visar aktuella företagsuppgifter från lib/site.
+ * `label` visas i admin (svenska); `value` får sidans språk.
  */
-export const placeholders: { key: string; label: string; value: () => string }[] = [
+export const placeholders: { key: string; label: string; value: (locale?: Locale) => string }[] = [
   { key: "företag", label: "Säljarens juridiska namn", value: () => company.legalName },
   { key: "orgnr", label: "Organisationsnummer / EIN", value: () => company.orgNumber },
-  { key: "adress", label: "Säljarens adress", value: () => company.address },
+  { key: "adress", label: "Säljarens adress", value: (l = "sv") => localizeCountry(company.address, l) },
   { key: "epost", label: "Kundtjänstens e-post", value: () => company.email },
   { key: "telefon", label: "Telefon", value: () => company.phone },
-  { key: "öppettider", label: "Kundtjänstens öppettider", value: () => company.hours },
-  { key: "returadress", label: "Adress för returer (lagret)", value: () => `${logistics.legalName}, ${logistics.address.replace(/, Sverige$/, "")}` },
+  { key: "öppettider", label: "Kundtjänstens öppettider", value: (l = "sv") => hoursFor(l) },
+  {
+    key: "returadress",
+    label: "Adress för returer (lagret)",
+    // På svenska utan land (som tidigare); på andra språk med landet, eftersom returen går över gränsen
+    value: (l = "sv") =>
+      `${logistics.legalName}, ${l === "sv" ? logistics.address.replace(/, Sverige$/, "") : localizeCountry(logistics.address, l)}`,
+  },
 ];
 
 const byKey = new Map(placeholders.map((p) => [p.key, p.value]));
 
 /** Byter {nyckel} mot aktuellt värde. Okända nycklar lämnas orörda. */
-export const fillPlaceholders = (text: string) => text.replace(/\{([a-zåäö]+)\}/g, (m, key: string) => byKey.get(key)?.() ?? m);
+export const fillPlaceholders = (text: string, locale: Locale = "sv") =>
+  text.replace(/\{([a-zåäö]+)\}/g, (m, key: string) => byKey.get(key)?.(locale) ?? m);
 
 /** Raderna i blocket "Företagsuppgifter". */
-export function companyInfoItems(): string[] {
+export function companyInfoItems(locale: Locale = "sv"): string[] {
+  const t = info[locale].company;
   return [
-    `Juridisk enhet: ${company.legalName}`,
-    `${company.idLabel === "Org.nr" ? "Organisationsnummer" : company.idLabel}: ${company.orgNumber}`,
-    ...(company.vatId ? [`Momsregistreringsnummer: ${company.vatId}`] : []),
-    `Adress: ${company.address}`,
-    `E-post: ${company.email}`,
-    `Telefon: ${company.phone} (${company.hours})`,
+    `${t.legalEntity}: ${company.legalName}`,
+    `${company.idLabel === "Org.nr" ? t.orgNumber : company.idLabel}: ${company.orgNumber}`,
+    ...(company.vatId ? [`${t.vatId}: ${company.vatId}`] : []),
+    `${t.address}: ${localizeCountry(company.address, locale)}`,
+    `${t.email}: ${company.email}`,
+    `${t.phone}: ${company.phone} (${hoursFor(locale)})`,
     ...(company.separateLogistics
-      ? [`Lager, packning, leveranser och returer sköts av ${logistics.legalName} (org.nr ${logistics.orgNumber}), ${logistics.address}, för ${company.legalName}s räkning.`]
+      ? [t.logistics(logistics.legalName, logistics.orgNumber, localizeCountry(logistics.address, locale), company.legalName)]
       : []),
   ];
 }

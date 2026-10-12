@@ -99,7 +99,7 @@ export async function getStats(period: Period, env: Env): Promise<Stats> {
     db.from("cart_events_hourly").select("event_hour,event,events").gte("event_hour", fromIso).lt("event_hour", toIso),
     db
       .from("orders")
-      .select("id,created_at,total,shipping,shipping_method,status,kind,order_items(product_slug,qty)")
+      .select("id,created_at,total,shipping,currency,exchange_rate_to_sek,shipping_method,status,kind,order_items(product_slug,qty)")
       .eq("environment", env)
       .gte("created_at", fromIso)
       .lt("created_at", toIso)
@@ -147,11 +147,12 @@ export async function getStats(period: Period, env: Env): Promise<Stats> {
   const revenueByDay = new Map<string, number>();
   const profitByDay = new Map<string, number>();
   const missing = new Set<string>();
-  type OrderRow = { id: string; created_at: string; total: number; shipping: number; shipping_method: string | null; kind: string; order_items: { product_slug: string; qty: number }[] };
+  type OrderRow = { id: string; created_at: string; total: number; shipping: number; currency: string | null; exchange_rate_to_sek: number | string | null; shipping_method: string | null; kind: string; order_items: { product_slug: string; qty: number }[] };
   for (const o of (orders.data ?? []) as unknown as OrderRow[]) {
     const day = keyOf(o.created_at);
     bump(ordersByDay, day, 1);
-    const total = Number(o.total);
+    // Intäkt i SEK: ordrar i EUR/DKK räknas om med kursen som sparades vid köpet
+    const total = Number(o.total) * ((o.currency ?? "SEK").toUpperCase() === "SEK" ? 1 : Number(o.exchange_rate_to_sek) || 1);
     bump(revenueByDay, day, total);
     let cost = HANDLING_FEE + (shippingCostByLabel.get(o.shipping_method ?? "") ?? 0);
     for (const it of o.order_items ?? []) {

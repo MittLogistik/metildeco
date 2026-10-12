@@ -1,9 +1,11 @@
 import "server-only";
-import { getProductContent } from "@/content/product-content";
+import { productContentFor } from "@/content/i18n";
 import { bundleInStock, type Bundle } from "./bundles";
 import { getCatalog } from "./catalog";
+import { defaultLocale, markets, type Locale } from "./i18n";
 import { imagesFor, isInStock, unitCount, type Product } from "./products";
-import { routes } from "./routes";
+import { routesOf } from "./routes";
+import { cheapestRate, shippingCost } from "./shipping";
 import { site } from "./site";
 import { metaContentId } from "./consent";
 
@@ -11,7 +13,19 @@ import { metaContentId } from "./consent";
  * Produktfeed för Google Merchant Center (RSS 2.0 med g:-attribut).
  * Slutsålda produkter skickas med availability out_of_stock, aldrig utelämnade,
  * så att Google inte får 404 på annonserade sidor.
+ *
+ * En feed per marknad (språk): länkar, texter, priser och valuta för det landet.
+ * /feeds/google.xml = Sverige, /feeds/google-fi.xml = Finland, /feeds/google-dk.xml = Danmark.
  */
+
+/** Feedtexter per språk. */
+const feedText: Record<Locale, { channel: string; contains: string; bundleType: string }> = {
+  sv: { channel: "Botaniska extrakt och svampextrakt i kapselform, utvecklade i Sverige.", contains: "Innehåller", bundleType: "Paket" },
+  fi: { channel: "Kasvi- ja sieniuutteita kapselimuodossa, kehitetty Ruotsissa.", contains: "Sisältää", bundleType: "Paketti" },
+  da: { channel: "Botaniske ekstrakter og svampeekstrakter i kapselform, udviklet i Sverige.", contains: "Indeholder", bundleType: "Pakke" },
+};
+
+type Ctx = { locale: Locale; currency: string };
 
 const GOOGLE_CATEGORY = "Health & Beauty > Health Care > Fitness & Nutrition > Vitamins & Supplements";
 
@@ -20,13 +34,13 @@ const esc = (s: string) =>
 
 const abs = (path: string) => (path.startsWith("http") ? path : `${site.url}${path}`);
 
-const money = (n: number) => `${n.toFixed(2)} ${site.currency}`;
+const money = (n: number, c: Ctx) => `${n.toFixed(2)} ${c.currency}`;
 
 const clip = (s: string, max: number) => (s.length > max ? `${s.slice(0, max - 1).trimEnd()}…` : s);
 
 /** Beskrivning utan hälsopåståenden: produktens intro + beskrivning + punkter. */
-const describe = (p: Product): string => {
-  const content = getProductContent(p.slug);
+const describe = (p: Product, c: Ctx): string => {
+  const content = productContentFor(p.slug, c.locale);
   const parts = [content?.intro ?? p.short, ...p.description, p.bullets.length ? `• ${p.bullets.join(" • ")}` : ""].filter(Boolean);
   return clip(parts.join("\n\n"), 5000);
 };
@@ -53,20 +67,33 @@ const bundleCount = (b: Bundle): number | null => {
   return total;
 };
 
-const productItem = (p: Product): string => {
+/**
+ * Frakt per vara för marknader utanför Sverige (feeden är enda fraktuppgiften Google har via CSS:erna).
+ * Billigaste fraktsättet; 0 om varan själv når gränsen för fri frakt eller alltid skickas fritt.
+ * Sveriges feed lämnas som den är.
+ */
+const shipping = (price: number, alwaysFree: boolean, c: Ctx): string => {
+  if (c.locale === defaultLocale) return "";
+  const rate = cheapestRate(c.locale);
+  const cost = alwaysFree ? 0 : shippingCost(rate, price);
+  return `<g:shipping>${tag("g:country", markets[c.locale].country)}${tag("g:service", rate.label)}${tag("g:price", money(cost, c))}</g:shipping>`;
+};
+
+const productItem = (p: Product, c: Ctx): string => {
   const images = imagesFor(p).map(abs);
   const onSale = p.oldPrice !== null && p.oldPrice > p.price;
   const identifiers = p.gtin || p.mpn;
   return `<item>
 ${tag("g:id", p.sku ?? p.slug)}
 ${tag("title", clip(p.name, 150))}
-${tag("description", describe(p))}
-${tag("link", abs(routes.product(p.slug)))}
+${tag("description", describe(p, c))}
+${tag("link", abs(routesOf(c.locale).product(p.slug)))}
 ${tag("g:image_link", images[0])}
 ${images.slice(1, 11).map((src) => tag("g:additional_image_link", src)).join("\n")}
 ${tag("g:availability", isInStock(p) ? "in_stock" : "out_of_stock")}
-${tag("g:price", money(onSale ? p.oldPrice! : p.price))}
-${onSale ? tag("g:sale_price", money(p.price)) : ""}
+${tag("g:price", money(onSale ? p.oldPrice! : p.price, c))}
+${onSale ? tag("g:sale_price", money(p.price, c)) : ""}
+${shipping(p.price, false, c)}
 ${tag("g:brand", p.brand)}
 ${tag("g:gtin", p.gtin)}
 ${tag("g:mpn", p.mpn)}
@@ -81,22 +108,23 @@ ${tag("g:adult", "no")}
 </item>`;
 };
 
-const bundleItem = (b: Bundle): string => {
+const bundleItem = (b: Bundle, c: Ctx): string => {
   const images = b.images.map(abs);
   return `<item>
 ${tag("g:id", b.sku ?? `paket-${b.slug}`)}
 ${tag("title", clip(b.name, 150))}
-${tag("description", clip([b.short, ...b.description, `Innehåller: ${b.items.map((i) => `${i.qty} × ${i.product.name}`).join(", ")}.`].join("\n\n"), 5000))}
-${tag("link", abs(routes.bundle(b.slug)))}
+${tag("description", clip([b.short, ...b.description, `${feedText[c.locale].contains}: ${b.items.map((i) => `${i.qty} × ${i.product.name}`).join(", ")}.`].join("\n\n"), 5000))}
+${tag("link", abs(routesOf(c.locale).bundle(b.slug)))}
 ${tag("g:image_link", images[0])}
 ${images.slice(1, 11).map((src) => tag("g:additional_image_link", src)).join("\n")}
 ${tag("g:availability", bundleInStock(b) ? "in_stock" : "out_of_stock")}
-${tag("g:price", money(b.price))}
+${tag("g:price", money(b.price, c))}
+${shipping(b.price, b.freeShipping, c)}
 ${tag("g:brand", "Metilde")}
 ${tag("g:identifier_exists", "no")}
 ${tag("g:condition", "new")}
 ${tag("g:google_product_category", GOOGLE_CATEGORY)}
-${tag("g:product_type", "Paket")}
+${tag("g:product_type", feedText[c.locale].bundleType)}
 ${tag("g:is_bundle", "yes")}
 ${b.freeShipping ? tag("g:shipping_label", "paket") : ""}
 ${unitPricing(bundleCount(b))}
@@ -104,18 +132,19 @@ ${tag("g:adult", "no")}
 </item>`;
 };
 
-export async function buildGoogleFeed(): Promise<string> {
-  const { products, bundles } = await getCatalog();
+export async function buildGoogleFeed(locale: Locale = defaultLocale): Promise<string> {
+  const { products, bundles, currency } = await getCatalog(locale);
+  const c: Ctx = { locale, currency };
   const items = [
-    ...products.filter((p) => !p.feedExclusions.includes("google")).map(productItem),
-    ...bundles.map(bundleItem),
+    ...products.filter((p) => !p.feedExclusions.includes("google")).map((p) => productItem(p, c)),
+    ...bundles.map((b) => bundleItem(b, c)),
   ];
   return `<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:g="http://base.google.com/ns/1.0">
 <channel>
 <title>Metilde</title>
 <link>${esc(site.url)}</link>
-<description>Botaniska extrakt och svampextrakt i kapselform, utvecklade i Sverige.</description>
+<description>${esc(feedText[locale].channel)}</description>
 ${items.join("\n")}
 </channel>
 </rss>
@@ -130,19 +159,19 @@ ${items.join("\n")}
  */
 const META_CATEGORY = "health & beauty > health care > vitamins & supplements";
 
-const metaProductItem = (p: Product): string => {
+const metaProductItem = (p: Product, c: Ctx): string => {
   const images = imagesFor(p).map(abs);
   const onSale = p.oldPrice !== null && p.oldPrice > p.price;
   return `<item>
 ${tag("g:id", metaContentId("product", p.slug, p.sku))}
 ${tag("title", clip(p.name, 150))}
-${tag("description", clip(describe(p), 9999))}
-${tag("link", abs(routes.product(p.slug)))}
+${tag("description", clip(describe(p, c), 9999))}
+${tag("link", abs(routesOf(c.locale).product(p.slug)))}
 ${tag("g:image_link", images[0])}
 ${images.slice(1, 11).map((src) => tag("g:additional_image_link", src)).join("\n")}
 ${tag("g:availability", isInStock(p) ? "in stock" : "out of stock")}
-${tag("g:price", money(onSale ? p.oldPrice! : p.price))}
-${onSale ? tag("g:sale_price", money(p.price)) : ""}
+${tag("g:price", money(onSale ? p.oldPrice! : p.price, c))}
+${onSale ? tag("g:sale_price", money(p.price, c)) : ""}
 ${tag("g:brand", p.brand)}
 ${tag("g:gtin", p.gtin)}
 ${tag("g:mpn", p.mpn)}
@@ -154,37 +183,38 @@ ${p.variant ? tag("g:item_group_id", p.variant.group) : ""}
 </item>`;
 };
 
-const metaBundleItem = (b: Bundle): string => {
+const metaBundleItem = (b: Bundle, c: Ctx): string => {
   const images = b.images.map(abs);
   return `<item>
 ${tag("g:id", metaContentId("bundle", b.slug, b.sku))}
 ${tag("title", clip(b.name, 150))}
-${tag("description", clip([b.short, ...b.description, `Innehåller: ${b.items.map((i) => `${i.qty} × ${i.product.name}`).join(", ")}.`].join("\n\n"), 9999))}
-${tag("link", abs(routes.bundle(b.slug)))}
+${tag("description", clip([b.short, ...b.description, `${feedText[c.locale].contains}: ${b.items.map((i) => `${i.qty} × ${i.product.name}`).join(", ")}.`].join("\n\n"), 9999))}
+${tag("link", abs(routesOf(c.locale).bundle(b.slug)))}
 ${tag("g:image_link", images[0])}
 ${images.slice(1, 11).map((src) => tag("g:additional_image_link", src)).join("\n")}
 ${tag("g:availability", bundleInStock(b) ? "in stock" : "out of stock")}
-${tag("g:price", money(b.price))}
+${tag("g:price", money(b.price, c))}
 ${tag("g:brand", "Metilde")}
 ${tag("g:condition", "new")}
 ${tag("g:fb_product_category", META_CATEGORY)}
 ${tag("g:google_product_category", GOOGLE_CATEGORY)}
-${tag("g:product_type", "Paket")}
+${tag("g:product_type", feedText[c.locale].bundleType)}
 </item>`;
 };
 
-export async function buildMetaFeed(): Promise<string> {
-  const { products, bundles } = await getCatalog();
+export async function buildMetaFeed(locale: Locale = defaultLocale): Promise<string> {
+  const { products, bundles, currency } = await getCatalog(locale);
+  const c: Ctx = { locale, currency };
   const items = [
-    ...products.filter((p) => !p.feedExclusions.includes("meta") && !p.feedExclusions.includes("facebook")).map(metaProductItem),
-    ...bundles.map(metaBundleItem),
+    ...products.filter((p) => !p.feedExclusions.includes("meta") && !p.feedExclusions.includes("facebook")).map((p) => metaProductItem(p, c)),
+    ...bundles.map((b) => metaBundleItem(b, c)),
   ];
   return `<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:g="http://base.google.com/ns/1.0">
 <channel>
 <title>Metilde</title>
 <link>${esc(site.url)}</link>
-<description>Botaniska extrakt och svampextrakt i kapselform, utvecklade i Sverige.</description>
+<description>${esc(feedText[locale].channel)}</description>
 ${items.join("\n")}
 </channel>
 </rss>

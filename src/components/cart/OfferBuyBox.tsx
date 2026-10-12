@@ -5,7 +5,10 @@ import { useState } from "react";
 import { useCart } from "./CartProvider";
 import { formatPrice } from "@/lib/format";
 import { site } from "@/lib/site";
-import { unitCount, type Product } from "@/lib/products";
+import { subscriptionUnitPrice, unitCount, type Product } from "@/lib/products";
+import { freeShippingOver } from "@/lib/shipping";
+import { useI18n } from "@/i18n/client";
+import { cart as cartMessages } from "@/i18n/messages/cart";
 import { artworkFor, isCutout, packArtworkFor } from "@/content/offer-artwork";
 import { Button } from "@/components/ui";
 import { CheckIcon } from "@/components/icons";
@@ -28,6 +31,10 @@ const shortName = (name: string) => name.replace(/\s*\|.*$/, "");
  */
 export function OfferBuyBox({ product, inStock, gifts }: { product: Product; inStock: boolean; gifts: GiftOption[] }) {
   const cart = useCart();
+  const { locale } = useI18n();
+  const t = cartMessages[locale];
+  const currency = cart.currency;
+  const fmt = (n: number) => formatPrice(n, currency);
   const packQty = Math.max(2, product.offerPackQty);
   const [option, setOption] = useState<OptionId>(gifts.length ? "pack" : "sub1");
   const [giftSlug, setGiftSlug] = useState<string | null>(gifts[0]?.slug ?? null);
@@ -37,13 +44,14 @@ export function OfferBuyBox({ product, inStock, gifts }: { product: Product; inS
   const single = artworkFor(product.slug, product.images[0] ?? "/media/placeholder.svg");
   const pack = packArtworkFor(product.slug);
 
-  const subUnit = Math.round(product.price * (1 - site.subscriptionDiscount / 100));
+  const subUnit = subscriptionUnitPrice(product.price, site.subscriptionDiscount, currency);
+  const cents = (n: number) => Math.round(n * 100) / 100;
   const packInterval: 30 | 60 | 90 = packQty >= 3 ? 90 : 60;
-  const packTotal = subUnit * packQty;
-  const packValue = product.price * packQty + (gift?.price ?? 0);
-  const packSave = packValue - packTotal;
+  const packTotal = cents(subUnit * packQty);
+  const packValue = cents(product.price * packQty + (gift?.price ?? 0));
+  const packSave = cents(packValue - packTotal);
   const packPct = packValue > 0 ? Math.round((packSave / packValue) * 100) : 0;
-  const oneSave = product.price - subUnit;
+  const oneSave = cents(product.price - subUnit);
 
   const totals: Record<OptionId, { pay: number; list: number }> = {
     sub1: { pay: subUnit, list: product.price },
@@ -62,36 +70,40 @@ export function OfferBuyBox({ product, inStock, gifts }: { product: Product; inS
 
   return (
     <div className="space-y-3">
-      <div role="radiogroup" aria-label="Välj köpalternativ" className="space-y-3">
+      <div role="radiogroup" aria-label={t.chooseOption} className="space-y-3">
         <OptionCard
+          currency={currency}
+          saveLabel={t.saveOffer}
           active={option === "sub1"}
           onClick={() => setOption("sub1")}
-          badge="Fri frakt"
-          title="Prenumerera på 1 förpackning"
-          sub={`1 månads förbrukning${perPack ? ` · ${perPack} kapslar` : ""}`}
+          badge={t.freeShipping}
+          title={t.sub1Title}
+          sub={t.sub1Sub(perPack)}
           pct={site.subscriptionDiscount}
           price={subUnit}
           list={product.price}
           save={oneSave}
-          points={[{ text: "Fri frakt · var 30:e dag" }, { text: "Avsluta när du vill" }]}
+          points={[{ text: t.freeEvery(30) }, { text: t.cancelAnytime }]}
           visual={<Art src={single} className="h-[60px] w-11 sm:h-[68px] sm:w-12" />}
         />
 
         <OptionCard
+          currency={currency}
+          saveLabel={t.saveOffer}
           active={option === "pack"}
           onClick={() => setOption("pack")}
-          badge="Bäst värde"
+          badge={t.bestValue}
           badgeTone="accent"
-          title={`Prenumerera på ${packQty} förpackningar`}
-          sub={`${packQty} månaders förbrukning${perPack ? ` · ${perPack * packQty} kapslar` : ""}`}
+          title={t.packTitle(packQty)}
+          sub={t.packSub(packQty, perPack ? perPack * packQty : null)}
           pct={packPct}
           price={packTotal}
           list={packValue}
           save={packSave}
           points={[
-            ...(gift ? [{ text: `+ ${shortName(gift.name)} på köpet (värde ${formatPrice(gift.price)})`, tone: "gift" as const }] : []),
-            { text: `Fri frakt · var ${packInterval}:e dag` },
-            { text: "Avsluta när du vill" },
+            ...(gift ? [{ text: t.giftPoint(shortName(gift.name), fmt(gift.price)), tone: "gift" as const }] : []),
+            { text: t.freeEvery(packInterval) },
+            { text: t.cancelAnytime },
           ]}
           visual={
             <span className="relative block h-[68px] w-[64px] -translate-x-1.5 sm:h-[84px] sm:w-[80px]">
@@ -107,7 +119,7 @@ export function OfferBuyBox({ product, inStock, gifts }: { product: Product; inS
               {gift ? (
                 <span className="absolute -bottom-2 -right-3 block h-[54px] w-10 drop-shadow-lg sm:-right-4 sm:h-[66px] sm:w-12">
                   <Art src={artworkFor(gift.slug, gift.image)} className="absolute inset-0" />
-                  <span className="absolute -top-1.5 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-success px-1.5 py-0.5 text-[9px] font-bold uppercase leading-none tracking-wide text-white shadow">Gåva</span>
+                  <span className="absolute -top-1.5 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-success px-1.5 py-0.5 text-[9px] font-bold uppercase leading-none tracking-wide text-white shadow">{t.gift}</span>
                 </span>
               ) : null}
               <span className="absolute -left-1 bottom-0 rounded-full bg-foreground px-1.5 py-0.5 text-[10px] font-bold leading-none text-white">×{packQty}</span>
@@ -116,7 +128,7 @@ export function OfferBuyBox({ product, inStock, gifts }: { product: Product; inS
         >
           {gifts.length > 1 && option === "pack" ? (
             <div className="mt-2.5">
-              <p className="mb-1.5 text-xs font-medium">Välj din gåva</p>
+              <p className="mb-1.5 text-xs font-medium">{t.chooseGift}</p>
               <div className="flex flex-wrap gap-1.5">
                 {gifts.map((g) => (
                   <button
@@ -143,36 +155,38 @@ export function OfferBuyBox({ product, inStock, gifts }: { product: Product; inS
         </OptionCard>
 
         <OptionCard
+          currency={currency}
+          saveLabel={t.saveOffer}
           active={option === "once"}
           onClick={() => setOption("once")}
-          title="Köp 1 förpackning"
-          sub="Engångsköp, ordinarie pris"
+          title={t.onceTitle}
+          sub={t.onceSub}
           price={product.price}
           list={null}
           save={null}
-          points={[{ text: `Fri frakt över ${site.freeShippingOver} kr` }]}
+          points={[{ text: t.freeOver(fmt(freeShippingOver(locale))) }]}
           visual={<Art src={single} className="h-[60px] w-11 sm:h-[68px] sm:w-12" />}
         />
       </div>
 
       <Button size="lg" className="w-full" onClick={add} disabled={!inStock}>
         {!inStock ? (
-          "Slutsåld"
+          t.soldOut
         ) : added ? (
           <>
-            <CheckIcon size={18} /> Tillagd i varukorgen
+            <CheckIcon size={18} /> {t.addedToCart}
           </>
         ) : (
           <>
-            Lägg i varukorgen · {formatPrice(current.pay)}
-            {current.pay < current.list ? <span className="text-primary-fg/70 line-through tabular-nums">{formatPrice(current.list)}</span> : null}
+            {t.addToCart} · {fmt(current.pay)}
+            {current.pay < current.list ? <span className="text-primary-fg/70 line-through tabular-nums">{fmt(current.list)}</span> : null}
           </>
         )}
       </Button>
       <p className="text-center text-xs text-muted">
         {option === "once"
-          ? "Betala en gång. Rabatt och fri frakt får du med prenumeration."
-          : `Ingen bindningstid. Ändra, pausa eller avsluta på Mitt konto.${option === "pack" && gift ? " Gåvan följer med första leveransen." : ""}`}
+          ? t.onceFootnote
+          : `${t.subFootnote}${option === "pack" && gift ? t.giftFootnote : ""}`}
       </p>
     </div>
   );
@@ -188,6 +202,8 @@ function Art({ src, className = "" }: { src: string; className?: string }) {
 }
 
 function OptionCard({
+  currency,
+  saveLabel,
   active,
   onClick,
   badge,
@@ -215,6 +231,8 @@ function OptionCard({
   points: Point[];
   visual: React.ReactNode;
   children?: React.ReactNode;
+  currency: string;
+  saveLabel: (pct: number, amount: string) => string;
 }) {
   return (
     <div
@@ -247,7 +265,7 @@ function OptionCard({
           <p className="text-xs text-muted">{sub}</p>
           {pct && save ? (
             <p className="mt-1.5 inline-flex items-center gap-1.5 rounded-full bg-success/12 px-2 py-0.5 text-[11px] font-bold text-success">
-              Spara {pct} % · {formatPrice(save)}
+              {saveLabel(pct, formatPrice(save, currency))}
             </p>
           ) : null}
           <ul className="mt-1.5 space-y-0.5 text-xs">
@@ -261,8 +279,8 @@ function OptionCard({
           {children}
         </div>
         <div className="shrink-0 self-start text-right">
-          <p className="text-base font-bold tabular-nums leading-tight">{formatPrice(price)}</p>
-          {list !== null && list > price ? <p className="text-[11px] text-muted line-through tabular-nums">{formatPrice(list)}</p> : null}
+          <p className="text-base font-bold tabular-nums leading-tight">{formatPrice(price, currency)}</p>
+          {list !== null && list > price ? <p className="text-[11px] text-muted line-through tabular-nums">{formatPrice(list, currency)}</p> : null}
         </div>
       </div>
     </div>

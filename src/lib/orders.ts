@@ -11,6 +11,9 @@ import { rateToSek } from "./exchange";
 import { sendMetaEvents } from "./meta";
 import { metaContentId } from "./consent";
 import { pushOrderToPlocky } from "./plocky";
+import { freeShippingLabel, stripLineSuffix } from "./checkout";
+import { defaultLocale, isLocale, localeForCurrency } from "./i18n";
+import { routesOf } from "./routes";
 
 export type OrderRecord = {
   id: string;
@@ -43,6 +46,8 @@ export type OrderRecord = {
   source?: string | null;
   source_detail?: string | null;
   first_source?: string | null;
+  /** Butikens språk vid köpet (sv/fi/da) – styr mejlens språk. */
+  locale?: string | null;
 };
 
 /** Dagar från att Stripe bekräftat förnyelsebetalningen till planerad leverans, och hur många dagar före leverans ordern släpps. */
@@ -132,13 +137,13 @@ export async function saveOrderFromSession(sessionId: string): Promise<{ order: 
     const name = li.description ?? "";
     if (!m) {
       // Fraktraden i subscription-läget ligger sist utan motsvarighet i korgen
-      if (name.startsWith("Frakt")) shippingLine += kr(li.amount_total);
+      if (/^(Frakt|Toimitus|Fragt)\b/.test(name)) shippingLine += kr(li.amount_total);
       return;
     }
     const qty = li.quantity ?? m.q;
     items.push({
       product_slug: m.s,
-      name: name.replace(/ – prenumeration var \d+:e dag$/, "").replace(/^Gåva – /, ""),
+      name: stripLineSuffix(name),
       qty,
       plan: m.p === "sub" ? `sub:${m.i ?? 30}` : m.p === "gift" ? "gift" : "once",
       unit_price: kr(li.amount_subtotal) / qty,
@@ -151,9 +156,10 @@ export async function saveOrderFromSession(sessionId: string): Promise<{ order: 
   const discount = kr(session.total_details?.amount_discount);
   const subscription = typeof session.subscription === "object" ? session.subscription : null;
   const paymentIntent = typeof session.payment_intent === "object" ? session.payment_intent : null;
+  const locale = isLocale(session.metadata?.locale) ? session.metadata.locale : defaultLocale;
   const shippingRate = session.shipping_cost?.shipping_rate;
   const shippingMethod =
-    (typeof shippingRate === "object" && shippingRate ? shippingRate.display_name : null) ?? (isSub ? "Fri frakt – spårbart brev" : null);
+    (typeof shippingRate === "object" && shippingRate ? shippingRate.display_name : null) ?? (isSub ? freeShippingLabel(locale) : null);
 
   const inserted = await db
     .from("orders")
@@ -179,7 +185,7 @@ export async function saveOrderFromSession(sessionId: string): Promise<{ order: 
       stripe_subscription_id: subscription?.id ?? null,
       environment: environment(),
       kind: isGiftCard ? "giftcard" : "checkout",
-      locale: "sv",
+      locale,
       discount_code: session.discounts?.[0]?.promotion_code ? String(session.discounts[0].promotion_code) : null,
       experiment_variant: session.metadata?.ab || null,
       // Affiliateklicket frystes i kassan; kursen sparas så att provisionen kan räknas om senare
@@ -240,7 +246,7 @@ export async function saveOrderFromSession(sessionId: string): Promise<{ order: 
   if (session.metadata?.consent === "all") {
     const [firstName, ...rest] = (shippingDetails?.name ?? customer?.name ?? "").split(" ");
     const subInterval = items.find((i) => i.plan.startsWith("sub"))?.plan.split(":")[1] ?? null;
-    const url = `${process.env.NEXT_PUBLIC_SITE_URL ?? "https://metilde.com"}/sv/tack`;
+    const url = `${process.env.NEXT_PUBLIC_SITE_URL ?? "https://metilde.com"}${routesOf(locale).thanks}`;
     const user = {
       email: customer?.email,
       phone: customer?.phone,
@@ -256,7 +262,7 @@ export async function saveOrderFromSession(sessionId: string): Promise<{ order: 
     const ids = await metaIdsFor(meta);
     const custom = {
       value: kr(session.amount_total),
-      currency: "SEK",
+      currency: (session.currency ?? "sek").toUpperCase(),
       content_type: "product",
       content_ids: ids,
       contents: items.map((i, idx) => ({ id: ids[idx] ?? i.product_slug, quantity: i.qty, item_price: i.unit_price })),
@@ -315,6 +321,8 @@ export async function saveRenewalFromInvoice(invoice: Stripe.Invoice): Promise<O
   const deliverAt = new Date(paidAt.getTime() + RENEWAL_DELIVERY_LEAD_DAYS * 864e5);
   const releaseAt = new Date(deliverAt.getTime() - RENEWAL_RELEASE_DAYS_BEFORE * 864e5);
   const intervalDays = (sub?.data?.interval_days as number | null) ?? null;
+  // Förnyelsen följer språket från första ordern (annars valutans marknad)
+  const renewalLocale = isLocale(prev?.locale) ? prev.locale : localeForCurrency(invoice.currency);
 
   const items: OrderItemRecord[] = [];
   for (const li of invoice.lines.data) {
@@ -323,7 +331,7 @@ export async function saveRenewalFromInvoice(invoice: Stripe.Invoice): Promise<O
     const qty = li.quantity ?? 1;
     items.push({
       product_slug: slug,
-      name: (li.description ?? slug).replace(/^\d+ × /, "").replace(/ – prenumeration var \d+:e dag.*$/, ""),
+      name: stripLineSuffix((li.description ?? slug).replace(/^\d+ × /, "")),
       qty,
       plan: intervalDays ? `sub:${intervalDays}` : "sub",
       unit_price: kr(li.amount) / qty,
@@ -350,14 +358,14 @@ export async function saveRenewalFromInvoice(invoice: Stripe.Invoice): Promise<O
       shipping_postal_code: prev?.shipping_postal_code ?? null,
       shipping_city: prev?.shipping_city ?? null,
       shipping_country: prev?.shipping_country ?? null,
-      shipping_method: "Fri frakt – spårbart brev",
+      shipping_method: freeShippingLabel(renewalLocale),
       stripe_invoice_id: invoice.id,
       stripe_subscription_id: subId,
       stripe_customer_id: typeof invoice.customer === "string" ? invoice.customer : (invoice.customer?.id ?? null),
       environment: environment(),
       kind: "renewal",
       source: "renewal",
-      locale: "sv",
+      locale: renewalLocale,
       exchange_rate_to_sek: await rateToSek(invoice.currency),
     })
     .select("*")

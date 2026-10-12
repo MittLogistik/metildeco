@@ -71,9 +71,9 @@ export function googleTrack(name: string, params: Record<string, unknown> = {}) 
  * omladdad tacksida inte räknas två gånger. Skickas för alla köp: med samtycke räknas den
  * direkt, utan samtycke som cookiefri signal som Google modellerar.
  * E-posten till förbättrade konverteringar (user_data) ges bara med samtycke; taggen hashar
- * den innan den lämnar webbläsaren.
+ * den innan den lämnar webbläsaren. `currency` = orderns valuta (SEK, EUR, DKK) – värdet räknas aldrig om.
  */
-export function googlePurchase(orderNumber: string, value: number, email?: string | null, currency = "SEK") {
+export function googlePurchase(orderNumber: string, value: number, email: string | null | undefined, currency: string) {
   const gtag = ensureTag();
   if (!gtag) return;
   if (email && readConsent() === "all") {
@@ -107,9 +107,9 @@ export function GoogleTag() {
 }
 
 /** Köp från tacksidan. Körs en gång per ordernummer i webbläsaren. */
-export function GooglePurchase({ orderNumber, value, email }: { orderNumber: string; value: number; email?: string | null }) {
+export function GooglePurchase({ orderNumber, value, currency, email }: { orderNumber: string; value: number; currency: string; email?: string | null }) {
   useEffect(() => {
-    googlePurchase(orderNumber, value, email);
-  }, [orderNumber, value, email]);
+    googlePurchase(orderNumber, value, email, currency.toUpperCase());
+  }, [orderNumber, value, currency, email]);
   return null;
 }

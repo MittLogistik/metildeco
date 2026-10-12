@@ -6,6 +6,7 @@ import { sendShippingConfirmation } from "./email";
 import { PLACEHOLDER, publicBase } from "./media";
 import type { OrderItemRecord, OrderRecord } from "./orders";
 import { supabaseAdmin, supabaseConfigured } from "./supabase";
+import { swedishShippingMethod } from "./shipping";
 
 /**
  * Koppling till Plocky (MittLogistik WMS) via dess Webshop-API.
@@ -150,7 +151,8 @@ export async function buildPlockyPayload(order: OrderRow, items: OrderItemRecord
       postal_code: order.shipping_postal_code ?? "",
       city: order.shipping_city ?? "",
       country_code: (order.shipping_country ?? "SE").toUpperCase(),
-      method: order.shipping_method,
+      // Plocky mappar namnet mot fraktmallen – alltid det svenska namnet
+      method: swedishShippingMethod(order.shipping_method),
     },
     lines,
   };
@@ -396,7 +398,7 @@ async function handleStockUpdate(body: Record<string, unknown>): Promise<Inbound
   }
   if (updated.length) {
     revalidateTag(CATALOG_TAG, "max");
-    revalidatePath("/sv", "layout");
+    revalidatePath("/[lang]", "layout");
     revalidatePath("/admin", "layout");
   }
   await logEvent(

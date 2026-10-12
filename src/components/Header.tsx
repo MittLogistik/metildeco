@@ -4,23 +4,47 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
-import { routes } from "@/lib/routes";
-import { site } from "@/lib/site";
+import { useI18n } from "@/i18n/client";
+import { layout } from "@/i18n/messages/layout";
+import { formatPrice } from "@/lib/format";
+import { locales, markets } from "@/lib/i18n";
+import { hasPage, translatePath, type RouteKey } from "@/lib/routes";
+import { freeShippingOver } from "@/lib/shipping";
 import { useCart } from "@/components/cart/CartProvider";
 import { CartIcon, CloseIcon, MenuIcon } from "@/components/icons";
 import { Container } from "@/components/ui";
 
-const nav = [
-  { href: routes.products, label: "Produkter" },
-  { href: routes.goals, label: "Hitta ditt extrakt" },
-  { href: routes.subscription, label: "Prenumeration" },
-  { href: routes.articles, label: "Journalen" },
-  { href: routes.quality, label: "Kvalitet" },
-];
+const navKeys = ["products", "goals", "subscription", "articles", "quality"] as const satisfies RouteKey[];
+
+/** Språkväljaren: samma sida på de andra språken (sidor som saknas där leder till startsidan). */
+function LanguageSwitcher({ pathname, className = "" }: { pathname: string; className?: string }) {
+  const { locale } = useI18n();
+  return (
+    <ul className={className} aria-label={layout[locale].header.language}>
+      {locales.map((l) => (
+        <li key={l}>
+          <Link
+            href={translatePath(pathname, l)}
+            hrefLang={l}
+            lang={l}
+            aria-current={l === locale ? "true" : undefined}
+            className={l === locale ? "font-semibold underline underline-offset-4" : "opacity-75 hover:opacity-100"}
+          >
+            {markets[l].languageName}
+          </Link>
+        </li>
+      ))}
+    </ul>
+  );
+}
 
 export function Header() {
   const cart = useCart();
   const pathname = usePathname();
+  const { locale, market, r } = useI18n();
+  const t = layout[locale].header;
+  const nav = navKeys.filter((k) => hasPage(k, locale)).map((k) => ({ href: r[k], label: t.nav[k] }));
+  const showAccount = hasPage("account", locale);
   // Menyn är öppen bara för den sida den öppnades på – byter sidan stängs den automatiskt.
   const [openOn, setOpenOn] = useState<string | null>(null);
   const menuOpen = openOn === pathname;
@@ -29,12 +53,13 @@ export function Header() {
   return (
     <>
       <div className="bg-primary text-primary-fg">
-        <Container className="flex h-9 items-center justify-center text-center text-xs font-medium tracking-wide">
+        <Container className="relative flex min-h-9 items-center justify-center py-1.5 text-center text-xs font-medium tracking-wide">
           <p>
-            Fri frakt över {site.freeShippingOver} kr <span className="mx-2 opacity-50">·</span> Skickas samma dag vid order före 12
+            {t.freeShipping(formatPrice(freeShippingOver(locale), market.currency))} <span className="mx-2 opacity-50">·</span> {t.sameDay}
             <span className="mx-2 hidden opacity-50 sm:inline">·</span>
-            <span className="hidden sm:inline">Utvecklat i Sverige</span>
+            <span className="hidden sm:inline">{t.developed}</span>
           </p>
+          <LanguageSwitcher pathname={pathname} className="absolute right-8 hidden items-center gap-3 lg:flex" />
         </Container>
       </div>
 
@@ -43,7 +68,7 @@ export function Header() {
           <div className="flex items-center gap-2 lg:hidden">
             <button
               type="button"
-              aria-label={menuOpen ? "Stäng meny" : "Öppna meny"}
+              aria-label={menuOpen ? t.closeMenu : t.openMenu}
               aria-expanded={menuOpen}
               onClick={() => setMenuOpen((o) => !o)}
               className="rounded-full p-2 hover:bg-sand"
@@ -52,12 +77,12 @@ export function Header() {
             </button>
           </div>
 
-          <Link href={routes.home} className="flex items-center gap-2.5" aria-label="Metilde – till startsidan">
+          <Link href={r.home} className="flex items-center gap-2.5" aria-label={t.homeLabel}>
             <Image src="/logo-mark.png" alt="" width={44} height={32} className="h-8 w-auto" priority />
             <span className="font-display text-2xl font-medium tracking-tight">Metilde</span>
           </Link>
 
-          <nav className="hidden items-center gap-7 lg:flex" aria-label="Huvudmeny">
+          <nav className="hidden items-center gap-7 lg:flex" aria-label={t.mainNav}>
             {nav.map((item) => {
               const active = pathname === item.href || pathname.startsWith(item.href + "/") || pathname.startsWith(item.href + "?");
               return (
@@ -73,16 +98,18 @@ export function Header() {
           </nav>
 
           <div className="flex items-center gap-1">
-            <Link href={routes.contact} className="hidden rounded-full px-3 py-2 text-sm font-medium hover:bg-sand lg:inline-block">
-              Kundservice
+            <Link href={r.contact} className="hidden rounded-full px-3 py-2 text-sm font-medium hover:bg-sand lg:inline-block">
+              {t.customerService}
             </Link>
-            <Link href={routes.account} className="hidden rounded-full px-3 py-2 text-sm font-medium hover:bg-sand lg:inline-block">
-              Mitt konto
-            </Link>
+            {showAccount ? (
+              <Link href={r.account} className="hidden rounded-full px-3 py-2 text-sm font-medium hover:bg-sand lg:inline-block">
+                {t.account}
+              </Link>
+            ) : null}
             <button
               type="button"
               onClick={cart.open}
-              aria-label={`Öppna varukorgen, ${cart.count} varor`}
+              aria-label={t.openCart(cart.count)}
               className="relative rounded-full p-2 hover:bg-sand"
             >
               <CartIcon size={22} />
@@ -96,19 +123,22 @@ export function Header() {
         </Container>
 
         {menuOpen ? (
-          <nav className="border-t border-line bg-white lg:hidden" aria-label="Mobilmeny">
+          <nav className="border-t border-line bg-white lg:hidden" aria-label={t.mobileNav}>
             <Container className="flex flex-col py-2">
               {nav.map((item) => (
-                <Link key={item.href} href={item.href} className="border-b border-line py-3.5 text-base font-medium last:border-0">
+                <Link key={item.href} href={item.href} className="border-b border-line py-3.5 text-base font-medium">
                   {item.label}
                 </Link>
               ))}
-              <Link href={routes.contact} className="border-b border-line py-3.5 text-base font-medium">
-                Kundservice
+              <Link href={r.contact} className="border-b border-line py-3.5 text-base font-medium">
+                {t.customerService}
               </Link>
-              <Link href={routes.account} className="py-3.5 text-base font-medium">
-                Mitt konto
-              </Link>
+              {showAccount ? (
+                <Link href={r.account} className="border-b border-line py-3.5 text-base font-medium">
+                  {t.account}
+                </Link>
+              ) : null}
+              <LanguageSwitcher pathname={pathname} className="flex flex-wrap gap-5 py-3.5 text-sm text-muted" />
             </Container>
           </nav>
         ) : null}

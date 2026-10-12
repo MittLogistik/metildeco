@@ -65,8 +65,8 @@ export function buildBundles(
   rows: BundleRow[],
   components: BundleComponentRow[],
   products: Product[],
-  sekPrices: Map<string, { price: number | string; old_price: number | string | null }> = new Map(),
-  { includeHidden = false }: { includeHidden?: boolean } = {},
+  prices: Map<string, { price: number | string; old_price: number | string | null }> = new Map(),
+  { includeHidden = false, currency = "SEK" }: { includeHidden?: boolean; currency?: string } = {},
 ): Bundle[] {
   const bySlug = new Map(products.map((p) => [p.slug, p]));
   const out: Bundle[] = [];
@@ -86,11 +86,11 @@ export function buildBundles(
     }
     if ((!complete || items.length === 0) && !includeHidden) continue;
 
-    const priceRow = sekPrices.get(row.slug);
+    const priceRow = prices.get(row.slug);
     const price = priceRow ? Number(priceRow.price) : Number(row.price);
     const value = items.reduce((s, i) => s + i.product.price * i.qty, 0);
     if (price >= value && items.length > 0 && !includeHidden) {
-      warn(`${row.slug} döljs: paketpriset ${price} kr är inte lägre än delarna (${value} kr).`);
+      warn(`${row.slug} döljs: paketpriset ${price} ${currency} är inte lägre än delarna (${value} ${currency}).`);
       continue;
     }
     const images = (row.images ?? []).length > 0 ? (row.images ?? []).map(mediaUrl) : items.map((i) => primaryImage(i.product));

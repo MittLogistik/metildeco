@@ -1,6 +1,8 @@
 import "server-only";
 import { formatPrice } from "./format";
-import { routes } from "./routes";
+import { routes, routesOf } from "./routes";
+import { emailText } from "./email-text";
+import { isLocale, markets, type Locale } from "./i18n";
 import { company, site } from "./site";
 import type { OrderItemRecord, OrderRecord } from "./orders";
 
@@ -27,62 +29,64 @@ export async function sendEmail(to: string, subject: string, html: string, text:
 
 const esc = (s: string) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 
-/** Orderbekräftelse på svenska. */
+/** Orderbekräftelse på orderns språk (orders.locale), belopp i orderns valuta. */
 export async function sendOrderConfirmation(order: OrderRecord, items: OrderItemRecord[]) {
   if (!order.email) return;
+  const locale: Locale = isLocale(order.locale) ? order.locale : "sv";
+  const t = emailText[locale];
+  const money = (n: number) => formatPrice(n, order.currency);
   const isRenewal = order.kind === "renewal";
-  const deliverAt = order.deliver_at ? new Date(order.deliver_at).toLocaleDateString("sv-SE", { day: "numeric", month: "long" }) : null;
-  const subject = isRenewal
-    ? `Din prenumerationsleverans ${order.order_number} är planerad`
-    : `Tack för din beställning ${order.order_number}`;
-  const renewalIntro = deliverAt
-    ? `Din prenumeration har förnyats. Nästa förpackning skickas så att den beräknas nå dig omkring ${deliverAt}.`
-    : "Din prenumeration har förnyats och paketet packas nu.";
+  const deliverAt = order.deliver_at ? new Date(order.deliver_at).toLocaleDateString(markets[locale].intl, { day: "numeric", month: "long" }) : null;
+  const subject = isRenewal ? t.subjectRenewal(order.order_number) : t.subjectOrder(order.order_number);
+  const renewalIntro = deliverAt ? t.renewalWithDate(deliverAt) : t.renewalNoDate;
+  const heading = isRenewal ? t.headingRenewal : t.headingOrder;
 
   const rowsHtml = items
     .map(
       (i) =>
-        `<tr><td style="padding:8px 0;border-bottom:1px solid #eee">${i.qty} × ${esc(i.name)}${i.plan.startsWith("sub") ? ' <span style="color:#666">(prenumeration)</span>' : i.plan === "gift" ? ' <span style="color:#2a7a4b">(gåva)</span>' : ""}</td><td style="padding:8px 0;border-bottom:1px solid #eee;text-align:right;white-space:nowrap">${i.plan === "gift" ? "0 kr" : formatPrice(i.line_total)}</td></tr>`,
+        `<tr><td style="padding:8px 0;border-bottom:1px solid #eee">${i.qty} × ${esc(i.name)}${i.plan.startsWith("sub") ? ` <span style="color:#666">(${t.subscription})</span>` : i.plan === "gift" ? ` <span style="color:#2a7a4b">(${t.gift})</span>` : ""}</td><td style="padding:8px 0;border-bottom:1px solid #eee;text-align:right;white-space:nowrap">${money(i.plan === "gift" ? 0 : i.line_total)}</td></tr>`,
     )
     .join("");
-  const rowsText = items.map((i) => `${i.qty} × ${i.name} – ${formatPrice(i.line_total)}`).join("\n");
+  const rowsText = items.map((i) => `${i.qty} × ${i.name} – ${money(i.line_total)}`).join("\n");
 
   const address = [order.shipping_name, order.shipping_address, `${order.shipping_postal_code ?? ""} ${order.shipping_city ?? ""}`.trim()]
     .filter(Boolean)
     .join("<br>");
+  const returnsLink = `<a href="${site.url}${routesOf(locale).returns}" style="color:#2f5445">${t.returnsLinkText}</a>`;
 
-  const html = `<!doctype html><html lang="sv"><body style="margin:0;background:#f7f5f0;font-family:Helvetica,Arial,sans-serif;color:#222">
+  const html = `<!doctype html><html lang="${locale}"><body style="margin:0;background:#f7f5f0;font-family:Helvetica,Arial,sans-serif;color:#222">
 <div style="max-width:560px;margin:0 auto;padding:32px 20px">
   <p style="font-size:22px;font-weight:600;margin:0 0 24px">Metilde</p>
   <div style="background:#fff;border-radius:16px;padding:28px">
-    <h1 style="font-size:22px;margin:0 0 8px">${isRenewal ? "Din nästa leverans är planerad" : "Tack för din beställning!"}</h1>
-    <p style="margin:0 0 20px;color:#555">Ordernummer <strong style="color:#222">${order.order_number}</strong>. ${
-      isRenewal ? renewalIntro : "Vi har tagit emot din betalning. Ordrar lagda före kl. 12 på vardagar skickas samma dag."
-    }</p>
+    <h1 style="font-size:22px;margin:0 0 8px">${heading}</h1>
+    <p style="margin:0 0 20px;color:#555">${t.orderNumber} <strong style="color:#222">${order.order_number}</strong>. ${isRenewal ? renewalIntro : t.received}</p>
     <table style="width:100%;border-collapse:collapse;font-size:15px">${rowsHtml}
-      ${order.discount > 0 ? `<tr><td style="padding:8px 0;color:#2a7a4b">Rabatt</td><td style="padding:8px 0;text-align:right;color:#2a7a4b">−${formatPrice(order.discount)}</td></tr>` : ""}
-      <tr><td style="padding:8px 0;color:#555">Frakt${order.shipping_method ? ` – ${esc(order.shipping_method)}` : ""}</td><td style="padding:8px 0;text-align:right">${order.shipping === 0 ? "Fri" : formatPrice(order.shipping)}</td></tr>
-      <tr><td style="padding:12px 0;font-weight:600;border-top:2px solid #222">Totalt</td><td style="padding:12px 0;text-align:right;font-weight:600;border-top:2px solid #222">${formatPrice(order.total)}</td></tr>
+      ${order.discount > 0 ? `<tr><td style="padding:8px 0;color:#2a7a4b">${t.discount}</td><td style="padding:8px 0;text-align:right;color:#2a7a4b">−${money(order.discount)}</td></tr>` : ""}
+      <tr><td style="padding:8px 0;color:#555">${t.shipping}${order.shipping_method ? ` – ${esc(order.shipping_method)}` : ""}</td><td style="padding:8px 0;text-align:right">${order.shipping === 0 ? t.free : money(order.shipping)}</td></tr>
+      <tr><td style="padding:12px 0;font-weight:600;border-top:2px solid #222">${t.total}</td><td style="padding:12px 0;text-align:right;font-weight:600;border-top:2px solid #222">${money(order.total)}</td></tr>
     </table>
-    ${address ? `<p style="margin:20px 0 0;font-size:14px;color:#555"><strong style="color:#222">Levereras till</strong><br>${address}</p>` : ""}
-    <p style="margin:20px 0 0;font-size:14px;color:#555">Du får ett mejl med spårningslänk när paketet lämnar oss. Ångerrätt 30 dagar på oöppnade produkter, läs mer på <a href="${site.url}${routes.returns}" style="color:#2f5445">våra retursidor</a>.</p>
+    ${address ? `<p style="margin:20px 0 0;font-size:14px;color:#555"><strong style="color:#222">${t.deliverTo}</strong><br>${address}</p>` : ""}
+    <p style="margin:20px 0 0;font-size:14px;color:#555">${t.afterOrder(returnsLink)}</p>
   </div>
   <p style="font-size:12px;color:#888;margin:24px 0 0;line-height:1.6">${company.legalName} · ${company.idLabel} ${company.orgNumber} · ${company.address}<br>
-  Frågor? Svara på det här mejlet eller ring ${company.phone} (${company.hours}).</p>
+  ${t.questions(company.phone, hoursFor(locale))}</p>
 </div></body></html>`;
 
-  const text = `${isRenewal ? "Din nästa leverans är planerad" : "Tack för din beställning!"}
-Ordernummer ${order.order_number}
+  const text = `${heading}
+${t.orderNumber} ${order.order_number}
 ${isRenewal ? renewalIntro + "\n" : ""}
 ${rowsText}
-Frakt: ${order.shipping === 0 ? "Fri" : formatPrice(order.shipping)}
-Totalt: ${formatPrice(order.total)}
+${t.shipping}: ${order.shipping === 0 ? t.free : money(order.shipping)}
+${t.total}: ${money(order.total)}
 
 ${company.legalName} · ${company.idLabel} ${company.orgNumber} · ${company.address}
-Frågor? Svara på det här mejlet eller ring ${company.phone}.`;
+${t.questionsText(company.phone)}`;
 
   await sendEmail(order.email, subject, html, text);
 }
+
+/** Kundtjänstens öppettider på mejlets språk. */
+const hoursFor = (locale: Locale) => ({ sv: company.hours, fi: "ma–pe 9.00–17.00 (Ruotsin aikaa)", da: "man.–fre. 9.00–17.00" })[locale];
 
 /** Presentkortsmejl – till köparen och, om angivet, mottagaren. */
 export async function sendGiftCardEmail(
@@ -194,23 +198,35 @@ export async function sendAbandonedCartEmail(o: { to: string; firstName: string 
   await sendEmail(o.to, c.subject, html, text);
 }
 
-/** Leveransbesked med spårningslänk när Plocky bokat frakten. */
+/** Leveransbesked med spårningslänk när Plocky bokat frakten (på orderns språk). */
 export async function sendShippingConfirmation(order: OrderRecord, tracking: { number: string | null; url: string | null; carrier: string | null }) {
   if (!order.email) return;
+  const locale: Locale = isLocale(order.locale) ? order.locale : "sv";
+  const t = emailText[locale];
   const carrierName: Record<string, string> = { postnord: "PostNord", dhl: "DHL", bring: "Bring", gls: "GLS" };
   const carrier = tracking.carrier ? (carrierName[tracking.carrier] ?? tracking.carrier) : null;
-  const subject = `Din order ${order.order_number} är på väg`;
+  const subject = t.shippedSubject(order.order_number);
   const trackHtml = tracking.url
-    ? `<p style="margin:16px 0 0"><a href="${esc(tracking.url)}" style="display:inline-block;background:#2f5445;color:#fff;text-decoration:none;border-radius:999px;padding:12px 22px;font-weight:600">Spåra paketet</a></p>`
+    ? `<p style="margin:16px 0 0"><a href="${esc(tracking.url)}" style="display:inline-block;background:#2f5445;color:#fff;text-decoration:none;border-radius:999px;padding:12px 22px;font-weight:600">${t.track}</a></p>`
     : "";
-  const html = frame(
-    "Ditt paket är på väg",
-    `<p style="margin:0 0 12px;color:#555">Order <strong style="color:#222">${order.order_number}</strong> har lämnat vårt lager${carrier ? ` med ${esc(carrier)}` : ""}.${
-      tracking.number ? ` Kolli-id: <strong style="color:#222">${esc(tracking.number)}</strong>.` : ""
+  const body = `<p style="margin:0 0 12px;color:#555">${esc(t.shippedBody(order.order_number, carrier))}${
+      tracking.number ? ` ${t.parcelId}: <strong style="color:#222">${esc(tracking.number)}</strong>.` : ""
     }</p>
     ${trackHtml}
-    <p style="margin:20px 0 0;font-size:14px;color:#555">Spårningen kan dröja några timmar innan den visar första händelsen.</p>`,
-  );
-  const text = `Ditt paket är på väg\nOrder ${order.order_number}${carrier ? ` skickas med ${carrier}` : ""}.${tracking.number ? ` Kolli-id: ${tracking.number}.` : ""}${tracking.url ? `\nSpåra: ${tracking.url}` : ""}`;
+    <p style="margin:20px 0 0;font-size:14px;color:#555">${t.trackingDelay}</p>`;
+  const html = locale === "sv" ? frame(t.shippedHeading, body) : frameFor(locale, t.shippedHeading, body);
+  const text = `${t.shippedHeading}\n${t.shippedBody(order.order_number, carrier)}${tracking.number ? ` ${t.parcelId}: ${tracking.number}.` : ""}${tracking.url ? `\n${t.trackShort}: ${tracking.url}` : ""}`;
   await sendEmail(order.email, subject, html, text);
 }
+
+/** Samma ram som frame(), med sidfot på mejlets språk. */
+const frameFor = (locale: Locale, title: string, body: string) => `<!doctype html><html lang="${locale}"><body style="margin:0;background:#f7f5f0;font-family:Helvetica,Arial,sans-serif;color:#222">
+<div style="max-width:560px;margin:0 auto;padding:32px 20px">
+  <p style="font-size:22px;font-weight:600;margin:0 0 24px">Metilde</p>
+  <div style="background:#fff;border-radius:16px;padding:28px">
+    <h1 style="font-size:22px;margin:0 0 8px">${title}</h1>
+    ${body}
+  </div>
+  <p style="font-size:12px;color:#888;margin:24px 0 0;line-height:1.6">${company.legalName} · ${company.idLabel} ${company.orgNumber} · ${company.address}<br>
+  ${emailText[locale].questions(company.phone, hoursFor(locale))}</p>
+</div></body></html>`;

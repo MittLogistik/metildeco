@@ -1,17 +1,22 @@
-import Link from "next/link";
-import { routes } from "@/lib/routes";
-import { site } from "@/lib/site";
-import { FlaskIcon, LeafIcon, RefreshIcon, TruckIcon } from "@/components/icons";
+"use client";
 
-const items = [
-  { icon: FlaskIcon, title: "Tydligt innehåll", text: "Extraktstyrka och dos står på varje burk.", href: routes.quality },
-  { icon: LeafIcon, title: "Utan onödiga tillsatser", text: "Extrakt och kapselskal – inget annat.", href: routes.quality },
-  { icon: TruckIcon, title: `Fri frakt över ${site.freeShippingOver} kr`, text: "Skickas samma dag vid order före 12.", href: routes.shipping },
-  { icon: RefreshIcon, title: "30 dagars ångerrätt", text: "På oöppnade produkter – längre än lagens 14 dagar.", href: routes.returns },
-];
+import Link from "next/link";
+import { useI18n } from "@/i18n/client";
+import { layout } from "@/i18n/messages/layout";
+import { formatPrice } from "@/lib/format";
+import { freeShippingOver } from "@/lib/shipping";
+import { FlaskIcon, LeafIcon, RefreshIcon, TruckIcon } from "@/components/icons";
 
 /** Fyra löften som återkommer på start- och produktsidor. */
 export function TrustBar({ compact = false }: { compact?: boolean }) {
+  const { locale, market, r } = useI18n();
+  const t = layout[locale].trust;
+  const items = [
+    { icon: FlaskIcon, title: t.contentTitle, text: t.contentText, href: r.quality },
+    { icon: LeafIcon, title: t.additivesTitle, text: t.additivesText, href: r.quality },
+    { icon: TruckIcon, title: t.shippingTitle(formatPrice(freeShippingOver(locale), market.currency)), text: t.shippingText, href: r.shipping },
+    { icon: RefreshIcon, title: t.returnsTitle, text: t.returnsText, href: r.returns },
+  ];
   if (compact) {
     return (
       <ul className="grid grid-cols-2 gap-x-4 gap-y-3 text-sm">

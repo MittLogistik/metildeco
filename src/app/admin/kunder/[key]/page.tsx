@@ -80,7 +80,7 @@ export default async function CustomerPage({ params }: PageProps<"/admin/kunder/
                     <dl className="mt-2 grid gap-x-6 gap-y-1 text-xs text-muted sm:grid-cols-3">
                       <div>
                         <dt className="uppercase tracking-wider">Pris</dt>
-                        <dd className="text-foreground">{s.amount ? `${formatPrice(Number(s.amount))} per förpackning` : "–"}</dd>
+                        <dd className="text-foreground">{s.amount ? `${formatPrice(Number(s.amount), s.currency ?? "SEK")} per förpackning` : "–"}</dd>
                       </div>
                       <div>
                         <dt className="uppercase tracking-wider">Nästa betalning</dt>
@@ -137,7 +137,7 @@ export default async function CustomerPage({ params }: PageProps<"/admin/kunder/
                           </span>
                         ))}
                       </td>
-                      <td className="py-2 pr-3 text-right tabular-nums">{formatPrice(Number(o.total))}</td>
+                      <td className="py-2 pr-3 text-right tabular-nums">{formatPrice(Number(o.total), o.currency)}</td>
                       <td className="py-2">
                         <StatusBadge status={o.status} />
                       </td>

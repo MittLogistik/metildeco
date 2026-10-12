@@ -1,7 +1,8 @@
 import type Stripe from "stripe";
-import { buildLineItems, buildShippingOptions, parseCheckoutRequest, priceLines, subtotalOf } from "@/lib/checkout";
-import { routes } from "@/lib/routes";
-import { cheapestSwedenRate, shippingCost } from "@/lib/shipping";
+import { buildLineItems, buildShippingOptions, minor, parseCheckoutRequest, priceLines, shippingLineName, subtotalOf } from "@/lib/checkout";
+import { markets } from "@/lib/i18n";
+import { routesOf } from "@/lib/routes";
+import { cheapestRate, shippingCost } from "@/lib/shipping";
 import { stripe, stripeConfigured } from "@/lib/stripe";
 import { latestClick } from "@/lib/affiliate";
 import { promotionCodeId, recordCheckoutStart } from "@/lib/abandoned";
@@ -27,9 +28,12 @@ export async function POST(request: Request) {
   const origin = request.headers.get("origin") ?? process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
 
   try {
-    const priced = await priceLines(payload.lines);
+    const { locale } = payload;
+    const market = markets[locale];
+    const r = routesOf(locale);
+    const priced = await priceLines(payload.lines, locale);
     const hasSub = priced.some((l) => l.plan === "sub");
-    const lineItems = buildLineItems(priced, origin);
+    const lineItems = buildLineItems(priced, origin, locale);
     const consent = request.headers.get("cookie")?.match(new RegExp(`(?:^|; )${CONSENT_COOKIE}=(necessary|all)`))?.[1] ?? "necessary";
     const fbp = request.headers.get("cookie")?.match(/(?:^|; )_fbp=([^;]+)/)?.[1] ?? "";
     const fbc = request.headers.get("cookie")?.match(/(?:^|; )_fbc=([^;]+)/)?.[1] ?? "";
@@ -37,6 +41,7 @@ export async function POST(request: Request) {
     const click = payload.visitorId ? await latestClick(payload.visitorId).catch(() => null) : null;
     const metadata = {
       consent,
+      locale,
       ...(payload.variant ? { ab: payload.variant } : {}),
       fbp: fbp.slice(0, 100),
       fbc: fbc.slice(0, 200),
@@ -50,16 +55,17 @@ export async function POST(request: Request) {
 
     const params: Stripe.Checkout.SessionCreateParams = {
       mode: hasSub ? "subscription" : "payment",
-      locale: "sv",
+      locale: market.stripeLocale,
       line_items: lineItems,
       customer_email: payload.email ?? undefined,
-      shipping_address_collection: { allowed_countries: ["SE"] },
+      // Marknaden levererar bara till sitt land – valuta, frakt och villkor gäller just där
+      shipping_address_collection: { allowed_countries: [market.country] },
       phone_number_collection: { enabled: true },
       billing_address_collection: "auto",
       expires_at: Math.floor(Date.now() / 1000) + 24 * 3600,
       after_expiration: { recovery: { enabled: true, allow_promotion_codes: true } },
-      success_url: `${origin}${routes.home}/tack?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${origin}${routes.checkout}`,
+      success_url: `${origin}${r.thanks}?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${origin}${r.checkout}`,
       metadata,
     };
     // En kod från en påminnelselänk läggs på direkt; annars får kunden skriva in en kod hos Stripe.
@@ -72,21 +78,22 @@ export async function POST(request: Request) {
       // Stripe stöder inte fraktalternativ i subscription-läget. Prenumerationer är fraktfria;
       // engångsvaror i samma korg får billigaste frakten som en engångsrad.
       const onceLines = priced.filter((l) => !l.freeShipping);
-      const shipping = onceLines.length ? shippingCost(cheapestSwedenRate, subtotalOf(priced)) : 0;
+      const rate = cheapestRate(locale);
+      const shipping = onceLines.length ? shippingCost(rate, subtotalOf(priced)) : 0;
       if (shipping > 0) {
         lineItems.push({
           quantity: 1,
           price_data: {
-            currency: "sek",
-            unit_amount: Math.round(shipping * 100),
+            currency: market.currency.toLowerCase(),
+            unit_amount: minor(shipping),
             tax_behavior: "inclusive",
-            product_data: { name: `Frakt – ${cheapestSwedenRate.label}` },
+            product_data: { name: shippingLineName(locale, rate.label) },
           },
         });
       }
       params.subscription_data = { metadata };
     } else {
-      params.shipping_options = buildShippingOptions(priced);
+      params.shipping_options = buildShippingOptions(priced, locale);
       params.customer_creation = "always";
       params.payment_intent_data = {
         description: `Metilde – ${priced.map((l) => `${l.qty}× ${l.name}`).join(", ")}`.slice(0, 900),
@@ -97,7 +104,8 @@ export async function POST(request: Request) {
     const session = await stripe().checkout.sessions.create(params);
     if (!session.url) throw new Error("Stripe returnerade ingen betalningslänk.");
     // Korgen sparas nu, med e-posten från vår kassa, så att påminnelser kan gå redan efter tre timmar
-    if (payload.email) await recordCheckoutStart({ sessionId: session.id, email: payload.email, priced, subtotal: subtotalOf(priced) }).catch((e: unknown) => console.error("[korg]", e instanceof Error ? e.message : e));
+    // Påminnelsemejlen finns bara på svenska än så länge
+    if (payload.email && locale === "sv") await recordCheckoutStart({ sessionId: session.id, email: payload.email, priced, subtotal: subtotalOf(priced) }).catch((e: unknown) => console.error("[korg]", e instanceof Error ? e.message : e));
     return Response.json({ url: session.url });
   } catch (e) {
     const message = e instanceof Error ? e.message : "Kunde inte starta betalningen.";

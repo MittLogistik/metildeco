@@ -1,9 +1,12 @@
 import Image from "next/image";
 import Link from "next/link";
 import type { Article } from "@/lib/articles";
-import { routes } from "@/lib/routes";
+import { defaultLocale, type Locale } from "@/lib/i18n";
+import { routesOf } from "@/lib/routes";
+import { catalog } from "@/i18n/messages/catalog";
 
-export function ArticleCard({ article, large = false }: { article: Article; large?: boolean }) {
+export function ArticleCard({ article, large = false, locale = defaultLocale }: { article: Article; large?: boolean; locale?: Locale }) {
+  const routes = routesOf(locale);
   return (
     <article className="group flex flex-col">
       <Link href={routes.article(article.slug)} className="block">
@@ -21,7 +24,7 @@ export function ArticleCard({ article, large = false }: { article: Article; larg
       </Link>
       <p className="mt-4 text-[11px] font-semibold uppercase tracking-[0.16em] text-primary">
         {article.category} <span className="mx-1.5 text-muted-soft">·</span>
-        <span className="font-medium normal-case tracking-normal text-muted">{article.readMinutes} min läsning</span>
+        <span className="font-medium normal-case tracking-normal text-muted">{catalog[locale].readMinutes(article.readMinutes)}</span>
       </p>
       <h3 className={`mt-2 font-display font-medium leading-snug ${large ? "text-2xl sm:text-3xl" : "text-lg"}`}>
         <Link href={routes.article(article.slug)} className="hover:underline">

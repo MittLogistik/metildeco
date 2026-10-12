@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import "../globals.css";
+import { fontClasses } from "../fonts";
 import Link from "next/link";
 import { getAdminUser } from "@/lib/auth";
 import { signOut } from "./actions";
@@ -9,7 +11,18 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 };
 
-export default async function AdminLayout({ children }: LayoutProps<"/admin">) {
+/** Adminens rotlayout (butiken har sin egen under app/[lang]). */
+export default function AdminRootLayout({ children }: LayoutProps<"/admin">) {
+  return (
+    <html lang="sv" className={fontClasses}>
+      <body className="flex min-h-full flex-col">
+        <AdminFrame>{children}</AdminFrame>
+      </body>
+    </html>
+  );
+}
+
+async function AdminFrame({ children }: { children: React.ReactNode }) {
   const user = await getAdminUser();
   if (!user) {
     // Inloggningssidan renderas utan ram; proxyn skickar övriga sidor hit.

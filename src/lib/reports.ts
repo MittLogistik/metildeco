@@ -159,7 +159,7 @@ async function fetchOrders(range: ReportRange, env: Env): Promise<ReportOrder[]>
     let q = db
       .from("orders")
       .select(
-        "id,order_number,created_at,email,status,kind,currency,subtotal,discount,discount_code,shipping,shipping_method,shipping_country,total,has_subscription,affiliate_source,source,order_items(product_slug,name,qty,plan,unit_price,line_total)",
+        "id,order_number,created_at,email,status,kind,currency,exchange_rate_to_sek,subtotal,discount,discount_code,shipping,shipping_method,shipping_country,total,has_subscription,affiliate_source,source,order_items(product_slug,name,qty,plan,unit_price,line_total)",
       )
       .eq("environment", env)
       .lt("created_at", toIso)
@@ -168,11 +168,28 @@ async function fetchOrders(range: ReportRange, env: Env): Promise<ReportOrder[]>
     if (fromIso) q = q.gte("created_at", fromIso);
     const { data, error } = await q;
     if (error) throw new Error(error.message);
-    const rows = (data ?? []) as unknown as ReportOrder[];
-    out.push(...rows);
+    const rows = (data ?? []) as unknown as (ReportOrder & { exchange_rate_to_sek: number | string | null })[];
+    // Rapporten är i SEK: ordrar i EUR/DKK räknas om med kursen som sparades vid köpet
+    out.push(...rows.map(inSek));
     if (rows.length < page) break;
   }
   return out;
+}
+
+/** Ordern med alla belopp omräknade till SEK (orderns sparade kurs). */
+function inSek(o: ReportOrder & { exchange_rate_to_sek: number | string | null }): ReportOrder {
+  const cur = (o.currency || "SEK").toUpperCase();
+  const rate = cur === "SEK" ? 1 : Number(o.exchange_rate_to_sek) || 1;
+  if (rate === 1) return o;
+  const x = (n: number) => Math.round(Number(n) * rate * 100) / 100;
+  return {
+    ...o,
+    subtotal: x(o.subtotal),
+    discount: x(o.discount),
+    shipping: x(o.shipping),
+    total: x(o.total),
+    order_items: o.order_items.map((i) => ({ ...i, unit_price: x(i.unit_price), line_total: x(i.line_total) })),
+  };
 }
 
 /** E-postadresser (gemener) som handlat före intervallets början – för nya kontra återkommande kunder. */

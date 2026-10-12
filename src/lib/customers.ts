@@ -50,14 +50,18 @@ export type AdminOrder = OrderRecord & {
   discount_code: string | null;
 };
 
-type OrderLite = Pick<AdminOrder, "email" | "shipping_name" | "shipping_city" | "total" | "status" | "created_at" | "has_subscription" | "environment">;
+type OrderLite = Pick<AdminOrder, "email" | "shipping_name" | "shipping_city" | "total" | "currency" | "status" | "created_at" | "has_subscription" | "environment"> & { exchange_rate_to_sek?: number | string | null };
+
+/** Orderns summa i SEK (EUR/DKK räknas om med kursen som sparades vid köpet). */
+const totalSek = (o: { total: number | string; currency?: string | null; exchange_rate_to_sek?: number | string | null }) =>
+  Number(o.total) * ((o.currency ?? "SEK").toUpperCase() === "SEK" ? 1 : Number(o.exchange_rate_to_sek) || 1);
 
 /** Alla kunder med ordrar, senaste order först. */
 export async function listCustomers(): Promise<CustomerSummary[]> {
   const db = supabaseAdmin();
   const res = await db
     .from("orders")
-    .select("email,shipping_name,shipping_city,total,status,created_at,has_subscription,environment")
+    .select("email,shipping_name,shipping_city,total,currency,exchange_rate_to_sek,status,created_at,has_subscription,environment")
     .not("email", "is", null)
     .order("created_at", { ascending: false })
     .limit(5000);
@@ -74,7 +78,7 @@ export async function listCustomers(): Promise<CustomerSummary[]> {
         name: o.shipping_name,
         city: o.shipping_city,
         orders: counts ? 1 : 0,
-        revenue: counts && live ? Number(o.total) : 0,
+        revenue: counts && live ? totalSek(o) : 0,
         firstOrderAt: o.created_at,
         lastOrderAt: o.created_at,
         hasSubscription: o.has_subscription,
@@ -83,7 +87,7 @@ export async function listCustomers(): Promise<CustomerSummary[]> {
       continue;
     }
     if (counts) cur.orders += 1;
-    if (counts && live) cur.revenue += Number(o.total);
+    if (counts && live) cur.revenue += totalSek(o);
     cur.firstOrderAt = o.created_at; // listan är sorterad nyast först
     cur.hasSubscription ||= o.has_subscription;
     cur.sandboxOnly &&= !live;
@@ -133,7 +137,7 @@ export async function getCustomer(email: string): Promise<CustomerDetail | null>
 
   const counted = orders.filter((o) => countsAsRevenue(o.status));
   const live = counted.filter((o) => o.environment !== "sandbox");
-  const revenue = live.reduce((s, o) => s + Number(o.total), 0);
+  const revenue = live.reduce((s, o) => s + totalSek(o as typeof o & { exchange_rate_to_sek?: number | null }), 0);
   const withAddress = orders.find((o) => o.shipping_address);
   const latest = orders[0]!;
   return {

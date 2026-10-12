@@ -2,21 +2,27 @@ import Image from "next/image";
 import Link from "next/link";
 import { formatPrice, percentOff } from "@/lib/format";
 import { isInStock, primaryImage, type Product } from "@/lib/products";
-import { routes } from "@/lib/routes";
+import { defaultLocale, markets, type Locale } from "@/lib/i18n";
+import { routesOf } from "@/lib/routes";
+import { catalog } from "@/i18n/messages/catalog";
 import { site } from "@/lib/site";
 import { Badge } from "@/components/ui";
 import { Stars } from "@/components/Stars";
 import { QuickAddButton } from "@/components/cart/AddToCart";
 
-export function ProductCard({ product, priority = false }: { product: Product; priority?: boolean }) {
+/** Fungerar i både server- och klientkomponenter, därför språket som prop (svenska som standard). */
+export function ProductCard({ product, priority = false, locale = defaultLocale }: { product: Product; priority?: boolean; locale?: Locale }) {
+  const t = catalog[locale];
+  const routes = routesOf(locale);
+  const currency = markets[locale].currency;
   const inStock = isInStock(product);
   const off = percentOff(product.price, product.oldPrice);
   const badge = !inStock
-    ? { tone: "danger" as const, label: "Slutsåld" }
+    ? { tone: "danger" as const, label: t.soldOut }
     : off
       ? { tone: "accent" as const, label: `−${off} %` }
       : product.tags.includes("Nyhet")
-          ? { tone: "neutral" as const, label: "Nyhet" }
+          ? { tone: "neutral" as const, label: t.isNew }
           : null;
 
   return (
@@ -50,14 +56,14 @@ export function ProductCard({ product, priority = false }: { product: Product; p
         </h3>
         {site.showRatings && product.reviews > 0 ? (
           <div className="mt-1.5">
-            <Stars rating={product.rating} count={product.reviews} size={13} />
+            <Stars rating={product.rating} count={product.reviews} size={13} locale={locale} />
           </div>
         ) : null}
         <div className="mt-auto flex items-end justify-between gap-3 pt-3">
           <div>
-            <p className="text-base font-semibold tabular-nums">{formatPrice(product.price)}</p>
+            <p className="text-base font-semibold tabular-nums">{formatPrice(product.price, currency)}</p>
             {product.oldPrice ? (
-              <p className="text-xs text-muted line-through tabular-nums">{formatPrice(product.oldPrice)}</p>
+              <p className="text-xs text-muted line-through tabular-nums">{formatPrice(product.oldPrice, currency)}</p>
             ) : null}
           </div>
           <QuickAddButton slug={product.slug} disabled={!inStock} />

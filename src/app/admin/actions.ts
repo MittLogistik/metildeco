@@ -13,7 +13,7 @@ export type ActionResult = { ok: true; message?: string } | { ok: false; error: 
 /** Tömmer katalogcachen så att butiken visar ändringen direkt. */
 const refreshShop = () => {
   revalidateTag(CATALOG_TAG, "max");
-  revalidatePath("/sv", "layout");
+  revalidatePath("/[lang]", "layout");
   revalidatePath("/admin", "layout");
 };
 

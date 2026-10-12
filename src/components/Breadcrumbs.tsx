@@ -1,13 +1,18 @@
+"use client";
+
 import Link from "next/link";
-import { routes } from "@/lib/routes";
+import { useI18n } from "@/i18n/client";
+import { layout } from "@/i18n/messages/layout";
 import { ChevronRight } from "@/components/icons";
 
 export type Crumb = { href?: string; label: string };
 
 export function Breadcrumbs({ items }: { items: Crumb[] }) {
-  const all: Crumb[] = [{ href: routes.home, label: "Hem" }, ...items];
+  const { locale, r } = useI18n();
+  const t = layout[locale].breadcrumbs;
+  const all: Crumb[] = [{ href: r.home, label: t.home }, ...items];
   return (
-    <nav aria-label="Brödsmulor" className="text-xs text-muted">
+    <nav aria-label={t.label} className="text-xs text-muted">
       <ol className="flex flex-wrap items-center gap-1">
         {all.map((c, i) => (
           <li key={i} className="flex items-center gap-1">

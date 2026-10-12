@@ -11,7 +11,7 @@ import { supabaseAdmin } from "@/lib/supabase";
 import { StatusBadge } from "./_components/fields";
 import { TrendChart } from "./_components/TrendChart";
 
-type OrderRow = { id: string; order_number: string; created_at: string; email: string | null; shipping_name: string | null; total: number; status: string; kind: string };
+type OrderRow = { id: string; order_number: string; created_at: string; email: string | null; shipping_name: string | null; total: number; currency: string; status: string; kind: string };
 
 const fmtCount = (v: number) => new Intl.NumberFormat("sv-SE").format(Math.round(v));
 const fmtDay = (iso: string) => new Date(iso).toLocaleDateString("sv-SE", { day: "numeric", month: "short", timeZone: "Europe/Stockholm" });
@@ -134,7 +134,7 @@ export default async function AdminDashboard({ searchParams }: PageProps<"/admin
   const stats = await getStats(period, env);
   const db = supabaseAdmin();
   const [latest, catalog, subs] = await Promise.all([
-    db.from("orders").select("id,order_number,created_at,email,shipping_name,total,status,kind").eq("environment", env).order("created_at", { ascending: false }).limit(6),
+    db.from("orders").select("id,order_number,created_at,email,shipping_name,total,currency,status,kind").eq("environment", env).order("created_at", { ascending: false }).limit(6),
     getCatalog(),
     getSubscriptionOverview(env),
   ]);
@@ -243,7 +243,7 @@ export default async function AdminDashboard({ searchParams }: PageProps<"/admin
                     <span className="block text-xs text-muted">{new Date(o.created_at).toLocaleString("sv-SE", { dateStyle: "short", timeStyle: "short" })}</span>
                   </div>
                   <div className="flex shrink-0 items-center gap-3">
-                    <span className="tabular-nums">{formatPrice(Number(o.total))}</span>
+                    <span className="tabular-nums">{formatPrice(Number(o.total), o.currency)}</span>
                     <StatusBadge status={o.status} />
                   </div>
                 </li>

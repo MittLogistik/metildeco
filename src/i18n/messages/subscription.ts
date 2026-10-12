@@ -1,0 +1,169 @@
+/**
+ * Prenumerationssidan. Användning: `const t = subscription[locale]`.
+ * Mitt konto finns bara på svenska – på fi/da pausar och avslutar kunden via kundservice (e-post).
+ */
+import type { Locale } from "@/lib/i18n";
+
+type Item = { q: string; a: string };
+
+const sv = {
+  title: (pct: number) => `Prenumeration – spara ${pct} % på varje leverans`,
+  description: (pct: number) =>
+    `Prenumerera på dina kosttillskott och spara ${pct} % på varje leverans. Fri frakt, valfritt intervall och avsluta när du vill.`,
+  breadcrumb: "Prenumeration",
+  eyebrow: (pct: number) => `Spara ${pct} %`,
+  h1: "Prenumeration – dina tillskott hem, automatiskt",
+  lead: (pct: number) =>
+    `Slipp tomma förpackningar och glömda beställningar. Prenumerera på det du använder varje dag och spara ${pct} % på varje leverans – med fri frakt och utan bindningstid.`,
+  start: "Starta en prenumeration",
+  how: "Så fungerar det",
+  checks: ["Ingen bindningstid", "Fri frakt", "Avsluta när du vill"],
+  stepsEyebrow: "Steg för steg",
+  stepsIntro: "Fyra enkla steg – och du behåller kontrollen hela vägen.",
+  steps: [
+    ["Välj produkt", "Välj de extrakt du använder regelbundet och klicka i Prenumerera på produktsidan."],
+    ["Välj intervall", "Leverans var 30:e, 60:e eller 90:e dag – anpassa efter hur snabbt din förpackning tar slut."],
+    ["Få hem den automatiskt", "Vid varje ny period dras betalningen och du får ett mejl med beräknad leveransdag. Alltid fri frakt, oavsett ordervärde."],
+    ["Pausa eller avsluta", "Pausa, återuppta eller avsluta på Mitt konto – helt utan bindningstid. Vill du byta intervall eller produkt hjälper kundservice dig."],
+  ] as [string, string][],
+  exampleEyebrow: "Räkneexempel",
+  exampleTitle: "Vad tjänar du på det?",
+  exampleIntro: (pct: number) =>
+    `${pct} % rabatt gäller varje leverans, inte bara den första. Med fri frakt blir skillnaden tydlig redan efter några månader.`,
+  exampleChecks: (pct: number, zero: string) => [`${pct} % lägre pris på varje förpackning`, `${zero} i frakt`, "Ingen risk att bli utan mitt i en kur"],
+  example: (name: string) => `Exempel · ${name}`,
+  oneTime: "Engångsköp",
+  perDelivery: (price: string) => `${price} / leverans`,
+  subscriptionLabel: "Prenumeration",
+  shipping: "Frakt",
+  yearly: "Du sparar per år (6 leveranser, var 60:e dag)",
+  exampleNote: "Exklusive sparad frakt. Ditt pris beror på valda produkter och intervall.",
+  benefitsEyebrow: "Fördelar",
+  benefitsTitle: "Fördelar med prenumeration",
+  benefits: (pct: number) =>
+    [
+      [`${pct} % rabatt varje gång`, "Rabatten gäller så länge prenumerationen är aktiv – inte bara första ordern."],
+      ["Alltid fri frakt", "Ingen fraktavgift på prenumerationsordrar, oavsett hur liten ordern är."],
+      ["Ingen bindningstid", "Avsluta när du vill. Inga avgifter, ingen uppsägningstid."],
+      ["Pausa vid behov", "Åker du bort eller har en förpackning kvar? Pausa prenumerationen på Mitt konto. Inga pengar dras förrän du återupptar den."],
+      ["Inga överraskningar", "Vi ändrar aldrig priset på en pågående prenumeration utan att meddela dig i förväg, och du kan alltid avsluta innan ändringen gäller."],
+      ["Trygg betalning", "Betala tryggt med kort, Klarna, Apple Pay eller Google Pay. Kvitto via e-post vid varje leverans."],
+    ] as [string, string][],
+  popularEyebrow: "Populära att prenumerera på",
+  popularTitle: "Vardagsextrakt många använder varje dag",
+  faqTitle: "Vanliga frågor",
+  faq: [
+    { q: "Hur avslutar jag min prenumeration?", a: "Logga in på Mitt konto, gå till Prenumerationer och välj Avsluta. Inga fler dragningar görs och prenumerationen upphör när den period du redan betalat är slut. Du kan också mejla kundservice så avslutar vi den åt dig och bekräftar skriftligen." },
+    { q: "Kan jag ändra leveransintervall eller adress?", a: "Betalsätt ändrar du själv under Mitt konto. Flyttar du, eller vill du byta intervall, antal eller produkt, mejlar du kundservice så ordnar vi det före nästa leverans." },
+    { q: "Kan jag ha flera produkter i samma prenumeration?", a: "Ja. Lägger du flera produkter med samma intervall i samma köp ingår de i samma prenumeration och kommer i samma paket." },
+    { q: "När dras pengarna?", a: "Första leveransen betalas vid köpet. Därefter dras betalningen automatiskt när en ny period börjar, var 30:e, 60:e eller 90:e dag räknat från köpet. Paketet skickas några dagar efter dragningen och du får ett mejl med beräknad leveransdag." },
+  ] as Item[],
+};
+
+export const subscription: Record<Locale, typeof sv> = {
+  sv,
+  fi: {
+    title: (pct) => `Kestotilaus – säästä ${pct} % jokaisesta toimituksesta`,
+    description: (pct) =>
+      `Tilaa ravintolisäsi kestotilauksena ja säästä ${pct} % jokaisesta toimituksesta. Ilmainen toimitus, valitsemasi toimitusväli ja voit lopettaa milloin haluat.`,
+    breadcrumb: "Kestotilaus",
+    eyebrow: (pct) => `Säästä ${pct} %`,
+    h1: "Kestotilaus – ravintolisäsi kotiin automaattisesti",
+    lead: (pct) =>
+      `Ei enää tyhjiä purkkeja tai unohtuneita tilauksia. Tilaa päivittäin käyttämäsi tuotteet kestotilauksena ja säästä ${pct} % jokaisesta toimituksesta – ilmaisella toimituksella ja ilman sitoutumista.`,
+    start: "Aloita kestotilaus",
+    how: "Näin se toimii",
+    checks: ["Ei sitoutumista", "Ilmainen toimitus", "Lopeta milloin haluat"],
+    stepsEyebrow: "Vaihe vaiheelta",
+    stepsIntro: "Neljä helppoa vaihetta – ja päätösvalta pysyy sinulla koko ajan.",
+    steps: [
+      ["Valitse tuote", "Valitse säännöllisesti käyttämäsi uutteet ja valitse tuotesivulla kestotilaus."],
+      ["Valitse toimitusväli", "Toimitus 30, 60 tai 90 päivän välein – sen mukaan, kuinka nopeasti purkkisi loppuu."],
+      ["Saat sen kotiin automaattisesti", "Jokaisen uuden jakson alussa maksu veloitetaan ja saat sähköpostin, jossa on arvioitu toimituspäivä. Aina ilmainen toimitus tilauksen arvosta riippumatta."],
+      ["Keskeytä tai lopeta", "Haluatko keskeyttää, jatkaa tai lopettaa kestotilauksen tai vaihtaa toimitusväliä tai tuotetta? Lähetä sähköpostia asiakaspalveluun, niin hoidamme sen – ilman sitoutumista."],
+    ],
+    exampleEyebrow: "Esimerkkilaskelma",
+    exampleTitle: "Mitä hyödyt siitä?",
+    exampleIntro: (pct) =>
+      `${pct} % alennus koskee jokaista toimitusta, ei vain ensimmäistä. Ilmaisen toimituksen kanssa ero näkyy jo muutamassa kuukaudessa.`,
+    exampleChecks: (pct, zero) => [`${pct} % edullisempi hinta jokaisesta purkista`, `Toimituskulut ${zero}`, "Ei riskiä, että tuote loppuu kesken"],
+    example: (name) => `Esimerkki · ${name}`,
+    oneTime: "Kertaosto",
+    perDelivery: (price) => `${price} / toimitus`,
+    subscriptionLabel: "Kestotilaus",
+    shipping: "Toimitus",
+    yearly: "Säästät vuodessa (6 toimitusta, 60 päivän välein)",
+    exampleNote: "Ei sisällä säästettyjä toimituskuluja. Hintasi riippuu valituista tuotteista ja toimitusvälistä.",
+    benefitsEyebrow: "Edut",
+    benefitsTitle: "Kestotilauksen edut",
+    benefits: (pct) => [
+      [`${pct} % alennus joka kerta`, "Alennus on voimassa niin kauan kuin kestotilaus on aktiivinen – ei vain ensimmäisessä tilauksessa."],
+      ["Aina ilmainen toimitus", "Kestotilauksissa ei ole toimituskuluja, oli tilaus kuinka pieni tahansa."],
+      ["Ei sitoutumista", "Lopeta milloin haluat. Ei maksuja, ei irtisanomisaikaa."],
+      ["Keskeytä tarvittaessa", "Oletko matkoilla tai onko sinulla vielä purkki jäljellä? Pyydä asiakaspalvelua keskeyttämään kestotilaus. Maksuja ei veloiteta ennen kuin jatkat sitä."],
+      ["Ei yllätyksiä", "Emme koskaan muuta käynnissä olevan kestotilauksen hintaa ilmoittamatta sinulle etukäteen, ja voit aina lopettaa ennen kuin muutos tulee voimaan."],
+      ["Turvallinen maksu", "Maksa turvallisesti kortilla, Klarnalla, Apple Paylla tai Google Paylla. Kuitti sähköpostiin jokaisesta toimituksesta."],
+    ],
+    popularEyebrow: "Suosittuja kestotilauksia",
+    popularTitle: "Uutteita, joita moni käyttää päivittäin",
+    faqTitle: "Usein kysyttyä",
+    faq: [
+      { q: "Miten lopetan kestotilaukseni?", a: "Lähetä sähköpostia asiakaspalveluun, niin lopetamme kestotilauksen puolestasi ja vahvistamme sen kirjallisesti. Uusia veloituksia ei tehdä, ja kestotilaus päättyy, kun jo maksamasi jakso on lopussa." },
+      { q: "Voinko muuttaa toimitusväliä tai osoitetta?", a: "Lähetä sähköpostia asiakaspalveluun, jos muutat tai haluat vaihtaa toimitusväliä, määrää tai tuotetta, niin hoidamme sen ennen seuraavaa toimitusta." },
+      { q: "Voiko samassa kestotilauksessa olla useita tuotteita?", a: "Kyllä. Kun lisäät samaan ostokseen useita tuotteita samalla toimitusvälillä, ne kuuluvat samaan kestotilaukseen ja tulevat samassa paketissa." },
+      { q: "Milloin maksu veloitetaan?", a: "Ensimmäinen toimitus maksetaan ostohetkellä. Sen jälkeen maksu veloitetaan automaattisesti uuden jakson alkaessa, 30, 60 tai 90 päivän välein ostopäivästä lukien. Paketti lähetetään muutama päivä veloituksen jälkeen, ja saat sähköpostin, jossa on arvioitu toimituspäivä." },
+    ],
+  },
+  da: {
+    title: (pct) => `Abonnement – spar ${pct} % på hver levering`,
+    description: (pct) =>
+      `Få dine kosttilskud som abonnement og spar ${pct} % på hver levering. Fri fragt, valgfrit interval, og du kan opsige, når du vil.`,
+    breadcrumb: "Abonnement",
+    eyebrow: (pct) => `Spar ${pct} %`,
+    h1: "Abonnement – dine tilskud leveret automatisk",
+    lead: (pct) =>
+      `Slip for tomme bøtter og glemte bestillinger. Få det, du bruger hver dag, som abonnement og spar ${pct} % på hver levering – med fri fragt og uden binding.`,
+    start: "Start et abonnement",
+    how: "Sådan fungerer det",
+    checks: ["Ingen binding", "Fri fragt", "Opsig, når du vil"],
+    stepsEyebrow: "Trin for trin",
+    stepsIntro: "Fire enkle trin – og du bevarer kontrollen hele vejen.",
+    steps: [
+      ["Vælg produkt", "Vælg de ekstrakter, du bruger regelmæssigt, og vælg abonnement på produktsiden."],
+      ["Vælg interval", "Levering hver 30., 60. eller 90. dag – tilpas efter, hvor hurtigt din bøtte slipper op."],
+      ["Få den leveret automatisk", "Ved hver ny periode trækkes betalingen, og du får en e-mail med forventet leveringsdag. Altid fri fragt, uanset ordrens størrelse."],
+      ["Sæt på pause eller opsig", "Vil du sætte abonnementet på pause, genoptage det, opsige det eller skifte interval eller produkt? Skriv til kundeservice på e-mail, så ordner vi det – helt uden binding."],
+    ],
+    exampleEyebrow: "Regneeksempel",
+    exampleTitle: "Hvad får du ud af det?",
+    exampleIntro: (pct) =>
+      `${pct} % rabat gælder hver levering, ikke kun den første. Med fri fragt bliver forskellen tydelig allerede efter et par måneder.`,
+    exampleChecks: (pct, zero) => [`${pct} % lavere pris på hver bøtte`, `${zero} i fragt`, "Ingen risiko for at løbe tør midt i en kur"],
+    example: (name) => `Eksempel · ${name}`,
+    oneTime: "Engangskøb",
+    perDelivery: (price) => `${price} / levering`,
+    subscriptionLabel: "Abonnement",
+    shipping: "Fragt",
+    yearly: "Du sparer pr. år (6 leveringer, hver 60. dag)",
+    exampleNote: "Eksklusive sparet fragt. Din pris afhænger af de valgte produkter og intervallet.",
+    benefitsEyebrow: "Fordele",
+    benefitsTitle: "Fordele ved abonnement",
+    benefits: (pct) => [
+      [`${pct} % rabat hver gang`, "Rabatten gælder, så længe abonnementet er aktivt – ikke kun på første ordre."],
+      ["Altid fri fragt", "Intet fragtgebyr på abonnementsordrer, uanset hvor lille ordren er."],
+      ["Ingen binding", "Opsig, når du vil. Ingen gebyrer, ingen opsigelsesperiode."],
+      ["Sæt på pause efter behov", "Skal du ud at rejse, eller har du en bøtte tilbage? Bed kundeservice om at sætte abonnementet på pause. Der trækkes ingen penge, før du genoptager det."],
+      ["Ingen overraskelser", "Vi ændrer aldrig prisen på et igangværende abonnement uden at give dig besked på forhånd, og du kan altid opsige, før ændringen træder i kraft."],
+      ["Sikker betaling", "Betal sikkert med kort, Klarna, Apple Pay eller Google Pay. Kvittering på e-mail ved hver levering."],
+    ],
+    popularEyebrow: "Populære som abonnement",
+    popularTitle: "Hverdagsekstrakter, som mange bruger hver dag",
+    faqTitle: "Ofte stillede spørgsmål",
+    faq: [
+      { q: "Hvordan opsiger jeg mit abonnement?", a: "Skriv til kundeservice på e-mail, så opsiger vi abonnementet for dig og bekræfter det skriftligt. Der foretages ikke flere træk, og abonnementet ophører, når den periode, du allerede har betalt for, er slut." },
+      { q: "Kan jeg ændre leveringsinterval eller adresse?", a: "Flytter du, eller vil du skifte interval, antal eller produkt, så skriv til kundeservice på e-mail, så ordner vi det før næste levering." },
+      { q: "Kan jeg have flere produkter i samme abonnement?", a: "Ja. Lægger du flere produkter med samme interval i samme køb, indgår de i samme abonnement og kommer i samme pakke." },
+      { q: "Hvornår trækkes pengene?", a: "Første levering betales ved købet. Derefter trækkes betalingen automatisk, når en ny periode begynder, hver 30., 60. eller 90. dag regnet fra købet. Pakken sendes nogle dage efter trækket, og du får en e-mail med forventet leveringsdag." },
+    ],
+  },
+};

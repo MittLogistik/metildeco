@@ -15,7 +15,7 @@ export async function saveExperimentAction(formData: FormData): Promise<ActionRe
   try {
     await saveExperimentSettings({ mode, split });
     revalidateTag(CATALOG_TAG, "max");
-    revalidatePath("/sv", "layout");
+    revalidatePath("/[lang]", "layout");
     revalidatePath("/admin/annonser/abtest");
     return { ok: true, message: mode === "off" ? "Testet är av: alla ser nuvarande köpruta." : mode === "on" ? "Erbjudandet visas för alla." : `Testet är på: ${split} % ser erbjudandet.` };
   } catch (e) {

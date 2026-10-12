@@ -6,6 +6,7 @@ import { supabaseAdmin } from "@/lib/supabase";
 import { Card, StatusBadge, statusLabel } from "../_components/fields";
 
 type OrderRow = {
+  currency: string;
   id: string;
   order_number: string;
   created_at: string;
@@ -29,7 +30,7 @@ export default async function OrdersPage({ searchParams }: PageProps<"/admin/ord
   const status = typeof sp.status === "string" && (filters as readonly string[]).includes(sp.status) ? sp.status : "alla";
   let q = supabaseAdmin()
     .from("orders")
-    .select("id,order_number,created_at,email,shipping_name,shipping_city,total,status,kind,environment,source,source_detail")
+    .select("id,order_number,created_at,email,shipping_name,shipping_city,total,currency,status,kind,environment,source,source_detail")
     .order("created_at", { ascending: false })
     .limit(200);
   if (status !== "alla") q = q.eq("status", status);
@@ -104,7 +105,7 @@ export default async function OrdersPage({ searchParams }: PageProps<"/admin/ord
                       <span className="block whitespace-nowrap">{sourceLabel(o.source)}</span>
                       {o.source_detail ? <span className="block max-w-48 truncate text-xs text-muted" title={o.source_detail}>{o.source_detail}</span> : null}
                     </td>
-                    <td className="py-2 pr-3 text-right tabular-nums">{formatPrice(Number(o.total))}</td>
+                    <td className="py-2 pr-3 text-right tabular-nums">{formatPrice(Number(o.total), o.currency)}</td>
                     <td className="py-2">
                       <StatusBadge status={o.status} />
                     </td>

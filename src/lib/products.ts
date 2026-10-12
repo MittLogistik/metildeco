@@ -3,6 +3,7 @@
  * (databasen) – den här filen innehåller inget som kräver server eller nätverk,
  * så att den kan användas i både server- och klientkomponenter.
  */
+import { roundPrice } from "./i18n";
 import { mediaUrl, PLACEHOLDER } from "./media";
 
 export type Variant = {
@@ -181,16 +182,21 @@ export const primaryImage = (p: Pick<Product, "images">): string => imagesFor(p)
 export const tieredUnitPrice = (
   p: Pick<Product, "price" | "tieredPricing" | "tier2Discount" | "tier3Discount">,
   qty: number,
+  currency = "SEK",
 ): number => {
   if (!p.tieredPricing) return p.price;
-  if (qty >= 3) return Math.round(p.price * (1 - p.tier3Discount / 100));
-  if (qty === 2) return Math.round(p.price * (1 - p.tier2Discount / 100));
+  if (qty >= 3) return roundPrice(p.price * (1 - p.tier3Discount / 100), currency);
+  if (qty === 2) return roundPrice(p.price * (1 - p.tier2Discount / 100), currency);
   return p.price;
 };
 
-/** Antal kapslar/tabletter enligt namnet, t.ex. "… | 60 kapslar" → 60. */
+/** Pris per förpackning med prenumeration. Samma avrundning i korg, kassa och på servern. */
+export const subscriptionUnitPrice = (price: number, discountPercent: number, currency = "SEK"): number =>
+  roundPrice(price * (1 - discountPercent / 100), currency);
+
+/** Antal kapslar/tabletter enligt namnet, t.ex. "… | 60 kapslar" → 60 (även finska och danska namn). */
 export const unitCount = (p: Pick<Product, "name">): number | null => {
-  const m = p.name.match(/(\d+)\s*(kapslar|tabletter)/i);
+  const m = p.name.match(/(\d+)\s*(kapslar|tabletter|kapselia|tablettia|kapsler)/i);
   return m ? Number(m[1]) : null;
 };
 

@@ -8,9 +8,9 @@ för att få full kontroll över SEO, structured data och Google Merchant Center
 ## Struktur
 - `data/*.json` – produkter, priser, paket, artiklar, fraktzoner (exporterade från gamla butiken; källa tills Supabase kopplas på).
 - `public/media/` – alla produkt-, paket- och artikelbilder. Gamla sökvägar `/api/public/media/x` mappas till `/media/x` via `src/lib/media.ts`.
-- `src/lib/` – datalager (`products.ts`, `bundles.ts`, `articles.ts`, `shipping.ts`), `site.ts` (företagsuppgifter och alla "påståenden"), `routes.ts` (svenska slugs).
+- `src/lib/` – datalager (`products.ts`, `bundles.ts`, `articles.ts`, `shipping.ts`), `site.ts` (företagsuppgifter och alla "påståenden"), `routes.ts` (slugs per språk), `i18n.ts` (marknader).
 - `src/content/` – produktberättelser (`product-content.ts`), juridiska sidor (`legal.ts`), FAQ, mål.
-- `src/app/sv/` – alla sidor. Bara svenska är aktivt; övriga språk läggs till som egna segment senare.
+- `src/app/[lang]/` – alla sidor (rotlayout, `<html lang>`). Språk sv, fi, da – se Marknader nedan. Admin har egen rotlayout, 404 utanför dem i `global-not-found.tsx`.
 - `src/components/cart/` – varukorg i localStorage via `useSyncExternalStore` (`cartStore.ts`).
 
 ## Regler
@@ -129,3 +129,13 @@ quiz, presentkort, spåra order, mitt konto, samarbeten/jobba hos oss, fler spr�
 - `/admin/rapporter` (`src/lib/reports.ts`): vad som sålts per period – denna/förra månaden, i år, förra året, allt eller egna datum (svensk tid). Räknar allt utom `pending`, `cancelled` och `refunded` (`countsAsSale`), skarpt och test var för sig.
 - Visar omsättning (inkl. moms och frakt), varor (`subtotal`, efter rabatt), frakt, rabatt, nya/återkommande kunder, sålt per produkt (paket som egna rader), "burkar som lämnat lagret" (paketinnehåll upplöst), per land, fraktsätt, ordertyp och rabattkod. Diagram per dag upp till 62 dagar, annars per månad (`TrendChart` tolkar nyckeln YYYY-MM).
 - CSV: `/admin/rapporter/export?typ=produkter|ordrar` med samma period- och env-parametrar.
+
+## Marknader (Sverige, Finland, Danmark – lanserat 2026-10-12)
+- Ett språk = en marknad (`src/lib/i18n.ts`): sv → SE/SEK, fi → FI/EUR, da → DK/DKK. Kassan levererar bara till marknadens land (`shipping_address_collection`), Stripe-språk och valuta följer. Ordern får `locale` (Stripe-metadata), mejlen skickas på det språket (`src/lib/email-text.ts`); förnyelser ärver språket.
+- Adresser: mapparna heter som på svenska; fi/da har egna slugar (gamla butikens) i `routeSlugs` som skrivs om i next.config (`localizedRewrites`, beforeFiles). Den svenska slugen under /fi omdirigeras till den finska. `translatePath` = språkväljaren och hreflang (`alternates()` i `src/i18n/server.ts`).
+- Bara på svenska (404 på fi/da via layout i mappen, länkar döljs med `hasPage`): artiklar, mål, quiz, tongkat-ali, presentkort, mitt konto, spåra order, samarbeten, jobba hos oss. Påminnelser om övergiven korg bara för sv.
+- Språket i serverkomponenter: `getI18n()` (läser rotparametern via `next/root-params`), i klientkomponenter `useI18n()`. UI-texter i `src/i18n/messages/*.ts` (sv/fi/da, samma form). Översatt innehåll i `src/content/i18n/<språk>/` (katalog, produktsidor, villkor, FAQ); `getCatalog(locale)` visar bara produkter/paket med både översättning och pris i valutan. Ändras en svensk produkttext i admin måste översättningen uppdateras här.
+- Priser i EUR/DKK i `product_prices`/`bundle_prices` (omräknade från SEK: EUR ≈ SEK/11 till ,95, DKK ≈ SEK×0,69 till …9). `roundPrice` avrundar euro till cent – använd `subscriptionUnitPrice`/`tieredUnitPrice` med valuta, aldrig Math.round.
+- Frakt FI/DK: zon `nordic` i `data/shipping_rates.json` (spårbart brev 6,50 €/46 kr, fri över 65 €/469 kr, 2–5 arbetsdagar). Returavgift i villkoren 8 €/59 kr = `markets[l].returnFee`. Plocky får alltid det svenska fraktnamnet (`swedishShippingMethod`), mallarna mappas på namnet.
+- Feeds per marknad: `/feeds/google-fi.xml`, `/feeds/google-dk.xml`, `/feeds/meta-fi.xml`, `/feeds/meta-dk.xml` (med `g:shipping`). Svenska feeden oförändrad.
+- Rapporter, statistik och kundintäkt räknas i SEK med orderns `exchange_rate_to_sek` (tabellen exchange_rates uppdateras inte automatiskt). Affiliatemoms: FI 13,5 %, DK 25 %.

@@ -1,7 +1,8 @@
 import type { NextConfig } from "next";
+import { localizedRewrites } from "./src/lib/routes";
 
 /** Språk som fanns i gamla butiken men inte är byggda ännu – skickas tills vidare till svenska. */
-const pendingLocales = ["en", "fi", "da", "dk", "no", "nb", "de", "nl", "be", "it", "fr", "es", "pl", "pt", "lv", "lt", "ee", "et", "at", "ch", "ie", "uk", "gb", "us", "eu"];
+const pendingLocales = ["en", "no", "nb", "de", "nl", "be", "it", "fr", "es", "pl", "pt", "lv", "lt", "ee", "et", "at", "ch", "ie", "uk", "gb", "us", "eu"];
 
 const nextConfig: NextConfig = {
   // satori och harfbuzzjs letar upp sina egna filer i körningen. Buntas de av Next hittar
@@ -13,7 +14,8 @@ const nextConfig: NextConfig = {
   },
   // Serveraktioner tar emot 1 MB som standard – bilduppladdningar i admin är större.
   // Riktigt stora filer går förbi aktionerna, direkt till lagringen (se ad-uploads).
-  experimental: { serverActions: { bodySizeLimit: "4mb" } },
+  // globalNotFound: butiken (app/[lang]) och admin har var sin rotlayout, så 404 utanför dem behöver en egen sida
+  experimental: { serverActions: { bodySizeLimit: "4mb" }, globalNotFound: true },
   images: {
     formats: ["image/avif", "image/webp"],
     deviceSizes: [360, 640, 828, 1080, 1200, 1600],
@@ -25,8 +27,17 @@ const nextConfig: NextConfig = {
   async headers() {
     return [{ source: "/:path*", has: [{ type: "host", value: "(?<host>.*\.vercel\.app)" }], headers: [{ key: "X-Robots-Tag", value: "noindex, nofollow" }] }];
   },
+  // Lokala slugar (/fi/tuotteet) visar de svenska mapparna (/fi/produkter). Före filsystemet,
+  // annars fångas adressen av den dynamiska [doc]-sidan.
+  async rewrites() {
+    return { beforeFiles: localizedRewrites().rewrites, afterFiles: [], fallback: [] };
+  },
   async redirects() {
     return [
+      ...localizedRewrites().redirects,
+      // Danmark med landskoden i stället för språkkoden
+      { source: "/dk", destination: "/da", permanent: true },
+      { source: "/dk/:path*", destination: "/da/:path*", permanent: true },
       // Rotadressen till svenska butiken. Här och inte i app/page.tsx: en config-omdirigering behåller
       // parametrarna (gclid, utm_…, clickId), annars tappas annonsklickets källa på vägen.
       { source: "/", destination: "/sv", permanent: false },

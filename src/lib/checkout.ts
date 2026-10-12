@@ -6,8 +6,9 @@
 import type Stripe from "stripe";
 import { isChannel, type Channel } from "./attribution";
 import { getBundle, getProduct } from "./catalog";
-import { isInStock, offerGiftSlugs, tieredUnitPrice } from "./products";
-import { ratesForZone, shippingCost } from "./shipping";
+import { defaultLocale, isLocale, markets, type Locale } from "./i18n";
+import { isInStock, offerGiftSlugs, subscriptionUnitPrice, tieredUnitPrice } from "./products";
+import { ratesFor, shippingCost } from "./shipping";
 import { site } from "./site";
 
 export const SUB_INTERVALS = [30, 60, 90] as const;
@@ -33,6 +34,8 @@ export type CheckoutRequest = {
   variant: string | null;
   /** Varifrån kunden kom (lib/attribution), sparas på ordern. */
   source: { ch: Channel; d: string | null; first: Channel | null };
+  /** Butikens språk = marknad (valuta, leveransland, fraktsätt). */
+  locale: Locale;
 };
 
 export type PricedLine = CheckoutLine & {
@@ -69,18 +72,46 @@ export function parseCheckoutRequest(body: unknown): CheckoutRequest {
   const variant = clean(b.variant, 10).replace(/[^a-z0-9]/gi, "") || null;
   const s = (b.source ?? {}) as Record<string, unknown>;
   const source = { ch: isChannel(s.ch) ? s.ch : "unknown", d: clean(s.d, 150) || null, first: isChannel(s.first) ? s.first : null } as CheckoutRequest["source"];
-  return { lines, email: /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email) ? email : null, visitorId, code, variant, source };
+  const locale = isLocale(b.locale) ? b.locale : defaultLocale;
+  return { locale, lines, email: /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email) ? email : null, visitorId, code, variant, source };
 }
 
+/** Felmeddelanden som visas för kunden i kassan. */
+const errors: Record<Locale, { bundleGone: string; productGone: string; bundleSoldOut: (n: string) => string; soldOut: (n: string) => string; gift: (n: string) => string }> = {
+  sv: {
+    bundleGone: "Ett paket i varukorgen finns inte längre.",
+    productGone: "En produkt i varukorgen finns inte längre.",
+    bundleSoldOut: (n) => `${n} är tillfälligt slut.`,
+    soldOut: (n) => `${n} är slutsåld i det antal du valt.`,
+    gift: (n) => `Gåvan ${n} kräver ett flerpack med prenumeration i varukorgen.`,
+  },
+  fi: {
+    bundleGone: "Ostoskorissa oleva paketti ei ole enää saatavilla.",
+    productGone: "Ostoskorissa oleva tuote ei ole enää saatavilla.",
+    bundleSoldOut: (n) => `${n} on tilapäisesti loppu.`,
+    soldOut: (n) => `${n} on loppuunmyyty valitsemassasi määrässä.`,
+    gift: (n) => `Lahja ${n} edellyttää ostoskorissa olevaa monipakkauksen kestotilausta.`,
+  },
+  da: {
+    bundleGone: "En pakke i kurven findes ikke længere.",
+    productGone: "Et produkt i kurven findes ikke længere.",
+    bundleSoldOut: (n) => `${n} er midlertidigt udsolgt.`,
+    soldOut: (n) => `${n} er udsolgt i det antal, du har valgt.`,
+    gift: (n) => `Gaven ${n} kræver en flerpakning med abonnement i kurven.`,
+  },
+};
+
 /** Sätter pris på varje rad utifrån katalogen. Okända eller slutsålda varor ger fel. */
-export async function priceLines(lines: CheckoutLine[]): Promise<PricedLine[]> {
+export async function priceLines(lines: CheckoutLine[], locale: Locale = defaultLocale): Promise<PricedLine[]> {
+  const currency = markets[locale].currency;
+  const e = errors[locale];
   const out: PricedLine[] = [];
   for (const line of lines) {
     if (line.kind === "bundle") {
-      const bundle = await getBundle(line.slug);
-      if (!bundle) throw new Error("Ett paket i varukorgen finns inte längre.");
+      const bundle = await getBundle(line.slug, locale);
+      if (!bundle) throw new Error(e.bundleGone);
       const soldOut = bundle.items.some((i) => i.product.trackStock && i.product.stock < i.qty * line.qty);
-      if (soldOut) throw new Error(`${bundle.name} är tillfälligt slut.`);
+      if (soldOut) throw new Error(e.bundleSoldOut(bundle.name));
       out.push({
         ...line,
         plan: "once",
@@ -91,27 +122,27 @@ export async function priceLines(lines: CheckoutLine[]): Promise<PricedLine[]> {
       });
       continue;
     }
-    const product = await getProduct(line.slug);
-    if (!product) throw new Error("En produkt i varukorgen finns inte längre.");
+    const product = await getProduct(line.slug, locale);
+    if (!product) throw new Error(e.productGone);
     if (!isInStock(product) || (product.trackStock && product.stock < line.qty)) {
-      throw new Error(`${product.name} är slutsåld i det antal du valt.`);
+      throw new Error(e.soldOut(product.name));
     }
     if (line.plan === "gift") {
       // Gåvan kräver ett flerpack i samma korg som ger rätt till just den gåvan
       let qualifies = false;
       for (const other of lines) {
         if (other.kind !== "product" || other.plan !== "sub") continue;
-        const p = await getProduct(other.slug);
+        const p = await getProduct(other.slug, locale);
         if (p && p.offerEnabled && other.qty >= p.offerPackQty && offerGiftSlugs(p).includes(line.slug)) qualifies = true;
       }
-      if (!qualifies) throw new Error(`Gåvan ${product.name} kräver ett flerpack med prenumeration i varukorgen.`);
+      if (!qualifies) throw new Error(e.gift(product.name));
       out.push({ ...line, qty: 1, name: product.name, unitPrice: 0, image: product.images[0] ?? null, freeShipping: true });
       continue;
     }
     const unitPrice =
       line.plan === "sub"
-        ? Math.round(product.price * (1 - site.subscriptionDiscount / 100))
-        : tieredUnitPrice(product, line.qty);
+        ? subscriptionUnitPrice(product.price, site.subscriptionDiscount, currency)
+        : tieredUnitPrice(product, line.qty, currency);
     out.push({ ...line, name: product.name, unitPrice, image: product.images[0] ?? null, freeShipping: line.plan === "sub" });
   }
   return out;
@@ -119,18 +150,20 @@ export async function priceLines(lines: CheckoutLine[]): Promise<PricedLine[]> {
 
 export const subtotalOf = (priced: PricedLine[]) => priced.reduce((s, l) => s + l.unitPrice * l.qty, 0);
 
-const sek = (amount: number) => Math.round(amount * 100);
+/** Belopp i minsta enheten (öre/cent). SEK, EUR och DKK har alla två decimaler. */
+export const minor = (amount: number) => Math.round(amount * 100);
 
 /** Bygger Stripe-raderna. Prenumerationsrader blir återkommande, resten engångsköp. */
-export function buildLineItems(priced: PricedLine[], origin: string): Stripe.Checkout.SessionCreateParams.LineItem[] {
+export function buildLineItems(priced: PricedLine[], origin: string, locale: Locale = defaultLocale): Stripe.Checkout.SessionCreateParams.LineItem[] {
+  const t = lineNames[locale];
   return priced.map((l) => ({
     quantity: l.qty,
     price_data: {
-      currency: "sek",
-      unit_amount: sek(l.unitPrice),
+      currency: markets[locale].currency.toLowerCase(),
+      unit_amount: minor(l.unitPrice),
       tax_behavior: "inclusive",
       product_data: {
-        name: l.plan === "sub" ? `${l.name} – prenumeration var ${l.intervalDays ?? 30}:e dag` : l.plan === "gift" ? `Gåva – ${l.name}` : l.name,
+        name: l.plan === "sub" ? t.sub(l.name, l.intervalDays ?? 30) : l.plan === "gift" ? t.gift(l.name) : l.name,
         images: l.image ? [`${origin}${l.image}`] : [],
         metadata: { slug: l.slug, kind: l.kind, plan: l.plan },
       },
@@ -139,25 +172,45 @@ export function buildLineItems(priced: PricedLine[], origin: string): Stripe.Che
   }));
 }
 
+/** Radnamn hos Stripe (kvitto och kassa) per språk. */
+const lineNames: Record<Locale, { sub: (name: string, days: number) => string; gift: (name: string) => string; freeShipping: string; free: string; shipping: string }> = {
+  sv: { sub: (n, d) => `${n} – prenumeration var ${d}:e dag`, gift: (n) => `Gåva – ${n}`, freeShipping: "Fri frakt – spårbart brev", free: "fri frakt", shipping: "Frakt" },
+  fi: { sub: (n, d) => `${n} – kestotilaus ${d} päivän välein`, gift: (n) => `Lahja – ${n}`, freeShipping: "Ilmainen toimitus – kirje seurannalla", free: "ilmainen toimitus", shipping: "Toimitus" },
+  da: { sub: (n, d) => `${n} – abonnement hver ${d}. dag`, gift: (n) => `Gave – ${n}`, freeShipping: "Fri fragt – sporbart brev", free: "fri fragt", shipping: "Fragt" },
+};
+export const shippingLineName = (locale: Locale, label: string) => `${lineNames[locale].shipping} – ${label}`;
+
+/** Fraktsättet på prenumerationsordrar (alltid fraktfria). */
+export const freeShippingLabel = (locale: Locale) => lineNames[locale].freeShipping;
+
+/** Radnamnet hos Stripe utan prenumerations- eller gåvotillägg, på alla språk (för order_items). */
+export const stripLineSuffix = (name: string) =>
+  name
+    .replace(/ – (prenumeration var \d+:e dag|kestotilaus \d+ päivän välein|abonnement hver \d+\. dag).*$/, "")
+    .replace(/^(Gåva|Lahja|Gave) – /, "");
+
 /**
- * Fraktalternativ för Sverige som Stripe visar i kassan. Är alla rader fraktfria
+ * Fraktalternativ för marknaden som Stripe visar i kassan. Är alla rader fraktfria
  * (prenumerationer, paket) blir det ett enda kostnadsfritt alternativ.
  */
-export function buildShippingOptions(priced: PricedLine[]): Stripe.Checkout.SessionCreateParams.ShippingOption[] {
+export function buildShippingOptions(priced: PricedLine[], locale: Locale = defaultLocale): Stripe.Checkout.SessionCreateParams.ShippingOption[] {
   const subtotal = subtotalOf(priced);
   const allFree = priced.every((l) => l.freeShipping);
-  const rates = ratesForZone("se");
+  const rates = ratesFor(locale);
+  const currency = markets[locale].currency.toLowerCase();
+  const t = lineNames[locale];
+  const [min, max] = markets[locale].deliveryDays;
   const estimate = {
-    minimum: { unit: "business_day" as const, value: 1 },
-    maximum: { unit: "business_day" as const, value: 3 },
+    minimum: { unit: "business_day" as const, value: min },
+    maximum: { unit: "business_day" as const, value: max },
   };
   if (allFree) {
     return [
       {
         shipping_rate_data: {
           type: "fixed_amount",
-          display_name: "Fri frakt – spårbart brev",
-          fixed_amount: { amount: 0, currency: "sek" },
+          display_name: t.freeShipping,
+          fixed_amount: { amount: 0, currency },
           delivery_estimate: estimate,
         },
       },
@@ -168,8 +221,8 @@ export function buildShippingOptions(priced: PricedLine[]): Stripe.Checkout.Sess
     return {
       shipping_rate_data: {
         type: "fixed_amount",
-        display_name: cost === 0 ? `${r.label} – fri frakt` : r.label,
-        fixed_amount: { amount: sek(cost), currency: "sek" },
+        display_name: cost === 0 ? `${r.label} – ${t.free}` : r.label,
+        fixed_amount: { amount: minor(cost), currency },
         delivery_estimate: estimate,
         metadata: { method: r.method },
       },

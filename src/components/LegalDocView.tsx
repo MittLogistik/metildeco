@@ -2,9 +2,11 @@ import type { LegalBlock, LegalDoc } from "@/content/legal";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { ShippingTable } from "@/components/ShippingTable";
 import { Container } from "@/components/ui";
-import { companyInfoItems, fillPlaceholders as f } from "@/lib/page-text";
+import type { Locale } from "@/lib/i18n";
+import { companyInfoItems, fillPlaceholders } from "@/lib/page-text";
 
-function Block({ block }: { block: LegalBlock }) {
+function Block({ block, locale }: { block: LegalBlock; locale: Locale }) {
+  const f = (text: string) => fillPlaceholders(text, locale);
   switch (block.type) {
     case "h2":
       return <h2>{f(block.text)}</h2>;
@@ -46,13 +48,13 @@ function Block({ block }: { block: LegalBlock }) {
     case "shippingTable":
       return (
         <div className="overflow-x-auto">
-          <ShippingTable />
+          <ShippingTable locale={locale} />
         </div>
       );
     case "companyInfo":
       return (
         <ul>
-          {companyInfoItems().map((it, i) => (
+          {companyInfoItems(locale).map((it, i) => (
             <li key={i}>{it}</li>
           ))}
         </ul>
@@ -60,17 +62,18 @@ function Block({ block }: { block: LegalBlock }) {
   }
 }
 
-export function LegalDocView({ doc }: { doc: LegalDoc }) {
+/** Villkor, policyer och informationssidor. `locale` styr platshållare, frakttabell och företagsuppgifter. */
+export function LegalDocView({ doc, locale = "sv" }: { doc: LegalDoc; locale?: Locale }) {
   return (
     <Container className="py-10 sm:py-14">
       <Breadcrumbs items={[{ label: doc.title }]} />
       <div className="mx-auto mt-8 max-w-3xl">
         <h1 className="font-display text-4xl font-medium leading-tight tracking-tight sm:text-5xl">{doc.title}</h1>
-        <p className="mt-5 text-lg leading-relaxed text-muted">{f(doc.intro)}</p>
+        <p className="mt-5 text-lg leading-relaxed text-muted">{fillPlaceholders(doc.intro, locale)}</p>
         <p className="mt-3 text-xs text-muted">{doc.updated}</p>
         <div className="prose-metilde mt-10">
           {doc.blocks.map((b, i) => (
-            <Block key={i} block={b} />
+            <Block key={i} block={b} locale={locale} />
           ))}
         </div>
       </div>

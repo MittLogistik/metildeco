@@ -1,0 +1,100 @@
+/**
+ * Texter i kundmejlen (orderbekräftelse och leveransbesked) per språk. Mejlet skickas på
+ * orderns språk (orders.locale). Kundtjänsten svarar på svenska och engelska – det står i
+ * de finska och danska mejlen så att ingen förväntar sig svar på sitt eget språk.
+ */
+import type { Locale } from "./i18n";
+
+const sv = {
+  subjectOrder: (n: string) => `Tack för din beställning ${n}`,
+  subjectRenewal: (n: string) => `Din prenumerationsleverans ${n} är planerad`,
+  headingOrder: "Tack för din beställning!",
+  headingRenewal: "Din nästa leverans är planerad",
+  renewalWithDate: (d: string) => `Din prenumeration har förnyats. Nästa förpackning skickas så att den beräknas nå dig omkring ${d}.`,
+  renewalNoDate: "Din prenumeration har förnyats och paketet packas nu.",
+  orderNumber: "Ordernummer",
+  received: "Vi har tagit emot din betalning. Ordrar lagda före kl. 12 på vardagar skickas samma dag.",
+  subscription: "prenumeration",
+  gift: "gåva",
+  discount: "Rabatt",
+  shipping: "Frakt",
+  free: "Fri",
+  total: "Totalt",
+  deliverTo: "Levereras till",
+  afterOrder: (returnsLink: string) =>
+    `Du får ett mejl med spårningslänk när paketet lämnar oss. Ångerrätt 30 dagar på oöppnade produkter, läs mer på ${returnsLink}.`,
+  returnsLinkText: "våra retursidor",
+  questions: (phone: string, hours: string) => `Frågor? Svara på det här mejlet eller ring ${phone} (${hours}).`,
+  questionsText: (phone: string) => `Frågor? Svara på det här mejlet eller ring ${phone}.`,
+  shippedSubject: (n: string) => `Din order ${n} är på väg`,
+  shippedHeading: "Ditt paket är på väg",
+  shippedBody: (n: string, carrier: string | null) => `Order ${n} har lämnat vårt lager${carrier ? ` med ${carrier}` : ""}.`,
+  parcelId: "Kolli-id",
+  track: "Spåra paketet",
+  trackShort: "Spåra",
+  trackingDelay: "Spårningen kan dröja några timmar innan den visar första händelsen.",
+};
+
+export type EmailText = typeof sv;
+
+export const emailText: Record<Locale, EmailText> = {
+  sv,
+  fi: {
+    subjectOrder: (n) => `Kiitos tilauksestasi ${n}`,
+    subjectRenewal: (n) => `Kestotilauksesi toimitus ${n} on suunniteltu`,
+    headingOrder: "Kiitos tilauksestasi!",
+    headingRenewal: "Seuraava toimituksesi on suunniteltu",
+    renewalWithDate: (d) => `Kestotilauksesi on uusittu. Seuraava pakkaus lähetetään niin, että se on perillä arviolta ${d}.`,
+    renewalNoDate: "Kestotilauksesi on uusittu ja paketti pakataan nyt.",
+    orderNumber: "Tilausnumero",
+    received: "Olemme vastaanottaneet maksusi. Arkipäivisin klo 12 (Ruotsin aikaa) mennessä tehdyt tilaukset lähetetään samana päivänä Ruotsista.",
+    subscription: "kestotilaus",
+    gift: "lahja",
+    discount: "Alennus",
+    shipping: "Toimitus",
+    free: "Ilmainen",
+    total: "Yhteensä",
+    deliverTo: "Toimitusosoite",
+    afterOrder: (returnsLink) =>
+      `Saat sähköpostiin seurantalinkin, kun paketti lähtee varastoltamme. Avaamattomilla tuotteilla on 30 päivän palautusoikeus, lue lisää ${returnsLink}.`,
+    returnsLinkText: "palautussivuiltamme",
+    questions: (phone, hours) => `Kysyttävää? Vastaa tähän viestiin tai soita ${phone} (${hours}). Asiakaspalvelumme palvelee ruotsiksi ja englanniksi.`,
+    questionsText: (phone) => `Kysyttävää? Vastaa tähän viestiin tai soita ${phone}. Asiakaspalvelumme palvelee ruotsiksi ja englanniksi.`,
+    shippedSubject: (n) => `Tilauksesi ${n} on matkalla`,
+    shippedHeading: "Pakettisi on matkalla",
+    shippedBody: (n, carrier) => `Tilaus ${n} on lähtenyt varastoltamme${carrier ? ` (${carrier})` : ""}.`,
+    parcelId: "Lähetystunnus",
+    track: "Seuraa pakettia",
+    trackShort: "Seuraa",
+    trackingDelay: "Seurannassa voi kestää muutama tunti ennen kuin ensimmäinen tapahtuma näkyy.",
+  },
+  da: {
+    subjectOrder: (n) => `Tak for din bestilling ${n}`,
+    subjectRenewal: (n) => `Din abonnementslevering ${n} er planlagt`,
+    headingOrder: "Tak for din bestilling!",
+    headingRenewal: "Din næste levering er planlagt",
+    renewalWithDate: (d) => `Dit abonnement er fornyet. Næste pakke sendes, så den forventes at nå dig omkring ${d}.`,
+    renewalNoDate: "Dit abonnement er fornyet, og pakken bliver pakket nu.",
+    orderNumber: "Ordrenummer",
+    received: "Vi har modtaget din betaling. Ordrer afgivet før kl. 12 (svensk tid) på hverdage sendes samme dag fra Sverige.",
+    subscription: "abonnement",
+    gift: "gave",
+    discount: "Rabat",
+    shipping: "Fragt",
+    free: "Gratis",
+    total: "I alt",
+    deliverTo: "Leveres til",
+    afterOrder: (returnsLink) =>
+      `Du får en mail med sporingslink, når pakken forlader vores lager. 30 dages fortrydelsesret på uåbnede produkter, læs mere på ${returnsLink}.`,
+    returnsLinkText: "vores retursider",
+    questions: (phone, hours) => `Spørgsmål? Svar på denne mail eller ring ${phone} (${hours}). Kundeservice svarer på svensk og engelsk.`,
+    questionsText: (phone) => `Spørgsmål? Svar på denne mail eller ring ${phone}. Kundeservice svarer på svensk og engelsk.`,
+    shippedSubject: (n) => `Din ordre ${n} er på vej`,
+    shippedHeading: "Din pakke er på vej",
+    shippedBody: (n, carrier) => `Ordre ${n} har forladt vores lager${carrier ? ` med ${carrier}` : ""}.`,
+    parcelId: "Kolli-id",
+    track: "Spor pakken",
+    trackShort: "Spor",
+    trackingDelay: "Der kan gå et par timer, før sporingen viser den første hændelse.",
+  },
+};

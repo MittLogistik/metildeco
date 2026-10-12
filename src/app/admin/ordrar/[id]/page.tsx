@@ -74,7 +74,7 @@ export default async function OrderDetailPage({ params }: PageProps<"/admin/ordr
                       {String(i.plan).startsWith("sub") ? <span className="ml-1 text-xs text-muted">prenumeration {intervalLabel(intervalDaysOf(i.plan) ?? intervalDays)}</span> : null}
                       <span className="block text-xs text-muted">{i.product_slug}</span>
                     </td>
-                    <td className="py-2 text-right tabular-nums">{formatPrice(Number(i.line_total))}</td>
+                    <td className="py-2 text-right tabular-nums">{formatPrice(Number(i.line_total), o.currency)}</td>
                   </tr>
                 ))}
               </tbody>
@@ -82,16 +82,16 @@ export default async function OrderDetailPage({ params }: PageProps<"/admin/ordr
                 {Number(o.discount) > 0 ? (
                   <tr>
                     <td className="pt-2 text-muted">Rabatt {o.discount_code ? `(${o.discount_code})` : ""}</td>
-                    <td className="pt-2 text-right tabular-nums text-success">−{formatPrice(Number(o.discount))}</td>
+                    <td className="pt-2 text-right tabular-nums text-success">−{formatPrice(Number(o.discount), o.currency)}</td>
                   </tr>
                 ) : null}
                 <tr>
                   <td className="pt-2 text-muted">Frakt {o.shipping_method ? `– ${o.shipping_method}` : ""}</td>
-                  <td className="pt-2 text-right tabular-nums">{Number(o.shipping) === 0 ? "Fri" : formatPrice(Number(o.shipping))}</td>
+                  <td className="pt-2 text-right tabular-nums">{Number(o.shipping) === 0 ? "Fri" : formatPrice(Number(o.shipping), o.currency)}</td>
                 </tr>
                 <tr className="font-semibold">
                   <td className="pt-2">Totalt</td>
-                  <td className="pt-2 text-right tabular-nums">{formatPrice(Number(o.total))}</td>
+                  <td className="pt-2 text-right tabular-nums">{formatPrice(Number(o.total), o.currency)}</td>
                 </tr>
               </tfoot>
             </table>
@@ -151,7 +151,7 @@ export default async function OrderDetailPage({ params }: PageProps<"/admin/ordr
                   </div>
                   <div>
                     <dt className="text-xs uppercase tracking-wider text-muted">Pris</dt>
-                    <dd className="mt-0.5">{sub.amount ? `${formatPrice(Number(sub.amount))} per förpackning, ${sub.quantity} st` : "–"}</dd>
+                    <dd className="mt-0.5">{sub.amount ? `${formatPrice(Number(sub.amount), sub.currency ?? "SEK")} per förpackning, ${sub.quantity} st` : "–"}</dd>
                   </div>
                   <div>
                     <dt className="text-xs uppercase tracking-wider text-muted">Nästa betalning</dt>
