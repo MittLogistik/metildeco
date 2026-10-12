@@ -78,7 +78,7 @@ const privacy: LegalDoc = {
         "Betalingsudbydere, til betaling og kontrol af svindel.",
         "Logistikpartnere og fragtfirmaer, til levering og returnering.",
         "Udbydere af drift, database og e-mail, til at drive websitet og sende ordrerelaterede e-mails.",
-        "Betaling via Stripe (kort, Klarna, Apple Pay, Google Pay), lager og fragt via MittLogistik og PostNord, e-mail via Resend, drift og database via Vercel og Supabase.",
+        "Betaling via Stripe (kort, Klarna, Apple Pay, Google Pay, MobilePay), lager og fragt via MittLogistik og PostNord, e-mail via Resend, drift og database via Vercel og Supabase.",
         "Meta (Facebook, Instagram) og Google Ads, til at måle vores annoncer. Med dit samtykke til markedsføringscookies modtager de oplysninger om dit besøg og køb samt din e-mail i hashet form for at koble købet til en annonce. Uden samtykke sender Googles tag kun anonyme signaler uden cookies.",
         "AddRevenue, når du er kommet til os via et affiliatelink: ordrenummer og ordreværdi, så vi kan udbetale provision til den, der linkede.",
         "Myndigheder, når vi efter loven er forpligtet til at udlevere oplysninger.",
@@ -142,7 +142,7 @@ const terms: LegalDoc = {
       type: "ul",
       items: [
         "Alle priser vises i danske kroner (DKK) og er inklusive moms. Den samlede pris inklusive fragt vises, før du bekræfter ordren.",
-        "Vi accepterer følgende betalingsmåder: Klarna, Visa, Mastercard, American Express, Apple Pay og Google Pay.",
+        "Vi accepterer følgende betalingsmåder: Klarna, Visa, Mastercard, American Express, Apple Pay, Google Pay og MobilePay. MobilePay kan ikke bruges til abonnementer.",
         "Ved enkeltkøb trækkes betalingen, når ordren afgives.",
         "Vi leverer til adresser i Sverige, Finland og Danmark. Ordrer til Danmark sendes inden for EU, så der kommer aldrig told eller importafgifter oveni.",
       ],

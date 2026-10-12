@@ -78,7 +78,7 @@ const privacy: LegalDoc = {
         "Betaalproviders, voor betalingen en fraudecontrole.",
         "Logistieke partners en vervoerders, voor levering en retouren.",
         "Leveranciers van hosting, database en e-mail, om de website te laten draaien en e-mails over je bestelling te versturen.",
-        "Betaling via Stripe (kaart, Klarna, Apple Pay, Google Pay), opslag en verzending via MittLogistik en PostNord, e-mail via Resend, hosting en database via Vercel en Supabase.",
+        "Betaling via Stripe (kaart, iDEAL, Klarna, Apple Pay, Google Pay), opslag en verzending via MittLogistik en PostNord, e-mail via Resend, hosting en database via Vercel en Supabase.",
         "Meta (Facebook, Instagram) en Google Ads, om onze advertenties te meten. Met je toestemming voor marketingcookies ontvangen zij gegevens over je bezoek en aankoop, en je e-mailadres in gehashte vorm om de aankoop aan een advertentie te koppelen. Zonder toestemming stuurt de tag van Google alleen anonieme signalen zonder cookies.",
         "AddRevenue, als je via een affiliatelink bij ons bent gekomen: ordernummer en orderwaarde, om commissie uit te betalen aan degene die de link plaatste.",
         "Overheidsinstanties, als we wettelijk verplicht zijn informatie te verstrekken.",
@@ -142,7 +142,7 @@ const terms: LegalDoc = {
       type: "ul",
       items: [
         "Alle prijzen worden weergegeven in euro (EUR) en zijn inclusief btw. Het totaalbedrag inclusief verzendkosten zie je voordat je de bestelling bevestigt.",
-        "Geaccepteerde betaalmethoden: Klarna, Visa, Mastercard, American Express, Apple Pay en Google Pay.",
+        "Geaccepteerde betaalmethoden: iDEAL, Klarna, Visa, Mastercard, American Express, Apple Pay en Google Pay. iDEAL is niet beschikbaar voor abonnementen.",
         "Bij een eenmalige aankoop wordt de betaling afgeschreven zodra je de bestelling plaatst.",
         "We leveren aan adressen in Zweden, Finland, Denemarken en Nederland. Bestellingen naar Nederland worden binnen de EU verzonden, dus er komen nooit douanekosten of invoerheffingen bij.",
       ],

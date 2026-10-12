@@ -9,7 +9,7 @@ export const faqGroups: FaqGroup[] = [
     items: [
       {
         q: "Hvilke betalingsmåder kan jeg bruge?",
-        a: "Du kan betale med Klarna, Visa, Mastercard, American Express, Apple Pay og Google Pay. Betalingen håndteres af Stripe – vi gemmer aldrig dine kortoplysninger.",
+        a: "Du kan betale med Klarna, Visa, Mastercard, American Express, Apple Pay, Google Pay og MobilePay (MobilePay kan ikke bruges til abonnementer). Betalingen håndteres af Stripe – vi gemmer aldrig dine kortoplysninger.",
       },
       {
         q: "Kan jeg ændre eller annullere min ordre?",

@@ -9,7 +9,7 @@ export const faqGroups: FaqGroup[] = [
     items: [
       {
         q: "Mitä maksutapoja voin käyttää?",
-        a: "Voit maksaa Klarnalla, Visalla, Mastercardilla, American Expressillä, Apple Paylla ja Google Paylla. Maksut käsittelee Stripe – emme koskaan tallenna korttitietojasi.",
+        a: "Voit maksaa Klarnalla, Visalla, Mastercardilla, American Expressillä, Apple Paylla, Google Paylla ja MobilePaylla (MobilePay ei ole käytettävissä kestotilauksissa). Maksut käsittelee Stripe – emme koskaan tallenna korttitietojasi.",
       },
       {
         q: "Voinko muuttaa tai perua tilaukseni?",

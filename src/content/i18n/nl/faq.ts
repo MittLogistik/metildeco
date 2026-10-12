@@ -9,7 +9,7 @@ export const faqGroups: FaqGroup[] = [
     items: [
       {
         q: "Welke betaalmethoden kan ik gebruiken?",
-        a: "Je kunt betalen met Klarna, Visa, Mastercard, American Express, Apple Pay en Google Pay. De betaling wordt verwerkt door Stripe – wij slaan je kaartgegevens nooit op.",
+        a: "Je kunt betalen met iDEAL, Klarna, Visa, Mastercard, American Express, Apple Pay en Google Pay (iDEAL is niet beschikbaar voor abonnementen). De betaling wordt verwerkt door Stripe – wij slaan je kaartgegevens nooit op.",
       },
       {
         q: "Kan ik mijn bestelling wijzigen of annuleren?",

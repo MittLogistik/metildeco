@@ -75,7 +75,7 @@ const privacy: LegalDoc = {
         "Maksupalveluntarjoajat maksujen käsittelyä ja petosten tarkistusta varten.",
         "Logistiikkakumppanit ja kuljetusyhtiöt toimituksia ja palautuksia varten.",
         "Ylläpito-, tietokanta- ja sähköpostipalveluiden tarjoajat sivuston ylläpitoa ja tilauksiin liittyvien sähköpostien lähettämistä varten.",
-        "Maksut Stripen kautta (kortti, Klarna, Apple Pay, Google Pay), varasto ja kuljetus MittLogistikin ja PostNordin kautta, sähköposti Resendin kautta, ylläpito ja tietokanta Vercelin ja Supabasen kautta.",
+        "Maksut Stripen kautta (kortti, Klarna, Apple Pay, Google Pay, MobilePay), varasto ja kuljetus MittLogistikin ja PostNordin kautta, sähköposti Resendin kautta, ylläpito ja tietokanta Vercelin ja Supabasen kautta.",
         "Meta (Facebook, Instagram) ja Google Ads mainostemme tulosten mittaamiseen. Jos annat suostumuksesi markkinointievästeisiin, ne saavat tietoja käynnistäsi ja ostoksestasi sekä sähköpostiosoitteesi tiivistetyssä (hashed) muodossa, jotta ostos voidaan yhdistää mainokseen. Ilman suostumusta Googlen tagi lähettää vain anonyymejä signaaleja ilman evästeitä.",
         "AddRevenue, kun olet tullut meille kumppanilinkin (affiliate) kautta: tilausnumero ja tilauksen arvo, jotta linkin jakajalle voidaan maksaa palkkio.",
         "Viranomaiset, kun olemme lain mukaan velvollisia luovuttamaan tietoja.",
@@ -139,7 +139,7 @@ const terms: LegalDoc = {
       type: "ul",
       items: [
         "Kaikki hinnat näytetään euroina (EUR) ja ne sisältävät arvonlisäveron. Kokonaissumma toimituskuluineen näytetään ennen kuin vahvistat tilauksen.",
-        "Hyväksytyt maksutavat: Klarna, Visa, Mastercard, American Express, Apple Pay ja Google Pay.",
+        "Hyväksytyt maksutavat: Klarna, Visa, Mastercard, American Express, Apple Pay, Google Pay ja MobilePay. Kestotilauksissa MobilePay ei ole käytettävissä.",
         "Kertaostoksissa maksu veloitetaan, kun tilaus tehdään.",
         "Toimitamme Ruotsiin, Suomeen ja Tanskaan. EU:n sisäisistä toimituksista ei peritä tulleja eikä tuontimaksuja.",
       ],
