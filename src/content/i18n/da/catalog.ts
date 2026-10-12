@@ -228,7 +228,7 @@ export const catalog: CatalogText = {
       ],
       description: [
         "Spirulina er en blågrøn alge, der er blevet dyrket og spist som fødevare i flere dele af verden.",
-        "Vores spirulina presses til tabletter uden tilsatte bindemidler og testes for tungmetaller.",
+        "Vores spirulina presses til tabletter uden tilsatte bindemidler.",
       ],
     },
     "pine-pollen": {

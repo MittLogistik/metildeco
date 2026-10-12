@@ -119,7 +119,7 @@ export const productContent: Record<string, ProductContent> = {
     faq: [
       {
         q: "Hvor meget eurycomanon indeholder en kapsel?",
-        a: "20 mg eurycomanon i 520 mg ekstrakt. Indholdet kontrolleres i hver batch, så styrken er ensartet.",
+        a: "20 mg eurycomanon i 520 mg ekstrakt.",
       },
       {
         q: "Hvad er forskellen på Ultra 4% og Elite?",
@@ -220,7 +220,7 @@ export const productContent: Record<string, ProductContent> = {
       {
         heading: "Tradition møder moderne renhed",
         body:
-          "Kun blomsterekstrakt i et plantebaseret kapselskal af tangbaseret cellulose. Vegansk, uden unødvendige tilsætningsstoffer og kvalitetskontrolleret efter europæiske sikkerhedskrav.",
+          "Kun blomsterekstrakt i et plantebaseret kapselskal af tangbaseret cellulose. Vegansk og uden unødvendige tilsætningsstoffer.",
       },
     ],
     specs: [

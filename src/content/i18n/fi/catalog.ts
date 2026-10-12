@@ -231,7 +231,7 @@ export const catalog: CatalogText = {
       ],
       description: [
         "Spirulina on sinilevä, jota on viljelty ja syöty ravintona monissa osissa maailmaa.",
-        "Spirulinamme puristetaan tableteiksi ilman lisättyjä sidosaineita, ja se testataan raskasmetallien varalta.",
+        "Spirulinamme puristetaan tableteiksi ilman lisättyjä sidosaineita.",
       ],
     },
     "pine-pollen": {

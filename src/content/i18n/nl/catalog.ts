@@ -228,7 +228,7 @@ export const catalog: CatalogText = {
       ],
       description: [
         "Spirulina is een blauwgroene alg die in verschillende delen van de wereld wordt gekweekt en als voedingsmiddel wordt gegeten.",
-        "Onze spirulina wordt zonder toegevoegde bindmiddelen tot tabletten geperst en getest op zware metalen.",
+        "Onze spirulina wordt zonder toegevoegde bindmiddelen tot tabletten geperst.",
       ],
     },
     "pine-pollen": {

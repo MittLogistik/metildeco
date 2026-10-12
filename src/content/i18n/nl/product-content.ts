@@ -124,7 +124,7 @@ export const productContent: Record<string, ProductContent> = {
     faq: [
       {
         q: "Hoeveel eurycomanon bevat een capsule?",
-        a: "20 mg eurycomanon in 520 mg extract. Het gehalte wordt in elke batch gecontroleerd, zodat de sterkte gelijk blijft.",
+        a: "20 mg eurycomanon in 520 mg extract.",
       },
       {
         q: "Wat is het verschil tussen Ultra 4% en Elite?",
@@ -214,7 +214,7 @@ export const productContent: Record<string, ProductContent> = {
       {
         heading: "Traditie en moderne zuiverheid",
         body:
-          "Alleen bloemextract in een plantaardige capsulewand van cellulose op basis van zeewier. Vegan, zonder onnodige toevoegingen, en gecontroleerd volgens Europese veiligheidseisen.",
+          "Alleen bloemextract in een plantaardige capsulewand van cellulose op basis van zeewier. Vegan en zonder onnodige toevoegingen.",
       },
     ],
     specs: [

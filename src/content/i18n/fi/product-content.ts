@@ -119,7 +119,7 @@ export const productContent: Record<string, ProductContent> = {
     faq: [
       {
         q: "Kuinka paljon eurykomanonia yksi kapseli sisältää?",
-        a: "20 mg eurykomanonia 520 mg:ssa uutetta. Pitoisuus tarkistetaan jokaisesta erästä, jotta vahvuus pysyy tasaisena.",
+        a: "20 mg eurykomanonia 520 mg:ssa uutetta.",
       },
       {
         q: "Mitä eroa on Ultra 4%:lla ja Elitellä?",
@@ -220,7 +220,7 @@ export const productContent: Record<string, ProductContent> = {
       {
         heading: "Perinne ja nykyaikainen puhtaus",
         body:
-          "Vain kukkauutetta kasvipohjaisessa, merilevään pohjautuvasta selluloosasta valmistetussa kapselikuoressa. Vegaaninen, ilman turhia lisäaineita, ja laatu tarkastettu eurooppalaisten turvallisuusvaatimusten mukaisesti.",
+          "Vain kukkauutetta kasvipohjaisessa, merilevään pohjautuvasta selluloosasta valmistetussa kapselikuoressa. Vegaaninen ja ilman turhia lisäaineita.",
       },
     ],
     specs: [
