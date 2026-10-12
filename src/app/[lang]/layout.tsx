@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import "../globals.css";
-import { fontClasses } from "../fonts";
+import { Figtree, Outfit } from "next/font/google";
 import { CartProvider } from "@/components/cart/CartProvider";
 import { CartDrawer } from "@/components/cart/CartDrawer";
 import { Header } from "@/components/Header";
@@ -19,6 +19,12 @@ import { formatPrice } from "@/lib/format";
 import { isLocale, locales, markets } from "@/lib/i18n";
 import { freeShippingOver } from "@/lib/shipping";
 import { company, site } from "@/lib/site";
+
+/** Typsnitten deklareras i varje rotlayout (en delad modul fick bygget hos Vercel att fallera). */
+const outfit = Outfit({ variable: "--font-outfit", subsets: ["latin"], weight: ["300", "400", "500", "600", "700"], display: "swap" });
+const figtree = Figtree({ variable: "--font-figtree", subsets: ["latin"], weight: ["300", "400", "500", "600"], display: "swap" });
+const fontClasses = `${outfit.variable} ${figtree.variable} h-full`;
+
 
 /** Bara de byggda språken – övriga ger 404 (eller omdirigeras i next.config). */
 export const dynamicParams = false;

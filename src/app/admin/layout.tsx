@@ -1,10 +1,16 @@
 import type { Metadata } from "next";
 import "../globals.css";
-import { fontClasses } from "../fonts";
+import { Figtree, Outfit } from "next/font/google";
 import Link from "next/link";
 import { getAdminUser } from "@/lib/auth";
 import { signOut } from "./actions";
 import { AdminNav } from "./_components/AdminNav";
+
+/** Typsnitten deklareras i varje rotlayout (en delad modul fick bygget hos Vercel att fallera). */
+const outfit = Outfit({ variable: "--font-outfit", subsets: ["latin"], weight: ["300", "400", "500", "600", "700"], display: "swap" });
+const figtree = Figtree({ variable: "--font-figtree", subsets: ["latin"], weight: ["300", "400", "500", "600"], display: "swap" });
+const fontClasses = `${outfit.variable} ${figtree.variable} h-full`;
+
 
 export const metadata: Metadata = {
   title: { default: "Admin", template: "%s – Admin | Metilde" },

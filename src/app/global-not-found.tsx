@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import Link from "next/link";
-import { fontClasses } from "./fonts";
+
 
 /** 404 för adresser utanför butikens språk och admin (det finns ingen gemensam rotlayout). */
 export const metadata: Metadata = {
@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 
 export default function GlobalNotFound() {
   return (
-    <html lang="sv" className={fontClasses}>
+    <html lang="sv" className="h-full">
       <body className="flex min-h-full flex-col">
         <main className="flex flex-1 flex-col items-center justify-center px-4 py-32 text-center">
           <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-primary">404</p>
