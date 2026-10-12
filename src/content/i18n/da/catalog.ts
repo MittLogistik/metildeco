@@ -79,7 +79,7 @@ export const catalog: CatalogText = {
       bullets: [
         "Ekstrakt fra roden",
         "Standardiseret til 10 % withanolider",
-        "600 mg pr. daglig dosis",
+        "400 mg pr. kapsel",
         "Uden unødvendige tilsætningsstoffer",
       ],
       description: [

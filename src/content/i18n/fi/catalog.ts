@@ -82,7 +82,7 @@ export const catalog: CatalogText = {
       bullets: [
         "Uute juuresta",
         "Standardoitu 10 % witanolideihin",
-        "600 mg päiväannoksessa",
+        "400 mg kapselia kohden",
         "Ilman turhia lisäaineita",
       ],
       description: [
