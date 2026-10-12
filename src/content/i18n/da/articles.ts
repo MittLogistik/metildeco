@@ -32,7 +32,7 @@ export const articles: Record<string, ArticleText> = {
       },
       {
         type: "paragraph",
-        text: "Ved ekstraktion behandles svampen med varmt vand eller alkohol under kontrollerede forhold. Processen nedbryder effektivt kitinstrukturen og frigør de værdifulde komponenter. Derefter filtreres det tungtfordøjelige fibermateriale fra, og tilbage bliver et koncentreret pulver med en markant højere andel aktive stoffer pr. kapsel. Når du vælger et [standardiseret Lion's Mane-ekstrakt](product:lions-mane), får du dermed et renere og lettere optageligt produkt sammenlignet med et uekstraheret svampepulver.",
+        text: "Ved ekstraktion behandles svampen med varmt vand eller alkohol under kontrollerede forhold. Processen nedbryder effektivt kitinstrukturen og frigør de værdifulde komponenter. Derefter filtreres det tungtfordøjelige fibermateriale fra, og tilbage bliver et koncentreret pulver med en markant højere andel aktive stoffer pr. kapsel. Når du vælger et [standardiseret Lion's Mane-ekstrakt](product:lions-mane), får du dermed et renere og mere koncentreret produkt sammenlignet med et uekstraheret svampepulver.",
       },
       { type: "heading", text: "Hvad er polysakkarider og betaglukaner?" },
       {
@@ -53,7 +53,7 @@ export const articles: Record<string, ArticleText> = {
           "Høj ekstraktionsgrad (f.eks. 60 % polysakkarider), hvilket bekræfter, at råvaren er blevet kraftigt koncentreret.",
           "Garanteret indhold af betaglukaner (f.eks. 45 %), hvilket sikrer, at polysakkariderne faktisk stammer fra svampens egne aktive komponenter og ikke fra tilsat stivelsessubstrat.",
           "Fri for unødvendige fyld- eller bindemidler, så der kun er plads til det aktive ekstrakt i kapslen.",
-          "Standardiseret fremstilling, hvor hver batch holder en jævn og verificeret koncentration over tid.",
+          "Standardiseret fremstilling, hvor hver batch holder en jævn koncentration over tid.",
         ],
       },
       { type: "heading", text: "Renhed og fremstilling uden unødvendige tilsætningsstoffer" },
@@ -161,12 +161,12 @@ export const articles: Record<string, ArticleText> = {
       },
       {
         type: "paragraph",
-        text: "Da quercetin er en fedtopløselig flavonoid, kan indtag sammen med et måltid, der indeholder sunde fedtstoffer (for eksempel olivenolie, avocado eller nødder), lette optagelsen i kroppen.",
+        text: "Quercetin er en fedtopløselig flavonoid, og mange vælger derfor at tage kapslen sammen med et måltid, der indeholder fedt, for eksempel olivenolie, avocado eller nødder.",
       },
       { type: "heading", text: "Opsummering – kvalitetskriterier at holde øje med" },
       {
         type: "paragraph",
-        text: "Når du vælger plantebaserede tilskud, kan det altid betale sig at gennemgå ingredienslisten grundigt. En høj procentvis renhedsgrad, som 98 %, garanterer, at du får en høj andel aktivt stof pr. kapsel. Kombineret med en ren formulering uden unødvendige tilsætningsstoffer får du et pålideligt produkt, der trygt passer ind i dine daglige mål for sundhed og træning.",
+        text: "Når du vælger plantebaserede tilskud, kan det altid betale sig at gennemgå ingredienslisten grundigt. En høj procentvis renhedsgrad, som 98 %, betyder, at næsten hele indholdet i hver kapsel er quercetin. Kombineret med en ren formulering uden unødvendige tilsætningsstoffer får du et rent produkt, der er nemt at passe ind i din daglige rutine.",
       },
       {
         type: "products",
@@ -409,7 +409,7 @@ export const articles: Record<string, ArticleText> = {
       },
       {
         type: "paragraph",
-        text: "Hver batch bør gennemgå kontrol for tungmetaller som bly, cadmium, kviksølv og arsen samt mikrobiologisk status. På den måde kan man være helt tryg ved, at produktet opfylder alle strenge sikkerhedskrav. At produktet desuden er helt vegansk, gør det tilgængeligt for de fleste kostformer.",
+        text: "Spirulina, der sælges som fødevare, er omfattet af EU's grænseværdier for tungmetaller som bly, cadmium og kviksølv. At produktet desuden er helt vegansk, gør det tilgængeligt for de fleste kostformer.",
       },
       {
         type: "list",

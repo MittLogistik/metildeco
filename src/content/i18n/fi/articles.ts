@@ -31,7 +31,7 @@ export const articles: Record<string, ArticleText> = {
       },
       {
         type: "paragraph",
-        text: "Uutettaessa sieni käsitellään kuumalla vedellä tai alkoholilla valvotuissa olosuhteissa. Prosessi hajottaa kitiinirakenteen tehokkaasti ja vapauttaa arvokkaat ainesosat. Sen jälkeen vaikeasti sulava kuituaines suodatetaan pois, ja jäljelle jää väkevä jauhe, jossa aktiivisten aineiden osuus kapselia kohden on huomattavasti suurempi. Kun valitset [standardoidun Lion's Mane -uutteen](product:lions-mane), saat siis puhtaamman ja helpommin hyödynnettävän tuotteen kuin uuttamattomasta sienijauheesta.",
+        text: "Uutettaessa sieni käsitellään kuumalla vedellä tai alkoholilla valvotuissa olosuhteissa. Prosessi hajottaa kitiinirakenteen tehokkaasti ja vapauttaa arvokkaat ainesosat. Sen jälkeen vaikeasti sulava kuituaines suodatetaan pois, ja jäljelle jää väkevä jauhe, jossa aktiivisten aineiden osuus kapselia kohden on huomattavasti suurempi. Kun valitset [standardoidun Lion's Mane -uutteen](product:lions-mane), saat siis puhtaamman ja väkevämmän tuotteen kuin uuttamattomasta sienijauheesta.",
       },
       { type: "heading", text: "Mitä polysakkaridit ja beetaglukaanit tarkoittavat?" },
       {
@@ -52,7 +52,7 @@ export const articles: Record<string, ArticleText> = {
           "Korkea uuttoaste (esim. 60 % polysakkarideja), mikä vahvistaa, että raaka-aine on väkevöity voimakkaasti.",
           "Taattu beetaglukaanipitoisuus (esim. 45 %), mikä varmistaa, että polysakkaridit ovat todella peräisin sienen omista aktiivisista ainesosista eivätkä lisätystä tärkkelyspitoisesta kasvualustasta.",
           "Ei tarpeettomia täyte- tai sideaineita, jolloin kapselissa on tilaa vain aktiiviselle uutteelle.",
-          "Standardoitu valmistus, jossa jokaisen erän pitoisuus pysyy tasaisena ja varmennettuna ajan mittaan.",
+          "Standardoitu valmistus, jossa jokaisen erän pitoisuus pysyy tasaisena ajan mittaan.",
         ],
       },
       { type: "heading", text: "Puhtaus ja valmistus ilman tarpeettomia lisäaineita" },
@@ -159,12 +159,12 @@ export const articles: Record<string, ArticleText> = {
       },
       {
         type: "paragraph",
-        text: "Koska kversetiini on rasvaliukoinen flavonoidi, sen ottaminen aterian yhteydessä, joka sisältää terveellisiä rasvoja (esimerkiksi oliiviöljyä, avokadoa tai pähkinöitä), voi helpottaa sen imeytymistä elimistöön.",
+        text: "Kversetiini on rasvaliukoinen flavonoidi, ja siksi moni ottaa kapselin rasvaa sisältävän aterian yhteydessä, esimerkiksi oliiviöljyn, avokadon tai pähkinöiden kanssa.",
       },
       { type: "heading", text: "Yhteenveto – laatukriteerit, joita kannattaa seurata" },
       {
         type: "paragraph",
-        text: "Kasvipohjaisia lisiä valitessa ainesosaluettelo kannattaa aina tarkistaa huolellisesti. Korkea puhtausaste, kuten 98 %, takaa, että saat kapselia kohden suuren osuuden aktiivista ainetta. Kun tähän yhdistyy puhdas koostumus ilman tarpeettomia lisäaineita, saat luotettavan tuotteen, joka sopii vaivattomasti osaksi päivittäisiä terveys- ja liikuntarutiinejasi.",
+        text: "Kasvipohjaisia lisiä valitessa ainesosaluettelo kannattaa aina tarkistaa huolellisesti. Korkea puhtausaste, kuten 98 %, tarkoittaa, että lähes koko kapselin sisältö on kversetiiniä. Kun tähän yhdistyy puhdas koostumus ilman tarpeettomia lisäaineita, saat puhtaan tuotteen, joka on helppo sovittaa päivittäiseen rutiiniisi.",
       },
       {
         type: "products",
@@ -404,7 +404,7 @@ export const articles: Record<string, ArticleText> = {
       },
       {
         type: "paragraph",
-        text: "Jokainen erä tulisi tarkastaa raskasmetallien, kuten lyijyn, kadmiumin, elohopean ja arseenin, sekä mikrobiologisen tilan osalta. Näin voi olla täysin varma, että tuote täyttää kaikki tiukat turvallisuusvaatimukset. Koska tuote on lisäksi täysin vegaaninen, se sopii useimpiin ruokavalioihin.",
+        text: "Elintarvikkeena myytävää spirulinaa koskevat EU:n raskasmetallien, kuten lyijyn, kadmiumin ja elohopean, enimmäismäärät. Koska tuote on lisäksi täysin vegaaninen, se sopii useimpiin ruokavalioihin.",
       },
       {
         type: "list",
