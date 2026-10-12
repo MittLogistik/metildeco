@@ -1,11 +1,13 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
+import { localeForCountry } from "@/lib/i18n";
 
 /**
  * Förnyar Supabase-sessionen på adminsidorna och skickar utloggade till inloggningen.
  * Rollkontrollen (admin) görs sedan i adminlayouten.
  */
 export async function proxy(request: NextRequest) {
+  if (request.nextUrl.pathname === "/") return marketRedirect(request);
   let response = NextResponse.next({ request });
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const key = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
@@ -40,6 +42,22 @@ export async function proxy(request: NextRequest) {
   return response;
 }
 
+/**
+ * Rotadressen till rätt marknad efter besökarens land (Vercels geo-header): Finland → /fi,
+ * Danmark → /da, alla andra → /sv. Bara "/" – djuplänkar från annonser och feeds rörs aldrig.
+ * Tillfällig omdirigering och parametrarna (gclid, utm_…, clickId) följer med.
+ */
+function marketRedirect(request: NextRequest) {
+  const country = request.headers.get("x-vercel-ip-country")?.toUpperCase();
+  const url = request.nextUrl.clone();
+  url.pathname = `/${localeForCountry(country)}`;
+  const res = NextResponse.redirect(url, 307);
+  // Svaret beror på landet – får inte cachas som ett och samma för alla
+  res.headers.set("Cache-Control", "private, no-store");
+  res.headers.set("Vary", "x-vercel-ip-country");
+  return res;
+}
+
 export const config = {
-  matcher: ["/admin/:path*", "/sv/mitt-konto/:path*", "/sv/mitt-konto"],
+  matcher: ["/", "/admin/:path*", "/sv/mitt-konto/:path*", "/sv/mitt-konto"],
 };

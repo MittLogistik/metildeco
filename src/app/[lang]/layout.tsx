@@ -5,6 +5,7 @@ import { Figtree, Outfit } from "next/font/google";
 import { CartProvider } from "@/components/cart/CartProvider";
 import { CartDrawer } from "@/components/cart/CartDrawer";
 import { Header } from "@/components/Header";
+import { MarketHint } from "@/components/MarketHint";
 import { Footer } from "@/components/Footer";
 import { Analytics } from "@/components/Analytics";
 import { ClickTracker } from "@/components/affiliate/ClickTracker";
@@ -87,6 +88,7 @@ export default async function ShopLayout({ children, params }: LayoutProps<"/[la
             <Analytics />
             <ClickTracker />
             <JsonLd data={organization} />
+            <MarketHint />
             <Header />
             <main className="flex-1">{children}</main>
             <Footer />
