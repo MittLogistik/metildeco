@@ -31,6 +31,11 @@ const methodLabels: Record<Locale, MethodLabels> = {
     "tracked-letter": { label: "Sporbart brev", description: "Sporbar levering i postkassen, 2–5 hverdage" },
     ombud: { label: "Pakke til udleveringssted", description: "Afhentes på nærmeste udleveringssted, 2–5 hverdage" },
   },
+  nl: {
+    varubrev: { label: "Brief", description: "Levering in de brievenbus, 3–6 werkdagen" },
+    "tracked-letter": { label: "Brief met track & trace", description: "Traceerbare levering in de brievenbus, 3–6 werkdagen" },
+    ombud: { label: "Pakket naar afhaalpunt", description: "Ophalen bij het dichtstbijzijnde afhaalpunt, 3–6 werkdagen" },
+  },
 };
 
 type RawZone = { code: string; name: string; countries: string[]; active: boolean; sort_order: number };
@@ -85,6 +90,7 @@ const freeWords: Record<Locale, { suffix: string; subscription: string }> = {
   sv: { suffix: "fri frakt", subscription: "Fri frakt – spårbart brev" },
   fi: { suffix: "ilmainen toimitus", subscription: "Ilmainen toimitus – kirje seurannalla" },
   da: { suffix: "fri fragt", subscription: "Fri fragt – sporbart brev" },
+  nl: { suffix: "gratis verzending", subscription: "Gratis verzending – brief met track & trace" },
 };
 
 /**

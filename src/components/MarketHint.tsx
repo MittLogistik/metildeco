@@ -12,6 +12,7 @@ const text: Record<Locale, { message: string; action: string; close: string }> =
   sv: { message: "Handlar du från Sverige? Den svenska butiken har priser i kronor och leverans inom Sverige.", action: "Till svenska butiken", close: "Stäng" },
   fi: { message: "Asioitko Suomesta? Suomen verkkokaupassa hinnat ovat euroina ja toimitus Suomeen.", action: "Siirry Suomen kauppaan", close: "Sulje" },
   da: { message: "Handler du fra Danmark? Den danske butik har priser i kroner og levering til Danmark.", action: "Gå til den danske butik", close: "Luk" },
+  nl: { message: "Bestel je vanuit Nederland? In de Nederlandse webshop zie je prijzen in euro en leveren we in Nederland.", action: "Naar de Nederlandse webshop", close: "Sluiten" },
 };
 
 const MARKET_COUNTRIES = new Set(Object.values(markets).map((m) => m.country as string));

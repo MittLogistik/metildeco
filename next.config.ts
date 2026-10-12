@@ -2,7 +2,7 @@ import type { NextConfig } from "next";
 import { localizedRewrites } from "./src/lib/routes";
 
 /** Språk som fanns i gamla butiken men inte är byggda ännu – skickas tills vidare till svenska. */
-const pendingLocales = ["en", "no", "nb", "de", "nl", "be", "it", "fr", "es", "pl", "pt", "lv", "lt", "ee", "et", "at", "ch", "ie", "uk", "gb", "us", "eu"];
+const pendingLocales = ["en", "no", "nb", "de", "be", "it", "fr", "es", "pl", "pt", "lv", "lt", "ee", "et", "at", "ch", "ie", "uk", "gb", "us", "eu"];
 
 const nextConfig: NextConfig = {
   // satori och harfbuzzjs letar upp sina egna filer i körningen. Buntas de av Next hittar

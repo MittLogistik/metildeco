@@ -99,6 +99,13 @@ const errors: Record<Locale, { bundleGone: string; productGone: string; bundleSo
     soldOut: (n) => `${n} er udsolgt i det antal, du har valgt.`,
     gift: (n) => `Gaven ${n} kræver en flerpakning med abonnement i kurven.`,
   },
+  nl: {
+    bundleGone: "Een pakket in je winkelwagen is niet meer beschikbaar.",
+    productGone: "Een product in je winkelwagen is niet meer beschikbaar.",
+    bundleSoldOut: (n) => `${n} is tijdelijk uitverkocht.`,
+    soldOut: (n) => `${n} is uitverkocht in het gekozen aantal.`,
+    gift: (n) => `Het cadeau ${n} vereist een multipack met abonnement in je winkelwagen.`,
+  },
 };
 
 /** Sätter pris på varje rad utifrån katalogen. Okända eller slutsålda varor ger fel. */
@@ -177,6 +184,7 @@ const lineNames: Record<Locale, { sub: (name: string, days: number) => string; g
   sv: { sub: (n, d) => `${n} – prenumeration var ${d}:e dag`, gift: (n) => `Gåva – ${n}`, freeShipping: "Fri frakt – spårbart brev", free: "fri frakt", shipping: "Frakt" },
   fi: { sub: (n, d) => `${n} – kestotilaus ${d} päivän välein`, gift: (n) => `Lahja – ${n}`, freeShipping: "Ilmainen toimitus – kirje seurannalla", free: "ilmainen toimitus", shipping: "Toimitus" },
   da: { sub: (n, d) => `${n} – abonnement hver ${d}. dag`, gift: (n) => `Gave – ${n}`, freeShipping: "Fri fragt – sporbart brev", free: "fri fragt", shipping: "Fragt" },
+  nl: { sub: (n, d) => `${n} – abonnement elke ${d} dagen`, gift: (n) => `Cadeau – ${n}`, freeShipping: "Gratis verzending – brief met track & trace", free: "gratis verzending", shipping: "Verzending" },
 };
 export const shippingLineName = (locale: Locale, label: string) => `${lineNames[locale].shipping} – ${label}`;
 
@@ -186,8 +194,8 @@ export const freeShippingLabel = (locale: Locale) => lineNames[locale].freeShipp
 /** Radnamnet hos Stripe utan prenumerations- eller gåvotillägg, på alla språk (för order_items). */
 export const stripLineSuffix = (name: string) =>
   name
-    .replace(/ – (prenumeration var \d+:e dag|kestotilaus \d+ päivän välein|abonnement hver \d+\. dag).*$/, "")
-    .replace(/^(Gåva|Lahja|Gave) – /, "");
+    .replace(/ – (prenumeration var \d+:e dag|kestotilaus \d+ päivän välein|abonnement hver \d+\. dag|abonnement elke \d+ dagen).*$/, "")
+    .replace(/^(Gåva|Lahja|Gave|Cadeau) – /, "");
 
 /**
  * Fraktalternativ för marknaden som Stripe visar i kassan. Är alla rader fraktfria

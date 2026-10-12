@@ -15,7 +15,7 @@ import { metaContentId } from "./consent";
  * så att Google inte får 404 på annonserade sidor.
  *
  * En feed per marknad (språk): länkar, texter, priser och valuta för det landet.
- * /feeds/google.xml = Sverige, /feeds/google-fi.xml = Finland, /feeds/google-dk.xml = Danmark.
+ * /feeds/google.xml = Sverige, /feeds/google-fi.xml = Finland, /feeds/google-dk.xml = Danmark, /feeds/google-nl.xml = Nederländerna.
  */
 
 /** Feedtexter per språk. */
@@ -23,6 +23,7 @@ const feedText: Record<Locale, { channel: string; contains: string; bundleType: 
   sv: { channel: "Botaniska extrakt och svampextrakt i kapselform, utvecklade i Sverige.", contains: "Innehåller", bundleType: "Paket" },
   fi: { channel: "Kasvi- ja sieniuutteita kapselimuodossa, kehitetty Ruotsissa.", contains: "Sisältää", bundleType: "Paketti" },
   da: { channel: "Botaniske ekstrakter og svampeekstrakter i kapselform, udviklet i Sverige.", contains: "Indeholder", bundleType: "Pakke" },
+  nl: { channel: "Plantenextracten en paddenstoelextracten in capsulevorm, ontwikkeld in Zweden.", contains: "Bevat", bundleType: "Pakket" },
 };
 
 type Ctx = { locale: Locale; currency: string };

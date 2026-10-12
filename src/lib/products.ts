@@ -194,9 +194,9 @@ export const tieredUnitPrice = (
 export const subscriptionUnitPrice = (price: number, discountPercent: number, currency = "SEK"): number =>
   roundPrice(price * (1 - discountPercent / 100), currency);
 
-/** Antal kapslar/tabletter enligt namnet, t.ex. "… | 60 kapslar" → 60 (även finska och danska namn). */
+/** Antal kapslar/tabletter enligt namnet, t.ex. "… | 60 kapslar" → 60 (även finska, danska och nederländska namn). */
 export const unitCount = (p: Pick<Product, "name">): number | null => {
-  const m = p.name.match(/(\d+)\s*(kapslar|tabletter|kapselia|tablettia|kapsler)/i);
+  const m = p.name.match(/(\d+)\s*(kapslar|tabletter|kapselia|tablettia|kapsler|capsules|tabletten)/i);
   return m ? Number(m[1]) : null;
 };
 

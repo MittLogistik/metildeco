@@ -4,7 +4,7 @@
  *
  * Används av både server- och klientkomponenter (inget server-only här).
  */
-export const locales = ["sv", "fi", "da"] as const;
+export const locales = ["sv", "fi", "da", "nl"] as const;
 export type Locale = (typeof locales)[number];
 export const defaultLocale: Locale = "sv";
 
@@ -15,7 +15,7 @@ export type Currency = "SEK" | "EUR" | "DKK";
 export type Market = {
   locale: Locale;
   /** Landet kassan levererar till (ISO 3166-1 alpha-2). */
-  country: "SE" | "FI" | "DK";
+  country: "SE" | "FI" | "DK" | "NL";
   currency: Currency;
   /** Zon i data/shipping_rates.json. */
   shippingZone: string;
@@ -24,7 +24,7 @@ export type Market = {
   /** hreflang och og:locale. */
   hreflang: string;
   ogLocale: string;
-  stripeLocale: "sv" | "fi" | "da";
+  stripeLocale: "sv" | "fi" | "da" | "nl";
   /** Avdrag för returfrakt vid ångrat köp (i marknadens valuta). Samma siffra som i villkoren. */
   returnFee: number;
   /** Leveranstid i arbetsdagar efter att paketet lämnat lagret. */
@@ -76,6 +76,21 @@ export const markets: Record<Locale, Market> = {
     deliveryDays: [2, 5],
     languageName: "Dansk",
     countryName: "Danmark",
+  },
+  nl: {
+    locale: "nl",
+    country: "NL",
+    currency: "EUR",
+    // EU-zonen i data/shipping_rates.json (spårbart brev 8 €, fri frakt över 79 €)
+    shippingZone: "eu",
+    intl: "nl-NL",
+    hreflang: "nl-NL",
+    ogLocale: "nl_NL",
+    stripeLocale: "nl",
+    returnFee: 8,
+    deliveryDays: [3, 6],
+    languageName: "Nederlands",
+    countryName: "Nederland",
   },
 };
 

@@ -1,7 +1,7 @@
 /**
  * Texter i kundmejlen (orderbekräftelse och leveransbesked) per språk. Mejlet skickas på
  * orderns språk (orders.locale). Kundtjänsten svarar på svenska och engelska – det står i
- * de finska och danska mejlen så att ingen förväntar sig svar på sitt eget språk.
+ * de finska, danska och nederländska mejlen så att ingen förväntar sig svar på sitt eget språk.
  */
 import type { Locale } from "./i18n";
 
@@ -96,5 +96,34 @@ export const emailText: Record<Locale, EmailText> = {
     track: "Spor pakken",
     trackShort: "Spor",
     trackingDelay: "Der kan gå et par timer, før sporingen viser den første hændelse.",
+  },
+  nl: {
+    subjectOrder: (n) => `Bedankt voor je bestelling ${n}`,
+    subjectRenewal: (n) => `Je abonnementslevering ${n} is ingepland`,
+    headingOrder: "Bedankt voor je bestelling!",
+    headingRenewal: "Je volgende levering is ingepland",
+    renewalWithDate: (d) => `Je abonnement is verlengd. Het volgende pakket wordt zo verzonden dat het naar verwachting rond ${d} bij je aankomt.`,
+    renewalNoDate: "Je abonnement is verlengd en het pakket wordt nu ingepakt.",
+    orderNumber: "Bestelnummer",
+    received: "We hebben je betaling ontvangen. Bestellingen die op werkdagen vóór 12.00 uur (Zweedse tijd) worden geplaatst, worden dezelfde dag vanuit Zweden verzonden.",
+    subscription: "abonnement",
+    gift: "cadeau",
+    discount: "Korting",
+    shipping: "Verzending",
+    free: "Gratis",
+    total: "Totaal",
+    deliverTo: "Bezorgadres",
+    afterOrder: (returnsLink) =>
+      `Je ontvangt een e-mail met een track-and-tracelink zodra het pakket ons magazijn verlaat. 30 dagen bedenktijd op ongeopende producten, lees meer op ${returnsLink}.`,
+    returnsLinkText: "onze retourpagina's",
+    questions: (phone, hours) => `Vragen? Beantwoord deze e-mail of bel ${phone} (${hours}). Onze klantenservice antwoordt in het Zweeds en Engels.`,
+    questionsText: (phone) => `Vragen? Beantwoord deze e-mail of bel ${phone}. Onze klantenservice antwoordt in het Zweeds en Engels.`,
+    shippedSubject: (n) => `Je bestelling ${n} is onderweg`,
+    shippedHeading: "Je pakket is onderweg",
+    shippedBody: (n, carrier) => `Bestelling ${n} heeft ons magazijn verlaten${carrier ? ` met ${carrier}` : ""}.`,
+    parcelId: "Zendingsnummer",
+    track: "Volg je pakket",
+    trackShort: "Volgen",
+    trackingDelay: "Het kan een paar uur duren voordat de track-and-trace de eerste gebeurtenis toont.",
   },
 };

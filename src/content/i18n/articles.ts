@@ -2,6 +2,7 @@
 import type { Locale } from "@/lib/i18n";
 import { articles as daArticles } from "./da/articles";
 import { articles as fiArticles } from "./fi/articles";
+import { articles as nlArticles } from "./nl/articles";
 import type { ArticleText } from "./types";
 
-export const articleText: Partial<Record<Locale, Record<string, ArticleText>>> = { fi: fiArticles, da: daArticles };
+export const articleText: Partial<Record<Locale, Record<string, ArticleText>>> = { fi: fiArticles, da: daArticles, nl: nlArticles };

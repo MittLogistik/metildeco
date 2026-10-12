@@ -346,4 +346,116 @@ export const info: Record<Locale, typeof sv> = {
       ctaSubscription: "Læs om abonnement",
     },
   },
+  nl: {
+    shippingTable: {
+      destination: "Bestemming",
+      method: "Verzendmethode",
+      time: "Levertijd",
+      cost: "Kosten",
+      days: (from, to) => `${from}–${to} werkdagen`,
+      freeOver: (price, freeOver) => `${price} – gratis verzending vanaf ${freeOver}`,
+    },
+    company: {
+      legalEntity: "Rechtspersoon",
+      orgNumber: "Organisatienummer",
+      vatId: "Btw-identificatienummer",
+      address: "Adres",
+      email: "E-mail",
+      phone: "Telefoon",
+      hours: "ma–vr 9.00–17.00 (Zweedse tijd)",
+      sweden: "Zweden",
+      logistics: (logistics, orgNumber, address, seller) =>
+        `Opslag, verpakking, levering en retouren worden verzorgd door ${logistics} (Zweeds org.nr. ${orgNumber}), ${address}, namens ${seller}.`,
+    },
+    faq: {
+      metaTitle: "Veelgestelde vragen",
+      metaDescription: "Antwoorden op de meest gestelde vragen over bestellen, betalen, verzending, retourneren, abonnementen en onze producten.",
+      title: "Veelgestelde vragen",
+      eyebrow: "Klantenservice",
+      intro: "Hier vind je antwoorden op de meest gestelde vragen over bestellingen, levering, abonnementen en onze producten.",
+      categories: "Categorieën",
+      moreTitle: "Geen antwoord gevonden?",
+      moreBefore: "Onze klantenservice is op werkdagen bereikbaar van 9 tot 17 uur (Zweedse tijd) en reageert meestal binnen één werkdag. Mail naar",
+      moreOr: "of bel",
+      languages: "Onze klantenservice antwoordt in het Zweeds en Engels.",
+      contact: "Neem contact op",
+      trackOrder: "Volg je bestelling",
+    },
+    contact: {
+      metaTitle: "Contact",
+      metaDescription: "Heb je een vraag over je bestelling, een product of je abonnement? De klantenservice van Metilde reageert binnen 1–2 werkdagen.",
+      title: "Neem contact op",
+      eyebrow: "Klantenservice",
+      intro: "We reageren meestal binnen 1–2 werkdagen. Gaat het om een lopende bestelling, vermeld dan je bestelnummer – dan gaat het het snelst.",
+      languages: "Onze klantenservice antwoordt in het Zweeds en Engels.",
+      formTitle: "Stuur een bericht",
+      otherWays: "Andere manieren om ons te bereiken",
+      email: "E-mail",
+      phone: "Telefoon",
+      swedishTime: "Zweedse tijd",
+      companyInfo: "Bedrijfsgegevens",
+      trackTitle: "Wil je alleen weten waar je pakket is?",
+      trackText: "Volg je levering direct met je bestelnummer en e-mailadres.",
+      trackLink: "Volg je bestelling",
+      faqTitle: "Snelle antwoorden",
+      faqText: "Veel vragen over verzending, retourneren en abonnementen worden al beantwoord bij de veelgestelde vragen.",
+      faqLink: "Naar veelgestelde vragen",
+    },
+    story: {
+      metaTitle: "Ons verhaal – zo is Metilde begonnen",
+      metaDescription:
+        "Metilde begon met een simpele frustratie: te weinig pure voedingssupplementen zonder gedoe. Lees hoe het merk is opgericht en waarom een abonnement vanzelfsprekend was.",
+      title: "Ons verhaal",
+      eyebrow: "Over Metilde",
+      intro:
+        "Metilde is ontstaan uit een frustratie die veel mensen herkennen: waarom is het zo moeilijk om pure voedingssupplementen zonder gedoe te vinden? Die vraag zette Matilda ertoe aan om al het andere opzij te leggen en het merk vanaf de grond op te bouwen.",
+      sections: [
+        {
+          title: "Er ontbrak iets in het schap",
+          body: [
+            "Matilda gebruikte al lange tijd voedingssupplementen, maar hoe meer ze erover las, hoe gefrustreerder ze werd. Veel producten zaten vol vulstoffen, zoetstoffen en ingrediënten die niets toevoegden. Tegelijk waren de prijzen vaak hoog voor producten die niet eens bevatten wat ze beloofden.",
+            "Er waren genoeg merken die over gezondheid en welzijn praatten, maar weinig die uitlegden waarom een product zijn prijs echt waard was. Daar begon het idee van Metilde te groeien: een merk dat inzet op zuiverheid en transparantie, waarbij de klant krijgt waarvoor hij betaalt en niets anders.",
+          ],
+        },
+        {
+          title: "Een abonnement dat beter zou moeten werken",
+          body: [
+            "Iets anders wat stoorde, was dat er bijna geen manier was om je op voedingssupplementen te abonneren. Wat er was, waren ofwel ingewikkelde abonnementen met opzegtermijnen, ofwel oplossingen waarbij je er zelf aan moest denken om te bestellen.",
+            "Daarom bouwde Metilde een abonnement dat echt eerlijk is: 15% lagere prijs, gratis verzending en de mogelijkheid om op elk moment te pauzeren, te wijzigen of op te zeggen. Geen minimale looptijd, geen verborgen kosten.",
+          ],
+        },
+        {
+          title: "Van Matilda naar Metilde",
+          body: [
+            "Toen het tijd was om een naam te kiezen, lag de eerste keuze voor de hand. Alle domeinen met \"Matilda\" waren al bezet, dus het werd iets wat er dichtbij lag – iets eenvoudiger, iets zuiverder. Metilde.com was nog vrij, en de naam voelde meteen goed.",
+          ],
+        },
+        {
+          title: "Volgende stap: het assortiment uitbreiden",
+          body: [
+            "We gaan geen nieuwe producten toevoegen alleen omdat het er goed uitziet. Elk extract moet er zijn omdat het een doel heeft, echte kwaliteit heeft en voldoet aan dezelfde eisen die we vanaf dag één hebben gesteld.",
+          ],
+        },
+      ],
+      valuesEyebrow: "Waarden",
+      valuesTitle: "Waar we voor staan",
+      values: [
+        ["Geen gedoe", "We vermelden precies wat elk product bevat. Geen opvulling, geen verborgen toevoegingen."],
+        ["Je krijgt waarvoor je betaalt", "Grondstoffen, capsules, verpakking. Daar gaat ons geld naartoe – niet naar dure reclamecampagnes."],
+        ["Een echt abonnement", "15% korting, gratis verzending en volledige controle. Pauzeren, wijzigen of opzeggen wanneer je wilt."],
+        ["Zweeds merk", "Het assortiment wordt in Zweden ontwikkeld en elke bestelling wordt verzonden vanuit ons magazijn in Timrå."],
+      ],
+      companyEyebrow: "Het bedrijf",
+      companyTitle: "Over het bedrijf",
+      companyIntro: (legalName) =>
+        `Metilde wordt gerund door ${legalName}. Hier vind je onze volledige bedrijfsgegevens – we willen dat je altijd weet bij wie je koopt.`,
+      legalName: "Juridische naam",
+      customerService: "Klantenservice",
+      ctaTitle: "We staan pas aan het begin",
+      ctaText:
+        "Metilde is een jong merk, maar de ambitie is duidelijk: het assortiment uitbreiden en een grote speler worden op de markt voor pure, botanische voedingssupplementen. Dat doen we door eerlijk te zijn, een hoge kwaliteit te leveren en naar onze klanten te luisteren.",
+      ctaProducts: "Ontdek de producten",
+      ctaSubscription: "Lees over abonnementen",
+    },
+  },
 };

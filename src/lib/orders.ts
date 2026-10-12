@@ -137,7 +137,7 @@ export async function saveOrderFromSession(sessionId: string): Promise<{ order: 
     const name = li.description ?? "";
     if (!m) {
       // Fraktraden i subscription-läget ligger sist utan motsvarighet i korgen
-      if (/^(Frakt|Toimitus|Fragt)\b/.test(name)) shippingLine += kr(li.amount_total);
+      if (/^(Frakt|Toimitus|Fragt|Verzending)\b/.test(name)) shippingLine += kr(li.amount_total);
       return;
     }
     const qty = li.quantity ?? m.q;

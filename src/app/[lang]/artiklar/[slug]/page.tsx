@@ -6,7 +6,7 @@ import { notFound } from "next/navigation";
 import { articlesFor, getArticle, type ArticleBlock } from "@/lib/articles";
 import { formatDate } from "@/lib/format";
 import { getProducts } from "@/lib/catalog";
-import { isLocale, type Locale } from "@/lib/i18n";
+import { isLocale, locales, type Locale } from "@/lib/i18n";
 import type { Product } from "@/lib/products";
 import type { Routes } from "@/lib/routes";
 import { site } from "@/lib/site";
@@ -23,7 +23,7 @@ export function generateStaticParams({ params }: { params: { lang: string } }) {
 }
 
 /** Språken där artikeln finns (för hreflang). */
-const languagesOf = (slug: string): Locale[] => (["sv", "fi", "da"] as const).filter((l) => getArticle(slug, l));
+const languagesOf = (slug: string): Locale[] => locales.filter((l) => getArticle(slug, l));
 
 export async function generateMetadata({ params }: PageProps<"/[lang]/artiklar/[slug]">): Promise<Metadata> {
   const { slug } = await params;

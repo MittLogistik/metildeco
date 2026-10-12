@@ -18,14 +18,18 @@ import { catalog as fiCatalog } from "./fi/catalog";
 import { faqGroups as fiFaq } from "./fi/faq";
 import { legalDocs as fiLegal } from "./fi/legal";
 import { productContent as fiProductContent } from "./fi/product-content";
+import { catalog as nlCatalog } from "./nl/catalog";
+import { faqGroups as nlFaq } from "./nl/faq";
+import { legalDocs as nlLegal } from "./nl/legal";
+import { productContent as nlProductContent } from "./nl/product-content";
 import type { CatalogText } from "./types";
 
 /** Katalogtexter för språk utöver svenska (svenska kommer från databasen). */
-export const catalogText: Partial<Record<Locale, CatalogText>> = { fi: fiCatalog, da: daCatalog };
+export const catalogText: Partial<Record<Locale, CatalogText>> = { fi: fiCatalog, da: daCatalog, nl: nlCatalog };
 
-const productContentByLocale: Record<Locale, Record<string, ProductContent>> = { sv: svProductContent, fi: fiProductContent, da: daProductContent };
-const legalByLocale: Record<Locale, Record<string, LegalDoc>> = { sv: svLegal, fi: fiLegal, da: daLegal };
-const faqByLocale: Record<Locale, FaqGroup[]> = { sv: svFaq, fi: fiFaq, da: daFaq };
+const productContentByLocale: Record<Locale, Record<string, ProductContent>> = { sv: svProductContent, fi: fiProductContent, da: daProductContent, nl: nlProductContent };
+const legalByLocale: Record<Locale, Record<string, LegalDoc>> = { sv: svLegal, fi: fiLegal, da: daLegal, nl: nlLegal };
+const faqByLocale: Record<Locale, FaqGroup[]> = { sv: svFaq, fi: fiFaq, da: daFaq, nl: nlFaq };
 
 export const productContentFor = (slug: string, locale: Locale): ProductContent | undefined => productContentByLocale[locale][slug];
 export const legalDocFor = (key: string, locale: Locale): LegalDoc | undefined => legalByLocale[locale][key];

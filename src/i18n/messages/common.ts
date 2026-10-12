@@ -38,4 +38,14 @@ export const common: Record<Locale, typeof sv> = {
       home: "Til forsiden",
     },
   },
+  nl: {
+    siteTitle: "Metilde – Pure botanische voedingssupplementen, ontwikkeld in Zweden",
+    siteDescription: (freeOver) =>
+      `Gestandaardiseerde kruiden- en paddenstoelenextracten zonder vulstoffen, ontwikkeld in Zweden. Gratis verzending vanaf ${freeOver}.`,
+    notFound: {
+      title: "Pagina niet gevonden",
+      text: "Het adres is mogelijk gewijzigd of het product zit niet meer in het assortiment.",
+      home: "Naar de startpagina",
+    },
+  },
 };

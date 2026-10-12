@@ -61,4 +61,23 @@ export const articlesMessages: Record<Locale, typeof sv> = {
     published: "Udgivet",
     more: "Flere artikler",
   },
+  nl: {
+    metaTitle: "Journal – gidsen over kruidenextracten, paddenstoelenextracten en kwaliteit",
+    metaDescription:
+      "Gidsen en verdieping over grondstoffen, extractieverhouding, standaardisatie en routines – geschreven door Metilde. Zonder shortcuts en zonder beloften die we niet kunnen waarmaken.",
+    journal: "Journal",
+    title: "Gidsen en verdieping",
+    intro: "Achtergrond over grondstoffen, extracten en routines – zonder shortcuts en zonder beloften die we niet kunnen waarmaken.",
+    categoryNav: "Categorie",
+    allPosts: "Alle artikelen",
+    empty: "Er zijn nog geen artikelen in deze categorie.",
+    disclaimer:
+      "De inhoud is algemene informatie over grondstoffen en routines en vervangt geen advies van een arts of apotheek. Voedingssupplementen zijn geen vervanging voor een gevarieerd voedingspatroon.",
+    notFound: "Artikel niet gevonden",
+    fromRange: "Uit het assortiment",
+    productsInArticle: "Producten in dit artikel",
+    readMinutes: (n) => `${n} min leestijd`,
+    published: "Gepubliceerd",
+    more: "Meer artikelen",
+  },
 };
