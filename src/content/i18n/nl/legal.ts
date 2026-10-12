@@ -79,7 +79,7 @@ const privacy: LegalDoc = {
         "Logistieke partners en vervoerders, voor levering en retouren.",
         "Leveranciers van hosting, database en e-mail, om de website te laten draaien en e-mails over je bestelling te versturen.",
         "Betaling via Stripe (kaart, iDEAL, Klarna, Apple Pay, Google Pay), opslag en verzending via MittLogistik en PostNord, e-mail via Resend, hosting en database via Vercel en Supabase.",
-        "Meta (Facebook, Instagram) en Google Ads, om onze advertenties te meten. Met je toestemming voor marketingcookies ontvangen zij gegevens over je bezoek en aankoop, en je e-mailadres in gehashte vorm om de aankoop aan een advertentie te koppelen. Zonder toestemming stuurt de tag van Google alleen anonieme signalen zonder cookies.",
+        "Meta (Facebook, Instagram), Google Ads en Microsoft Advertising, om onze advertenties te meten. Met je toestemming voor marketingcookies ontvangen zij gegevens over je bezoek en aankoop, en je e-mailadres in gehashte vorm om de aankoop aan een advertentie te koppelen. Zonder toestemming stuurt de tag van Google alleen anonieme signalen zonder cookies.",
         "AddRevenue, als je via een affiliatelink bij ons bent gekomen: ordernummer en orderwaarde, om commissie uit te betalen aan degene die de link plaatste.",
         "Overheidsinstanties, als we wettelijk verplicht zijn informatie te verstrekken.",
       ],
@@ -232,12 +232,13 @@ const cookies: LegalDoc = {
       rows: [
         ["_fbp", "Meet het effect van onze advertenties", "3 maanden"],
         ["_gcl_au", "Koppelt conversies aan Google Ads", "3 maanden"],
+        ["_uetsid, _uetvid, MUID", "Koppelt conversies aan Microsoft Advertising (Bing)", "1 dag – 13 maanden"],
       ],
     },
     { type: "h2", text: "Derde partijen" },
     {
       type: "p",
-      text: "Analyse- en marketingcookies worden geplaatst door Google en Meta als zelfstandige aanbieders. Zij verwerken gegevens volgens hun eigen beleid, en de cookies worden pas actief na je toestemming. De advertentietag van Google gebruikt de toestemmingsmodus (Consent Mode): zonder je toestemming plaatst de tag geen cookies en stuurt alleen anonieme signalen over paginaweergaven en aankopen, zonder persoonsgegevens zoals je e-mailadres. Google gebruikt die om de resultaten van advertenties te schatten.",
+      text: "Analyse- en marketingcookies worden geplaatst door Google, Microsoft en Meta als zelfstandige aanbieders. Zij verwerken gegevens volgens hun eigen beleid, en de cookies worden pas actief na je toestemming. De advertentietag van Google gebruikt de toestemmingsmodus (Consent Mode): zonder je toestemming plaatst de tag geen cookies en stuurt alleen anonieme signalen over paginaweergaven en aankopen, zonder persoonsgegevens zoals je e-mailadres. Google gebruikt die om de resultaten van advertenties te schatten.",
     },
     { type: "h2", text: "Cookies beheren in je browser" },
     {

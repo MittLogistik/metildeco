@@ -60,6 +60,9 @@ quiz, presentkort, spåra order, mitt konto, samarbeten/jobba hos oss, fler spr�
 - Googles egen "Testa installation" hittar inte taggen (crawlern ger inget samtycke). Testa i ett riktigt fönster efter Acceptera alla, med Tag Assistant.
 - Google-feeden (`/feeds/google.xml`) skickar jämförpris: `unit_pricing_measure` = antal kapslar (`unitCount` från namnet) och `unit_pricing_base_measure` = 1 ct. Paket = summan av innehållet.
 
+## Microsoft Advertising (UET-tagg)
+- `src/components/consent/MicrosoftTag.tsx` laddar UET (`NEXT_PUBLIC_MS_UET_ID`, tomt = avstängt) först efter "Acceptera alla" – inget cookiefritt läge som hos Google. SPA-sidvisningar via `enableAutoSpaTracking`. Köp från tacksidan som händelsen `purchase` med `revenue_value` och orderns valuta; konverteringsmålet i Microsoft Ads = händelse, åtgärd "purchase", variabelt intäktsvärde. Cookies (_uetsid, _uetvid, MUID) står i cookiepolicyn på alla språk.
+
 ## Meta Marketing API (annonser)
 - `src/lib/meta-ads.ts` – klient för kampanjer/annonsgrupper/annonser/insikter. Kräver `META_ADS_TOKEN` (systemanvändare "Conversions API System User" i portföljen Nordicsauna, token genererad via appen "Metilde Health" 1575304117393916 med ads_management + ads_read m.fl.) och `META_AD_ACCOUNT_ID` (928861056362107). Sidan som annonserar: `META_PAGE_ID`.
 - `npm run meta-ads status|campaigns|insights|pages` verifierar kopplingen från .env.local.

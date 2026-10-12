@@ -12,6 +12,7 @@ import { ClickTracker } from "@/components/affiliate/ClickTracker";
 import { CookieBanner } from "@/components/consent/CookieBanner";
 import { MetaPixel } from "@/components/consent/MetaPixel";
 import { GoogleTag } from "@/components/consent/GoogleTag";
+import { MicrosoftTag } from "@/components/consent/MicrosoftTag";
 import { JsonLd } from "@/components/JsonLd";
 import { LocaleProvider } from "@/i18n/client";
 import { common } from "@/i18n/messages/common";
@@ -96,6 +97,7 @@ export default async function ShopLayout({ children, params }: LayoutProps<"/[la
             <CookieBanner />
             <MetaPixel />
             <GoogleTag />
+            <MicrosoftTag />
           </CartProvider>
         </LocaleProvider>
       </body>

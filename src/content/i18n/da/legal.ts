@@ -79,7 +79,7 @@ const privacy: LegalDoc = {
         "Logistikpartnere og fragtfirmaer, til levering og returnering.",
         "Udbydere af drift, database og e-mail, til at drive websitet og sende ordrerelaterede e-mails.",
         "Betaling via Stripe (kort, Klarna, Apple Pay, Google Pay, MobilePay), lager og fragt via MittLogistik og PostNord, e-mail via Resend, drift og database via Vercel og Supabase.",
-        "Meta (Facebook, Instagram) og Google Ads, til at måle vores annoncer. Med dit samtykke til markedsføringscookies modtager de oplysninger om dit besøg og køb samt din e-mail i hashet form for at koble købet til en annonce. Uden samtykke sender Googles tag kun anonyme signaler uden cookies.",
+        "Meta (Facebook, Instagram), Google Ads og Microsoft Advertising, til at måle vores annoncer. Med dit samtykke til markedsføringscookies modtager de oplysninger om dit besøg og køb samt din e-mail i hashet form for at koble købet til en annonce. Uden samtykke sender Googles tag kun anonyme signaler uden cookies.",
         "AddRevenue, når du er kommet til os via et affiliatelink: ordrenummer og ordreværdi, så vi kan udbetale provision til den, der linkede.",
         "Myndigheder, når vi efter loven er forpligtet til at udlevere oplysninger.",
       ],
@@ -232,12 +232,13 @@ const cookies: LegalDoc = {
       rows: [
         ["_fbp", "Måler effekten af vores annoncer", "3 måneder"],
         ["_gcl_au", "Tilskriver konverteringer fra Google Ads", "3 måneder"],
+        ["_uetsid, _uetvid, MUID", "Tilskriver konverteringer fra Microsoft Advertising (Bing)", "1 dag – 13 måneder"],
       ],
     },
     { type: "h2", text: "Tredjeparter" },
     {
       type: "p",
-      text: "Analyse- og markedsføringscookies sættes af Google og Meta som selvstændige udbydere. De behandler oplysninger efter deres egne politikker og aktiveres først efter dit samtykke. Googles annoncetag bruger samtykketilstand (Consent Mode): uden dit samtykke sætter den ingen cookies og sender kun anonyme signaler om sidevisninger og køb uden personoplysninger som e-mail, som Google bruger til at anslå annoncernes resultater.",
+      text: "Analyse- og markedsføringscookies sættes af Google, Microsoft og Meta som selvstændige udbydere. De behandler oplysninger efter deres egne politikker og aktiveres først efter dit samtykke. Googles annoncetag bruger samtykketilstand (Consent Mode): uden dit samtykke sætter den ingen cookies og sender kun anonyme signaler om sidevisninger og køb uden personoplysninger som e-mail, som Google bruger til at anslå annoncernes resultater.",
     },
     { type: "h2", text: "Administrer cookies i browseren" },
     {

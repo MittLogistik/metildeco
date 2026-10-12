@@ -10,6 +10,7 @@ import { checkout } from "@/i18n/messages/checkout";
 import { ClearCart } from "@/components/checkout/ClearCart";
 import { MetaPurchase } from "@/components/consent/MetaEvents";
 import { GooglePurchase } from "@/components/consent/GoogleTag";
+import { MicrosoftPurchase } from "@/components/consent/MicrosoftTag";
 import { CheckIcon } from "@/components/icons";
 import { ButtonLink, Container } from "@/components/ui";
 
@@ -90,6 +91,7 @@ export default async function ThankYouPage({ searchParams }: PageProps<"/[lang]/
       <ClearCart />
       {saved ? <MetaPurchase sessionId={session.id} value={saved.order.total} currency={currency} ids={metaIds} subscription={saved.order.has_subscription} /> : null}
       {saved ? <GooglePurchase orderNumber={orderNumber} value={saved.order.total} currency={currency} email={email} /> : null}
+      {saved ? <MicrosoftPurchase orderNumber={orderNumber} value={saved.order.total} currency={currency} /> : null}
       <div className="mx-auto max-w-2xl">
         <span className="inline-flex h-14 w-14 items-center justify-center rounded-full bg-primary-soft text-primary">
           <CheckIcon size={28} />

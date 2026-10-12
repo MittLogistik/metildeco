@@ -76,7 +76,7 @@ const privacy: LegalDoc = {
         "Logistiikkakumppanit ja kuljetusyhtiöt toimituksia ja palautuksia varten.",
         "Ylläpito-, tietokanta- ja sähköpostipalveluiden tarjoajat sivuston ylläpitoa ja tilauksiin liittyvien sähköpostien lähettämistä varten.",
         "Maksut Stripen kautta (kortti, Klarna, Apple Pay, Google Pay, MobilePay), varasto ja kuljetus MittLogistikin ja PostNordin kautta, sähköposti Resendin kautta, ylläpito ja tietokanta Vercelin ja Supabasen kautta.",
-        "Meta (Facebook, Instagram) ja Google Ads mainostemme tulosten mittaamiseen. Jos annat suostumuksesi markkinointievästeisiin, ne saavat tietoja käynnistäsi ja ostoksestasi sekä sähköpostiosoitteesi tiivistetyssä (hashed) muodossa, jotta ostos voidaan yhdistää mainokseen. Ilman suostumusta Googlen tagi lähettää vain anonyymejä signaaleja ilman evästeitä.",
+        "Meta (Facebook, Instagram), Google Ads ja Microsoft Advertising mainostemme tulosten mittaamiseen. Jos annat suostumuksesi markkinointievästeisiin, ne saavat tietoja käynnistäsi ja ostoksestasi sekä sähköpostiosoitteesi tiivistetyssä (hashed) muodossa, jotta ostos voidaan yhdistää mainokseen. Ilman suostumusta Googlen tagi lähettää vain anonyymejä signaaleja ilman evästeitä.",
         "AddRevenue, kun olet tullut meille kumppanilinkin (affiliate) kautta: tilausnumero ja tilauksen arvo, jotta linkin jakajalle voidaan maksaa palkkio.",
         "Viranomaiset, kun olemme lain mukaan velvollisia luovuttamaan tietoja.",
       ],
@@ -232,12 +232,13 @@ const cookies: LegalDoc = {
       rows: [
         ["_fbp", "Mittaa mainostemme tehoa", "3 kuukautta"],
         ["_gcl_au", "Kohdistaa konversiot Google Ads -mainoksille", "3 kuukautta"],
+        ["_uetsid, _uetvid, MUID", "Kohdistaa konversiot Microsoft Advertising (Bing) -mainoksille", "1 päivä – 13 kuukautta"],
       ],
     },
     { type: "h2", text: "Kolmannet osapuolet" },
     {
       type: "p",
-      text: "Analytiikka- ja markkinointievästeet asettavat Google ja Meta itsenäisinä palveluntarjoajina. Ne käsittelevät tietoja omien käytäntöjensä mukaisesti, ja ne otetaan käyttöön vasta suostumuksesi jälkeen. Googlen mainostagi käyttää suostumustilaa (Consent Mode): ilman suostumustasi se ei aseta evästeitä ja lähettää vain anonyymejä signaaleja sivunkatseluista ja ostoksista ilman henkilötietoja, kuten sähköpostiosoitetta. Google käyttää niitä mainosten tulosten arvioimiseen.",
+      text: "Analytiikka- ja markkinointievästeet asettavat Google, Microsoft ja Meta itsenäisinä palveluntarjoajina. Ne käsittelevät tietoja omien käytäntöjensä mukaisesti, ja ne otetaan käyttöön vasta suostumuksesi jälkeen. Googlen mainostagi käyttää suostumustilaa (Consent Mode): ilman suostumustasi se ei aseta evästeitä ja lähettää vain anonyymejä signaaleja sivunkatseluista ja ostoksista ilman henkilötietoja, kuten sähköpostiosoitetta. Google käyttää niitä mainosten tulosten arvioimiseen.",
     },
     { type: "h2", text: "Evästeiden hallinta selaimessa" },
     {

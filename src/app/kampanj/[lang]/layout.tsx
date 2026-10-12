@@ -12,6 +12,7 @@ import { ClickTracker } from "@/components/affiliate/ClickTracker";
 import { CookieBanner } from "@/components/consent/CookieBanner";
 import { MetaPixel } from "@/components/consent/MetaPixel";
 import { GoogleTag } from "@/components/consent/GoogleTag";
+import { MicrosoftTag } from "@/components/consent/MicrosoftTag";
 import { LocaleProvider } from "@/i18n/client";
 import { getCatalogSnapshot } from "@/lib/catalog";
 import { isAdSafe } from "@/lib/ad-safe";
@@ -62,6 +63,7 @@ export default async function CampaignLayout({ children, params }: LayoutProps<"
             <CookieBanner />
             <MetaPixel />
             <GoogleTag />
+            <MicrosoftTag />
           </CartProvider>
         </LocaleProvider>
       </body>

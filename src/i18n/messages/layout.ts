@@ -102,7 +102,7 @@ const sv = {
   },
   cookie: {
     title: "Cookies på metilde.com",
-    text: "Nödvändiga cookies håller varukorgen och kassan igång. Med ditt samtycke använder vi också cookies från Google och Meta för att mäta våra annonser. Läs mer i vår",
+    text: "Nödvändiga cookies håller varukorgen och kassan igång. Med ditt samtycke använder vi också cookies från Google, Microsoft och Meta för att mäta våra annonser. Läs mer i vår",
     policy: "cookiepolicy",
     necessary: "Bara nödvändiga",
     acceptAll: "Acceptera alla",
@@ -209,7 +209,7 @@ export const layout: Record<Locale, typeof sv> = {
     },
     cookie: {
       title: "Evästeet sivustolla metilde.com",
-      text: "Välttämättömät evästeet pitävät ostoskorin ja kassan toiminnassa. Suostumuksellasi käytämme myös Googlen ja Metan evästeitä mainostemme mittaamiseen. Lue lisää",
+      text: "Välttämättömät evästeet pitävät ostoskorin ja kassan toiminnassa. Suostumuksellasi käytämme myös Googlen, Microsoftin ja Metan evästeitä mainostemme mittaamiseen. Lue lisää",
       policy: "evästekäytännöstämme",
       necessary: "Vain välttämättömät",
       acceptAll: "Hyväksy kaikki",
@@ -313,7 +313,7 @@ export const layout: Record<Locale, typeof sv> = {
     },
     cookie: {
       title: "Cookies på metilde.com",
-      text: "Nødvendige cookies holder kurven og kassen kørende. Med dit samtykke bruger vi også cookies fra Google og Meta til at måle vores annoncer. Læs mere i vores",
+      text: "Nødvendige cookies holder kurven og kassen kørende. Med dit samtykke bruger vi også cookies fra Google, Microsoft og Meta til at måle vores annoncer. Læs mere i vores",
       policy: "cookiepolitik",
       necessary: "Kun nødvendige",
       acceptAll: "Acceptér alle",
@@ -417,7 +417,7 @@ export const layout: Record<Locale, typeof sv> = {
     },
     cookie: {
       title: "Cookies op metilde.com",
-      text: "Noodzakelijke cookies houden de winkelwagen en het afrekenen werkend. Met jouw toestemming gebruiken we ook cookies van Google en Meta om onze advertenties te meten. Lees meer in ons",
+      text: "Noodzakelijke cookies houden de winkelwagen en het afrekenen werkend. Met jouw toestemming gebruiken we ook cookies van Google, Microsoft en Meta om onze advertenties te meten. Lees meer in ons",
       policy: "cookiebeleid",
       necessary: "Alleen noodzakelijke",
       acceptAll: "Alles accepteren",
