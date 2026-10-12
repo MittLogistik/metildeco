@@ -25,3 +25,18 @@ export type CatalogText = {
   /** Svensk kategori → översatt kategori. */
   categories: Record<string, string>;
 };
+
+/**
+ * Översatt artikel (Journalen). Samma slug som den svenska. Blocken har samma ordning och
+ * typer som originalet (data/articles.json); bilder och produktslugar är oförändrade.
+ * Produktlänkar i texten skrivs [text](product:slug) och leder till produkten på artikelns språk.
+ */
+export type ArticleText = {
+  title: string;
+  excerpt: string;
+  category: string;
+  lead: string;
+  seoTitle: string | null;
+  seoDescription: string | null;
+  blocks: Record<string, unknown>[];
+};

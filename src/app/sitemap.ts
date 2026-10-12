@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next";
-import { articles } from "@/lib/articles";
+import { articles, getArticle } from "@/lib/articles";
 import { getCatalog } from "@/lib/catalog";
 import { legalDocs } from "@/content/legal";
 import { locales, markets, type Locale } from "@/lib/i18n";
@@ -41,7 +41,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   add(sv.goals, { key: "goals", freq: "monthly", priority: 0.6 });
   add(sv.subscription, { key: "subscription", freq: "monthly", priority: 0.6 });
   add(sv.articles, { key: "articles", freq: "weekly", priority: 0.6 });
-  for (const a of articles) add(sv.article(a.slug), { key: "articles", freq: "monthly", priority: 0.5, lastModified: new Date(a.updatedAt) });
+  for (const a of articles) add(sv.article(a.slug), { key: "articles", freq: "monthly", priority: 0.5, lastModified: new Date(a.updatedAt), only: locales.filter((l) => getArticle(a.slug, l)) });
   add(sv.story, { key: "story", freq: "yearly", priority: 0.4 });
   add(sv.faq, { key: "faq", freq: "monthly", priority: 0.4 });
   add(sv.contact, { key: "contact", freq: "yearly", priority: 0.4 });

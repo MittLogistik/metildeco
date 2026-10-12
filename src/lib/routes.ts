@@ -38,9 +38,9 @@ export type RouteKey = keyof typeof routeSlugs;
 
 /**
  * Sidor som bara finns på svenska än så länge. På andra språk ger de 404 och länkarna döljs.
- * (Artiklar, presentkort, konto m.m. är skrivna för den svenska marknaden.)
+ * (Presentkort, konto m.m. är skrivna för den svenska marknaden.)
  */
-const svOnly = new Set<RouteKey>(["articles", "quiz", "giftCard", "partners", "careers", "account", "trackOrder", "goals", "tongkat"]);
+const svOnly = new Set<RouteKey>(["quiz", "giftCard", "partners", "careers", "account", "trackOrder", "goals", "tongkat"]);
 
 export const hasPage = (key: RouteKey, locale: Locale): boolean => locale === "sv" || !svOnly.has(key);
 

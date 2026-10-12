@@ -1,5 +1,11 @@
-/** Artiklar (Journalen). Källa: /data/articles.json – bara svenska, publicerade. */
+/**
+ * Artiklar (Journalen). Källa: /data/articles.json (svenska, publicerade). Finska och danska
+ * översättningar ligger i content/i18n/<språk>/articles.ts med samma slug; en artikel utan
+ * översättning visas inte på det språket.
+ */
 import articlesJson from "../../data/articles.json";
+import { articleText } from "@/content/i18n/articles";
+import { defaultLocale, type Locale } from "./i18n";
 import { mediaUrl } from "./media";
 
 export type ArticleBlock =
@@ -80,6 +86,31 @@ export const articles: Article[] = (articlesJson as Raw[])
   }))
   .sort((a, b) => (b.publishedAt ?? "").localeCompare(a.publishedAt ?? ""));
 
-export const getArticle = (slug: string) => articles.find((a) => a.slug === slug);
+/** Artiklarna på ett språk: svenska som grund, översatta texter ovanpå (bilder och datum delas). */
+const byLocale = new Map<Locale, Article[]>();
+export function articlesFor(locale: Locale): Article[] {
+  if (locale === defaultLocale) return articles;
+  const cached = byLocale.get(locale);
+  if (cached) return cached;
+  const texts = articleText[locale] ?? {};
+  const list = articles.flatMap((a) => {
+    const t = texts[a.slug];
+    if (!t) return [];
+    return [{
+      ...a,
+      title: t.title,
+      excerpt: t.excerpt,
+      category: t.category,
+      lead: t.lead,
+      seoTitle: t.seoTitle,
+      seoDescription: t.seoDescription,
+      blocks: t.blocks.map(normalizeBlock).filter((b): b is ArticleBlock => b !== null),
+    }];
+  });
+  byLocale.set(locale, list);
+  return list;
+}
 
-export const articleCategories = Array.from(new Set(articles.map((a) => a.category)));
+export const getArticle = (slug: string, locale: Locale = defaultLocale) => articlesFor(locale).find((a) => a.slug === slug);
+
+export const articleCategoriesFor = (locale: Locale) => Array.from(new Set(articlesFor(locale).map((a) => a.category)));

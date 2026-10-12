@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { articles } from "@/lib/articles";
+import { articlesFor } from "@/lib/articles";
 import { getCatalog } from "@/lib/catalog";
 import { aggregateRating, categoriesOf, isInStock } from "@/lib/products";
 import { formatPrice } from "@/lib/format";
@@ -41,7 +41,7 @@ export default async function HomePage() {
   const inStock = products.filter(isInStock);
   const featured = [...inStock, ...products.filter((p) => !isInStock(p))].slice(0, 8);
   const rating = site.showRatings ? aggregateRating(products) : null;
-  const latest = showArticles ? articles.slice(0, 3) : [];
+  const latest = showArticles ? articlesFor(locale).slice(0, 3) : [];
   const ratingValue = rating ? new Intl.NumberFormat(market.intl, { minimumFractionDigits: 1, maximumFractionDigits: 1 }).format(rating.avg) : "";
 
   return (
