@@ -24,6 +24,8 @@ export const routeSlugs = {
   partners: { sv: "samarbeten", fi: "yhteistyot", da: "samarbejde", nl: "samenwerkingen" },
   careers: { sv: "jobba-hos-oss", fi: "toihin-meille", da: "job-hos-os", nl: "werken-bij-ons" },
   tongkat: { sv: "tongkat-ali", fi: "tongkat-ali", da: "tongkat-ali", nl: "tongkat-ali" },
+  // Kampanjsidan för Google Ads – egen rotlayout i app/kampanj/[lang], se localizedRewrites
+  campaign: { sv: "kampanj", fi: "kampanja", da: "kampagne", nl: "actie" },
   // Informationssidor (app/[lang]/[doc]) – nyckeln i content/legal är den svenska slugen
   privacy: { sv: "integritetspolicy", fi: "tietosuojakaytanto", da: "privatlivspolitik", nl: "privacybeleid" },
   terms: { sv: "kopvillkor", fi: "ostoehdot", da: "kobsbetingelser", nl: "koopvoorwaarden" },
@@ -79,6 +81,7 @@ export function routesFor(l: Locale) {
     partners: p("partners"),
     careers: p("careers"),
     tongkat: p("tongkat"),
+    campaign: p("campaign"),
   };
 }
 
@@ -127,10 +130,13 @@ export function translatePath(pathname: string, target: Locale): string {
 export function localizedRewrites() {
   const rewrites: { source: string; destination: string }[] = [];
   const redirects: { source: string; destination: string; permanent: boolean }[] = [];
+  // Kampanjsidan ligger utanför app/[lang] (egen layout utan Tongkat Ali i sidfot och korgdata)
+  for (const l of locales) rewrites.push({ source: `/${l}/${slug("campaign", l)}`, destination: `/kampanj/${l}` });
   for (const l of locales) {
     if (l === defaultLocale) continue;
     const localSlugs = new Set(Object.values(routeSlugs).map((m) => m[l]));
     for (const key of Object.keys(routeSlugs) as RouteKey[]) {
+      if (key === "campaign") continue;
       const local = slug(key, l);
       const internal = slug(key, "sv");
       if (local === internal) continue;

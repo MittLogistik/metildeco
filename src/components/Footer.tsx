@@ -12,7 +12,8 @@ import { CookieSettingsLink } from "@/components/consent/CookieBanner";
 
 type FooterLink = { href: string; label: string; key?: RouteKey };
 
-export async function Footer() {
+/** `adSafe`: utan länken till Tongkat Ali (kampanjsidorna för Google Ads, se lib/ad-safe). */
+export async function Footer({ adSafe = false }: { adSafe?: boolean } = {}) {
   const { locale, r } = await getI18n();
   const t = layout[locale].footer;
   const year = new Date().getFullYear();
@@ -43,7 +44,7 @@ export async function Footer() {
         { href: r.products, label: t.allProducts },
         { href: r.goals, label: t.goals, key: "goals" },
         { href: r.subscription, label: t.subscription },
-        { href: r.category("Tongkat Ali"), label: "Tongkat Ali" },
+        ...(adSafe ? [] : [{ href: r.category("Tongkat Ali"), label: "Tongkat Ali" }]),
         { href: r.articles, label: t.articles, key: "articles" },
       ],
     },
