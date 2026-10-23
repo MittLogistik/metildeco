@@ -203,7 +203,7 @@ export default async function HomePage() {
           </div>
           <dl className="grid grid-cols-2 gap-6">
             {t.pillars.map(([title, d]) => (
-              <div key={title} className="rounded-2xl bg-white/10 p-5">
+              <div key={title} className="rounded-2xl bg-white/10 p-5 odd:last:col-span-2">
                 <dt className="font-display text-lg font-medium">{title}</dt>
                 <dd className="mt-1.5 text-sm text-primary-fg/75">{d}</dd>
               </div>
