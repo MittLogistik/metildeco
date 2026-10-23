@@ -23,7 +23,7 @@ const sv = {
   // Produktlistan
   listTitle: "Alla produkter – ört- och svampextrakt",
   listDescription:
-    "Hela Metildes sortiment av standardiserade örtextrakt och svampextrakt: Tongkat Ali, Fadogia Agrestis, Blue Lotus, Lion's Mane, Cordyceps med mera. Utvecklat i Sverige.",
+    "Hela Metildes sortiment av standardiserade örtextrakt och svampextrakt: Lion's Mane, Cordyceps, Reishi, Chaga, Maca med mera. Utvecklat i Sverige.",
   sorts: { utvald: "Utvald", "pris-lag": "Lägsta pris", "pris-hog": "Högsta pris", namn: "A–Ö" },
   bundles: "Paket",
   allProducts: "Alla produkter",

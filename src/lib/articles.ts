@@ -7,6 +7,7 @@ import articlesJson from "../../data/articles.json";
 import { articleText } from "@/content/i18n/articles";
 import { defaultLocale, type Locale } from "./i18n";
 import { mediaUrl } from "./media";
+import { NOVEL_FOOD_ARTICLES, novelFoodsClosed } from "./novel-foods";
 
 export type ArticleBlock =
   | { type: "paragraph"; text: string }
@@ -89,11 +90,13 @@ export const articles: Article[] = (articlesJson as Raw[])
 /** Artiklarna på ett språk: svenska som grund, översatta texter ovanpå (bilder och datum delas). */
 const byLocale = new Map<Locale, Article[]>();
 export function articlesFor(locale: Locale): Article[] {
-  if (locale === defaultLocale) return articles;
   const cached = byLocale.get(locale);
   if (cached) return cached;
   const texts = articleText[locale] ?? {};
   const list = articles.flatMap((a) => {
+    // Artiklar om novel food-produkter döljs där produkterna är stängda (lib/novel-foods)
+    if (novelFoodsClosed(locale) && NOVEL_FOOD_ARTICLES.has(a.slug)) return [];
+    if (locale === defaultLocale) return [a];
     const t = texts[a.slug];
     if (!t) return [];
     return [{

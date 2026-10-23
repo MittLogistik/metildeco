@@ -8,7 +8,7 @@ import type { ProductContent } from "@/content/product-content";
 const developedInSweden = {
   heading: "Ontwikkeld in Zweden",
   body:
-    "Metilde is een Zweeds merk. Het assortiment wordt hier ontwikkeld en elke bestelling wordt verzonden vanuit ons magazijn in Timrå, Zweden. De verpakking is een plastic pot met schroefdeksel die de inhoud droog houdt tussen de doses door.",
+    "Metilde is een Zweeds merk. Het assortiment wordt hier ontwikkeld en elke bestelling wordt verzonden vanuit ons magazijn in Zweden. De verpakking is een plastic pot met schroefdeksel die de inhoud droog houdt tussen de doses door.",
 };
 
 const noExceed = "De aanbevolen dagelijkse dosis niet overschrijden.";

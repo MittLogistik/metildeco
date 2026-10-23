@@ -39,7 +39,7 @@ export const faqGroups: FaqGroup[] = [
       },
       {
         q: "Mihin maihin toimitatte?",
-        a: "Toimitamme Ruotsiin, Suomeen ja Tanskaan. Suomeen tilaukset lähetetään PostNordin kautta kirjeenä seurannalla varastostamme Timråsta, Ruotsista. EU:n sisäisistä toimituksista ei peritä tulleja eikä tuontimaksuja.",
+        a: "Toimitamme Ruotsiin, Suomeen ja Tanskaan. Suomeen tilaukset lähetetään PostNordin kautta kirjeenä seurannalla varastostamme Ruotsista. EU:n sisäisistä toimituksista ei peritä tulleja eikä tuontimaksuja.",
       },
       {
         q: "Miten seuraan pakettiani?",

@@ -9,6 +9,7 @@ import bundlePricesJson from "../../data/bundle_prices.json";
 import { catalogText } from "@/content/i18n";
 import { buildBundles, slimBundle, type Bundle, type BundleComponentRow, type BundleRow, type SlimBundle } from "./bundles";
 import { defaultLocale, markets, type Currency, type Locale } from "./i18n";
+import { isClosedNovelFood } from "./novel-foods";
 import { productFromRow, slimProduct, type Product, type ProductRow, type SlimProduct } from "./products";
 import { supabaseAdmin, supabaseConfigured } from "./supabase";
 
@@ -114,7 +115,8 @@ export const getCatalog = cache(async (locale: Locale = defaultLocale): Promise<
       return [productFromRow(row, price)];
     })
     .sort((a, b) => a.sortOrder - b.sortOrder);
-  const products = allProducts.filter((p) => p.isActive);
+  // Novel food är stängt på vissa marknader (lib/novel-foods) – paket med dem döljs då också
+  const products = allProducts.filter((p) => p.isActive && !isClosedNovelFood(p.slug, locale));
   const bundlePrices = new Map<string, PriceRow>();
   for (const r of raw.bundlePrices) if (r.bundle_slug && r.currency === currency) bundlePrices.set(r.bundle_slug, r);
   const { rows, components } = localizeBundleRows(

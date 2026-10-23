@@ -39,7 +39,7 @@ export const faqGroups: FaqGroup[] = [
       },
       {
         q: "Leverer I til Danmark?",
-        a: "Ja. Vi leverer til adresser i Sverige, Finland og Danmark. Ordrer til Danmark sendes med PostNord som sporbart brev fra vores lager i Timrå i Sverige. Da forsendelsen sker inden for EU, kommer der ingen told eller importafgifter.",
+        a: "Ja. Vi leverer til adresser i Sverige, Finland og Danmark. Ordrer til Danmark sendes med PostNord som sporbart brev fra vores lager i Sverige. Da forsendelsen sker inden for EU, kommer der ingen told eller importafgifter.",
       },
       {
         q: "Hvordan sporer jeg min forsendelse?",

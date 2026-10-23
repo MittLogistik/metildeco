@@ -10,7 +10,7 @@ import { cartStore, type CartLine } from "@/components/cart/cartStore";
 import { clientValues, useClientValue } from "./clientStore";
 import { storedVariant } from "@/lib/experiment-client";
 import { formatPrice } from "@/lib/format";
-import { company, site } from "@/lib/site";
+import { site } from "@/lib/site";
 import { subscriptionUnitPrice } from "@/lib/products";
 import { useI18n } from "@/i18n/client";
 import { checkout as checkoutMessages } from "@/i18n/messages/checkout";
@@ -239,7 +239,7 @@ export function Checkout() {
             <Link href={r.privacy} className="underline">
               {t.privacy}
             </Link>
-            . {t.seller}: {company.legalName}, {company.idLabel.toLowerCase()} {company.orgNumber}. {t.reminder}
+            . {t.reminder}
           </p>
         </aside>
       </div>

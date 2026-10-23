@@ -57,7 +57,7 @@ export const productContent: Record<string, ProductContent> = {
       {
         heading: "Utvecklad i Sverige",
         body:
-          "Metilde är ett svenskt varumärke. Sortimentet tas fram här och varje order skickas från vårt lager i Timrå. Förpackningen är en plastburk med skruvlock som håller innehållet torrt mellan doserna.",
+          "Metilde är ett svenskt varumärke. Sortimentet tas fram här och varje order skickas från vårt lager i Sverige. Förpackningen är en plastburk med skruvlock som håller innehållet torrt mellan doserna.",
       },
     ],
     specs: [
@@ -123,7 +123,7 @@ export const productContent: Record<string, ProductContent> = {
       {
         heading: "Utvecklad i Sverige",
         body:
-          "Metilde är ett svenskt varumärke. Sortimentet tas fram här och varje order skickas från vårt lager i Timrå. Förpackningen är en plastburk med skruvlock som håller innehållet torrt mellan doserna.",
+          "Metilde är ett svenskt varumärke. Sortimentet tas fram här och varje order skickas från vårt lager i Sverige. Förpackningen är en plastburk med skruvlock som håller innehållet torrt mellan doserna.",
       },
     ],
     specs: [
@@ -243,7 +243,7 @@ export const productContent: Record<string, ProductContent> = {
       {
         heading: "Utvecklad i Sverige",
         body:
-          "Metilde är ett svenskt varumärke. Sortimentet tas fram här och varje order skickas från vårt lager i Timrå. Förpackningen är en plastburk med skruvlock som håller innehållet torrt mellan doserna.",
+          "Metilde är ett svenskt varumärke. Sortimentet tas fram här och varje order skickas från vårt lager i Sverige. Förpackningen är en plastburk med skruvlock som håller innehållet torrt mellan doserna.",
       },
     ],
     specs: [
@@ -651,7 +651,7 @@ export const productContent: Record<string, ProductContent> = {
       {
         heading: "Utvecklad i Sverige",
         body:
-          "Metilde är ett svenskt varumärke. Sortimentet tas fram här och varje order skickas från vårt lager i Timrå. Förpackningen är en plastburk med skruvlock som håller innehållet torrt mellan doserna.",
+          "Metilde är ett svenskt varumärke. Sortimentet tas fram här och varje order skickas från vårt lager i Sverige. Förpackningen är en plastburk med skruvlock som håller innehållet torrt mellan doserna.",
       },
     ],
     specs: [
@@ -716,7 +716,7 @@ export const productContent: Record<string, ProductContent> = {
       {
         heading: "Utvecklad i Sverige",
         body:
-          "Metilde är ett svenskt varumärke. Sortimentet tas fram här och varje order skickas från vårt lager i Timrå. Förpackningen är en plastburk med skruvlock som håller innehållet torrt mellan doserna.",
+          "Metilde är ett svenskt varumärke. Sortimentet tas fram här och varje order skickas från vårt lager i Sverige. Förpackningen är en plastburk med skruvlock som håller innehållet torrt mellan doserna.",
       },
     ],
     specs: [
@@ -782,7 +782,7 @@ export const productContent: Record<string, ProductContent> = {
       {
         heading: "Utvecklad i Sverige",
         body:
-          "Metilde är ett svenskt varumärke. Sortimentet tas fram här och varje order skickas från vårt lager i Timrå. Förpackningen är en plastburk med skruvlock som håller innehållet torrt mellan doserna.",
+          "Metilde är ett svenskt varumärke. Sortimentet tas fram här och varje order skickas från vårt lager i Sverige. Förpackningen är en plastburk med skruvlock som håller innehållet torrt mellan doserna.",
       },
     ],
     specs: [
@@ -847,7 +847,7 @@ export const productContent: Record<string, ProductContent> = {
       {
         heading: "Utvecklad i Sverige",
         body:
-          "Metilde är ett svenskt varumärke. Sortimentet tas fram här och varje order skickas från vårt lager i Timrå. Förpackningen är en plastburk med skruvlock som håller innehållet torrt mellan doserna.",
+          "Metilde är ett svenskt varumärke. Sortimentet tas fram här och varje order skickas från vårt lager i Sverige. Förpackningen är en plastburk med skruvlock som håller innehållet torrt mellan doserna.",
       },
     ],
     specs: [
@@ -911,7 +911,7 @@ export const productContent: Record<string, ProductContent> = {
       {
         heading: "Utvecklad i Sverige",
         body:
-          "Metilde är ett svenskt varumärke. Sortimentet tas fram här och varje order skickas från vårt lager i Timrå. Förpackningen är en plastburk med skruvlock som håller innehållet torrt mellan doserna.",
+          "Metilde är ett svenskt varumärke. Sortimentet tas fram här och varje order skickas från vårt lager i Sverige. Förpackningen är en plastburk med skruvlock som håller innehållet torrt mellan doserna.",
       },
     ],
     specs: [
@@ -974,7 +974,7 @@ export const productContent: Record<string, ProductContent> = {
       {
         heading: "Utvecklad i Sverige",
         body:
-          "Metilde är ett svenskt varumärke. Sortimentet tas fram här och varje order skickas från vårt lager i Timrå. Förpackningen är en plastburk med skruvlock som håller innehållet torrt mellan doserna.",
+          "Metilde är ett svenskt varumärke. Sortimentet tas fram här och varje order skickas från vårt lager i Sverige. Förpackningen är en plastburk med skruvlock som håller innehållet torrt mellan doserna.",
       },
     ],
     specs: [
@@ -1037,7 +1037,7 @@ export const productContent: Record<string, ProductContent> = {
       {
         heading: "Utvecklad i Sverige",
         body:
-          "Metilde är ett svenskt varumärke. Sortimentet tas fram här och varje order skickas från vårt lager i Timrå. Förpackningen är en plastburk med skruvlock som håller innehållet torrt mellan doserna.",
+          "Metilde är ett svenskt varumärke. Sortimentet tas fram här och varje order skickas från vårt lager i Sverige. Förpackningen är en plastburk med skruvlock som håller innehållet torrt mellan doserna.",
       },
     ],
     specs: [
@@ -1101,7 +1101,7 @@ export const productContent: Record<string, ProductContent> = {
       {
         heading: "Utvecklad i Sverige",
         body:
-          "Metilde är ett svenskt varumärke. Sortimentet tas fram här och varje order skickas från vårt lager i Timrå. Förpackningen är en plastburk med skruvlock som håller innehållet torrt mellan doserna.",
+          "Metilde är ett svenskt varumärke. Sortimentet tas fram här och varje order skickas från vårt lager i Sverige. Förpackningen är en plastburk med skruvlock som håller innehållet torrt mellan doserna.",
       },
     ],
     specs: [
@@ -1165,7 +1165,7 @@ export const productContent: Record<string, ProductContent> = {
       {
         heading: "Utvecklad i Sverige",
         body:
-          "Metilde är ett svenskt varumärke. Sortimentet tas fram här och varje order skickas från vårt lager i Timrå. Förpackningen är en plastburk med skruvlock som håller innehållet torrt mellan doserna.",
+          "Metilde är ett svenskt varumärke. Sortimentet tas fram här och varje order skickas från vårt lager i Sverige. Förpackningen är en plastburk med skruvlock som håller innehållet torrt mellan doserna.",
       },
     ],
     specs: [

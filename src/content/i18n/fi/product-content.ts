@@ -8,7 +8,7 @@ import type { ProductContent } from "@/content/product-content";
 const developedInSweden = {
   heading: "Kehitetty Ruotsissa",
   body:
-    "Metilde on ruotsalainen tuotemerkki. Valikoimamme kehitetään Ruotsissa, ja jokainen tilaus lähetetään varastostamme Timråsta, Ruotsista. Pakkaus on kierrekorkillinen muovipurkki, joka pitää sisällön kuivana annosten välillä.",
+    "Metilde on ruotsalainen tuotemerkki. Valikoimamme kehitetään Ruotsissa, ja jokainen tilaus lähetetään varastostamme Ruotsista. Pakkaus on kierrekorkillinen muovipurkki, joka pitää sisällön kuivana annosten välillä.",
 };
 
 export const productContent: Record<string, ProductContent> = {

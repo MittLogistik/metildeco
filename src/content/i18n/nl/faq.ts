@@ -39,7 +39,7 @@ export const faqGroups: FaqGroup[] = [
       },
       {
         q: "Leveren jullie in Nederland?",
-        a: "Ja. We leveren aan adressen in Zweden, Finland, Denemarken en Nederland. Bestellingen naar Nederland gaan met PostNord als brief met track & trace vanuit ons magazijn in Timrå, Zweden. Omdat de zending binnen de EU blijft, betaal je geen douanekosten of invoerheffingen.",
+        a: "Ja. We leveren aan adressen in Zweden, Finland, Denemarken en Nederland. Bestellingen naar Nederland gaan met PostNord als brief met track & trace vanuit ons magazijn in Zweden. Omdat de zending binnen de EU blijft, betaal je geen douanekosten of invoerheffingen.",
       },
       {
         q: "Hoe volg ik mijn zending?",

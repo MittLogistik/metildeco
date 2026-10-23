@@ -40,7 +40,6 @@ const sv = {
   terms: "köpvillkor",
   and: " och ",
   privacy: "integritetspolicy",
-  seller: "Säljare",
   reminder: "Lämnar du kassan kan vi påminna dig om varukorgen per e-post.",
 
   thanks: {
@@ -112,7 +111,6 @@ export const checkout: Record<Locale, typeof sv> = {
     terms: "ostoehtomme",
     and: " ja ",
     privacy: "tietosuojakäytäntömme",
-    seller: "Myyjä",
     reminder: "Jos poistut kassalta, voimme muistuttaa ostoskoristasi sähköpostilla.",
 
     thanks: {
@@ -181,7 +179,6 @@ export const checkout: Record<Locale, typeof sv> = {
     terms: "købsbetingelser",
     and: " og ",
     privacy: "privatlivspolitik",
-    seller: "Sælger",
     reminder: "Forlader du kassen, kan vi minde dig om kurven via e-mail.",
 
     thanks: {
@@ -250,7 +247,6 @@ export const checkout: Record<Locale, typeof sv> = {
     terms: "algemene voorwaarden",
     and: " en ",
     privacy: "privacyverklaring",
-    seller: "Verkoper",
     reminder: "Verlaat je de kassa, dan kunnen we je per e-mail aan je winkelwagen herinneren.",
 
     thanks: {

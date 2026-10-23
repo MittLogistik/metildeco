@@ -12,7 +12,7 @@ import { Container, SectionHeading } from "@/components/ui";
 export const metadata: Metadata = {
   title: "Hitta ditt extrakt",
   description:
-    "Sortera sortimentet efter råvara och tid på dagen: Tongkat Ali, morgon, kväll, kring träningen, rötter och örter, svampextrakt med mera.",
+    "Sortera sortimentet efter råvara och tid på dagen: morgon, kväll, kring träningen, rötter och örter, svampextrakt med mera.",
   alternates: { canonical: `${site.url}${routes.goals}` },
 };
 

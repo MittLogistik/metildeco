@@ -1,6 +1,6 @@
 import { info } from "@/i18n/messages/info";
 import type { Locale } from "./i18n";
-import { company, logistics } from "./site";
+import { company } from "./site";
 
 /** Adresser i site.ts slutar på ", Sverige" – landsnamnet på sidans språk. */
 const localizeCountry = (address: string, locale: Locale) => address.replace(/, Sverige$/, `, ${info[locale].company.sweden}`);
@@ -20,13 +20,6 @@ export const placeholders: { key: string; label: string; value: (locale?: Locale
   { key: "epost", label: "Kundtjänstens e-post", value: () => company.email },
   { key: "telefon", label: "Telefon", value: () => company.phone },
   { key: "öppettider", label: "Kundtjänstens öppettider", value: (l = "sv") => hoursFor(l) },
-  {
-    key: "returadress",
-    label: "Adress för returer (lagret)",
-    // På svenska utan land (som tidigare); på andra språk med landet, eftersom returen går över gränsen
-    value: (l = "sv") =>
-      `${logistics.legalName}, ${l === "sv" ? logistics.address.replace(/, Sverige$/, "") : localizeCountry(logistics.address, l)}`,
-  },
 ];
 
 const byKey = new Map(placeholders.map((p) => [p.key, p.value]));
@@ -45,8 +38,5 @@ export function companyInfoItems(locale: Locale = "sv"): string[] {
     `${t.address}: ${localizeCountry(company.address, locale)}`,
     `${t.email}: ${company.email}`,
     `${t.phone}: ${company.phone} (${hoursFor(locale)})`,
-    ...(company.separateLogistics
-      ? [t.logistics(logistics.legalName, logistics.orgNumber, localizeCountry(logistics.address, locale), company.legalName)]
-      : []),
   ];
 }

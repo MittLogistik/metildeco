@@ -24,8 +24,6 @@ const sv = {
     hours: "Mån–fre 09:00–17:00",
     /** Landsnamnet för Sverige i adresser. */
     sweden: "Sverige",
-    logistics: (logistics: string, orgNumber: string, address: string, seller: string) =>
-      `Lager, packning, leveranser och returer sköts av ${logistics} (org.nr ${orgNumber}), ${address}, för ${seller}s räkning.`,
   },
   faq: {
     metaTitle: "Vanliga frågor",
@@ -104,7 +102,7 @@ const sv = {
       ["Inget krångel", "Vi listar exakt vad varje produkt innehåller. Ingen fluff, inga dolda tillsatser."],
       ["Du får vad du betalar för", "Råvaror, kapslar, förpackning. Det är där vi lägger pengarna – inte på dyra reklamkampanjer."],
       ["Prenumeration på riktigt", "15 % rabatt, fri frakt och full kontroll. Pausa, byt eller avsluta när du vill."],
-      ["Svenskt varumärke", "Sortimentet tas fram i Sverige och varje order skickas från vårt lager i Timrå."],
+      ["Svenskt varumärke", "Sortimentet tas fram i Sverige och varje order skickas härifrån."],
     ] as [string, string][],
     companyEyebrow: "Företaget",
     companyTitle: "Om företaget",
@@ -140,8 +138,6 @@ export const info: Record<Locale, typeof sv> = {
       phone: "Puhelin",
       hours: "ma–pe 9.00–17.00 (Ruotsin aikaa)",
       sweden: "Ruotsi",
-      logistics: (logistics, orgNumber, address, seller) =>
-        `Varastoinnista, pakkaamisesta, toimituksista ja palautuksista vastaa ${logistics} (ruotsalainen organisaationumero ${orgNumber}), ${address}, ${seller}:n puolesta.`,
     },
     faq: {
       metaTitle: "Usein kysytyt kysymykset",
@@ -219,7 +215,7 @@ export const info: Record<Locale, typeof sv> = {
         ["Ei turhaa monimutkaisuutta", "Kerromme tarkalleen, mitä jokainen tuote sisältää. Ei täytettä, ei piilotettuja lisäaineita."],
         ["Saat sen, mistä maksat", "Raaka-aineet, kapselit, pakkaus. Niihin käytämme rahamme – emme kalliisiin mainoskampanjoihin."],
         ["Kestotilaus, joka toimii", "15 % alennus, ilmainen toimitus ja täysi hallinta. Keskeytä, vaihda tai lopeta milloin haluat."],
-        ["Ruotsalainen brändi", "Valikoima kehitetään Ruotsissa, ja jokainen tilaus lähetetään varastostamme Timråsta."],
+        ["Ruotsalainen brändi", "Valikoima kehitetään Ruotsissa, ja jokainen tilaus lähetetään varastostamme Ruotsista."],
       ],
       companyEyebrow: "Yritys",
       companyTitle: "Tietoa yrityksestä",
@@ -252,8 +248,6 @@ export const info: Record<Locale, typeof sv> = {
       phone: "Telefon",
       hours: "man–fre 09.00–17.00",
       sweden: "Sverige",
-      logistics: (logistics, orgNumber, address, seller) =>
-        `Lager, pakning, levering og returnering varetages af ${logistics} (svensk org.nr. ${orgNumber}), ${address}, på vegne af ${seller}.`,
     },
     faq: {
       metaTitle: "Ofte stillede spørgsmål",
@@ -331,7 +325,7 @@ export const info: Record<Locale, typeof sv> = {
         ["Intet besvær", "Vi oplyser præcis, hvad hvert produkt indeholder. Intet fyld, ingen skjulte tilsætningsstoffer."],
         ["Du får det, du betaler for", "Råvarer, kapsler, emballage. Det er dér, vi bruger pengene – ikke på dyre reklamekampagner."],
         ["Abonnement for alvor", "15 % rabat, fri fragt og fuld kontrol. Sæt på pause, skift eller opsig, når du vil."],
-        ["Svensk brand", "Sortimentet udvikles i Sverige, og hver ordre sendes fra vores lager i Timrå."],
+        ["Svensk brand", "Sortimentet udvikles i Sverige, og hver ordre sendes herfra."],
       ],
       companyEyebrow: "Virksomheden",
       companyTitle: "Om virksomheden",
@@ -364,8 +358,6 @@ export const info: Record<Locale, typeof sv> = {
       phone: "Telefoon",
       hours: "ma–vr 9.00–17.00 (Zweedse tijd)",
       sweden: "Zweden",
-      logistics: (logistics, orgNumber, address, seller) =>
-        `Opslag, verpakking, levering en retouren worden verzorgd door ${logistics} (Zweeds org.nr. ${orgNumber}), ${address}, namens ${seller}.`,
     },
     faq: {
       metaTitle: "Veelgestelde vragen",
@@ -443,7 +435,7 @@ export const info: Record<Locale, typeof sv> = {
         ["Geen gedoe", "We vermelden precies wat elk product bevat. Geen opvulling, geen verborgen toevoegingen."],
         ["Je krijgt waarvoor je betaalt", "Grondstoffen, capsules, verpakking. Daar gaat ons geld naartoe – niet naar dure reclamecampagnes."],
         ["Een echt abonnement", "15% korting, gratis verzending en volledige controle. Pauzeren, wijzigen of opzeggen wanneer je wilt."],
-        ["Zweeds merk", "Het assortiment wordt in Zweden ontwikkeld en elke bestelling wordt verzonden vanuit ons magazijn in Timrå."],
+        ["Zweeds merk", "Het assortiment wordt in Zweden ontwikkeld en elke bestelling wordt vanuit Zweden verzonden."],
       ],
       companyEyebrow: "Het bedrijf",
       companyTitle: "Over het bedrijf",

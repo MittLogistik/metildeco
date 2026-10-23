@@ -8,7 +8,7 @@ import type { ProductContent } from "@/content/product-content";
 const developedInSweden = {
   heading: "Udviklet i Sverige",
   body:
-    "Metilde er et svensk varemærke. Sortimentet udvikles her, og alle ordrer sendes fra vores lager i Timrå, Sverige. Emballagen er en plastbøtte med skruelåg, der holder indholdet tørt mellem doserne.",
+    "Metilde er et svensk varemærke. Sortimentet udvikles her, og alle ordrer sendes fra vores lager i Sverige. Emballagen er en plastbøtte med skruelåg, der holder indholdet tørt mellem doserne.",
 };
 
 export const productContent: Record<string, ProductContent> = {

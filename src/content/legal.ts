@@ -338,7 +338,7 @@ const shipping: LegalDoc = {
     { type: "shippingTable" },
     {
       type: "p",
-      text: "Alla priser visas inklusive moms. Vi levererar för närvarande bara till adresser i Sverige. Paketen skickas med PostNord från vårt lager i Timrå.",
+      text: "Alla priser visas inklusive moms. Vi levererar för närvarande bara till adresser i Sverige. Paketen skickas med PostNord.",
     },
     { type: "h2", text: "Spåra din order" },
     {
@@ -385,7 +385,7 @@ const returns: LegalDoc = {
       type: "ul",
       items: [
         `Anmäl returen genom att mejla {epost} med ordernummer och vilka varor det gäller.`,
-        `Du får retursedel och instruktioner inom en arbetsdag. Returer skickas till {returadress}.`,
+        `Du får retursedel med returadress och instruktioner inom en arbetsdag.`,
         "Packa produkterna i originalförpackningen eller motsvarande skyddande emballage.",
         "Lämna paketet hos närmaste ombud och spara kvittot tills återbetalningen är klar.",
       ],

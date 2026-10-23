@@ -44,7 +44,11 @@ export type RouteKey = keyof typeof routeSlugs;
  */
 const svOnly = new Set<RouteKey>(["quiz", "giftCard", "partners", "careers", "account", "trackOrder", "goals", "tongkat"]);
 
-export const hasPage = (key: RouteKey, locale: Locale): boolean => locale === "sv" || !svOnly.has(key);
+/** Sidor som är stängda på en marknad. Tongkat Ali-sidan: novel food är stängt i Sverige (lib/novel-foods). */
+const closed: Partial<Record<Locale, Set<RouteKey>>> = { sv: new Set<RouteKey>(["tongkat"]) };
+
+export const hasPage = (key: RouteKey, locale: Locale): boolean =>
+  !closed[locale]?.has(key) && (locale === "sv" || !svOnly.has(key));
 
 const slug = (key: RouteKey, l: Locale) => routeSlugs[key][l];
 

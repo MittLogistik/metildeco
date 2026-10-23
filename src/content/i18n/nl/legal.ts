@@ -151,7 +151,7 @@ const terms: LegalDoc = {
     { type: "shippingTable" },
     {
       type: "p",
-      text: "Bestellingen die op een werkdag vóór 12.00 uur (Zweedse tijd) worden geplaatst, versturen we normaal gesproken dezelfde dag vanuit ons magazijn in Timrå, Zweden. Bestellingen naar Nederland gaan met PostNord als brief met track & trace; de levertijd is normaal 3–6 werkdagen. Je ontvangt een track & trace-link per e-mail zodra de zending bij ons vertrekt. Voor zendingen die niet worden afgehaald, rekenen we de werkelijke verzendkosten heen en terug.",
+      text: "Bestellingen die op een werkdag vóór 12.00 uur (Zweedse tijd) worden geplaatst, versturen we normaal gesproken dezelfde dag vanuit ons magazijn in Zweden. Bestellingen naar Nederland gaan met PostNord als brief met track & trace; de levertijd is normaal 3–6 werkdagen. Je ontvangt een track & trace-link per e-mail zodra de zending bij ons vertrekt. Voor zendingen die niet worden afgehaald, rekenen we de werkelijke verzendkosten heen en terug.",
     },
     { type: "h2", text: "Abonnement" },
     {
@@ -310,7 +310,7 @@ const shipping: LegalDoc = {
     { type: "shippingTable" },
     {
       type: "p",
-      text: "Alle prijzen zijn inclusief btw. We leveren aan adressen in Zweden, Finland, Denemarken en Nederland. Bestellingen naar Nederland gaan met PostNord als brief met track & trace vanuit ons magazijn in Timrå, Zweden; de levertijd is normaal 3–6 werkdagen. De verzendkosten zijn 8,00 €, en bij bestellingen boven 79 € is de verzending gratis. Abonnementen en bundels worden altijd gratis verzonden. Omdat de zending binnen de EU blijft, betaal je geen douanekosten of invoerheffingen.",
+      text: "Alle prijzen zijn inclusief btw. We leveren aan adressen in Zweden, Finland, Denemarken en Nederland. Bestellingen naar Nederland gaan met PostNord als brief met track & trace vanuit ons magazijn in Zweden; de levertijd is normaal 3–6 werkdagen. De verzendkosten zijn 8,00 €, en bij bestellingen boven 79 € is de verzending gratis. Abonnementen en bundels worden altijd gratis verzonden. Omdat de zending binnen de EU blijft, betaal je geen douanekosten of invoerheffingen.",
     },
     { type: "h2", text: "Je bestelling volgen" },
     {
@@ -357,7 +357,7 @@ const returns: LegalDoc = {
       type: "ul",
       items: [
         `Meld je retour door te mailen naar {epost} met je ordernummer en om welke producten het gaat. Je kunt ook het Europese modelformulier voor herroeping gebruiken.`,
-        `Je ontvangt binnen één werkdag een retourlabel en instructies. Retouren stuur je naar {returadress}.`,
+        `Je ontvangt binnen één werkdag een retourlabel met het retouradres en instructies.`,
         "Verpak de producten in de originele verpakking of een vergelijkbare beschermende verpakking.",
         "Lever de zending in en bewaar het bewijs van verzending tot de terugbetaling is afgerond.",
       ],

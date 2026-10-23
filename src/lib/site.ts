@@ -79,13 +79,6 @@ type Seller = {
   addressInFooter: boolean;
 };
 
-/** Lager, packning, leveranser och returer – alltid i Sverige. */
-export const logistics = {
-  legalName: "Swedish Treats AB",
-  orgNumber: "559506-5359",
-  address: "Plåtslagarvägen 19, 861 36 Timrå, Sverige",
-} as const;
-
 const sellers = {
   "swedish-treats": {
     legalName: "Swedish Treats AB",
@@ -132,6 +125,4 @@ export const company = {
   ...(sellers[ACTIVE_SELLER] as Seller),
   email: "support@metilde.com",
   hours: "Mån–fre 09:00–17:00",
-  /** Sköts logistiken av ett annat bolag än säljaren? Då nämns det i villkoren. */
-  separateLogistics: sellers[ACTIVE_SELLER].legalName !== logistics.legalName,
 };

@@ -7,36 +7,13 @@ import { useState } from "react";
 import { useI18n } from "@/i18n/client";
 import { layout } from "@/i18n/messages/layout";
 import { formatPrice } from "@/lib/format";
-import { locales, markets } from "@/lib/i18n";
-import { hasPage, translatePath, type RouteKey } from "@/lib/routes";
+import { hasPage, type RouteKey } from "@/lib/routes";
 import { freeShippingOver } from "@/lib/shipping";
 import { useCart } from "@/components/cart/CartProvider";
 import { CartIcon, CloseIcon, MenuIcon } from "@/components/icons";
 import { Container } from "@/components/ui";
 
 const navKeys = ["products", "goals", "subscription", "articles", "quality"] as const satisfies RouteKey[];
-
-/** Språkväljaren: samma sida på de andra språken (sidor som saknas där leder till startsidan). */
-function LanguageSwitcher({ pathname, className = "" }: { pathname: string; className?: string }) {
-  const { locale } = useI18n();
-  return (
-    <ul className={className} aria-label={layout[locale].header.language}>
-      {locales.map((l) => (
-        <li key={l}>
-          <Link
-            href={translatePath(pathname, l)}
-            hrefLang={l}
-            lang={l}
-            aria-current={l === locale ? "true" : undefined}
-            className={l === locale ? "font-semibold underline underline-offset-4" : "opacity-75 hover:opacity-100"}
-          >
-            {markets[l].languageName}
-          </Link>
-        </li>
-      ))}
-    </ul>
-  );
-}
 
 export function Header() {
   const cart = useCart();
@@ -53,13 +30,12 @@ export function Header() {
   return (
     <>
       <div className="bg-primary text-primary-fg">
-        <Container className="relative flex min-h-9 items-center justify-center py-1.5 text-center text-xs font-medium tracking-wide">
+        <Container className="flex min-h-9 items-center justify-center py-1.5 text-center text-xs font-medium tracking-wide">
           <p>
             {t.freeShipping(formatPrice(freeShippingOver(locale), market.currency))} <span className="mx-2 opacity-50">·</span> {t.sameDay}
             <span className="mx-2 hidden opacity-50 sm:inline">·</span>
             <span className="hidden sm:inline">{t.developed}</span>
           </p>
-          <LanguageSwitcher pathname={pathname} className="absolute right-8 hidden items-center gap-3 lg:flex" />
         </Container>
       </div>
 
@@ -138,7 +114,6 @@ export function Header() {
                   {t.account}
                 </Link>
               ) : null}
-              <LanguageSwitcher pathname={pathname} className="flex flex-wrap gap-5 py-3.5 text-sm text-muted" />
             </Container>
           </nav>
         ) : null}

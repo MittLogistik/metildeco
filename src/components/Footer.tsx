@@ -3,6 +3,7 @@ import Link from "next/link";
 import { getI18n } from "@/i18n/server";
 import { layout } from "@/i18n/messages/layout";
 import { hasPage, type RouteKey } from "@/lib/routes";
+import { novelFoodsClosed } from "@/lib/novel-foods";
 import { company, site } from "@/lib/site";
 import { hoursFor } from "@/lib/page-text";
 import { Container } from "@/components/ui";
@@ -44,7 +45,7 @@ export async function Footer({ adSafe = false }: { adSafe?: boolean } = {}) {
         { href: r.products, label: t.allProducts },
         { href: r.goals, label: t.goals, key: "goals" },
         { href: r.subscription, label: t.subscription },
-        ...(adSafe ? [] : [{ href: r.category("Tongkat Ali"), label: "Tongkat Ali" }]),
+        ...(adSafe || novelFoodsClosed(locale) ? [] : [{ href: r.category("Tongkat Ali"), label: "Tongkat Ali" }]),
         { href: r.articles, label: t.articles, key: "articles" },
       ],
     },

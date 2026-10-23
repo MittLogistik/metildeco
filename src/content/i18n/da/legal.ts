@@ -151,7 +151,7 @@ const terms: LegalDoc = {
     { type: "shippingTable" },
     {
       type: "p",
-      text: "Ordrer, der afgives før kl. 12.00 (svensk tid) på en hverdag, sendes normalt samme dag fra vores lager i Timrå i Sverige. Ordrer til Danmark sendes med PostNord som sporbart brev, og leveringstiden er normalt 2–5 hverdage. Du får et sporingslink på e-mail, så snart forsendelsen forlader os. For forsendelser, der ikke bliver afhentet, opkræves de faktiske omkostninger til fragt frem og tilbage.",
+      text: "Ordrer, der afgives før kl. 12.00 (svensk tid) på en hverdag, sendes normalt samme dag fra vores lager i Sverige. Ordrer til Danmark sendes med PostNord som sporbart brev, og leveringstiden er normalt 2–5 hverdage. Du får et sporingslink på e-mail, så snart forsendelsen forlader os. For forsendelser, der ikke bliver afhentet, opkræves de faktiske omkostninger til fragt frem og tilbage.",
     },
     { type: "h2", text: "Abonnement" },
     {
@@ -310,7 +310,7 @@ const shipping: LegalDoc = {
     { type: "shippingTable" },
     {
       type: "p",
-      text: "Alle priser er inklusive moms. Vi leverer til adresser i Sverige, Finland og Danmark. Ordrer til Danmark sendes med PostNord som sporbart brev fra vores lager i Timrå i Sverige, og leveringstiden er normalt 2–5 hverdage. Fragten koster 46 kr., og der er fri fragt på ordrer over 469 kr. Abonnementer og pakker sendes altid gratis. Da forsendelsen sker inden for EU, kommer der ingen told eller importafgifter.",
+      text: "Alle priser er inklusive moms. Vi leverer til adresser i Sverige, Finland og Danmark. Ordrer til Danmark sendes med PostNord som sporbart brev fra vores lager i Sverige, og leveringstiden er normalt 2–5 hverdage. Fragten koster 46 kr., og der er fri fragt på ordrer over 469 kr. Abonnementer og pakker sendes altid gratis. Da forsendelsen sker inden for EU, kommer der ingen told eller importafgifter.",
     },
     { type: "h2", text: "Spor din ordre" },
     {
@@ -357,7 +357,7 @@ const returns: LegalDoc = {
       type: "ul",
       items: [
         `Anmeld returneringen ved at skrive til {epost} med ordrenummer og hvilke varer, det drejer sig om. Du kan også bruge EU's standardfortrydelsesformular.`,
-        `Du får returlabel og instruktioner inden for en hverdag. Returneringer sendes til {returadress}.`,
+        `Du får returlabel med returadresse og instruktioner inden for en hverdag.`,
         "Pak produkterne i originalemballagen eller tilsvarende beskyttende emballage.",
         "Indlever forsendelsen, og gem kvitteringen, indtil tilbagebetalingen er gennemført.",
       ],

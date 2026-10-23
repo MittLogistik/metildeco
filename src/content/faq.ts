@@ -41,7 +41,7 @@ export const faqGroups: FaqGroup[] = [
       },
       {
         q: "Levererar ni utanför Sverige?",
-        a: "Inte just nu. Vi levererar bara till adresser i Sverige, med PostNord från vårt lager i Timrå.",
+        a: "Inte just nu. Vi levererar bara till adresser i Sverige, med PostNord.",
       },
       {
         q: "Hur spårar jag mitt paket?",
@@ -95,7 +95,7 @@ export const faqGroups: FaqGroup[] = [
     items: [
       {
         q: "Var kommer era produkter ifrån?",
-        a: "Metilde är ett svenskt varumärke och sortimentet tas fram i Sverige. Råvarorna och extrakten kommer från länderna där växterna hör hemma, till exempel Tongkat Ali från Sydostasien och maca från Anderna.",
+        a: "Metilde är ett svenskt varumärke och sortimentet tas fram i Sverige. Råvarorna och extrakten kommer från länderna där växterna hör hemma, till exempel maca från Anderna.",
       },
       {
         q: "Hur vet jag vilken batch jag har fått?",
