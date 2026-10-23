@@ -33,8 +33,6 @@ export function Header() {
         <Container className="flex min-h-9 items-center justify-center py-1.5 text-center text-xs font-medium tracking-wide">
           <p>
             {t.freeShipping(formatPrice(freeShippingOver(locale), market.currency))} <span className="mx-2 opacity-50">·</span> {t.sameDay}
-            <span className="mx-2 hidden opacity-50 sm:inline">·</span>
-            <span className="hidden sm:inline">{t.developed}</span>
           </p>
         </Container>
       </div>

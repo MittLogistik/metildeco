@@ -8,7 +8,6 @@ const sv = {
   header: {
     freeShipping: (amount: string) => `Fri frakt över ${amount}`,
     sameDay: "Skickas samma dag vid order före 12",
-    developed: "Utvecklat i Sverige",
     nav: {
       products: "Produkter",
       goals: "Hitta ditt extrakt",
@@ -116,7 +115,6 @@ export const layout: Record<Locale, typeof sv> = {
     header: {
       freeShipping: (amount) => `Ilmainen toimitus yli ${amount} tilauksiin`,
       sameDay: "Lähetetään samana päivänä, kun tilaat ennen klo 12",
-      developed: "Kehitetty Ruotsissa",
       nav: {
         products: "Tuotteet",
         goals: "Löydä uutteesi",
@@ -220,7 +218,6 @@ export const layout: Record<Locale, typeof sv> = {
     header: {
       freeShipping: (amount) => `Fri fragt over ${amount}`,
       sameDay: "Afsendes samme dag ved bestilling før kl. 12",
-      developed: "Udviklet i Sverige",
       nav: {
         products: "Produkter",
         goals: "Find dit ekstrakt",
@@ -324,7 +321,6 @@ export const layout: Record<Locale, typeof sv> = {
     header: {
       freeShipping: (amount) => `Gratis verzending vanaf ${amount}`,
       sameDay: "Vóór 12.00 uur besteld, dezelfde dag verzonden",
-      developed: "Ontwikkeld in Zweden",
       nav: {
         products: "Producten",
         goals: "Vind jouw extract",
