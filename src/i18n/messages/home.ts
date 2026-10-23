@@ -7,7 +7,7 @@ const sv = {
   title: "Metilde – Rena botaniska kosttillskott utvecklade i Sverige",
   description: (freeOver: string) =>
     `Funktionella svampar, örter och växtextrakt som standardiserade extrakt i vegansk kapsel, utvecklade i Sverige. Fri frakt över ${freeOver}.`,
-  heroEyebrow: "Utvecklat i Sverige · Vegansk kapsel",
+  heroEyebrow: "Vegansk kapsel",
   heroTitle: "Rena botaniska extrakt",
   heroTitleAccent: "för en stark vardag",
   heroLead:
@@ -49,7 +49,7 @@ export const home: Record<Locale, typeof sv> = {
     title: "Metilde – Puhtaita kasviperäisiä ravintolisiä, kehitetty Ruotsissa",
     description: (freeOver) =>
       `Tongkat Ali, Fadogia Agrestis, Blue Lotus ja toiminnalliset sienet standardoituina uutteina vegaanisessa kapselissa, kehitetty Ruotsissa. Ilmainen toimitus yli ${freeOver} tilauksiin.`,
-    heroEyebrow: "Kehitetty Ruotsissa · Vegaaninen kapseli",
+    heroEyebrow: "Vegaaninen kapseli",
     heroTitle: "Puhtaita kasviuutteita",
     heroTitleAccent: "arkeesi",
     heroLead:
@@ -88,7 +88,7 @@ export const home: Record<Locale, typeof sv> = {
     title: "Metilde – Rene botaniske kosttilskud udviklet i Sverige",
     description: (freeOver) =>
       `Tongkat Ali, Fadogia Agrestis, Blue Lotus og funktionelle svampe som standardiserede ekstrakter i vegansk kapsel, udviklet i Sverige. Fri fragt over ${freeOver}.`,
-    heroEyebrow: "Udviklet i Sverige · Vegansk kapsel",
+    heroEyebrow: "Vegansk kapsel",
     heroTitle: "Rene botaniske ekstrakter",
     heroTitleAccent: "til din hverdag",
     heroLead:
@@ -127,7 +127,7 @@ export const home: Record<Locale, typeof sv> = {
     title: "Metilde – Pure botanische voedingssupplementen, ontwikkeld in Zweden",
     description: (freeOver) =>
       `Tongkat Ali, Fadogia Agrestis, Blue Lotus en functionele paddenstoelen als gestandaardiseerde extracten in veganistische capsules, ontwikkeld in Zweden. Gratis verzending vanaf ${freeOver}.`,
-    heroEyebrow: "Ontwikkeld in Zweden · Veganistische capsule",
+    heroEyebrow: "Veganistische capsule",
     heroTitle: "Pure botanische extracten",
     heroTitleAccent: "voor elke dag",
     heroLead:
