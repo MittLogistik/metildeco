@@ -3,6 +3,10 @@
  * är ett objekt per språk där fi och da har samma form som sv (typen tvingar det).
  * Användning: `const t = common[locale]`.
  */
+import { messages as deCommonMessages } from "./locales/de/common";
+import { messages as frCommonMessages } from "./locales/fr/common";
+import { messages as enCommonMessages } from "./locales/en/common";
+import { messages as plCommonMessages } from "./locales/pl/common";
 import type { Locale } from "@/lib/i18n";
 
 const sv = {
@@ -16,8 +20,15 @@ const sv = {
   },
 };
 
+/** Typen som varje språk måste uppfylla (de nya språken ligger i messages/locales/<språk>/common.ts). */
+export type CommonMessages = typeof sv;
+
 export const common: Record<Locale, typeof sv> = {
   sv,
+  de: deCommonMessages,
+  fr: frCommonMessages,
+  en: enCommonMessages,
+  pl: plCommonMessages,
   fi: {
     siteTitle: "Metilde – Puhtaita kasviperäisiä ravintolisiä, kehitetty Ruotsissa",
     siteDescription: (freeOver) =>

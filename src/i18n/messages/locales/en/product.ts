@@ -1,0 +1,31 @@
+import type { ProductMessages } from "../../product";
+
+export const messages: ProductMessages = {
+  notFound: "Product not found",
+  products: "Products",
+  vegan: "Vegan",
+  inclVat: "incl. VAT",
+  soldOut: "Sold out – more on the way",
+  lowStock: (n) => `In stock – only ${n} left`,
+  inStock: "In stock – ships the same working day if ordered before 12:00 (Swedish time)",
+  shippingFrom: (from, freeOver) => `Shipping from ${from}, free shipping over ${freeOver}.`,
+  deliveryTime: (min, max) => `Delivery time ${min}–${max} working days`,
+  returnRight: "30-day right of withdrawal",
+  securePayment: "Secure payment with",
+  summary: "Product at a glance",
+  description: "Description",
+  facts: "Facts",
+  sku: "Item number",
+  ingredients: "Ingredients",
+  usage: "How to use it",
+  qualityTitle: "How we ensure quality",
+  quality: [
+    { t: "Latin name", d: "Species and plant part are stated on every jar." },
+    { t: "Clear dosage", d: "Extract strength and amount per capsule are on the label." },
+    { t: "Developed in Sweden", d: "Vegan capsule with no fillers, packed in a plastic jar." },
+  ],
+  faq: "Frequently asked questions",
+  disclaimer:
+    "Food supplements should not replace a varied diet and a healthy lifestyle. Do not exceed the recommended daily intake. Keep out of reach of young children.",
+  related: "You might also like",
+};

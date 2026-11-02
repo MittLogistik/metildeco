@@ -79,11 +79,11 @@ export const faqGroups: FaqGroup[] = [
       },
       {
         q: "Hoe pauzeer of beëindig ik mijn abonnement?",
-        a: "Log in op Mijn account en kies Pauzeren of Opzeggen. Een pauze gaat direct in en er wordt niets afgeschreven tot je het abonnement hervat. Zeg je op, dan wordt er niets meer afgeschreven en stopt het abonnement aan het einde van de betaalde periode. Geen minimale looptijd en geen kosten. Lukt het inloggen niet, mail dan de klantenservice, dan helpen we je verder.",
+        a: "Mail de klantenservice, dan pauzeren of beëindigen we het abonnement voor je en bevestigen we dat schriftelijk. Een pauze gaat direct in en er wordt niets afgeschreven tot je het abonnement hervat. Zeg je op, dan wordt er niets meer afgeschreven en stopt het abonnement aan het einde van de betaalde periode. Geen minimale looptijd en geen kosten.",
       },
       {
         q: "Kan ik van product of interval wisselen?",
-        a: "Ja. Mail de klantenservice, dan passen we het interval, het aantal, het product of het bezorgadres aan vóór de volgende levering. Pauzeren en opzeggen kun je zelf doen via Mijn account.",
+        a: "Ja. Mail de klantenservice, dan passen we het interval, het aantal, het product of het bezorgadres aan vóór de volgende levering.",
       },
     ],
   },

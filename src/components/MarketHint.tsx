@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useI18n } from "@/i18n/client";
-import { localeForCountry, markets, type Locale } from "@/lib/i18n";
+import { countriesOf, localeForCountry, locales, type Locale } from "@/lib/i18n";
 import { translatePath } from "@/lib/routes";
 
 /** Texten skrivs på besökarens (landets) språk, inte sidans. */
@@ -12,10 +12,14 @@ const text: Record<Locale, { message: string; action: string; close: string }> =
   sv: { message: "Handlar du från Sverige? Den svenska butiken har priser i kronor och leverans inom Sverige.", action: "Till svenska butiken", close: "Stäng" },
   fi: { message: "Asioitko Suomesta? Suomen verkkokaupassa hinnat ovat euroina ja toimitus Suomeen.", action: "Siirry Suomen kauppaan", close: "Sulje" },
   da: { message: "Handler du fra Danmark? Den danske butik har priser i kroner og levering til Danmark.", action: "Gå til den danske butik", close: "Luk" },
-  nl: { message: "Bestel je vanuit Nederland? In de Nederlandse webshop zie je prijzen in euro en leveren we in Nederland.", action: "Naar de Nederlandse webshop", close: "Sluiten" },
+  nl: { message: "Bestel je vanuit Nederland of België? In de Nederlandstalige webshop zie je prijzen in euro en leveren we in Nederland en België.", action: "Naar de Nederlandstalige webshop", close: "Sluiten" },
+  de: { message: "Bestellst du aus Deutschland, Österreich oder Luxemburg? Im deutschen Shop siehst du Preise in Euro und wir liefern zu dir.", action: "Zum deutschen Shop", close: "Schließen" },
+  fr: { message: "Vous commandez depuis la France, la Belgique ou le Luxembourg ? La boutique en français affiche les prix en euros et livre chez vous.", action: "Aller à la boutique en français", close: "Fermer" },
+  en: { message: "Ordering from Ireland? Our English shop shows prices in euro and delivers to Ireland.", action: "Go to the English shop", close: "Close" },
+  pl: { message: "Zamawiasz z Polski? W polskim sklepie zobaczysz ceny w złotych i dostawę do Polski.", action: "Przejdź do polskiego sklepu", close: "Zamknij" },
 };
 
-const MARKET_COUNTRIES = new Set(Object.values(markets).map((m) => m.country as string));
+const MARKET_COUNTRIES = new Set(locales.flatMap((l) => countriesOf(l)));
 const DISMISS_KEY = "metilde_market_hint";
 const GEO_KEY = "metilde_geo";
 

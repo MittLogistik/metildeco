@@ -2,6 +2,10 @@
  * Varukorg och köprutor (korgrad, låda, summor, produktsidans köpruta, erbjudanderutan).
  * Användning: `const t = cart[locale]`. Belopp formateras med formatPrice innan de skickas in.
  */
+import { messages as deCartMessages } from "./locales/de/cart";
+import { messages as frCartMessages } from "./locales/fr/cart";
+import { messages as enCartMessages } from "./locales/en/cart";
+import { messages as plCartMessages } from "./locales/pl/cart";
 import type { Locale } from "@/lib/i18n";
 
 const sv = {
@@ -88,8 +92,15 @@ const sv = {
   continueShopping: "Fortsätt handla",
 };
 
+/** Typen som varje språk måste uppfylla (de nya språken ligger i messages/locales/<språk>/cart.ts). */
+export type CartMessages = typeof sv;
+
 export const cart: Record<Locale, typeof sv> = {
   sv,
+  de: deCartMessages,
+  fr: frCartMessages,
+  en: enCartMessages,
+  pl: plCartMessages,
   fi: {
     bundleDiscount: (pct) => `Paketti −${pct} %`,
     giftValue: (value) => `Lahja · arvo ${value}`,

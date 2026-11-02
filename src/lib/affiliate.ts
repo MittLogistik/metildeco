@@ -41,8 +41,10 @@ export const defaultSettings: AffiliateSettings = {
   endpointUrl: "https://addrevenue.io/t",
   apiBaseUrl: "https://addrevenue.io/api/v2",
   attributionDays: 30,
-  // Livsmedelsmoms (kosttillskott): SE 12 %, FI 13,5 % (sedan 2026-01-01), NL 9 %, DK har ingen sänkt sats = 25 %
-  vatRates: { SE: 0.12, FI: 0.135, DK: 0.25, NL: 0.09, default: 0.25 },
+  // Livsmedelsmoms (kosttillskott): SE 12 %, FI 13,5 % (sedan 2026-01-01), NL 9 %, DK har ingen sänkt sats = 25 %.
+  // DE 7, AT 10, FR 5,5, BE 6, LU 3 (livsmedel), IE 23 och PL 8 – OSTYRKTA för kosttillskott, stäms av med revisorn
+  // innan AddRevenue öppnar marknaden (ändras i /admin/affiliate, sparade värden går före).
+  vatRates: { SE: 0.12, FI: 0.135, DK: 0.25, NL: 0.09, DE: 0.07, AT: 0.1, FR: 0.055, BE: 0.06, LU: 0.03, IE: 0.23, PL: 0.08, default: 0.25 },
 };
 
 /** Inställningarna från databasen, med koden som reserv. */

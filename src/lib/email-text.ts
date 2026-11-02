@@ -3,6 +3,10 @@
  * orderns språk (orders.locale). Kundtjänsten svarar på svenska och engelska – det står i
  * de finska, danska och nederländska mejlen så att ingen förväntar sig svar på sitt eget språk.
  */
+import { messages as deEmail } from "@/i18n/messages/locales/de/email";
+import { messages as frEmail } from "@/i18n/messages/locales/fr/email";
+import { messages as enEmail } from "@/i18n/messages/locales/en/email";
+import { messages as plEmail } from "@/i18n/messages/locales/pl/email";
 import type { Locale } from "./i18n";
 
 const sv = {
@@ -39,6 +43,10 @@ export type EmailText = typeof sv;
 
 export const emailText: Record<Locale, EmailText> = {
   sv,
+  de: deEmail,
+  fr: frEmail,
+  en: enEmail,
+  pl: plEmail,
   fi: {
     subjectOrder: (n) => `Kiitos tilauksestasi ${n}`,
     subjectRenewal: (n) => `Kestotilauksesi toimitus ${n} on suunniteltu`,

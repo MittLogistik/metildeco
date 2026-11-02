@@ -2,7 +2,7 @@ import type { MetadataRoute } from "next";
 import { articles, getArticle } from "@/lib/articles";
 import { getCatalog } from "@/lib/catalog";
 import { legalDocs } from "@/content/legal";
-import { locales, markets, type Locale } from "@/lib/i18n";
+import { hreflangsOf, locales, type Locale } from "@/lib/i18n";
 import { docSlugFor, hasPage, routesOf, translatePath, type RouteKey } from "@/lib/routes";
 import { site } from "@/lib/site";
 
@@ -11,7 +11,7 @@ type Freq = NonNullable<Entry["changeFrequency"]>;
 
 /** Alla språkversioner av en svensk sökväg, för hreflang i sitemapen. */
 function languages(svPath: string, only: Locale[]): Record<string, string> {
-  return Object.fromEntries(only.map((l) => [markets[l].hreflang, `${site.url}${translatePath(svPath, l)}`]));
+  return Object.fromEntries(only.flatMap((l) => hreflangsOf(l).map((h) => [h, `${site.url}${translatePath(svPath, l)}`])));
 }
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {

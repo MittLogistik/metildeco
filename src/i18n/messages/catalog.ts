@@ -2,6 +2,10 @@
  * Produktlistan, produkt-/paketkort, galleri, betyg, artikelkort och paketsidan.
  * Användning: `const t = catalog[locale]`.
  */
+import { messages as deCatalogMessages } from "./locales/de/catalog";
+import { messages as frCatalogMessages } from "./locales/fr/catalog";
+import { messages as enCatalogMessages } from "./locales/en/catalog";
+import { messages as plCatalogMessages } from "./locales/pl/catalog";
 import type { Locale } from "@/lib/i18n";
 
 const sv = {
@@ -50,8 +54,15 @@ const sv = {
   moreBundles: "Fler paket",
 };
 
+/** Typen som varje språk måste uppfylla (de nya språken ligger i messages/locales/<språk>/catalog.ts). */
+export type CatalogMessages = typeof sv;
+
 export const catalog: Record<Locale, typeof sv> = {
   sv,
+  de: deCatalogMessages,
+  fr: frCatalogMessages,
+  en: enCatalogMessages,
+  pl: plCatalogMessages,
   fi: {
     soldOut: "Loppuunmyyty",
     isNew: "Uutuus",

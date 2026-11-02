@@ -1,7 +1,7 @@
 import { localeForCurrency, markets, type Locale } from "./i18n";
 
 /**
- * Prisformat per valuta: "1 099 kr" (SEK), "21,95 €" (EUR), "149 kr" (DKK).
+ * Prisformat per valuta: "1 099 kr" (SEK), "21,95 €" (EUR), "149 kr" (DKK), "99 zł" (PLN).
  * Formatet följer valutans marknad, inte sidans språk, så att samma belopp alltid ser likadant ut.
  */
 export const formatPrice = (amount: number, currency = "SEK"): string => {
@@ -16,6 +16,7 @@ export const formatPrice = (amount: number, currency = "SEK"): string => {
   if (code === "EUR") return `${formatted} €`;
   // Utan punkt ("469 kr"): beloppet avslutar ofta en mening, och "kr.." blir fel
   if (code === "DKK") return `${formatted} kr`;
+  if (code === "PLN") return `${formatted} zł`;
   return `${formatted} ${code}`;
 };
 

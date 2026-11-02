@@ -106,6 +106,34 @@ const errors: Record<Locale, { bundleGone: string; productGone: string; bundleSo
     soldOut: (n) => `${n} is uitverkocht in het gekozen aantal.`,
     gift: (n) => `Het cadeau ${n} vereist een multipack met abonnement in je winkelwagen.`,
   },
+  de: {
+    bundleGone: "Ein Set in deinem Warenkorb ist nicht mehr verfügbar.",
+    productGone: "Ein Produkt in deinem Warenkorb ist nicht mehr verfügbar.",
+    bundleSoldOut: (n) => `${n} ist vorübergehend ausverkauft.`,
+    soldOut: (n) => `${n} ist in der gewählten Menge ausverkauft.`,
+    gift: (n) => `Das Geschenk ${n} setzt ein Mehrfachpaket im Abo in deinem Warenkorb voraus.`,
+  },
+  fr: {
+    bundleGone: "Un coffret de votre panier n’est plus disponible.",
+    productGone: "Un produit de votre panier n’est plus disponible.",
+    bundleSoldOut: (n) => `${n} est temporairement en rupture de stock.`,
+    soldOut: (n) => `${n} est en rupture de stock pour la quantité choisie.`,
+    gift: (n) => `Le cadeau ${n} nécessite un lot avec abonnement dans votre panier.`,
+  },
+  en: {
+    bundleGone: "A bundle in your basket is no longer available.",
+    productGone: "A product in your basket is no longer available.",
+    bundleSoldOut: (n) => `${n} is temporarily out of stock.`,
+    soldOut: (n) => `${n} is out of stock in the quantity you chose.`,
+    gift: (n) => `The gift ${n} requires a multipack subscription in your basket.`,
+  },
+  pl: {
+    bundleGone: "Zestaw w Twoim koszyku nie jest już dostępny.",
+    productGone: "Produkt w Twoim koszyku nie jest już dostępny.",
+    bundleSoldOut: (n) => `${n} jest chwilowo niedostępny.`,
+    soldOut: (n) => `${n} jest niedostępny w wybranej ilości.`,
+    gift: (n) => `Prezent ${n} wymaga zestawu w subskrypcji w koszyku.`,
+  },
 };
 
 /** Sätter pris på varje rad utifrån katalogen. Okända eller slutsålda varor ger fel. */
@@ -185,6 +213,10 @@ const lineNames: Record<Locale, { sub: (name: string, days: number) => string; g
   fi: { sub: (n, d) => `${n} – kestotilaus ${d} päivän välein`, gift: (n) => `Lahja – ${n}`, freeShipping: "Ilmainen toimitus – kirje seurannalla", free: "ilmainen toimitus", shipping: "Toimitus" },
   da: { sub: (n, d) => `${n} – abonnement hver ${d}. dag`, gift: (n) => `Gave – ${n}`, freeShipping: "Fri fragt – sporbart brev", free: "fri fragt", shipping: "Fragt" },
   nl: { sub: (n, d) => `${n} – abonnement elke ${d} dagen`, gift: (n) => `Cadeau – ${n}`, freeShipping: "Gratis verzending – brief met track & trace", free: "gratis verzending", shipping: "Verzending" },
+  de: { sub: (n, d) => `${n} – Abo alle ${d} Tage`, gift: (n) => `Geschenk – ${n}`, freeShipping: "Kostenloser Versand – Brief mit Sendungsverfolgung", free: "kostenloser Versand", shipping: "Versand" },
+  fr: { sub: (n, d) => `${n} – abonnement tous les ${d} jours`, gift: (n) => `Cadeau – ${n}`, freeShipping: "Livraison gratuite – lettre suivie", free: "livraison gratuite", shipping: "Livraison" },
+  en: { sub: (n, d) => `${n} – subscription every ${d} days`, gift: (n) => `Gift – ${n}`, freeShipping: "Free delivery – tracked letter", free: "free delivery", shipping: "Delivery" },
+  pl: { sub: (n, d) => `${n} – subskrypcja co ${d} dni`, gift: (n) => `Prezent – ${n}`, freeShipping: "Darmowa wysyłka – list polecony ze śledzeniem", free: "darmowa wysyłka", shipping: "Wysyłka" },
 };
 export const shippingLineName = (locale: Locale, label: string) => `${lineNames[locale].shipping} – ${label}`;
 

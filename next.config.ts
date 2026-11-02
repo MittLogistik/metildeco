@@ -2,7 +2,10 @@ import type { NextConfig } from "next";
 import { localizedRewrites } from "./src/lib/routes";
 
 /** Språk som fanns i gamla butiken men inte är byggda ännu – skickas tills vidare till svenska. */
-const pendingLocales = ["en", "no", "nb", "de", "be", "it", "fr", "es", "pl", "pt", "lv", "lt", "ee", "et", "at", "ch", "ie", "uk", "gb", "us", "eu"];
+const pendingLocales = ["no", "nb", "be", "it", "es", "pt", "lv", "lt", "ee", "et", "ch", "uk", "gb", "us", "eu"];
+
+/** Landskoder från gamla butiken som nu har ett eget språk (permanent, sökvägen följer med). */
+const countryAliases = { at: "de", ie: "en" } as const;
 
 const nextConfig: NextConfig = {
   // satori och harfbuzzjs letar upp sina egna filer i körningen. Buntas de av Next hittar
@@ -43,6 +46,10 @@ const nextConfig: NextConfig = {
       { source: "/sv/products", destination: "/sv/produkter", permanent: true },
       // Quizet frågar om sömn och fokus och rekommenderar produkter utifrån det (antydda effekter) – av tills det byggts om
       { source: "/sv/quiz", destination: "/sv/mal", permanent: false },
+      ...Object.entries(countryAliases).flatMap(([from, to]) => [
+        { source: `/${from}`, destination: `/${to}`, permanent: true },
+        { source: `/${from}/:path*`, destination: `/${to}/:path*`, permanent: true },
+      ]),
       // Övriga språk aktiveras ett i taget – tills dess svenska (tillfällig omdirigering)
       ...pendingLocales.flatMap((l) => [
         { source: `/${l}`, destination: "/sv", permanent: false },

@@ -79,11 +79,11 @@ export const faqGroups: FaqGroup[] = [
       },
       {
         q: "Hvordan sætter jeg mit abonnement på pause eller opsiger det?",
-        a: "Log ind på Min konto, og vælg Pause eller Opsig. En pause gælder med det samme, og der trækkes ingen penge, før du genoptager abonnementet. Opsiger du, foretages der ikke flere træk, og abonnementet ophører, når den betalte periode er slut. Ingen bindingsperiode og intet gebyr. Kan du ikke logge ind, så skriv til kundeservice, så hjælper vi dig.",
+        a: "Skriv til kundeservice, så sætter vi abonnementet på pause eller opsiger det for dig og bekræfter det skriftligt. En pause gælder med det samme, og der trækkes ingen penge, før du genoptager abonnementet. Opsiger du, foretages der ikke flere træk, og abonnementet ophører, når den betalte periode er slut. Ingen bindingsperiode og intet gebyr.",
       },
       {
         q: "Kan jeg skifte produkt eller interval?",
-        a: "Ja. Skriv til kundeservice, så ændrer vi interval, antal, produkt eller leveringsadresse før næste levering. Pause og opsigelse kan du klare selv under Min konto.",
+        a: "Ja. Skriv til kundeservice, så ændrer vi interval, antal, produkt eller leveringsadresse før næste levering.",
       },
     ],
   },

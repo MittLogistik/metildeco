@@ -1,6 +1,10 @@
 /**
  * Produktsidan. Användning: `const t = product[locale]`.
  */
+import { messages as deProductMessages } from "./locales/de/product";
+import { messages as frProductMessages } from "./locales/fr/product";
+import { messages as enProductMessages } from "./locales/en/product";
+import { messages as plProductMessages } from "./locales/pl/product";
 import type { Locale } from "@/lib/i18n";
 
 const sv = {
@@ -33,8 +37,15 @@ const sv = {
   related: "Du kanske också gillar",
 };
 
+/** Typen som varje språk måste uppfylla (de nya språken ligger i messages/locales/<språk>/product.ts). */
+export type ProductMessages = typeof sv;
+
 export const product: Record<Locale, typeof sv> = {
   sv,
+  de: deProductMessages,
+  fr: frProductMessages,
+  en: enProductMessages,
+  pl: plProductMessages,
   fi: {
     notFound: "Tuotetta ei löytynyt",
     products: "Tuotteet",

@@ -6,7 +6,7 @@ import { productContentFor } from "@/content/i18n";
 import { formatPrice } from "@/lib/format";
 import { getProduct, getProducts } from "@/lib/catalog";
 import { imagesFor, isInStock, isLowStock, relatedProducts } from "@/lib/products";
-import { isLocale, locales, type Locale } from "@/lib/i18n";
+import { countriesOf, isLocale, locales, type Locale } from "@/lib/i18n";
 import { cheapestRate, freeShippingOver } from "@/lib/shipping";
 import { alternates, getI18n } from "@/i18n/server";
 import { product as productMessages } from "@/i18n/messages/product";
@@ -28,10 +28,14 @@ import { Stars } from "@/components/Stars";
 import { TrustBar } from "@/components/TrustBar";
 import { Container, Eyebrow } from "@/components/ui";
 
-/** Produkterna som säljs på språket (lang kommer från föräldern [lang]). */
+/**
+ * Produkterna som säljs på språket (lang kommer från föräldern [lang]). Tom lista för ett språk
+ * (t.ex. priser saknas) får en sökväg som ger 404 – annars förrenderar Next inga produktsidor alls.
+ */
 export async function generateStaticParams({ params }: { params: { lang: string } }) {
   const locale: Locale = isLocale(params.lang) ? params.lang : "sv";
-  return (await getProducts(locale)).map((p) => ({ slug: p.slug }));
+  const slugs = (await getProducts(locale)).map((p) => ({ slug: p.slug }));
+  return slugs.length ? slugs : [{ slug: "saknas" }];
 }
 
 /** Språken där produkten säljs (hreflang). */
@@ -119,7 +123,7 @@ export default async function ProductPage({ params }: PageProps<"/[lang]/produkt
       shippingDetails: {
         "@type": "OfferShippingDetails",
         shippingRate: { "@type": "MonetaryAmount", value: product.price >= freeOver && freeOver > 0 ? 0 : shipFrom, currency },
-        shippingDestination: { "@type": "DefinedRegion", addressCountry: market.country },
+        shippingDestination: countriesOf(locale).map((c) => ({ "@type": "DefinedRegion", addressCountry: c })),
         deliveryTime: {
           "@type": "ShippingDeliveryTime",
           handlingTime: { "@type": "QuantitativeValue", minValue: 0, maxValue: 1, unitCode: "DAY" },
@@ -128,7 +132,7 @@ export default async function ProductPage({ params }: PageProps<"/[lang]/produkt
       },
       hasMerchantReturnPolicy: {
         "@type": "MerchantReturnPolicy",
-        applicableCountry: market.country,
+        applicableCountry: countriesOf(locale),
         returnPolicyCategory: "https://schema.org/MerchantReturnFiniteReturnWindow",
         merchantReturnDays: 30,
         returnMethod: "https://schema.org/ReturnByMail",
@@ -242,9 +246,9 @@ export default async function ProductPage({ params }: PageProps<"/[lang]/produkt
                 <p className="mt-6 text-lg leading-relaxed text-muted">{content.intro}</p>
                 <dl className="mt-10 grid grid-cols-3 gap-4">
                   {content.highlights.map((h) => (
-                    <div key={h.label} className="rounded-2xl bg-white p-4 shadow-card">
+                    <div key={h.label} className="min-w-0 hyphens-auto wrap-break-word rounded-2xl bg-white p-4 shadow-card">
                       <dt className="text-[11px] font-semibold uppercase tracking-wider text-muted">{h.label}</dt>
-                      <dd className="mt-1 font-display text-xl font-medium sm:text-2xl">{h.value}</dd>
+                      <dd className="mt-1 font-display text-lg font-medium sm:text-2xl">{h.value}</dd>
                     </div>
                   ))}
                 </dl>

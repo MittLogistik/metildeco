@@ -2,6 +2,10 @@
  * Prenumerationssidan. Användning: `const t = subscription[locale]`.
  * Mitt konto finns bara på svenska – på fi/da pausar och avslutar kunden via kundservice (e-post).
  */
+import { messages as deSubscriptionMessages } from "./locales/de/subscription";
+import { messages as frSubscriptionMessages } from "./locales/fr/subscription";
+import { messages as enSubscriptionMessages } from "./locales/en/subscription";
+import { messages as plSubscriptionMessages } from "./locales/pl/subscription";
 import type { Locale } from "@/lib/i18n";
 
 type Item = { q: string; a: string };
@@ -60,8 +64,15 @@ const sv = {
   ] as Item[],
 };
 
+/** Typen som varje språk måste uppfylla (de nya språken ligger i messages/locales/<språk>/subscription.ts). */
+export type SubscriptionMessages = typeof sv;
+
 export const subscription: Record<Locale, typeof sv> = {
   sv,
+  de: deSubscriptionMessages,
+  fr: frSubscriptionMessages,
+  en: enSubscriptionMessages,
+  pl: plSubscriptionMessages,
   fi: {
     title: (pct) => `Kestotilaus – säästä ${pct} % jokaisesta toimituksesta`,
     description: (pct) =>

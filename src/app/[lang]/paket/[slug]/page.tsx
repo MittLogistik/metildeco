@@ -21,10 +21,15 @@ import { ProductGallery } from "@/components/ProductGallery";
 import { TrustBar } from "@/components/TrustBar";
 import { Container, Eyebrow } from "@/components/ui";
 
-/** Paketen som säljs på språket (lang kommer från föräldern [lang]). */
+/**
+ * Paketen som säljs på språket (lang kommer från föräldern [lang]). Ett språk utan paket (svenska,
+ * där novel food är stängt) får ändå en sökväg som ger 404 – returnerar ett språk en tom lista
+ * förrenderar Next inga paketsidor alls, på något språk.
+ */
 export async function generateStaticParams({ params }: { params: { lang: string } }) {
   const locale: Locale = isLocale(params.lang) ? params.lang : "sv";
-  return (await getBundles(locale)).map((b) => ({ slug: b.slug }));
+  const slugs = (await getBundles(locale)).map((b) => ({ slug: b.slug }));
+  return slugs.length ? slugs : [{ slug: "saknas" }];
 }
 
 /** Språken där paketet säljs (hreflang). */

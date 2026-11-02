@@ -1,4 +1,8 @@
 /** Journalen: listan och artikelsidan. */
+import { messages as deArticlesMessages } from "./locales/de/articles";
+import { messages as frArticlesMessages } from "./locales/fr/articles";
+import { messages as enArticlesMessages } from "./locales/en/articles";
+import { messages as plArticlesMessages } from "./locales/pl/articles";
 import type { Locale } from "@/lib/i18n";
 
 const sv = {
@@ -21,8 +25,15 @@ const sv = {
   more: "Fler artiklar",
 };
 
+/** Typen som varje språk måste uppfylla (de nya språken ligger i messages/locales/<språk>/articles.ts). */
+export type ArticlesMessages = typeof sv;
+
 export const articlesMessages: Record<Locale, typeof sv> = {
   sv,
+  de: deArticlesMessages,
+  fr: frArticlesMessages,
+  en: enArticlesMessages,
+  pl: plArticlesMessages,
   fi: {
     metaTitle: "Journal – oppaita yrtti- ja sieniuutteista sekä laadusta",
     metaDescription:

@@ -2,7 +2,7 @@ import "server-only";
 import { productContentFor } from "@/content/i18n";
 import { bundleInStock, type Bundle } from "./bundles";
 import { getCatalog } from "./catalog";
-import { defaultLocale, markets, type Locale } from "./i18n";
+import { countriesOf, defaultLocale, type Locale } from "./i18n";
 import { imagesFor, isInStock, unitCount, type Product } from "./products";
 import { routesOf } from "./routes";
 import { cheapestRate, shippingCost } from "./shipping";
@@ -15,7 +15,9 @@ import { metaContentId } from "./consent";
  * så att Google inte får 404 på annonserade sidor.
  *
  * En feed per marknad (språk): länkar, texter, priser och valuta för det landet.
- * /feeds/google.xml = Sverige, /feeds/google-fi.xml = Finland, /feeds/google-dk.xml = Danmark, /feeds/google-nl.xml = Nederländerna.
+ * /feeds/google.xml = Sverige, /feeds/google-fi.xml = Finland, /feeds/google-dk.xml = Danmark, /feeds/google-nl.xml = Nederländerna (+ Belgien),
+ * /feeds/google-de.xml = Tyskland (+ Österrike, Luxemburg), /feeds/google-fr.xml = Frankrike (+ Belgien, Luxemburg),
+ * /feeds/google-ie.xml = Irland (engelska), /feeds/google-pl.xml = Polen. Meta-feederna heter likadant (meta-…).
  */
 
 /** Feedtexter per språk. */
@@ -24,6 +26,10 @@ const feedText: Record<Locale, { channel: string; contains: string; bundleType: 
   fi: { channel: "Kasvi- ja sieniuutteita kapselimuodossa, kehitetty Ruotsissa.", contains: "Sisältää", bundleType: "Paketti" },
   da: { channel: "Botaniske ekstrakter og svampeekstrakter i kapselform, udviklet i Sverige.", contains: "Indeholder", bundleType: "Pakke" },
   nl: { channel: "Plantenextracten en paddenstoelextracten in capsulevorm, ontwikkeld in Zweden.", contains: "Bevat", bundleType: "Pakket" },
+  de: { channel: "Pflanzen- und Pilzextrakte in Kapselform.", contains: "Enthält", bundleType: "Set" },
+  fr: { channel: "Extraits de plantes et de champignons en gélules.", contains: "Contient", bundleType: "Coffret" },
+  en: { channel: "Botanical and mushroom extracts in capsule form.", contains: "Contains", bundleType: "Bundle" },
+  pl: { channel: "Ekstrakty roślinne i grzybowe w kapsułkach.", contains: "Zawiera", bundleType: "Zestaw" },
 };
 
 type Ctx = { locale: Locale; currency: string };
@@ -77,7 +83,10 @@ const shipping = (price: number, alwaysFree: boolean, c: Ctx): string => {
   if (c.locale === defaultLocale) return "";
   const rate = cheapestRate(c.locale);
   const cost = alwaysFree ? 0 : shippingCost(rate, price);
-  return `<g:shipping>${tag("g:country", markets[c.locale].country)}${tag("g:service", rate.label)}${tag("g:price", money(cost, c))}</g:shipping>`;
+  // En post per land marknaden levererar till (tyska feeden gäller DE, AT och LU)
+  return countriesOf(c.locale)
+    .map((country) => `<g:shipping>${tag("g:country", country)}${tag("g:service", rate.label)}${tag("g:price", money(cost, c))}</g:shipping>`)
+    .join("");
 };
 
 const productItem = (p: Product, c: Ctx): string => {

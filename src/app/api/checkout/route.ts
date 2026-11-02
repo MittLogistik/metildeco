@@ -1,6 +1,6 @@
 import type Stripe from "stripe";
 import { buildLineItems, buildShippingOptions, minor, parseCheckoutRequest, priceLines, shippingLineName, subtotalOf } from "@/lib/checkout";
-import { markets } from "@/lib/i18n";
+import { countriesOf, markets } from "@/lib/i18n";
 import { routesOf } from "@/lib/routes";
 import { cheapestRate, shippingCost } from "@/lib/shipping";
 import { stripe, stripeConfigured } from "@/lib/stripe";
@@ -58,8 +58,8 @@ export async function POST(request: Request) {
       locale: market.stripeLocale,
       line_items: lineItems,
       customer_email: payload.email ?? undefined,
-      // Marknaden levererar bara till sitt land – valuta, frakt och villkor gäller just där
-      shipping_address_collection: { allowed_countries: [market.country] },
+      // Marknaden levererar bara till sina länder (tyska: DE, AT, LU) – valuta, frakt och villkor gäller just där
+      shipping_address_collection: { allowed_countries: countriesOf(locale) as Stripe.Checkout.SessionCreateParams.ShippingAddressCollection.AllowedCountry[] },
       phone_number_collection: { enabled: true },
       billing_address_collection: "auto",
       expires_at: Math.floor(Date.now() / 1000) + 24 * 3600,

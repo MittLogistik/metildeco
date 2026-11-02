@@ -2,6 +2,10 @@
  * Sidhuvud, sidfot, cookiebanner och små delade komponenter (brödsmulor, förtroenderad,
  * betalsätt, nyhetsbrev, kontaktformulär). Användning: `const t = layout[locale]`.
  */
+import { messages as deLayoutMessages } from "./locales/de/layout";
+import { messages as frLayoutMessages } from "./locales/fr/layout";
+import { messages as enLayoutMessages } from "./locales/en/layout";
+import { messages as plLayoutMessages } from "./locales/pl/layout";
 import type { Locale } from "@/lib/i18n";
 
 const sv = {
@@ -109,8 +113,15 @@ const sv = {
   },
 };
 
+/** Typen som varje språk måste uppfylla (de nya språken ligger i messages/locales/<språk>/layout.ts). */
+export type LayoutMessages = typeof sv;
+
 export const layout: Record<Locale, typeof sv> = {
   sv,
+  de: deLayoutMessages,
+  fr: frLayoutMessages,
+  en: enLayoutMessages,
+  pl: plLayoutMessages,
   fi: {
     header: {
       freeShipping: (amount) => `Ilmainen toimitus yli ${amount} tilauksiin`,

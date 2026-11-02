@@ -1,0 +1,31 @@
+import type { EmailText } from "@/lib/email-text";
+
+export const messages: EmailText = {
+  subjectOrder: (n) => `Thank you for your order ${n}`,
+  subjectRenewal: (n) => `Your subscription delivery ${n} is scheduled`,
+  headingOrder: "Thank you for your order!",
+  headingRenewal: "Your next delivery is scheduled",
+  renewalWithDate: (d) => `Your subscription has been renewed. Your next pack will be sent so that it is expected to reach you around ${d}.`,
+  renewalNoDate: "Your subscription has been renewed and your parcel is being packed now.",
+  orderNumber: "Order number",
+  received: "We have received your payment. Orders placed before 12:00 (Swedish time) on working days ship from Sweden the same day.",
+  subscription: "subscription",
+  gift: "gift",
+  discount: "Discount",
+  shipping: "Shipping",
+  free: "Free",
+  total: "Total",
+  deliverTo: "Delivery address",
+  afterOrder: (returnsLink) =>
+    `You'll get an email with a tracking link when the parcel leaves our warehouse. 30-day right of withdrawal on unopened products, read more on ${returnsLink}.`,
+  returnsLinkText: "our returns pages",
+  questions: (phone, hours) => `Questions? Reply to this email or call ${phone} (${hours}).`,
+  questionsText: (phone) => `Questions? Reply to this email or call ${phone}.`,
+  shippedSubject: (n) => `Your order ${n} is on its way`,
+  shippedHeading: "Your parcel is on its way",
+  shippedBody: (n, carrier) => `Order ${n} has left our warehouse${carrier ? ` with ${carrier}` : ""}.`,
+  parcelId: "Parcel ID",
+  track: "Track your parcel",
+  trackShort: "Track",
+  trackingDelay: "It may take a few hours before tracking shows the first event.",
+};

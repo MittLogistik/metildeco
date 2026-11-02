@@ -86,7 +86,7 @@ ${t.questionsText(company.phone)}`;
 }
 
 /** Kundtjänstens öppettider på mejlets språk. */
-const hoursFor = (locale: Locale) => ({ sv: company.hours, fi: "ma–pe 9.00–17.00 (Ruotsin aikaa)", da: "man.–fre. 9.00–17.00", nl: "ma–vr 9.00–17.00 (Zweedse tijd)" })[locale];
+const hoursFor = (locale: Locale) => ({ sv: company.hours, fi: "ma–pe 9.00–17.00 (Ruotsin aikaa)", da: "man.–fre. 9.00–17.00", nl: "ma–vr 9.00–17.00 (Zweedse tijd)", de: "Mo–Fr 9.00–17.00 Uhr (schwedische Zeit)", fr: "lun.–ven. 9h00–17h00 (heure suédoise)", en: "Mon–Fri 9.00–17.00 (Swedish time)", pl: "pon.–pt. 9.00–17.00 (czasu szwedzkiego)" })[locale];
 
 /** Presentkortsmejl – till köparen och, om angivet, mottagaren. */
 export async function sendGiftCardEmail(

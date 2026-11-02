@@ -2,6 +2,10 @@
  * Informationssidor: villkor/policyer (frakttabell, företagsuppgifter), vanliga frågor,
  * kontakt och vår historia. Användning: `const t = info[locale]`.
  */
+import { messages as deInfoMessages } from "./locales/de/info";
+import { messages as frInfoMessages } from "./locales/fr/info";
+import { messages as enInfoMessages } from "./locales/en/info";
+import { messages as plInfoMessages } from "./locales/pl/info";
 import type { Locale } from "@/lib/i18n";
 
 const sv = {
@@ -118,8 +122,15 @@ const sv = {
   },
 };
 
+/** Typen som varje språk måste uppfylla (de nya språken ligger i messages/locales/<språk>/info.ts). */
+export type InfoMessages = typeof sv;
+
 export const info: Record<Locale, typeof sv> = {
   sv,
+  de: deInfoMessages,
+  fr: frInfoMessages,
+  en: enInfoMessages,
+  pl: plInfoMessages,
   fi: {
     shippingTable: {
       destination: "Kohde",

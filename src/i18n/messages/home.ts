@@ -1,6 +1,10 @@
 /**
  * Startsidan. Användning: `const t = home[locale]`.
  */
+import { messages as deHomeMessages } from "./locales/de/home";
+import { messages as frHomeMessages } from "./locales/fr/home";
+import { messages as enHomeMessages } from "./locales/en/home";
+import { messages as plHomeMessages } from "./locales/pl/home";
 import type { Locale } from "@/lib/i18n";
 
 const sv = {
@@ -43,8 +47,15 @@ const sv = {
   allArticles: "Alla artiklar",
 };
 
+/** Typen som varje språk måste uppfylla (de nya språken ligger i messages/locales/<språk>/home.ts). */
+export type HomeMessages = typeof sv;
+
 export const home: Record<Locale, typeof sv> = {
   sv,
+  de: deHomeMessages,
+  fr: frHomeMessages,
+  en: enHomeMessages,
+  pl: plHomeMessages,
   fi: {
     title: "Metilde – Puhtaita kasviperäisiä ravintolisiä, kehitetty Ruotsissa",
     description: (freeOver) =>

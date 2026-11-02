@@ -2,6 +2,10 @@
  * Kampanjsidan för Google Ads (app/kampanj/[lang]). Får aldrig nämna Tongkat Ali, Fadogia eller
  * Blue Lotus (se lib/ad-safe). Inga hälsopåståenden – bara extrakt, format, frakt och villkor.
  */
+import { messages as deCampaignMessages } from "./locales/de/campaign";
+import { messages as frCampaignMessages } from "./locales/fr/campaign";
+import { messages as enCampaignMessages } from "./locales/en/campaign";
+import { messages as plCampaignMessages } from "./locales/pl/campaign";
 import type { Locale } from "@/lib/i18n";
 
 const sv = {
@@ -23,8 +27,15 @@ const sv = {
   disclaimer: "Kosttillskott ersätter inte en varierad kost. Överskrid inte rekommenderad dagsdos.",
 };
 
+/** Typen som varje språk måste uppfylla (de nya språken ligger i messages/locales/<språk>/campaign.ts). */
+export type CampaignMessages = typeof sv;
+
 export const campaign: Record<Locale, typeof sv> = {
   sv,
+  de: deCampaignMessages,
+  fr: frCampaignMessages,
+  en: enCampaignMessages,
+  pl: plCampaignMessages,
   fi: {
     metaTitle: "Sieni- ja kasviuutteet vegaanisissa kapseleissa",
     metaDescription: "Standardoituja sieni- ja kasviuutteita ilman täyteaineita, vegaanisissa kapseleissa. Kehitetty Ruotsissa.",

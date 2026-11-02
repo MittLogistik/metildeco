@@ -43,8 +43,8 @@ export async function proxy(request: NextRequest) {
 }
 
 /**
- * Rotadressen till rätt marknad efter besökarens land (Vercels geo-header): Finland → /fi,
- * Danmark → /da, alla andra → /sv. Bara "/" – djuplänkar från annonser och feeds rörs aldrig.
+ * Rotadressen till rätt marknad efter besökarens land (Vercels geo-header, `localeForCountry`):
+ * Finland → /fi, Österrike → /de, Belgien → /nl, Irland → /en osv., alla andra → /sv. Bara "/" – djuplänkar från annonser och feeds rörs aldrig.
  * Tillfällig omdirigering och parametrarna (gclid, utm_…, clickId) följer med.
  */
 function marketRedirect(request: NextRequest) {

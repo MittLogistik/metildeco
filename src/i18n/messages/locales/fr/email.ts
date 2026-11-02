@@ -1,0 +1,31 @@
+import type { EmailText } from "@/lib/email-text";
+
+export const messages: EmailText = {
+  subjectOrder: (n) => `Merci pour votre commande ${n}`,
+  subjectRenewal: (n) => `La livraison ${n} de votre abonnement est programmée`,
+  headingOrder: "Merci pour votre commande !",
+  headingRenewal: "Votre prochaine livraison est programmée",
+  renewalWithDate: (d) => `Votre abonnement a été renouvelé. Le prochain colis sera expédié de façon à vous parvenir aux alentours du ${d}.`,
+  renewalNoDate: "Votre abonnement a été renouvelé et le colis est en cours de préparation.",
+  orderNumber: "Numéro de commande",
+  received: "Nous avons bien reçu votre paiement. Les commandes passées en semaine avant 12 h (heure suédoise) sont expédiées depuis la Suède le jour même.",
+  subscription: "abonnement",
+  gift: "cadeau",
+  discount: "Remise",
+  shipping: "Livraison",
+  free: "Offerte",
+  total: "Total",
+  deliverTo: "Adresse de livraison",
+  afterOrder: (returnsLink) =>
+    `Vous recevrez un e-mail avec un lien de suivi dès que le colis quittera notre entrepôt. Droit de rétractation de 30 jours sur les produits non ouverts, plus d'informations sur ${returnsLink}.`,
+  returnsLinkText: "nos pages retours",
+  questions: (phone, hours) => `Des questions ? Répondez à cet e-mail ou appelez le ${phone} (${hours}). Notre service client répond en suédois et en anglais.`,
+  questionsText: (phone) => `Des questions ? Répondez à cet e-mail ou appelez le ${phone}. Notre service client répond en suédois et en anglais.`,
+  shippedSubject: (n) => `Votre commande ${n} est en route`,
+  shippedHeading: "Votre colis est en route",
+  shippedBody: (n, carrier) => `La commande ${n} a quitté notre entrepôt${carrier ? ` avec ${carrier}` : ""}.`,
+  parcelId: "Numéro de colis",
+  track: "Suivre le colis",
+  trackShort: "Suivre",
+  trackingDelay: "Le suivi peut mettre quelques heures avant d'afficher le premier événement.",
+};

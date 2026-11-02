@@ -1,7 +1,7 @@
 import "server-only";
 import { lang } from "next/root-params";
 import type { Metadata } from "next";
-import { defaultLocale, isLocale, locales, markets, type Locale } from "@/lib/i18n";
+import { defaultLocale, hreflangsOf, isLocale, locales, markets, type Locale } from "@/lib/i18n";
 import { hasPage, routesOf, translatePath, type RouteKey } from "@/lib/routes";
 import { site } from "@/lib/site";
 
@@ -28,7 +28,7 @@ export async function getI18n() {
 export function alternates(path: string, opts: { key?: RouteKey; only?: Locale[] } = {}): Metadata["alternates"] {
   const langs = locales.filter((l) => (!opts.key || hasPage(opts.key, l)) && (!opts.only || opts.only.includes(l)));
   const languages: Record<string, string> = {};
-  for (const l of langs) languages[markets[l].hreflang] = `${site.url}${translatePath(path, l)}`;
+  for (const l of langs) for (const h of hreflangsOf(l)) languages[h] = `${site.url}${translatePath(path, l)}`;
   if (langs.includes(defaultLocale)) languages["x-default"] = `${site.url}${translatePath(path, defaultLocale)}`;
   return { canonical: `${site.url}${path}`, languages };
 }

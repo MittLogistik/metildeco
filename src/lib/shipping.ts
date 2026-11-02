@@ -36,6 +36,26 @@ const methodLabels: Record<Locale, MethodLabels> = {
     "tracked-letter": { label: "Brief met track & trace", description: "Traceerbare levering in de brievenbus, 3–6 werkdagen" },
     ombud: { label: "Pakket naar afhaalpunt", description: "Ophalen bij het dichtstbijzijnde afhaalpunt, 3–6 werkdagen" },
   },
+  de: {
+    varubrev: { label: "Brief", description: "Lieferung in den Briefkasten, 3–6 Werktage" },
+    "tracked-letter": { label: "Brief mit Sendungsverfolgung", description: "Nachverfolgbare Lieferung in den Briefkasten, 3–6 Werktage" },
+    ombud: { label: "Paket an Abholstelle", description: "Abholung an der nächsten Abholstelle, 3–6 Werktage" },
+  },
+  fr: {
+    varubrev: { label: "Lettre", description: "Livraison en boîte aux lettres, 3 à 6 jours ouvrés" },
+    "tracked-letter": { label: "Lettre suivie", description: "Livraison suivie en boîte aux lettres, 3 à 6 jours ouvrés" },
+    ombud: { label: "Colis en point relais", description: "Retrait au point relais le plus proche, 3 à 6 jours ouvrés" },
+  },
+  en: {
+    varubrev: { label: "Letter", description: "Delivered to your letterbox, 3–6 working days" },
+    "tracked-letter": { label: "Tracked letter", description: "Tracked delivery to your letterbox, 3–6 working days" },
+    ombud: { label: "Parcel to collection point", description: "Collect at your nearest collection point, 3–6 working days" },
+  },
+  pl: {
+    varubrev: { label: "List", description: "Dostawa do skrzynki pocztowej, 3–6 dni roboczych" },
+    "tracked-letter": { label: "List ze śledzeniem", description: "Śledzona dostawa do skrzynki pocztowej, 3–6 dni roboczych" },
+    ombud: { label: "Paczka do punktu odbioru", description: "Odbiór w najbliższym punkcie, 3–6 dni roboczych" },
+  },
 };
 
 type RawZone = { code: string; name: string; countries: string[]; active: boolean; sort_order: number };
@@ -91,6 +111,10 @@ const freeWords: Record<Locale, { suffix: string; subscription: string }> = {
   fi: { suffix: "ilmainen toimitus", subscription: "Ilmainen toimitus – kirje seurannalla" },
   da: { suffix: "fri fragt", subscription: "Fri fragt – sporbart brev" },
   nl: { suffix: "gratis verzending", subscription: "Gratis verzending – brief met track & trace" },
+  de: { suffix: "kostenloser Versand", subscription: "Kostenloser Versand – Brief mit Sendungsverfolgung" },
+  fr: { suffix: "livraison gratuite", subscription: "Livraison gratuite – lettre suivie" },
+  en: { suffix: "free delivery", subscription: "Free delivery – tracked letter" },
+  pl: { suffix: "darmowa wysyłka", subscription: "Darmowa wysyłka – list polecony ze śledzeniem" },
 };
 
 /**

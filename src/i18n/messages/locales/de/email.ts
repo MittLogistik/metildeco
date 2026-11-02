@@ -1,0 +1,31 @@
+import type { EmailText } from "@/lib/email-text";
+
+export const messages: EmailText = {
+  subjectOrder: (n) => `Danke für deine Bestellung ${n}`,
+  subjectRenewal: (n) => `Deine Abo-Lieferung ${n} ist geplant`,
+  headingOrder: "Danke für deine Bestellung!",
+  headingRenewal: "Deine nächste Lieferung ist geplant",
+  renewalWithDate: (d) => `Dein Abo wurde verlängert. Die nächste Packung wird so verschickt, dass sie voraussichtlich um den ${d} bei dir ankommt.`,
+  renewalNoDate: "Dein Abo wurde verlängert und das Paket wird jetzt gepackt.",
+  orderNumber: "Bestellnummer",
+  received: "Wir haben deine Zahlung erhalten. Bestellungen, die an Werktagen bis 12:00 Uhr (schwedische Zeit) eingehen, werden noch am selben Tag aus Schweden verschickt.",
+  subscription: "Abo",
+  gift: "Geschenk",
+  discount: "Rabatt",
+  shipping: "Versand",
+  free: "Kostenlos",
+  total: "Gesamt",
+  deliverTo: "Lieferadresse",
+  afterOrder: (returnsLink) =>
+    `Du bekommst eine E-Mail mit einem Link zur Sendungsverfolgung, sobald das Paket unser Lager verlässt. 30 Tage Widerrufsrecht für ungeöffnete Produkte, mehr dazu auf ${returnsLink}.`,
+  returnsLinkText: "unseren Seiten zur Rücksendung",
+  questions: (phone, hours) => `Fragen? Antworte einfach auf diese E-Mail oder ruf uns an unter ${phone} (${hours}). Unser Kundenservice antwortet auf Schwedisch und Englisch.`,
+  questionsText: (phone) => `Fragen? Antworte einfach auf diese E-Mail oder ruf uns an unter ${phone}. Unser Kundenservice antwortet auf Schwedisch und Englisch.`,
+  shippedSubject: (n) => `Deine Bestellung ${n} ist unterwegs`,
+  shippedHeading: "Dein Paket ist unterwegs",
+  shippedBody: (n, carrier) => `Bestellung ${n} hat unser Lager verlassen${carrier ? ` mit ${carrier}` : ""}.`,
+  parcelId: "Sendungsnummer",
+  track: "Paket verfolgen",
+  trackShort: "Verfolgen",
+  trackingDelay: "Es kann ein paar Stunden dauern, bis die Sendungsverfolgung das erste Ereignis anzeigt.",
+};

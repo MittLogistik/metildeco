@@ -79,11 +79,11 @@ export const faqGroups: FaqGroup[] = [
       },
       {
         q: "Miten keskeytän tai lopetan kestotilaukseni?",
-        a: "Kirjaudu Oma tili -sivulle ja valitse Keskeytä tai Lopeta. Keskeytys tulee voimaan heti, eikä maksuja veloiteta ennen kuin jatkat tilausta. Jos lopetat tilauksen, uusia veloituksia ei tehdä ja kestotilaus päättyy, kun maksettu jakso on päättynyt. Ei sitoutumisaikaa eikä maksuja. Jos et pääse kirjautumaan, lähetä sähköpostia asiakaspalveluun, niin autamme sinua.",
+        a: "Lähetä sähköpostia asiakaspalveluun, niin keskeytämme tai lopetamme tilauksen puolestasi ja vahvistamme sen kirjallisesti. Keskeytys tulee voimaan heti, eikä maksuja veloiteta ennen kuin jatkat tilausta. Jos lopetat tilauksen, uusia veloituksia ei tehdä ja kestotilaus päättyy, kun maksettu jakso on päättynyt. Ei sitoutumisaikaa eikä maksuja.",
       },
       {
         q: "Voinko vaihtaa tuotetta tai toimitusväliä?",
-        a: "Kyllä. Lähetä sähköpostia asiakaspalveluun, niin vaihdamme toimitusvälin, määrän, tuotteen tai toimitusosoitteen ennen seuraavaa toimitusta. Keskeyttää ja lopettaa voit itse Oma tili -sivulla. Asiakaspalvelumme palvelee ruotsiksi ja englanniksi.",
+        a: "Kyllä. Lähetä sähköpostia asiakaspalveluun, niin vaihdamme toimitusvälin, määrän, tuotteen tai toimitusosoitteen ennen seuraavaa toimitusta. Asiakaspalvelumme palvelee ruotsiksi ja englanniksi.",
       },
     ],
   },

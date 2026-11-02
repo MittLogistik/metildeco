@@ -2,6 +2,10 @@
  * Kassan och tacksidan. Användning: `const t = checkout[locale]`.
  * Felmeddelanden från /api/checkout är redan översatta på servern (lib/checkout.ts).
  */
+import { messages as deCheckoutMessages } from "./locales/de/checkout";
+import { messages as frCheckoutMessages } from "./locales/fr/checkout";
+import { messages as enCheckoutMessages } from "./locales/en/checkout";
+import { messages as plCheckoutMessages } from "./locales/pl/checkout";
 import type { Locale } from "@/lib/i18n";
 
 const sv = {
@@ -73,8 +77,15 @@ const sv = {
   },
 };
 
+/** Typen som varje språk måste uppfylla (de nya språken ligger i messages/locales/<språk>/checkout.ts). */
+export type CheckoutMessages = typeof sv;
+
 export const checkout: Record<Locale, typeof sv> = {
   sv,
+  de: deCheckoutMessages,
+  fr: frCheckoutMessages,
+  en: enCheckoutMessages,
+  pl: plCheckoutMessages,
   fi: {
     meta: {
       title: "Kassa",
