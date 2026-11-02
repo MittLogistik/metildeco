@@ -12,7 +12,7 @@ import { ButtonLink, Container, Eyebrow, SectionHeading } from "@/components/ui"
 export const metadata: Metadata = {
   title: "Tongkat Ali – rot, renhet och rätt styrka",
   description:
-    "Tongkat Ali (Eurycoma longifolia) som standardiserat 200:1-rotextrakt, utvecklat i Sverige. Jämför Elite, Ultra 4% och Black.",
+    "Tongkat Ali (Eurycoma longifolia) som standardiserat 200:1-rotextrakt. Jämför Elite, Ultra 4% och Black.",
   alternates: { canonical: `${site.url}/sv/tongkat-ali` },
 };
 
@@ -66,7 +66,7 @@ export default async function TongkatPage() {
             <p>Roten kommer från Sydostasien. Extraktet kapslas utan fyllnadsmedel.</p>
             <p>Extraktstyrka, mängd per kapsel och latinskt namn står på varje burk, tillsammans med batchnummer och bäst före-datum.</p>
             <ul className="flex flex-wrap gap-x-6 gap-y-2 pt-2 text-sm text-foreground">
-              {["Utvecklat i Sverige", "Vegansk kapsel", "Plastburk med 60 kapslar"].map((t) => (
+              {["Vegansk kapsel", "Plastburk med 60 kapslar"].map((t) => (
                 <li key={t} className="flex items-center gap-1.5">
                   <CheckIcon size={15} className="text-primary" /> {t}
                 </li>

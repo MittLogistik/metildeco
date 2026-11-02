@@ -22,10 +22,10 @@ import { metaContentId } from "./consent";
 
 /** Feedtexter per språk. */
 const feedText: Record<Locale, { channel: string; contains: string; bundleType: string }> = {
-  sv: { channel: "Botaniska extrakt och svampextrakt i kapselform, utvecklade i Sverige.", contains: "Innehåller", bundleType: "Paket" },
-  fi: { channel: "Kasvi- ja sieniuutteita kapselimuodossa, kehitetty Ruotsissa.", contains: "Sisältää", bundleType: "Paketti" },
-  da: { channel: "Botaniske ekstrakter og svampeekstrakter i kapselform, udviklet i Sverige.", contains: "Indeholder", bundleType: "Pakke" },
-  nl: { channel: "Plantenextracten en paddenstoelextracten in capsulevorm, ontwikkeld in Zweden.", contains: "Bevat", bundleType: "Pakket" },
+  sv: { channel: "Botaniska extrakt och svampextrakt i kapselform.", contains: "Innehåller", bundleType: "Paket" },
+  fi: { channel: "Kasvi- ja sieniuutteita kapselimuodossa.", contains: "Sisältää", bundleType: "Paketti" },
+  da: { channel: "Botaniske ekstrakter og svampeekstrakter i kapselform.", contains: "Indeholder", bundleType: "Pakke" },
+  nl: { channel: "Plantenextracten en paddenstoelextracten in capsulevorm.", contains: "Bevat", bundleType: "Pakket" },
   de: { channel: "Pflanzen- und Pilzextrakte in Kapselform.", contains: "Enthält", bundleType: "Set" },
   fr: { channel: "Extraits de plantes et de champignons en gélules.", contains: "Contient", bundleType: "Coffret" },
   en: { channel: "Botanical and mushroom extracts in capsule form.", contains: "Contains", bundleType: "Bundle" },

@@ -37,7 +37,7 @@ export const productContent: Record<string, ProductContent> = {
     eyebrow: "Eurycoma longifolia · 200:1 rotextrakt",
     headline: "Ren rot, 450 mg per kapsel",
     intro:
-      "Tongkat Ali Elite är ett koncentrerat 200:1-extrakt av roten från Eurycoma longifolia – även kallad Malaysian Ginseng eller Longjack. Utvecklad i Sverige, i vegansk kapsel, utan tillsatser.",
+      "Tongkat Ali Elite är ett koncentrerat 200:1-extrakt av roten från Eurycoma longifolia – även kallad Malaysian Ginseng eller Longjack. I vegansk kapsel, utan tillsatser.",
     highlights: [
       { label: "Extrakt", value: "200:1" },
       { label: "Per kapsel", value: "450 mg" },
@@ -55,9 +55,9 @@ export const productContent: Record<string, ProductContent> = {
           "Bara rotextrakt i ett växtbaserat kapselskal. Vegansk, glutenfri och utan GMO – inga bindemedel, fyllnadsmedel, sötningsmedel eller konstgjorda konserveringsmedel.",
       },
       {
-        heading: "Utvecklad i Sverige",
+        heading: "Förpackning och leverans",
         body:
-          "Metilde är ett svenskt varumärke. Sortimentet tas fram här och varje order skickas från vårt lager i Sverige. Förpackningen är en plastburk med skruvlock som håller innehållet torrt mellan doserna.",
+          "Kapslarna packas i en plastburk med skruvlock som håller innehållet torrt mellan doserna. Varje order skickas från vårt lager i Sverige.",
       },
     ],
     specs: [
@@ -68,7 +68,6 @@ export const productContent: Record<string, ProductContent> = {
       { label: "Dagsdos", value: "1 kapsel dagligen" },
       { label: "Innehåll", value: "60 kapslar – 60 dagar" },
       { label: "Kapsel", value: "Vegansk (HPMC)" },
-      { label: "Utvecklad i", value: "Sverige" },
     ],
     ingredients:
       "Tongkat Ali-extrakt (Eurycoma longifolia, rot) 200:1, kapselskal (HPMC). Innehåll per kapsel: Tongkat Ali-extrakt (200:1) 450 mg.",
@@ -121,9 +120,9 @@ export const productContent: Record<string, ProductContent> = {
           "Varje batch standardiseras på halten eurycomanon, så att varje kapsel på 520 mg innehåller 20 mg eurycomanon. Det gör styrkan jämn mellan batcher. En kapsel om dagen.",
       },
       {
-        heading: "Utvecklad i Sverige",
+        heading: "Förpackning och leverans",
         body:
-          "Metilde är ett svenskt varumärke. Sortimentet tas fram här och varje order skickas från vårt lager i Sverige. Förpackningen är en plastburk med skruvlock som håller innehållet torrt mellan doserna.",
+          "Kapslarna packas i en plastburk med skruvlock som håller innehållet torrt mellan doserna. Varje order skickas från vårt lager i Sverige.",
       },
     ],
     specs: [
@@ -135,7 +134,6 @@ export const productContent: Record<string, ProductContent> = {
       { label: "Innehåll", value: "60 kapslar – 60 dagar" },
       { label: "Förpackning", value: "Plastburk med skruvlock" },
       { label: "Kapsel", value: "Vegansk (HPMC)" },
-      { label: "Utvecklad i", value: "Sverige" },
     ],
     ingredients:
       "Tongkat Ali-extrakt (Eurycoma longifolia, rot) 200:1, kapselskal (HPMC). Innehåll per kapsel: Tongkat Ali-extrakt (200:1) 520 mg, varav eurycomanon 20 mg.",
@@ -223,7 +221,7 @@ export const productContent: Record<string, ProductContent> = {
     eyebrow: "Fadogia agrestis · 20:1 örtextrakt",
     headline: "Ren växt, 450 mg per kapsel",
     intro:
-      "Ett 20:1-extrakt av Fadogia agrestis, en buske med lång tradition i västafrikansk örtanvändning. 450 mg per kapsel i vegansk kapsel – utan tillsatser. Utvecklad i Sverige.",
+      "Ett 20:1-extrakt av Fadogia agrestis, en buske med lång tradition i västafrikansk örtanvändning. 450 mg per kapsel i vegansk kapsel – utan tillsatser.",
     highlights: [
       { label: "Extrakt", value: "20:1" },
       { label: "Per kapsel", value: "450 mg" },
@@ -241,9 +239,9 @@ export const productContent: Record<string, ProductContent> = {
           "Bara Fadogia agrestis-extrakt i ett växtbaserat kapselskal. Vegansk, glutenfri och utan GMO – inga bindemedel, fyllnadsmedel eller konstgjorda konserveringsmedel.",
       },
       {
-        heading: "Utvecklad i Sverige",
+        heading: "Förpackning och leverans",
         body:
-          "Metilde är ett svenskt varumärke. Sortimentet tas fram här och varje order skickas från vårt lager i Sverige. Förpackningen är en plastburk med skruvlock som håller innehållet torrt mellan doserna.",
+          "Kapslarna packas i en plastburk med skruvlock som håller innehållet torrt mellan doserna. Varje order skickas från vårt lager i Sverige.",
       },
     ],
     specs: [
@@ -253,7 +251,6 @@ export const productContent: Record<string, ProductContent> = {
       { label: "Dagsdos", value: "1 kapsel dagligen" },
       { label: "Innehåll", value: "60 kapslar – 60 dagar" },
       { label: "Kapsel", value: "Vegansk (HPMC)" },
-      { label: "Utvecklad i", value: "Sverige" },
     ],
     ingredients:
       "Fadogia agrestis-extrakt 20:1, kapselskal (HPMC). Innehåll per kapsel: Fadogia agrestis-extrakt (20:1) 450 mg.",
@@ -436,7 +433,6 @@ export const productContent: Record<string, ProductContent> = {
       { label: "Innehåll", value: "60 kapslar – 30 till 60 dagar" },
       { label: "Kapselskal", value: "Vegetabiliskt (HPMC)" },
       { label: "Förpackning", value: "Plastburk med skruvlock" },
-      { label: "Utvecklad i", value: "Sverige" },
     ],
     ingredients:
       "Tongkat Ali-extrakt (Eurycoma longifolia, rot) 200:1, kapselskal (HPMC). Innehåll per kapsel: Tongkat Ali-extrakt (200:1) 500 mg.",
@@ -606,7 +602,6 @@ export const productContent: Record<string, ProductContent> = {
       { label: "Använd växtdel", value: "Rot" },
       { label: "Dagsdos", value: "2 kapslar (500 mg extrakt)" },
       { label: "Innehåll", value: "60 kapslar – 30 dagar" },
-      { label: "Utvecklad i", value: "Sverige" },
     ],
     ingredients:
       "Akarkara rotextrakt (Anacyclus pyrethrum), kapselskal (hydroxipropylmetylcellulosa).",
@@ -649,9 +644,9 @@ export const productContent: Record<string, ProductContent> = {
           "Bara macarotextrakt i ett växtbaserat kapselskal. Veganskt, glutenfritt och utan GMO – inga bindemedel, fyllnadsmedel, sötningsmedel eller konstgjorda konserveringsmedel.",
       },
       {
-        heading: "Utvecklad i Sverige",
+        heading: "Förpackning och leverans",
         body:
-          "Metilde är ett svenskt varumärke. Sortimentet tas fram här och varje order skickas från vårt lager i Sverige. Förpackningen är en plastburk med skruvlock som håller innehållet torrt mellan doserna.",
+          "Kapslarna packas i en plastburk med skruvlock som håller innehållet torrt mellan doserna. Varje order skickas från vårt lager i Sverige.",
       },
     ],
     specs: [
@@ -662,7 +657,6 @@ export const productContent: Record<string, ProductContent> = {
       { label: "Dagsdos", value: "2 kapslar dagligen" },
       { label: "Innehåll", value: "60 kapslar – 30 dagar" },
       { label: "Kapsel", value: "Vegansk (HPMC)" },
-      { label: "Utvecklad i", value: "Sverige" },
     ],
     ingredients:
       "Macaextrakt (Lepidium meyenii, rot) 20:1, kapselskal (HPMC). Innehåll per kapsel: macarotextrakt (20:1) 470 mg.",
@@ -714,9 +708,9 @@ export const productContent: Record<string, ProductContent> = {
           "Bara mariatistelextrakt i ett växtbaserat kapselskal av pullulan. Veganskt, glutenfritt och utan GMO – fritt från laktos, soja, jäst, vete och mjölk, och utan färgämnen, bindemedel, fyllnadsmedel eller konstgjorda konserveringsmedel.",
       },
       {
-        heading: "Utvecklad i Sverige",
+        heading: "Förpackning och leverans",
         body:
-          "Metilde är ett svenskt varumärke. Sortimentet tas fram här och varje order skickas från vårt lager i Sverige. Förpackningen är en plastburk med skruvlock som håller innehållet torrt mellan doserna.",
+          "Kapslarna packas i en plastburk med skruvlock som håller innehållet torrt mellan doserna. Varje order skickas från vårt lager i Sverige.",
       },
     ],
     specs: [
@@ -728,7 +722,6 @@ export const productContent: Record<string, ProductContent> = {
       { label: "Dagsdos", value: "1 kapsel dagligen" },
       { label: "Innehåll", value: "60 kapslar – 60 dagar" },
       { label: "Kapsel", value: "Vegansk (pullulan)" },
-      { label: "Utvecklad i", value: "Sverige" },
     ],
     ingredients:
       "Mariatistelextrakt (Silybum marianum, frö) 20:1 standardiserat till 80 % silymarin, kapselskal (pullulan). Innehåll per kapsel: mariatistelextrakt 350 mg, varav silymarin 280 mg.",
@@ -780,9 +773,9 @@ export const productContent: Record<string, ProductContent> = {
           "Bara nässelbladsextrakt i ett växtbaserat kapselskal. Veganskt, glutenfritt och utan GMO – inga bindemedel, fyllnadsmedel, sötningsmedel eller konstgjorda konserveringsmedel.",
       },
       {
-        heading: "Utvecklad i Sverige",
+        heading: "Förpackning och leverans",
         body:
-          "Metilde är ett svenskt varumärke. Sortimentet tas fram här och varje order skickas från vårt lager i Sverige. Förpackningen är en plastburk med skruvlock som håller innehållet torrt mellan doserna.",
+          "Kapslarna packas i en plastburk med skruvlock som håller innehållet torrt mellan doserna. Varje order skickas från vårt lager i Sverige.",
       },
     ],
     specs: [
@@ -793,7 +786,6 @@ export const productContent: Record<string, ProductContent> = {
       { label: "Dagsdos", value: "1 kapsel dagligen" },
       { label: "Innehåll", value: "60 kapslar – 60 dagar" },
       { label: "Kapsel", value: "Vegansk" },
-      { label: "Utvecklad i", value: "Sverige" },
     ],
     ingredients:
       "Nässelbladsextrakt (Urtica dioica, blad) 10:1, kapselskal (vegetabiliskt). Innehåll per kapsel: nässelbladsextrakt 430 mg.",
@@ -845,9 +837,9 @@ export const productContent: Record<string, ProductContent> = {
           "Bara druvkärneextrakt i ett växtbaserat kapselskal. Veganskt, glutenfritt och utan GMO – inga bindemedel, fyllnadsmedel, sötningsmedel eller konstgjorda konserveringsmedel.",
       },
       {
-        heading: "Utvecklad i Sverige",
+        heading: "Förpackning och leverans",
         body:
-          "Metilde är ett svenskt varumärke. Sortimentet tas fram här och varje order skickas från vårt lager i Sverige. Förpackningen är en plastburk med skruvlock som håller innehållet torrt mellan doserna.",
+          "Kapslarna packas i en plastburk med skruvlock som håller innehållet torrt mellan doserna. Varje order skickas från vårt lager i Sverige.",
       },
     ],
     specs: [
@@ -858,7 +850,6 @@ export const productContent: Record<string, ProductContent> = {
       { label: "Dagsdos", value: "1–2 kapslar dagligen" },
       { label: "Innehåll", value: "60 kapslar – 30–60 dagar" },
       { label: "Kapsel", value: "Vegansk" },
-      { label: "Utvecklad i", value: "Sverige" },
     ],
     ingredients:
       "Druvkärneextrakt (Vitis vinifera, kärna) standardiserat till 95 % proantocyanidiner, kapselskal (vegetabiliskt). Innehåll per kapsel: druvkärneextrakt 500 mg, varav proantocyanidiner 475 mg.",
@@ -909,9 +900,9 @@ export const productContent: Record<string, ProductContent> = {
           "Bara quercetinextrakt i ett växtbaserat kapselskal. Veganskt, glutenfritt och utan GMO – inga bindemedel, fyllnadsmedel, sötningsmedel eller konstgjorda konserveringsmedel.",
       },
       {
-        heading: "Utvecklad i Sverige",
+        heading: "Förpackning och leverans",
         body:
-          "Metilde är ett svenskt varumärke. Sortimentet tas fram här och varje order skickas från vårt lager i Sverige. Förpackningen är en plastburk med skruvlock som håller innehållet torrt mellan doserna.",
+          "Kapslarna packas i en plastburk med skruvlock som håller innehållet torrt mellan doserna. Varje order skickas från vårt lager i Sverige.",
       },
     ],
     specs: [
@@ -921,7 +912,6 @@ export const productContent: Record<string, ProductContent> = {
       { label: "Dagsdos", value: "1 kapsel dagligen" },
       { label: "Förpackning", value: "60 kapslar – 60 dagar" },
       { label: "Kapsel", value: "Vegansk" },
-      { label: "Utvecklad i", value: "Sverige" },
     ],
     ingredients:
       "Quercetinextrakt (98 % quercetin), kapselskal (vegetabiliskt). Innehåll per kapsel: quercetinextrakt 500 mg, varav quercetin 490 mg.",
@@ -972,9 +962,9 @@ export const productContent: Record<string, ProductContent> = {
           "Bara reishiextrakt i ett växtbaserat kapselskal. Veganskt, glutenfritt och utan GMO – inga bindemedel, fyllnadsmedel, sötningsmedel eller konstgjorda konserveringsmedel.",
       },
       {
-        heading: "Utvecklad i Sverige",
+        heading: "Förpackning och leverans",
         body:
-          "Metilde är ett svenskt varumärke. Sortimentet tas fram här och varje order skickas från vårt lager i Sverige. Förpackningen är en plastburk med skruvlock som håller innehållet torrt mellan doserna.",
+          "Kapslarna packas i en plastburk med skruvlock som håller innehållet torrt mellan doserna. Varje order skickas från vårt lager i Sverige.",
       },
     ],
     specs: [
@@ -984,7 +974,6 @@ export const productContent: Record<string, ProductContent> = {
       { label: "Dagsdos", value: "1 kapsel dagligen" },
       { label: "Förpackning", value: "60 kapslar – 60 dagar" },
       { label: "Kapsel", value: "Vegansk" },
-      { label: "Utvecklad i", value: "Sverige" },
     ],
     ingredients:
       "Reishiextrakt (Ganoderma lucidum) standardiserat till 40 % polysackarider, kapselskal (vegetabiliskt). Innehåll per kapsel: reishiextrakt 350 mg, varav polysackarider 140 mg.",
@@ -1035,9 +1024,9 @@ export const productContent: Record<string, ProductContent> = {
           "Bara chagaextrakt i ett växtbaserat kapselskal. Veganskt, glutenfritt och utan GMO – inga bindemedel, fyllnadsmedel, sötningsmedel eller konstgjorda konserveringsmedel.",
       },
       {
-        heading: "Utvecklad i Sverige",
+        heading: "Förpackning och leverans",
         body:
-          "Metilde är ett svenskt varumärke. Sortimentet tas fram här och varje order skickas från vårt lager i Sverige. Förpackningen är en plastburk med skruvlock som håller innehållet torrt mellan doserna.",
+          "Kapslarna packas i en plastburk med skruvlock som håller innehållet torrt mellan doserna. Varje order skickas från vårt lager i Sverige.",
       },
     ],
     specs: [
@@ -1048,7 +1037,6 @@ export const productContent: Record<string, ProductContent> = {
       { label: "Dagsdos", value: "1 kapsel dagligen" },
       { label: "Förpackning", value: "60 kapslar – 60 dagar" },
       { label: "Kapsel", value: "Vegansk" },
-      { label: "Utvecklad i", value: "Sverige" },
     ],
     ingredients:
       "Chagaextrakt (Inonotus obliquus) 30:1 standardiserat till 10 % polysackarider, kapselskal (vegetabiliskt). Innehåll per kapsel: chagaextrakt 400 mg, varav polysackarider 40 mg.",
@@ -1099,9 +1087,9 @@ export const productContent: Record<string, ProductContent> = {
           "Bara Lion's Mane-extrakt i ett växtbaserat kapselskal. Veganskt, glutenfritt och utan GMO – inga bindemedel, fyllnadsmedel, sötningsmedel eller konstgjorda konserveringsmedel.",
       },
       {
-        heading: "Utvecklad i Sverige",
+        heading: "Förpackning och leverans",
         body:
-          "Metilde är ett svenskt varumärke. Sortimentet tas fram här och varje order skickas från vårt lager i Sverige. Förpackningen är en plastburk med skruvlock som håller innehållet torrt mellan doserna.",
+          "Kapslarna packas i en plastburk med skruvlock som håller innehållet torrt mellan doserna. Varje order skickas från vårt lager i Sverige.",
       },
     ],
     specs: [
@@ -1112,7 +1100,6 @@ export const productContent: Record<string, ProductContent> = {
       { label: "Dagsdos", value: "1 kapsel dagligen" },
       { label: "Förpackning", value: "60 kapslar – 60 dagar" },
       { label: "Kapsel", value: "Vegansk" },
-      { label: "Utvecklad i", value: "Sverige" },
     ],
     ingredients:
       "Lion's Mane-extrakt (Hericium erinaceus) standardiserat till 60 % polysackarider, varav 45 % betaglukaner, kapselskal (vegetabiliskt). Innehåll per kapsel: extrakt 500 mg, varav polysackarider 300 mg och betaglukaner 225 mg.",
@@ -1163,9 +1150,9 @@ export const productContent: Record<string, ProductContent> = {
           "Bara cordycepsextrakt i ett växtbaserat kapselskal. Veganskt, glutenfritt och utan GMO – inga bindemedel, fyllnadsmedel, sötningsmedel eller konstgjorda konserveringsmedel.",
       },
       {
-        heading: "Utvecklad i Sverige",
+        heading: "Förpackning och leverans",
         body:
-          "Metilde är ett svenskt varumärke. Sortimentet tas fram här och varje order skickas från vårt lager i Sverige. Förpackningen är en plastburk med skruvlock som håller innehållet torrt mellan doserna.",
+          "Kapslarna packas i en plastburk med skruvlock som håller innehållet torrt mellan doserna. Varje order skickas från vårt lager i Sverige.",
       },
     ],
     specs: [
@@ -1176,7 +1163,6 @@ export const productContent: Record<string, ProductContent> = {
       { label: "Dagsdos", value: "1 kapsel dagligen" },
       { label: "Förpackning", value: "60 kapslar – 60 dagar" },
       { label: "Kapsel", value: "Vegansk" },
-      { label: "Utvecklad i", value: "Sverige" },
     ],
     ingredients:
       "Cordycepsextrakt (Cordyceps militaris) 8:1 standardiserat till 40 % polysackarider, kapselskal (vegetabiliskt). Innehåll per kapsel: cordycepsextrakt 350 mg, varav polysackarider 140 mg.",

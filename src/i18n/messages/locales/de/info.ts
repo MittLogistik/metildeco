@@ -95,7 +95,7 @@ export const messages: InfoMessages = {
       ["Keine Umstände", "Wir geben genau an, was jedes Produkt enthält. Kein Blabla, keine versteckten Zusätze."],
       ["Du bekommst, wofür du bezahlst", "Rohstoffe, Kapseln, Verpackung. Dafür geben wir unser Geld aus – nicht für teure Werbekampagnen."],
       ["Ein echtes Abo", "15 % Rabatt, kostenloser Versand und volle Kontrolle. Pausieren, ändern oder kündigen, wann du willst."],
-      ["Schwedische Marke", "Das Sortiment wird in Schweden entwickelt und jede Bestellung wird von Schweden aus verschickt."],
+      ["Versand aus Schweden", "Jede Bestellung wird aus unserem Lager in Schweden verschickt."],
     ],
     companyEyebrow: "Das Unternehmen",
     companyTitle: "Über das Unternehmen",

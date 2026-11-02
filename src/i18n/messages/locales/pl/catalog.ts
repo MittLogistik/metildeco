@@ -27,12 +27,12 @@ export const messages: CatalogMessages = {
   // Lista produktów
   listTitle: "Wszystkie produkty – ekstrakty z ziół i grzybów",
   listDescription:
-    "Cała oferta Metilde ze standaryzowanymi ekstraktami z ziół i grzybów: Lion's Mane, Cordyceps, Reishi, Chaga, Maca i więcej. Opracowane w Szwecji.",
+    "Cała oferta Metilde ze standaryzowanymi ekstraktami z ziół i grzybów: Lion's Mane, Cordyceps, Reishi, Chaga, Maca i więcej.",
   sorts: { utvald: "Polecane", "pris-lag": "Najniższa cena", "pris-hog": "Najwyższa cena", namn: "A–Z" },
   bundles: "Zestawy",
   allProducts: "Wszystkie produkty",
   products: "Produkty",
-  listIntro: "Standaryzowane ekstrakty w wegańskich kapsułkach, opracowane w Szwecji i pakowane w plastikowe słoiki.",
+  listIntro: "Standaryzowane ekstrakty w wegańskich kapsułkach, pakowane w plastikowe słoiki.",
   categoryNav: "Kategoria",
   all: "Wszystkie",
   sortLabel: "Sortuj:",

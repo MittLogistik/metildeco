@@ -95,7 +95,7 @@ export const faqGroups: FaqGroup[] = [
     items: [
       {
         q: "Var kommer era produkter ifrån?",
-        a: "Metilde är ett svenskt varumärke och sortimentet tas fram i Sverige. Råvarorna och extrakten kommer från länderna där växterna hör hemma, till exempel maca från Anderna.",
+        a: "Råvarorna och extrakten kommer från länderna där växterna hör hemma, till exempel maca från Anderna.",
       },
       {
         q: "Hur vet jag vilken batch jag har fått?",

@@ -294,7 +294,7 @@ const quality: LegalDoc = {
       items: [
         "Vegansk kapsel utan fyllnadsmedel.",
         "Extraktstyrka, mängd per kapsel och latinskt namn står på burken.",
-        "Kapslarna levereras i plastburk. Metilde är ett svenskt varumärke; råvarorna kommer från länderna där växterna hör hemma.",
+        "Kapslarna levereras i plastburk. Råvarorna kommer från länderna där växterna hör hemma.",
         "Batchnummer och bäst före-datum på varje burk.",
       ],
     },

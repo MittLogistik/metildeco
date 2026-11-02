@@ -48,7 +48,7 @@ export const messages: LayoutMessages = {
     subscription: "Subskrypcja",
     articles: "Journal",
     cookies: "Pliki cookie",
-    blurb: "Standaryzowane ekstrakty z ziół i grzybów, opracowane w Szwecji. W wegańskich kapsułkach bez wypełniaczy.",
+    blurb: "Standaryzowane ekstrakty z ziół i grzybów. W wegańskich kapsułkach bez wypełniaczy.",
     rights: "Wszelkie prawa zastrzeżone.",
   },
   trust: {

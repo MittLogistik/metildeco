@@ -82,7 +82,7 @@ export const articles: Record<string, ArticleText> = {
       {
         type: "products",
         heading: "Ausgewähltes Nahrungsergänzungsmittel",
-        intro: "Entdecke unseren standardisierten Lion's-Mane-Extrakt mit 60 % Polysacchariden und 45 % Beta-Glucanen, entwickelt in Schweden.",
+        intro: "Entdecke unseren standardisierten Lion's-Mane-Extrakt mit 60 % Polysacchariden und 45 % Beta-Glucanen.",
         slugs: ["lions-mane"],
       },
     ],
@@ -263,7 +263,7 @@ export const articles: Record<string, ArticleText> = {
       {
         type: "products",
         heading: "Ausgewählte Produkte",
-        intro: "Cordyceps militaris als 8:1-Extrakt, 350 mg pro Kapsel, entwickelt in Schweden.",
+        intro: "Cordyceps militaris als 8:1-Extrakt, 350 mg pro Kapsel.",
         slugs: ["cordyceps"],
       },
     ],

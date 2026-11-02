@@ -2,8 +2,8 @@ import type { CampaignMessages } from "../../campaign";
 
 export const messages: CampaignMessages = {
   metaTitle: "Pilz- und Pflanzenextrakte in veganen Kapseln",
-  metaDescription: "Standardisierte Pilz- und Pflanzenextrakte ohne Füllstoffe, in veganen Kapseln. Entwickelt in Schweden.",
-  eyebrow: "Entwickelt in Schweden · vegane Kapsel",
+  metaDescription: "Standardisierte Pilz- und Pflanzenextrakte ohne Füllstoffe, in veganen Kapseln.",
+  eyebrow: "Vegane Kapsel · ohne Füllstoffe",
   title: "Reine Pilz- und Pflanzenextrakte",
   intro: "Standardisierte Extrakte ohne Füllstoffe. Extraktstärke und Dosierung stehen auf jeder Dose.",
   cta: "Zu den Produkten",

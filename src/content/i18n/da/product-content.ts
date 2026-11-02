@@ -5,10 +5,10 @@ import type { ProductContent } from "@/content/product-content";
  * Ingen sundhedsanprisninger – kun botanik, oprindelse, ekstraktion, format og dosering.
  */
 
-const developedInSweden = {
-  heading: "Udviklet i Sverige",
+const packaging = {
+  heading: "Emballage og levering",
   body:
-    "Metilde er et svensk varemærke. Sortimentet udvikles her, og alle ordrer sendes fra vores lager i Sverige. Emballagen er en plastbøtte med skruelåg, der holder indholdet tørt mellem doserne.",
+    "Kapslerne pakkes i en plastbøtte med skruelåg, der holder indholdet tørt mellem doserne. Alle ordrer sendes fra vores lager i Sverige.",
 };
 
 export const productContent: Record<string, ProductContent> = {
@@ -16,7 +16,7 @@ export const productContent: Record<string, ProductContent> = {
     eyebrow: "Eurycoma longifolia · 200:1 rodekstrakt",
     headline: "Ren rod, 450 mg pr. kapsel",
     intro:
-      "Tongkat Ali Elite er et koncentreret 200:1-ekstrakt af roden fra Eurycoma longifolia – også kendt som Malaysian Ginseng eller Longjack. Udviklet i Sverige, i vegansk kapsel, uden tilsætningsstoffer.",
+      "Tongkat Ali Elite er et koncentreret 200:1-ekstrakt af roden fra Eurycoma longifolia – også kendt som Malaysian Ginseng eller Longjack. I vegansk kapsel, uden tilsætningsstoffer.",
     highlights: [
       { label: "Ekstrakt", value: "200:1" },
       { label: "Pr. kapsel", value: "450 mg" },
@@ -33,7 +33,7 @@ export const productContent: Record<string, ProductContent> = {
         body:
           "Kun rodekstrakt i et plantebaseret kapselskal. Vegansk, glutenfri og uden GMO – ingen bindemidler, fyldstoffer, sødestoffer eller kunstige konserveringsmidler.",
       },
-      developedInSweden,
+      packaging,
     ],
     specs: [
       { label: "Latinsk navn", value: "Eurycoma longifolia" },
@@ -43,7 +43,6 @@ export const productContent: Record<string, ProductContent> = {
       { label: "Daglig dosis", value: "1 kapsel dagligt" },
       { label: "Indhold", value: "60 kapsler – 60 dage" },
       { label: "Kapsel", value: "Vegansk (HPMC)" },
-      { label: "Udviklet i", value: "Sverige" },
     ],
     ingredients:
       "Tongkat Ali-ekstrakt (Eurycoma longifolia, rod) 200:1, kapselskal (HPMC). Indhold pr. kapsel: Tongkat Ali-ekstrakt (200:1) 450 mg.",
@@ -94,7 +93,7 @@ export const productContent: Record<string, ProductContent> = {
         body:
           "Hver batch standardiseres på indholdet af eurycomanon, så hver kapsel på 520 mg indeholder 20 mg eurycomanon. Det giver en ensartet styrke fra batch til batch. Én kapsel om dagen.",
       },
-      developedInSweden,
+      packaging,
     ],
     specs: [
       { label: "Latinsk navn", value: "Eurycoma longifolia" },
@@ -105,7 +104,6 @@ export const productContent: Record<string, ProductContent> = {
       { label: "Indhold", value: "60 kapsler – 60 dage" },
       { label: "Emballage", value: "Plastbøtte med skruelåg" },
       { label: "Kapsel", value: "Vegansk (HPMC)" },
-      { label: "Udviklet i", value: "Sverige" },
     ],
     ingredients:
       "Tongkat Ali-ekstrakt (Eurycoma longifolia, rod) 200:1, kapselskal (HPMC). Indhold pr. kapsel: Tongkat Ali-ekstrakt (200:1) 520 mg, heraf eurycomanon 20 mg.",
@@ -140,7 +138,7 @@ export const productContent: Record<string, ProductContent> = {
     eyebrow: "Fadogia agrestis · 20:1 urteekstrakt",
     headline: "Ren plante, 450 mg pr. kapsel",
     intro:
-      "Et 20:1-ekstrakt af Fadogia agrestis, en busk med lang tradition i vestafrikansk urtebrug. 450 mg pr. kapsel i vegansk kapsel – uden tilsætningsstoffer. Udviklet i Sverige.",
+      "Et 20:1-ekstrakt af Fadogia agrestis, en busk med lang tradition i vestafrikansk urtebrug. 450 mg pr. kapsel i vegansk kapsel – uden tilsætningsstoffer.",
     highlights: [
       { label: "Ekstrakt", value: "20:1" },
       { label: "Pr. kapsel", value: "450 mg" },
@@ -157,7 +155,7 @@ export const productContent: Record<string, ProductContent> = {
         body:
           "Kun Fadogia agrestis-ekstrakt i et plantebaseret kapselskal. Vegansk, glutenfri og uden GMO – ingen bindemidler, fyldstoffer eller kunstige konserveringsmidler.",
       },
-      developedInSweden,
+      packaging,
     ],
     specs: [
       { label: "Latinsk navn", value: "Fadogia agrestis" },
@@ -166,7 +164,6 @@ export const productContent: Record<string, ProductContent> = {
       { label: "Daglig dosis", value: "1 kapsel dagligt" },
       { label: "Indhold", value: "60 kapsler – 60 dage" },
       { label: "Kapsel", value: "Vegansk (HPMC)" },
-      { label: "Udviklet i", value: "Sverige" },
     ],
     ingredients:
       "Fadogia agrestis-ekstrakt 20:1, kapselskal (HPMC). Indhold pr. kapsel: Fadogia agrestis-ekstrakt (20:1) 450 mg.",
@@ -296,7 +293,6 @@ export const productContent: Record<string, ProductContent> = {
       { label: "Indhold", value: "60 kapsler – 30 til 60 dage" },
       { label: "Kapselskal", value: "Vegetabilsk (HPMC)" },
       { label: "Emballage", value: "Plastbøtte med skruelåg" },
-      { label: "Udviklet i", value: "Sverige" },
     ],
     ingredients:
       "Tongkat Ali-ekstrakt (Eurycoma longifolia, rod) 200:1, kapselskal (HPMC). Indhold pr. kapsel: Tongkat Ali-ekstrakt (200:1) 500 mg.",
@@ -347,7 +343,7 @@ export const productContent: Record<string, ProductContent> = {
         body:
           "Kun macarodekstrakt i et plantebaseret kapselskal. Vegansk, glutenfri og uden GMO – ingen bindemidler, fyldstoffer, sødestoffer eller kunstige konserveringsmidler.",
       },
-      developedInSweden,
+      packaging,
     ],
     specs: [
       { label: "Latinsk navn", value: "Lepidium meyenii" },
@@ -357,7 +353,6 @@ export const productContent: Record<string, ProductContent> = {
       { label: "Daglig dosis", value: "2 kapsler dagligt" },
       { label: "Indhold", value: "60 kapsler – 30 dage" },
       { label: "Kapsel", value: "Vegansk (HPMC)" },
-      { label: "Udviklet i", value: "Sverige" },
     ],
     ingredients:
       "Macaekstrakt (Lepidium meyenii, rod) 20:1, kapselskal (HPMC). Indhold pr. kapsel: macarodekstrakt (20:1) 470 mg.",
@@ -408,7 +403,7 @@ export const productContent: Record<string, ProductContent> = {
         body:
           "Kun mariatidselekstrakt i et plantebaseret kapselskal af pullulan. Vegansk, glutenfri og uden GMO – fri for laktose, soja, gær, hvede og mælk og uden farvestoffer, bindemidler, fyldstoffer eller kunstige konserveringsmidler.",
       },
-      developedInSweden,
+      packaging,
     ],
     specs: [
       { label: "Latinsk navn", value: "Silybum marianum" },
@@ -419,7 +414,6 @@ export const productContent: Record<string, ProductContent> = {
       { label: "Daglig dosis", value: "1 kapsel dagligt" },
       { label: "Indhold", value: "60 kapsler – 60 dage" },
       { label: "Kapsel", value: "Vegansk (pullulan)" },
-      { label: "Udviklet i", value: "Sverige" },
     ],
     ingredients:
       "Mariatidselekstrakt (Silybum marianum, frø) 20:1 standardiseret til 80 % silymarin, kapselskal (pullulan). Indhold pr. kapsel: mariatidselekstrakt 350 mg, heraf silymarin 280 mg.",
@@ -470,7 +464,7 @@ export const productContent: Record<string, ProductContent> = {
         body:
           "Kun brændenældebladekstrakt i et plantebaseret kapselskal. Vegansk, glutenfri og uden GMO – ingen bindemidler, fyldstoffer, sødestoffer eller kunstige konserveringsmidler.",
       },
-      developedInSweden,
+      packaging,
     ],
     specs: [
       { label: "Latinsk navn", value: "Urtica dioica" },
@@ -480,7 +474,6 @@ export const productContent: Record<string, ProductContent> = {
       { label: "Daglig dosis", value: "1 kapsel dagligt" },
       { label: "Indhold", value: "60 kapsler – 60 dage" },
       { label: "Kapsel", value: "Vegansk" },
-      { label: "Udviklet i", value: "Sverige" },
     ],
     ingredients:
       "Brændenældebladekstrakt (Urtica dioica, blad) 10:1, kapselskal (vegetabilsk). Indhold pr. kapsel: brændenældebladekstrakt 430 mg.",
@@ -531,7 +524,7 @@ export const productContent: Record<string, ProductContent> = {
         body:
           "Kun druekerneekstrakt i et plantebaseret kapselskal. Vegansk, glutenfri og uden GMO – ingen bindemidler, fyldstoffer, sødestoffer eller kunstige konserveringsmidler.",
       },
-      developedInSweden,
+      packaging,
     ],
     specs: [
       { label: "Latinsk navn", value: "Vitis vinifera" },
@@ -541,7 +534,6 @@ export const productContent: Record<string, ProductContent> = {
       { label: "Daglig dosis", value: "1–2 kapsler dagligt" },
       { label: "Indhold", value: "60 kapsler – 30–60 dage" },
       { label: "Kapsel", value: "Vegansk" },
-      { label: "Udviklet i", value: "Sverige" },
     ],
     ingredients:
       "Druekerneekstrakt (Vitis vinifera, kerne) standardiseret til 95 % proanthocyanidiner, kapselskal (vegetabilsk). Indhold pr. kapsel: druekerneekstrakt 500 mg, heraf proanthocyanidiner 475 mg.",
@@ -592,7 +584,7 @@ export const productContent: Record<string, ProductContent> = {
         body:
           "Kun quercetinekstrakt i et plantebaseret kapselskal. Vegansk, glutenfri og uden GMO – ingen bindemidler, fyldstoffer, sødestoffer eller kunstige konserveringsmidler.",
       },
-      developedInSweden,
+      packaging,
     ],
     specs: [
       { label: "Indhold", value: "Quercetinekstrakt" },
@@ -601,7 +593,6 @@ export const productContent: Record<string, ProductContent> = {
       { label: "Daglig dosis", value: "1 kapsel dagligt" },
       { label: "Emballage", value: "60 kapsler – 60 dage" },
       { label: "Kapsel", value: "Vegansk" },
-      { label: "Udviklet i", value: "Sverige" },
     ],
     ingredients:
       "Quercetinekstrakt (98 % quercetin), kapselskal (vegetabilsk). Indhold pr. kapsel: quercetinekstrakt 500 mg, heraf quercetin 490 mg.",
@@ -652,7 +643,7 @@ export const productContent: Record<string, ProductContent> = {
         body:
           "Kun reishiekstrakt i et plantebaseret kapselskal. Vegansk, glutenfri og uden GMO – ingen bindemidler, fyldstoffer, sødestoffer eller kunstige konserveringsmidler.",
       },
-      developedInSweden,
+      packaging,
     ],
     specs: [
       { label: "Latinsk navn", value: "Ganoderma lucidum" },
@@ -661,7 +652,6 @@ export const productContent: Record<string, ProductContent> = {
       { label: "Daglig dosis", value: "1 kapsel dagligt" },
       { label: "Emballage", value: "60 kapsler – 60 dage" },
       { label: "Kapsel", value: "Vegansk" },
-      { label: "Udviklet i", value: "Sverige" },
     ],
     ingredients:
       "Reishiekstrakt (Ganoderma lucidum) standardiseret til 40 % polysakkarider, kapselskal (vegetabilsk). Indhold pr. kapsel: reishiekstrakt 350 mg, heraf polysakkarider 140 mg.",
@@ -712,7 +702,7 @@ export const productContent: Record<string, ProductContent> = {
         body:
           "Kun chagaekstrakt i et plantebaseret kapselskal. Vegansk, glutenfri og uden GMO – ingen bindemidler, fyldstoffer, sødestoffer eller kunstige konserveringsmidler.",
       },
-      developedInSweden,
+      packaging,
     ],
     specs: [
       { label: "Latinsk navn", value: "Inonotus obliquus" },
@@ -722,7 +712,6 @@ export const productContent: Record<string, ProductContent> = {
       { label: "Daglig dosis", value: "1 kapsel dagligt" },
       { label: "Emballage", value: "60 kapsler – 60 dage" },
       { label: "Kapsel", value: "Vegansk" },
-      { label: "Udviklet i", value: "Sverige" },
     ],
     ingredients:
       "Chagaekstrakt (Inonotus obliquus) 30:1 standardiseret til 10 % polysakkarider, kapselskal (vegetabilsk). Indhold pr. kapsel: chagaekstrakt 400 mg, heraf polysakkarider 40 mg.",
@@ -773,7 +762,7 @@ export const productContent: Record<string, ProductContent> = {
         body:
           "Kun Lion's Mane-ekstrakt i et plantebaseret kapselskal. Vegansk, glutenfri og uden GMO – ingen bindemidler, fyldstoffer, sødestoffer eller kunstige konserveringsmidler.",
       },
-      developedInSweden,
+      packaging,
     ],
     specs: [
       { label: "Latinsk navn", value: "Hericium erinaceus" },
@@ -783,7 +772,6 @@ export const productContent: Record<string, ProductContent> = {
       { label: "Daglig dosis", value: "1 kapsel dagligt" },
       { label: "Emballage", value: "60 kapsler – 60 dage" },
       { label: "Kapsel", value: "Vegansk" },
-      { label: "Udviklet i", value: "Sverige" },
     ],
     ingredients:
       "Lion's Mane-ekstrakt (Hericium erinaceus) standardiseret til 60 % polysakkarider, heraf 45 % betaglucaner, kapselskal (vegetabilsk). Indhold pr. kapsel: ekstrakt 500 mg, heraf polysakkarider 300 mg og betaglucaner 225 mg.",
@@ -834,7 +822,7 @@ export const productContent: Record<string, ProductContent> = {
         body:
           "Kun cordycepsekstrakt i et plantebaseret kapselskal. Vegansk, glutenfri og uden GMO – ingen bindemidler, fyldstoffer, sødestoffer eller kunstige konserveringsmidler.",
       },
-      developedInSweden,
+      packaging,
     ],
     specs: [
       { label: "Latinsk navn", value: "Cordyceps militaris" },
@@ -844,7 +832,6 @@ export const productContent: Record<string, ProductContent> = {
       { label: "Daglig dosis", value: "1 kapsel dagligt" },
       { label: "Emballage", value: "60 kapsler – 60 dage" },
       { label: "Kapsel", value: "Vegansk" },
-      { label: "Udviklet i", value: "Sverige" },
     ],
     ingredients:
       "Cordycepsekstrakt (Cordyceps militaris) 8:1 standardiseret til 40 % polysakkarider, kapselskal (vegetabilsk). Indhold pr. kapsel: cordycepsekstrakt 350 mg, heraf polysakkarider 140 mg.",

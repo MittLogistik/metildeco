@@ -266,7 +266,7 @@ const quality: LegalDoc = {
       items: [
         "Vegan capsule with no fillers.",
         "Extract strength, amount per capsule and Latin name are stated on the jar.",
-        "The capsules come in a plastic jar. Metilde is a Swedish brand; the raw materials come from the countries where the plants are native.",
+        "The capsules come in a plastic jar. The raw materials come from the countries where the plants are native.",
         "Batch number and best-before date on every jar.",
       ],
     },

@@ -82,7 +82,7 @@ export const articles: Record<string, ArticleText> = {
       {
         type: "products",
         heading: "Uitgelicht voedingssupplement",
-        intro: "Ontdek ons gestandaardiseerde Lion's Mane-extract met 60 % polysachariden en 45 % bètaglucanen, ontwikkeld in Zweden.",
+        intro: "Ontdek ons gestandaardiseerde Lion's Mane-extract met 60 % polysachariden en 45 % bètaglucanen.",
         slugs: ["lions-mane"],
       },
     ],
@@ -263,7 +263,7 @@ export const articles: Record<string, ArticleText> = {
       {
         type: "products",
         heading: "Uitgelichte producten",
-        intro: "Cordyceps militaris als 8:1-extract, 350 mg per capsule, ontwikkeld in Zweden.",
+        intro: "Cordyceps militaris als 8:1-extract, 350 mg per capsule.",
         slugs: ["cordyceps"],
       },
     ],

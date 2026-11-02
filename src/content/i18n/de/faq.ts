@@ -93,7 +93,7 @@ export const faqGroups: FaqGroup[] = [
     items: [
       {
         q: "Woher kommen eure Produkte?",
-        a: "Metilde ist eine schwedische Marke, und das Sortiment wird in Schweden entwickelt. Die Rohstoffe und Extrakte stammen aus den Ländern, in denen die Pflanzen heimisch sind, zum Beispiel Maca aus den Anden.",
+        a: "Die Rohstoffe und Extrakte stammen aus den Ländern, in denen die Pflanzen heimisch sind, zum Beispiel Maca aus den Anden.",
       },
       {
         q: "Woran erkenne ich, welche Charge ich bekommen habe?",

@@ -98,7 +98,7 @@ export const messages: InfoMessages = {
       ["Sans complications", "Nous indiquons exactement ce que contient chaque produit. Pas de superflu, pas d'additifs cachés."],
       ["Vous obtenez ce que vous payez", "Matières premières, gélules, emballage. C'est là que va notre argent – pas dans de coûteuses campagnes publicitaires."],
       ["Un vrai abonnement", "15 % de remise, livraison offerte et contrôle total. Mettez en pause, modifiez ou résiliez quand vous le souhaitez."],
-      ["Une marque suédoise", "La gamme est développée en Suède et chaque commande est expédiée depuis la Suède."],
+      ["Expédié depuis la Suède", "Chaque commande est expédiée depuis notre entrepôt en Suède."],
     ],
     companyEyebrow: "L'entreprise",
     companyTitle: "À propos de l'entreprise",

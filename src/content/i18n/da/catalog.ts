@@ -5,7 +5,7 @@ export const catalog: CatalogText = {
   products: {
     "tongkat-ali-elite": {
       name: "Tongkat Ali Elite | 60 kapsler",
-      short: "200:1 rodekstrakt, 450 mg pr. kapsel – udviklet i Sverige.",
+      short: "200:1 rodekstrakt, 450 mg pr. kapsel.",
       bullets: [
         "200:1 rodekstrakt af Eurycoma longifolia",
         "450 mg pr. kapsel – 1 kapsel dagligt",
@@ -14,7 +14,7 @@ export const catalog: CatalogText = {
       ],
       description: [
         "Tongkat Ali Elite er et koncentreret 200:1-ekstrakt af roden fra Eurycoma longifolia, også kendt som Malaysian Ginseng eller Longjack.",
-        "Rent rodekstrakt i vegansk kapsel – uden bindemidler, fyldstoffer eller kunstige tilsætningsstoffer. Udviklet i Sverige og pakket i plastbøtte.",
+        "Rent rodekstrakt i vegansk kapsel – uden bindemidler, fyldstoffer eller kunstige tilsætningsstoffer. Pakket i plastbøtte.",
       ],
     },
     "tongkat-premium": {
@@ -28,12 +28,12 @@ export const catalog: CatalogText = {
       ],
       description: [
         "Tongkat Ali Ultra 4% er et 200:1-rodekstrakt af roden fra Eurycoma longifolia, også kendt som Malaysian Ginseng eller Longjack. Hver kapsel indeholder 520 mg ekstrakt, heraf 20 mg eurycomanon.",
-        "Rent rodekstrakt i vegansk kapsel – uden bindemidler, fyldstoffer eller kunstige tilsætningsstoffer. Udviklet i Sverige og pakket i plastbøtte med 60 kapsler.",
+        "Rent rodekstrakt i vegansk kapsel – uden bindemidler, fyldstoffer eller kunstige tilsætningsstoffer. Pakket i plastbøtte med 60 kapsler.",
       ],
     },
     "fadogia-agrestis": {
       name: "Fadogia Agrestis | 60 kapsler",
-      short: "20:1 urteekstrakt, 450 mg pr. kapsel – udviklet i Sverige.",
+      short: "20:1 urteekstrakt, 450 mg pr. kapsel.",
       bullets: [
         "20:1 ekstrakt af Fadogia agrestis",
         "450 mg pr. kapsel – 1 kapsel dagligt",
@@ -42,7 +42,7 @@ export const catalog: CatalogText = {
       ],
       description: [
         "Fadogia Agrestis er et koncentreret 20:1-ekstrakt af den afrikanske busk Fadogia agrestis, der har en lang tradition i urtebrug.",
-        "Rent ekstrakt i vegansk kapsel – uden bindemidler, fyldstoffer eller kunstige tilsætningsstoffer. Udviklet i Sverige og pakket i plastbøtte.",
+        "Rent ekstrakt i vegansk kapsel – uden bindemidler, fyldstoffer eller kunstige tilsætningsstoffer. Pakket i plastbøtte.",
       ],
     },
     "blue-lotus": {
@@ -70,7 +70,7 @@ export const catalog: CatalogText = {
       ],
       description: [
         "Black Tongkat Ali er et 200:1-rodekstrakt af Eurycoma longifolia – samme art som vores gule Tongkat Ali, men lavet af mørk rod.",
-        "500 mg ekstrakt pr. kapsel i vegetabilsk kapselskal uden fyldstoffer. Den anbefalede dosis er 1–2 kapsler om dagen. Udviklet i Sverige og pakket i plastbøtte.",
+        "500 mg ekstrakt pr. kapsel i vegetabilsk kapselskal uden fyldstoffer. Den anbefalede dosis er 1–2 kapsler om dagen. Pakket i plastbøtte.",
       ],
     },
     ashwagandha: {
@@ -94,7 +94,7 @@ export const catalog: CatalogText = {
         "20:1 ekstrakt af macarod",
         "470 mg pr. kapsel",
         "60 kapsler – 30 dage",
-        "Vegansk kapsel, udviklet i Sverige",
+        "Vegansk kapsel uden fyldstoffer",
       ],
       description: [
         "Maca (Lepidium meyenii) er en rodfrugt, der dyrkes højt oppe i Andesbjergene og har været en del af peruansk urtetradition i generationer.",
@@ -109,7 +109,7 @@ export const catalog: CatalogText = {
         "20:1 ekstrakt, 80 % silymarin",
         "350 mg pr. kapsel",
         "60 kapsler – 60 dage",
-        "Vegansk kapsel, udviklet i Sverige",
+        "Vegansk kapsel uden fyldstoffer",
       ],
       description: [
         "Mariatidsel (Silybum marianum) er en tidselplante fra Middelhavsområdet med en lang tradition i europæisk urtebrug.",
@@ -124,10 +124,10 @@ export const catalog: CatalogText = {
         "10:1 ekstrakt af brændenældeblade",
         "430 mg pr. kapsel",
         "60 kapsler – 60 dage",
-        "Vegansk kapsel, udviklet i Sverige",
+        "Vegansk kapsel uden fyldstoffer",
       ],
       description: [
-        "Brændenælde (Urtica dioica) er en traditionel plante i europæisk urtebrug. Vi bruger bladene, som tørres og koncentreres til et 10:1-ekstrakt – 430 mg pr. kapsel. Kun brændenældebladekstrakt i et plantebaseret kapselskal. Vegansk, glutenfri og uden GMO, uden bindemidler, fyldstoffer, sødestoffer eller kunstige konserveringsmidler. Udviklet i Sverige og pakket i plastbøtte.",
+        "Brændenælde (Urtica dioica) er en traditionel plante i europæisk urtebrug. Vi bruger bladene, som tørres og koncentreres til et 10:1-ekstrakt – 430 mg pr. kapsel. Kun brændenældebladekstrakt i et plantebaseret kapselskal. Vegansk, glutenfri og uden GMO, uden bindemidler, fyldstoffer, sødestoffer eller kunstige konserveringsmidler. Pakket i plastbøtte.",
       ],
     },
     druvkarneextrakt: {
@@ -137,7 +137,7 @@ export const catalog: CatalogText = {
         "95 % proanthocyanidiner (OPC)",
         "500 mg pr. kapsel",
         "60 kapsler",
-        "Vegansk kapsel, udviklet i Sverige",
+        "Vegansk kapsel uden fyldstoffer",
       ],
       description: [
         "Druekerner fra Vitis vinifera er en naturlig kilde til polyfenoler. Vores ekstrakt er standardiseret til 95 % proanthocyanidiner (OPC) – 500 mg pr. kapsel, heraf 475 mg OPC. Kun druekerneekstrakt i et plantebaseret kapselskal. Vegansk, glutenfri og uden GMO, uden bindemidler, fyldstoffer, sødestoffer eller kunstige konserveringsmidler. Pakket i plastbøtte.",
@@ -150,7 +150,7 @@ export const catalog: CatalogText = {
         "98 % rent quercetinekstrakt",
         "500 mg pr. kapsel",
         "60 kapsler – 60 dage",
-        "Vegansk kapsel, udviklet i Sverige",
+        "Vegansk kapsel uden fyldstoffer",
       ],
       description: [
         "Quercetin er en flavonoid, der forekommer naturligt i frugt og grøntsager. Vores ekstrakt har en renhed på 98 % – 500 mg pr. kapsel, heraf 490 mg quercetin. Kun quercetinekstrakt i et plantebaseret kapselskal. Vegansk, glutenfri og uden GMO, uden bindemidler, fyldstoffer, sødestoffer eller kunstige konserveringsmidler. Pakket i plastbøtte.",
@@ -163,7 +163,7 @@ export const catalog: CatalogText = {
         "40 % polysakkarider",
         "350 mg pr. kapsel",
         "60 kapsler – 60 dage",
-        "Vegansk kapsel, udviklet i Sverige",
+        "Vegansk kapsel uden fyldstoffer",
       ],
       description: [
         "Reishi (Ganoderma lucidum) er en af de mest omtalte svampe i traditionel urtekultur. Vores ekstrakt er standardiseret til 40 % polysakkarider – 350 mg pr. kapsel, heraf 140 mg polysakkarider. Kun reishiekstrakt i et plantebaseret kapselskal. Vegansk, glutenfri og uden GMO, uden bindemidler, fyldstoffer, sødestoffer eller kunstige konserveringsmidler. Pakket i plastbøtte.",
@@ -177,12 +177,12 @@ export const catalog: CatalogText = {
         "10 % polysakkarider",
         "400 mg pr. kapsel",
         "60 kapsler – 60 dage",
-        "Vegansk kapsel, udviklet i Sverige",
+        "Vegansk kapsel uden fyldstoffer",
       ],
       description: [
         "Chaga (Inonotus obliquus) vokser langsomt på birk og optager næring fra træet gennem mange år. Vores ekstrakt kommer fra vildthøstet chaga af høj kvalitet, koncentreret 30:1 og standardiseret til 10 % polysakkarider – 400 mg pr. kapsel.",
         "Kun chagaekstrakt i et plantebaseret kapselskal: vegansk, glutenfri og uden GMO, uden bindemidler, fyldstoffer, sødestoffer eller kunstige konserveringsmidler.",
-        "Udviklet i Sverige, pakket i plastbøtte. 60 kapsler rækker til 60 dage ved 1 kapsel dagligt.",
+        "Pakket i plastbøtte. 60 kapsler rækker til 60 dage ved 1 kapsel dagligt.",
       ],
     },
     "lions-mane": {
@@ -193,12 +193,12 @@ export const catalog: CatalogText = {
         "Heraf 45 % betaglucaner",
         "500 mg pr. kapsel",
         "60 kapsler – 60 dage",
-        "Vegansk kapsel, udviklet i Sverige",
+        "Vegansk kapsel uden fyldstoffer",
       ],
       description: [
         "Lion's Mane (Hericium erinaceus) har en lang historie i traditionel urtekultur i Østasien. Vores ekstrakt er standardiseret til 60 % polysakkarider, heraf 45 % betaglucaner – 500 mg pr. kapsel.",
         "Kun Lion's Mane-ekstrakt i et plantebaseret kapselskal: vegansk, glutenfri og uden GMO, uden bindemidler, fyldstoffer, sødestoffer eller kunstige konserveringsmidler.",
-        "Udviklet i Sverige, pakket i plastbøtte. 60 kapsler rækker til 60 dage ved 1 kapsel dagligt.",
+        "Pakket i plastbøtte. 60 kapsler rækker til 60 dage ved 1 kapsel dagligt.",
       ],
     },
     cordyceps: {
@@ -209,12 +209,12 @@ export const catalog: CatalogText = {
         "40 % polysakkarider",
         "350 mg pr. kapsel",
         "60 kapsler – 60 dage",
-        "Vegansk kapsel, udviklet i Sverige",
+        "Vegansk kapsel uden fyldstoffer",
       ],
       description: [
         "Cordyceps (Cordyceps militaris) har længe haft en plads i østasiatisk urtekultur. Vores ekstrakt er koncentreret 8:1 og standardiseret til 40 % polysakkarider – 350 mg pr. kapsel.",
         "Kun cordycepsekstrakt i et plantebaseret kapselskal: vegansk, glutenfri og uden GMO, uden bindemidler, fyldstoffer, sødestoffer eller kunstige konserveringsmidler.",
-        "Udviklet i Sverige, pakket i plastbøtte. 60 kapsler rækker til 60 dage ved 1 kapsel dagligt.",
+        "Pakket i plastbøtte. 60 kapsler rækker til 60 dage ved 1 kapsel dagligt.",
       ],
     },
     spirulina: {
@@ -259,7 +259,7 @@ export const catalog: CatalogText = {
       ],
       seoTitle: "Dag & aften-pakken – Tongkat Ali, Fadogia & Blue Lotus",
       seoDescription:
-        "Dag & aften-pakken: Tongkat Ali Elite 200:1, Fadogia Agrestis 20:1 og Blue Lotus 200:1. 3 × 60 veganske kapsler, udviklet i Sverige, fri fragt.",
+        "Dag & aften-pakken: Tongkat Ali Elite 200:1, Fadogia Agrestis 20:1 og Blue Lotus 200:1. 3 × 60 veganske kapsler, fri fragt.",
     },
     "tongkat-ali-extract-duo": {
       name: "Tongkat Ali Extract Duo",
@@ -270,18 +270,18 @@ export const catalog: CatalogText = {
       ],
       seoTitle: "Tongkat Ali Extract Duo – to styrker i én pakke | Metilde",
       seoDescription:
-        "Tongkat Ali Extract Duo: Tongkat Ali Elite og Ultra 4% i samme pakke. Rodekstrakter af Eurycoma longifolia, udviklet i Sverige, fri fragt.",
+        "Tongkat Ali Extract Duo: Tongkat Ali Elite og Ultra 4% i samme pakke. Rodekstrakter af Eurycoma longifolia, fri fragt.",
     },
     "tongkat-ali-fadogia-duo": {
       name: "Tongkat Ali & Fadogia Duo",
       short: "Tongkat Ali Elite og Fadogia Agrestis i samme pakke – to ekstrakter i vegansk kapsel.",
       description: [
         "Tongkat Ali & Fadogia Duo indeholder en bøtte Tongkat Ali Elite (200:1-rodekstrakt af Eurycoma longifolia, 450 mg pr. kapsel) og en bøtte Fadogia Agrestis (20:1-ekstrakt).",
-        "Begge i vegansk kapsel uden fyldstoffer, udviklet i Sverige og pakket i plastbøtter. Pakken har altid fri fragt.",
+        "Begge i vegansk kapsel uden fyldstoffer og pakket i plastbøtter. Pakken har altid fri fragt.",
       ],
       seoTitle: "Tongkat Ali & Fadogia Duo – kvalitet fra Metilde",
       seoDescription:
-        "Oplev Metildes Tongkat Ali & Fadogia Duo. To ekstrakter, 200:1 og 20:1, udviklet i Sverige. Til din daglige rutine.",
+        "Oplev Metildes Tongkat Ali & Fadogia Duo. To ekstrakter, 200:1 og 20:1. Til din daglige rutine.",
     },
     "tongkat-ali-discovery-trio": {
       name: "Tongkat Ali Discovery Trio",
@@ -289,18 +289,18 @@ export const catalog: CatalogText = {
       description: [
         "Tongkat Ali Discovery Trio indeholder en bøtte af hver af vores tre Tongkat Ali-varianter. Alle er 200:1-rodekstrakter af Eurycoma longifolia.",
         "Elite har 450 mg pr. kapsel og tages som 1 kapsel om dagen. Ultra 4% har 520 mg pr. kapsel, heraf 20 mg eurycomanon, og tages som 1 kapsel om dagen. Black er lavet af mørk rod, har 500 mg pr. kapsel og tages som 1–2 kapsler om dagen.",
-        "Alle i vegansk kapsel uden fyldstoffer, udviklet i Sverige og pakket i plastbøtter med 60 kapsler. Følg den anbefalede dosis for hvert produkt, og tag ét produkt ad gangen. Pakken har altid fri fragt.",
+        "Alle i vegansk kapsel uden fyldstoffer og pakket i plastbøtter med 60 kapsler. Følg den anbefalede dosis for hvert produkt, og tag ét produkt ad gangen. Pakken har altid fri fragt.",
       ],
       seoTitle: "Tongkat Ali Discovery Trio – hele sortimentet",
       seoDescription:
-        "Tongkat Ali Discovery Trio: Elite, Ultra 4% og Black i samme pakke. 200:1-rodekstrakter af Eurycoma longifolia, udviklet i Sverige, fri fragt.",
+        "Tongkat Ali Discovery Trio: Elite, Ultra 4% og Black i samme pakke. 200:1-rodekstrakter af Eurycoma longifolia, fri fragt.",
     },
     "metilde-botanical-collection": {
       name: "Metilde Botanical Collection",
       short: "Fire af vores ekstrakter i samme pakke: Tongkat Ali Elite, Ultra 4%, Fadogia Agrestis og Blue Lotus.",
       description: [
         "Metilde Botanical Collection indeholder en bøtte af hver: Tongkat Ali Elite (200:1, 450 mg pr. kapsel), Tongkat Ali Ultra 4% (200:1, 520 mg pr. kapsel, heraf 20 mg eurycomanon), Fadogia Agrestis (20:1) og Blue Lotus (200:1).",
-        "Alle i vegansk kapsel uden fyldstoffer, udviklet i Sverige og pakket i plastbøtter med 60 kapsler. Følg den anbefalede dosis på hver bøtte, og begynd med ét produkt ad gangen. Pakken har altid fri fragt.",
+        "Alle i vegansk kapsel uden fyldstoffer og pakket i plastbøtter med 60 kapsler. Følg den anbefalede dosis på hver bøtte, og begynd med ét produkt ad gangen. Pakken har altid fri fragt.",
       ],
       seoTitle: "Metilde Botanical Collection – botaniske ekstrakter",
       seoDescription:

@@ -2,8 +2,8 @@ import type { CampaignMessages } from "../../campaign";
 
 export const messages: CampaignMessages = {
   metaTitle: "Mushroom and plant extracts in vegan capsules",
-  metaDescription: "Standardised mushroom and plant extracts with no fillers, in vegan capsules. Developed in Sweden.",
-  eyebrow: "Developed in Sweden · vegan capsule",
+  metaDescription: "Standardised mushroom and plant extracts with no fillers, in vegan capsules.",
+  eyebrow: "Standardised extracts · vegan capsule",
   title: "Pure mushroom and plant extracts",
   intro: "Standardised extracts with no fillers. Extract strength and dose are printed on every jar.",
   cta: "See the products",

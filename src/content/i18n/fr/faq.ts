@@ -93,7 +93,7 @@ export const faqGroups: FaqGroup[] = [
     items: [
       {
         q: "D'où viennent vos produits ?",
-        a: "Metilde est une marque suédoise et la gamme est développée en Suède. Les matières premières et les extraits proviennent des pays d'origine des plantes, par exemple la maca des Andes.",
+        a: "Les matières premières et les extraits proviennent des pays d'origine des plantes, par exemple la maca des Andes.",
       },
       {
         q: "Comment savoir quel lot j'ai reçu ?",

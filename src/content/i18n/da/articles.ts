@@ -82,7 +82,7 @@ export const articles: Record<string, ArticleText> = {
       {
         type: "products",
         heading: "Udvalgt kosttilskud",
-        intro: "Udforsk vores standardiserede Lion's Mane-ekstrakt med 60 % polysakkarider og 45 % betaglukaner, udviklet i Sverige.",
+        intro: "Udforsk vores standardiserede Lion's Mane-ekstrakt med 60 % polysakkarider og 45 % betaglukaner.",
         slugs: ["lions-mane"],
       },
     ],
@@ -263,7 +263,7 @@ export const articles: Record<string, ArticleText> = {
       {
         type: "products",
         heading: "Udvalgte produkter",
-        intro: "Cordyceps militaris som 8:1-ekstrakt, 350 mg pr. kapsel, udviklet i Sverige.",
+        intro: "Cordyceps militaris som 8:1-ekstrakt, 350 mg pr. kapsel.",
         slugs: ["cordyceps"],
       },
     ],

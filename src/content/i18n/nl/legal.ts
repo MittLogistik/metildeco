@@ -266,7 +266,7 @@ const quality: LegalDoc = {
       items: [
         "Veganistische capsule zonder vulstoffen.",
         "Extractsterkte, hoeveelheid per capsule en Latijnse naam staan op de pot.",
-        "De capsules worden geleverd in een plastic pot. Metilde is een Zweeds merk; de grondstoffen komen uit de landen waar de planten van nature thuishoren.",
+        "De capsules worden geleverd in een plastic pot. De grondstoffen komen uit de landen waar de planten van nature thuishoren.",
         "Batchnummer en houdbaarheidsdatum op elke pot.",
       ],
     },

@@ -5,7 +5,7 @@ export const catalog: CatalogText = {
   products: {
     "tongkat-ali-elite": {
       name: "Tongkat Ali Elite | 60 gélules",
-      short: "Extrait de racine 200:1, 450 mg par gélule – développé en Suède.",
+      short: "Extrait de racine 200:1, 450 mg par gélule.",
       bullets: [
         "Extrait de racine 200:1 d'Eurycoma longifolia",
         "450 mg par gélule – 1 gélule par jour",
@@ -14,7 +14,7 @@ export const catalog: CatalogText = {
       ],
       description: [
         "Tongkat Ali Elite est un extrait concentré 200:1 de la racine d'Eurycoma longifolia, aussi appelée Malaysian Ginseng ou Longjack.",
-        "Un extrait de racine pur en gélule végane – sans liants, agents de charge ni additifs artificiels. Développé en Suède et conditionné en pot plastique.",
+        "Un extrait de racine pur en gélule végane – sans liants, agents de charge ni additifs artificiels. Conditionné en pot plastique.",
       ],
     },
     "tongkat-premium": {
@@ -28,12 +28,12 @@ export const catalog: CatalogText = {
       ],
       description: [
         "Tongkat Ali Ultra 4% est un extrait 200:1 de la racine d'Eurycoma longifolia, aussi appelée Malaysian Ginseng ou Longjack. Chaque gélule contient 520 mg d'extrait, dont 20 mg d'eurycomanone.",
-        "Un extrait de racine pur en gélule végane – sans liants, agents de charge ni additifs artificiels. Développé en Suède et conditionné en pot plastique de 60 gélules.",
+        "Un extrait de racine pur en gélule végane – sans liants, agents de charge ni additifs artificiels. Conditionné en pot plastique de 60 gélules.",
       ],
     },
     "fadogia-agrestis": {
       name: "Fadogia Agrestis | 60 gélules",
-      short: "Extrait de plante 20:1, 450 mg par gélule – développé en Suède.",
+      short: "Extrait de plante 20:1, 450 mg par gélule.",
       bullets: [
         "Extrait 20:1 de Fadogia agrestis",
         "450 mg par gélule – 1 gélule par jour",
@@ -42,7 +42,7 @@ export const catalog: CatalogText = {
       ],
       description: [
         "Fadogia Agrestis est un extrait concentré 20:1 de l'arbuste africain Fadogia agrestis, doté d'une longue tradition d'usage en herboristerie.",
-        "Un extrait pur en gélule végane – sans liants, agents de charge ni additifs artificiels. Développé en Suède et conditionné en pot plastique.",
+        "Un extrait pur en gélule végane – sans liants, agents de charge ni additifs artificiels. Conditionné en pot plastique.",
       ],
     },
     "blue-lotus": {
@@ -70,7 +70,7 @@ export const catalog: CatalogText = {
       ],
       description: [
         "Black Tongkat Ali est un extrait de racine 200:1 d'Eurycoma longifolia, la même espèce que notre Tongkat Ali jaune, élaboré à partir de racine sombre.",
-        "500 mg d'extrait par gélule dans une enveloppe végétale, sans agents de charge. La dose recommandée est de 1 à 2 gélules par jour. Développé en Suède et conditionné en pot plastique.",
+        "500 mg d'extrait par gélule dans une enveloppe végétale, sans agents de charge. La dose recommandée est de 1 à 2 gélules par jour. Conditionné en pot plastique.",
       ],
     },
     ashwagandha: {
@@ -94,7 +94,7 @@ export const catalog: CatalogText = {
         "Extrait 20:1 de racine de maca",
         "470 mg par gélule",
         "60 gélules – 30 jours",
-        "Gélule végane, développée en Suède",
+        "Gélule végane",
       ],
       description: [
         "La maca (Lepidium meyenii) est une plante à racine tubéreuse cultivée en haute altitude dans les Andes, qui fait partie de la tradition herboriste péruvienne depuis des générations.",
@@ -109,7 +109,7 @@ export const catalog: CatalogText = {
         "Extrait 20:1, 80 % de silymarine",
         "350 mg par gélule",
         "60 gélules – 60 jours",
-        "Gélule végane, développée en Suède",
+        "Gélule végane",
       ],
       description: [
         "Le chardon-Marie (Silybum marianum) est une plante de la famille des chardons originaire du bassin méditerranéen, avec une longue tradition dans l'herboristerie européenne.",
@@ -124,10 +124,10 @@ export const catalog: CatalogText = {
         "Extrait 10:1 de feuille d'ortie",
         "430 mg par gélule",
         "60 gélules – 60 jours",
-        "Gélule végane, développée en Suède",
+        "Gélule végane",
       ],
       description: [
-        "La grande ortie (Urtica dioica) est une plante traditionnelle de l'herboristerie européenne. Nous utilisons les feuilles, séchées puis concentrées en un extrait 10:1 – 430 mg par gélule. Uniquement de l'extrait de feuille d'ortie dans une enveloppe de gélule végétale. Végan, sans gluten et sans OGM, sans liants, agents de charge, édulcorants ni conservateurs artificiels. Développé en Suède et conditionné en pot plastique.",
+        "La grande ortie (Urtica dioica) est une plante traditionnelle de l'herboristerie européenne. Nous utilisons les feuilles, séchées puis concentrées en un extrait 10:1 – 430 mg par gélule. Uniquement de l'extrait de feuille d'ortie dans une enveloppe de gélule végétale. Végan, sans gluten et sans OGM, sans liants, agents de charge, édulcorants ni conservateurs artificiels. Conditionné en pot plastique.",
       ],
     },
     druvkarneextrakt: {
@@ -137,7 +137,7 @@ export const catalog: CatalogText = {
         "95 % de proanthocyanidines (OPC)",
         "500 mg par gélule",
         "60 gélules",
-        "Gélule végane, développée en Suède",
+        "Gélule végane",
       ],
       description: [
         "Les pépins de raisin de Vitis vinifera sont une source naturelle de polyphénols. Notre extrait est standardisé à 95 % de proanthocyanidines (OPC) – 500 mg par gélule, dont 475 mg d'OPC. Uniquement de l'extrait de pépins de raisin dans une enveloppe de gélule végétale. Végan, sans gluten et sans OGM, sans liants, agents de charge, édulcorants ni conservateurs artificiels. Conditionné en pot plastique.",
@@ -150,7 +150,7 @@ export const catalog: CatalogText = {
         "Extrait de quercétine pur à 98 %",
         "500 mg par gélule",
         "60 gélules – 60 jours",
-        "Gélule végane, développée en Suède",
+        "Gélule végane",
       ],
       description: [
         "La quercétine est un flavonoïde présent naturellement dans les fruits et les légumes. Notre extrait est pur à 98 % – 500 mg par gélule, dont 490 mg de quercétine. Uniquement de l'extrait de quercétine dans une enveloppe de gélule végétale. Végan, sans gluten et sans OGM, sans liants, agents de charge, édulcorants ni conservateurs artificiels. Conditionné en pot plastique.",
@@ -163,7 +163,7 @@ export const catalog: CatalogText = {
         "40 % de polysaccharides",
         "350 mg par gélule",
         "60 gélules – 60 jours",
-        "Gélule végane, développée en Suède",
+        "Gélule végane",
       ],
       description: [
         "Le reishi (Ganoderma lucidum) est l'un des champignons les plus connus de l'herboristerie traditionnelle. Notre extrait est standardisé à 40 % de polysaccharides – 350 mg par gélule, dont 140 mg de polysaccharides. Uniquement de l'extrait de reishi dans une enveloppe de gélule végétale. Végan, sans gluten et sans OGM, sans liants, agents de charge, édulcorants ni conservateurs artificiels. Conditionné en pot plastique.",
@@ -177,12 +177,12 @@ export const catalog: CatalogText = {
         "10 % de polysaccharides",
         "400 mg par gélule",
         "60 gélules – 60 jours",
-        "Gélule végane, développée en Suède",
+        "Gélule végane",
       ],
       description: [
         "Le chaga (Inonotus obliquus) pousse lentement sur le bouleau et y puise des nutriments pendant de nombreuses années. Notre extrait provient de chaga sauvage de grande qualité, concentré 30:1 et standardisé à 10 % de polysaccharides – 400 mg par gélule.",
         "Uniquement de l'extrait de chaga dans une enveloppe de gélule végétale : végan, sans gluten et sans OGM, sans liants, agents de charge, édulcorants ni conservateurs artificiels.",
-        "Développé en Suède, conditionné en pot plastique. 60 gélules suffisent pour 60 jours à raison de 1 gélule par jour.",
+        "Conditionné en pot plastique. 60 gélules suffisent pour 60 jours à raison de 1 gélule par jour.",
       ],
     },
     "lions-mane": {
@@ -193,12 +193,12 @@ export const catalog: CatalogText = {
         "Dont 45 % de bêta-glucanes",
         "500 mg par gélule",
         "60 gélules – 60 jours",
-        "Gélule végane, développée en Suède",
+        "Gélule végane",
       ],
       description: [
         "Le Lion's Mane (Hericium erinaceus) a une longue histoire dans l'herboristerie traditionnelle d'Asie de l'Est. Notre extrait est standardisé à 60 % de polysaccharides, dont 45 % de bêta-glucanes – 500 mg par gélule.",
         "Uniquement de l'extrait de Lion's Mane dans une enveloppe de gélule végétale : végan, sans gluten et sans OGM, sans liants, agents de charge, édulcorants ni conservateurs artificiels.",
-        "Développé en Suède, conditionné en pot plastique. 60 gélules suffisent pour 60 jours à raison de 1 gélule par jour.",
+        "Conditionné en pot plastique. 60 gélules suffisent pour 60 jours à raison de 1 gélule par jour.",
       ],
     },
     cordyceps: {
@@ -209,12 +209,12 @@ export const catalog: CatalogText = {
         "40 % de polysaccharides",
         "350 mg par gélule",
         "60 gélules – 60 jours",
-        "Gélule végane, développée en Suède",
+        "Gélule végane",
       ],
       description: [
         "Le cordyceps (Cordyceps militaris) occupe depuis longtemps une place dans l'herboristerie d'Asie de l'Est. Notre extrait est concentré 8:1 et standardisé à 40 % de polysaccharides – 350 mg par gélule.",
         "Uniquement de l'extrait de cordyceps dans une enveloppe de gélule végétale : végan, sans gluten et sans OGM, sans liants, agents de charge, édulcorants ni conservateurs artificiels.",
-        "Développé en Suède, conditionné en pot plastique. 60 gélules suffisent pour 60 jours à raison de 1 gélule par jour.",
+        "Conditionné en pot plastique. 60 gélules suffisent pour 60 jours à raison de 1 gélule par jour.",
       ],
     },
     spirulina: {
@@ -259,7 +259,7 @@ export const catalog: CatalogText = {
       ],
       seoTitle: "Pack Jour & Soir – Tongkat Ali, Fadogia & Blue Lotus",
       seoDescription:
-        "Le pack Jour & Soir : Tongkat Ali Elite 200:1, Fadogia Agrestis 20:1 et Blue Lotus 200:1. 3 × 60 gélules véganes, développées en Suède, livraison offerte.",
+        "Le pack Jour & Soir : Tongkat Ali Elite 200:1, Fadogia Agrestis 20:1 et Blue Lotus 200:1. 3 × 60 gélules véganes, livraison offerte.",
     },
     "tongkat-ali-extract-duo": {
       name: "Tongkat Ali Extract Duo",
@@ -270,18 +270,18 @@ export const catalog: CatalogText = {
       ],
       seoTitle: "Tongkat Ali Extract Duo – deux concentrations en un pack | Metilde",
       seoDescription:
-        "Tongkat Ali Extract Duo : Tongkat Ali Elite et Ultra 4% dans le même pack. Extraits de racine d'Eurycoma longifolia, développés en Suède, livraison offerte.",
+        "Tongkat Ali Extract Duo : Tongkat Ali Elite et Ultra 4% dans le même pack. Extraits de racine d'Eurycoma longifolia, livraison offerte.",
     },
     "tongkat-ali-fadogia-duo": {
       name: "Tongkat Ali & Fadogia Duo",
       short: "Tongkat Ali Elite et Fadogia Agrestis dans le même pack – deux extraits en gélule végane.",
       description: [
         "Le Tongkat Ali & Fadogia Duo contient un pot de Tongkat Ali Elite (extrait de racine 200:1 d'Eurycoma longifolia, 450 mg par gélule) et un pot de Fadogia Agrestis (extrait 20:1).",
-        "Les deux en gélule végane sans agents de charge, développés en Suède et conditionnés en pots plastique. La livraison du pack est toujours offerte.",
+        "Les deux en gélule végane sans agents de charge, conditionnés en pots plastique. La livraison du pack est toujours offerte.",
       ],
       seoTitle: "Tongkat Ali & Fadogia Duo – Metilde",
       seoDescription:
-        "Découvrez le Tongkat Ali & Fadogia Duo de Metilde : deux extraits, 200:1 et 20:1, en gélule végane. Développés en Suède, pour votre routine quotidienne.",
+        "Découvrez le Tongkat Ali & Fadogia Duo de Metilde : deux extraits, 200:1 et 20:1, en gélule végane, pour votre routine quotidienne.",
     },
     "tongkat-ali-discovery-trio": {
       name: "Tongkat Ali Discovery Trio",
@@ -289,18 +289,18 @@ export const catalog: CatalogText = {
       description: [
         "Le Tongkat Ali Discovery Trio contient un pot de chacune de nos trois variantes de Tongkat Ali. Toutes sont des extraits de racine 200:1 d'Eurycoma longifolia.",
         "Elite contient 450 mg par gélule et se prend à raison de 1 gélule par jour. Ultra 4% contient 520 mg par gélule, dont 20 mg d'eurycomanone, et se prend à raison de 1 gélule par jour. Black est élaboré à partir de racine sombre, contient 500 mg par gélule et se prend à raison de 1 à 2 gélules par jour.",
-        "Tous en gélule végane sans agents de charge, développés en Suède et conditionnés en pots plastique de 60 gélules. Respectez la dose recommandée pour chaque produit et prenez un seul produit à la fois. La livraison du pack est toujours offerte.",
+        "Tous en gélule végane sans agents de charge, conditionnés en pots plastique de 60 gélules. Respectez la dose recommandée pour chaque produit et prenez un seul produit à la fois. La livraison du pack est toujours offerte.",
       ],
       seoTitle: "Tongkat Ali Discovery Trio – découvrez toute la gamme",
       seoDescription:
-        "Tongkat Ali Discovery Trio : Elite, Ultra 4% et Black dans le même pack. Extraits de racine 200:1 d'Eurycoma longifolia, développés en Suède, livraison offerte.",
+        "Tongkat Ali Discovery Trio : Elite, Ultra 4% et Black dans le même pack. Extraits de racine 200:1 d'Eurycoma longifolia, livraison offerte.",
     },
     "metilde-botanical-collection": {
       name: "Metilde Botanical Collection",
       short: "Quatre de nos extraits dans le même pack : Tongkat Ali Elite, Ultra 4%, Fadogia Agrestis et Blue Lotus.",
       description: [
         "La Metilde Botanical Collection contient un pot de chacun des produits suivants : Tongkat Ali Elite (200:1, 450 mg par gélule), Tongkat Ali Ultra 4% (200:1, 520 mg par gélule, dont 20 mg d'eurycomanone), Fadogia Agrestis (20:1) et Blue Lotus (200:1).",
-        "Tous en gélule végane sans agents de charge, développés en Suède et conditionnés en pots plastique de 60 gélules. Respectez la dose recommandée indiquée sur chaque pot et commencez par un produit à la fois. La livraison du pack est toujours offerte.",
+        "Tous en gélule végane sans agents de charge, conditionnés en pots plastique de 60 gélules. Respectez la dose recommandée indiquée sur chaque pot et commencez par un produit à la fois. La livraison du pack est toujours offerte.",
       ],
       seoTitle: "Metilde Botanical Collection – extraits botaniques",
       seoDescription:

@@ -5,10 +5,10 @@ import type { ProductContent } from "@/content/product-content";
  * Bez oświadczeń zdrowotnych – tylko botanika, pochodzenie, ekstrakcja, forma i dawkowanie.
  */
 
-const developedInSweden = {
-  heading: "Opracowane w Szwecji",
+const packaging = {
+  heading: "Opakowanie i dostawa",
   body:
-    "Metilde to szwedzka marka. Tutaj powstaje cały asortyment, a każde zamówienie wysyłamy z naszego magazynu w Szwecji. Opakowanie to plastikowy pojemnik z zakrętką, który utrzymuje zawartość suchą między kolejnymi dawkami.",
+    "Kapsułki pakujemy w plastikowy słoik z zakrętką, który utrzymuje zawartość suchą między kolejnymi dawkami. Każde zamówienie wysyłamy z naszego magazynu w Szwecji.",
 };
 
 const noExceed = "Nie przekraczaj zalecanej dziennej porcji.";
@@ -29,7 +29,7 @@ export const productContent: Record<string, ProductContent> = {
     eyebrow: "Eurycoma longifolia · ekstrakt z korzenia 200:1",
     headline: "Czysty korzeń, 450 mg w kapsułce",
     intro:
-      "Tongkat Ali Elite to skoncentrowany ekstrakt 200:1 z korzenia Eurycoma longifolia – znanej też jako Malaysian Ginseng lub Longjack. Opracowany w Szwecji, w wegańskiej kapsułce, bez dodatków.",
+      "Tongkat Ali Elite to skoncentrowany ekstrakt 200:1 z korzenia Eurycoma longifolia – znanej też jako Malaysian Ginseng lub Longjack. W wegańskiej kapsułce, bez dodatków.",
     highlights: [
       { label: "Ekstrakt", value: "200:1" },
       { label: "W kapsułce", value: "450 mg" },
@@ -46,7 +46,7 @@ export const productContent: Record<string, ProductContent> = {
         body:
           "Tylko ekstrakt z korzenia w roślinnej otoczce kapsułki. Wegański, bezglutenowy i bez GMO – bez substancji wiążących, wypełniaczy, słodzików i sztucznych konserwantów.",
       },
-      developedInSweden,
+      packaging,
     ],
     specs: [
       { label: "Nazwa łacińska", value: "Eurycoma longifolia" },
@@ -56,7 +56,6 @@ export const productContent: Record<string, ProductContent> = {
       { label: "Dzienna porcja", value: "1 kapsułka dziennie" },
       { label: "Zawartość", value: "60 kapsułek – 60 dni" },
       { label: "Kapsułka", value: "Wegańska (HPMC)" },
-      { label: "Opracowano w", value: "Szwecji" },
     ],
     ingredients:
       "Ekstrakt z Tongkat Ali (Eurycoma longifolia, korzeń) 200:1, otoczka kapsułki (HPMC). Zawartość w kapsułce: ekstrakt z Tongkat Ali (200:1) 450 mg.",
@@ -99,7 +98,7 @@ export const productContent: Record<string, ProductContent> = {
         body:
           "Każda partia jest standaryzowana pod kątem zawartości eurykomanonu, tak aby każda kapsułka o masie 520 mg zawierała 20 mg eurykomanonu. Dzięki temu moc jest taka sama w kolejnych partiach. Jedna kapsułka dziennie.",
       },
-      developedInSweden,
+      packaging,
     ],
     specs: [
       { label: "Nazwa łacińska", value: "Eurycoma longifolia" },
@@ -110,7 +109,6 @@ export const productContent: Record<string, ProductContent> = {
       { label: "Zawartość", value: "60 kapsułek – 60 dni" },
       { label: "Opakowanie", value: "Plastikowy pojemnik z zakrętką" },
       { label: "Kapsułka", value: "Wegańska (HPMC)" },
-      { label: "Opracowano w", value: "Szwecji" },
     ],
     ingredients:
       "Ekstrakt z Tongkat Ali (Eurycoma longifolia, korzeń) 200:1, otoczka kapsułki (HPMC). Zawartość w kapsułce: ekstrakt z Tongkat Ali (200:1) 520 mg, w tym eurykomanon 20 mg.",
@@ -142,7 +140,7 @@ export const productContent: Record<string, ProductContent> = {
     eyebrow: "Fadogia agrestis · ekstrakt ziołowy 20:1",
     headline: "Czysta roślina, 450 mg w kapsułce",
     intro:
-      "Ekstrakt 20:1 z Fadogia agrestis – krzewu o długiej tradycji w zielarstwie Afryki Zachodniej. 450 mg w wegańskiej kapsułce – bez dodatków. Opracowany w Szwecji.",
+      "Ekstrakt 20:1 z Fadogia agrestis – krzewu o długiej tradycji w zielarstwie Afryki Zachodniej. 450 mg w wegańskiej kapsułce – bez dodatków.",
     highlights: [
       { label: "Ekstrakt", value: "20:1" },
       { label: "W kapsułce", value: "450 mg" },
@@ -159,7 +157,7 @@ export const productContent: Record<string, ProductContent> = {
         body:
           "Tylko ekstrakt z Fadogia agrestis w roślinnej otoczce kapsułki. Wegański, bezglutenowy i bez GMO – bez substancji wiążących, wypełniaczy i sztucznych konserwantów.",
       },
-      developedInSweden,
+      packaging,
     ],
     specs: [
       { label: "Nazwa łacińska", value: "Fadogia agrestis" },
@@ -168,7 +166,6 @@ export const productContent: Record<string, ProductContent> = {
       { label: "Dzienna porcja", value: "1 kapsułka dziennie" },
       { label: "Zawartość", value: "60 kapsułek – 60 dni" },
       { label: "Kapsułka", value: "Wegańska (HPMC)" },
-      { label: "Opracowano w", value: "Szwecji" },
     ],
     ingredients:
       "Ekstrakt z Fadogia agrestis 20:1, otoczka kapsułki (HPMC). Zawartość w kapsułce: ekstrakt z Fadogia agrestis (20:1) 450 mg.",
@@ -290,7 +287,6 @@ export const productContent: Record<string, ProductContent> = {
       { label: "Zawartość", value: "60 kapsułek – od 30 do 60 dni" },
       { label: "Otoczka kapsułki", value: "Roślinna (HPMC)" },
       { label: "Opakowanie", value: "Plastikowy pojemnik z zakrętką" },
-      { label: "Opracowano w", value: "Szwecji" },
     ],
     ingredients:
       "Ekstrakt z Tongkat Ali (Eurycoma longifolia, korzeń) 200:1, otoczka kapsułki (HPMC). Zawartość w kapsułce: ekstrakt z Tongkat Ali (200:1) 500 mg.",
@@ -399,7 +395,7 @@ export const productContent: Record<string, ProductContent> = {
         heading: "Czysty skład",
         body: `Tylko ekstrakt z korzenia maca w roślinnej otoczce kapsułki. ${cleanNoSweeteners}`,
       },
-      developedInSweden,
+      packaging,
     ],
     specs: [
       { label: "Nazwa łacińska", value: "Lepidium meyenii" },
@@ -409,7 +405,6 @@ export const productContent: Record<string, ProductContent> = {
       { label: "Dzienna porcja", value: "2 kapsułki dziennie" },
       { label: "Zawartość", value: "60 kapsułek – 30 dni" },
       { label: "Kapsułka", value: "Wegańska (HPMC)" },
-      { label: "Opracowano w", value: "Szwecji" },
     ],
     ingredients:
       "Ekstrakt z maca (Lepidium meyenii, korzeń) 20:1, otoczka kapsułki (HPMC). Zawartość w kapsułce: ekstrakt z korzenia maca (20:1) 470 mg.",
@@ -452,7 +447,7 @@ export const productContent: Record<string, ProductContent> = {
         body:
           "Tylko ekstrakt z ostropestu w roślinnej otoczce kapsułki z pullulanu. Wegański, bezglutenowy i bez GMO – bez laktozy, soi, drożdży, pszenicy i mleka, a także bez barwników, substancji wiążących, wypełniaczy i sztucznych konserwantów.",
       },
-      developedInSweden,
+      packaging,
     ],
     specs: [
       { label: "Nazwa łacińska", value: "Silybum marianum" },
@@ -463,7 +458,6 @@ export const productContent: Record<string, ProductContent> = {
       { label: "Dzienna porcja", value: "1 kapsułka dziennie" },
       { label: "Zawartość", value: "60 kapsułek – 60 dni" },
       { label: "Kapsułka", value: "Wegańska (pullulan)" },
-      { label: "Opracowano w", value: "Szwecji" },
     ],
     ingredients:
       "Ekstrakt z ostropestu plamistego (Silybum marianum, nasiona) 20:1 standaryzowany na 80% sylimaryny, otoczka kapsułki (pullulan). Zawartość w kapsułce: ekstrakt z ostropestu plamistego 350 mg, w tym sylimaryna 280 mg.",
@@ -505,7 +499,7 @@ export const productContent: Record<string, ProductContent> = {
         heading: "Czysty skład",
         body: `Tylko ekstrakt z liści pokrzywy w roślinnej otoczce kapsułki. ${cleanNoSweeteners}`,
       },
-      developedInSweden,
+      packaging,
     ],
     specs: [
       { label: "Nazwa łacińska", value: "Urtica dioica" },
@@ -515,7 +509,6 @@ export const productContent: Record<string, ProductContent> = {
       { label: "Dzienna porcja", value: "1 kapsułka dziennie" },
       { label: "Zawartość", value: "60 kapsułek – 60 dni" },
       { label: "Kapsułka", value: "Wegańska" },
-      { label: "Opracowano w", value: "Szwecji" },
     ],
     ingredients:
       "Ekstrakt z liści pokrzywy (Urtica dioica, liść) 10:1, otoczka kapsułki (roślinna). Zawartość w kapsułce: ekstrakt z liści pokrzywy 430 mg.",
@@ -554,7 +547,7 @@ export const productContent: Record<string, ProductContent> = {
         heading: "Czysty skład",
         body: `Tylko ekstrakt z pestek winogron w roślinnej otoczce kapsułki. ${cleanNoSweeteners}`,
       },
-      developedInSweden,
+      packaging,
     ],
     specs: [
       { label: "Nazwa łacińska", value: "Vitis vinifera" },
@@ -564,7 +557,6 @@ export const productContent: Record<string, ProductContent> = {
       { label: "Dzienna porcja", value: "1–2 kapsułki dziennie" },
       { label: "Zawartość", value: "60 kapsułek – 30–60 dni" },
       { label: "Kapsułka", value: "Wegańska" },
-      { label: "Opracowano w", value: "Szwecji" },
     ],
     ingredients:
       "Ekstrakt z pestek winogron (Vitis vinifera, pestka) standaryzowany na 95% proantocyjanidyn, otoczka kapsułki (roślinna). Zawartość w kapsułce: ekstrakt z pestek winogron 500 mg, w tym proantocyjanidyny 475 mg.",
@@ -606,7 +598,7 @@ export const productContent: Record<string, ProductContent> = {
         heading: "Czysty skład",
         body: `Tylko ekstrakt z kwercetyny w roślinnej otoczce kapsułki. ${cleanNoSweeteners}`,
       },
-      developedInSweden,
+      packaging,
     ],
     specs: [
       { label: "Zawartość", value: "Ekstrakt z kwercetyny" },
@@ -615,7 +607,6 @@ export const productContent: Record<string, ProductContent> = {
       { label: "Dzienna porcja", value: "1 kapsułka dziennie" },
       { label: "Opakowanie", value: "60 kapsułek – 60 dni" },
       { label: "Kapsułka", value: "Wegańska" },
-      { label: "Opracowano w", value: "Szwecji" },
     ],
     ingredients:
       "Ekstrakt z kwercetyny (98% kwercetyny), otoczka kapsułki (roślinna). Zawartość w kapsułce: ekstrakt z kwercetyny 500 mg, w tym kwercetyna 490 mg.",
@@ -654,7 +645,7 @@ export const productContent: Record<string, ProductContent> = {
         heading: "Czysty skład",
         body: `Tylko ekstrakt z reishi w roślinnej otoczce kapsułki. ${cleanNoSweeteners}`,
       },
-      developedInSweden,
+      packaging,
     ],
     specs: [
       { label: "Nazwa łacińska", value: "Ganoderma lucidum" },
@@ -663,7 +654,6 @@ export const productContent: Record<string, ProductContent> = {
       { label: "Dzienna porcja", value: "1 kapsułka dziennie" },
       { label: "Opakowanie", value: "60 kapsułek – 60 dni" },
       { label: "Kapsułka", value: "Wegańska" },
-      { label: "Opracowano w", value: "Szwecji" },
     ],
     ingredients:
       "Ekstrakt z reishi (Ganoderma lucidum) standaryzowany na 40% polisacharydów, otoczka kapsułki (roślinna). Zawartość w kapsułce: ekstrakt z reishi 350 mg, w tym polisacharydy 140 mg.",
@@ -702,7 +692,7 @@ export const productContent: Record<string, ProductContent> = {
         heading: "Czysty skład",
         body: `Tylko ekstrakt z chagi w roślinnej otoczce kapsułki. ${cleanNoSweeteners}`,
       },
-      developedInSweden,
+      packaging,
     ],
     specs: [
       { label: "Nazwa łacińska", value: "Inonotus obliquus" },
@@ -712,7 +702,6 @@ export const productContent: Record<string, ProductContent> = {
       { label: "Dzienna porcja", value: "1 kapsułka dziennie" },
       { label: "Opakowanie", value: "60 kapsułek – 60 dni" },
       { label: "Kapsułka", value: "Wegańska" },
-      { label: "Opracowano w", value: "Szwecji" },
     ],
     ingredients:
       "Ekstrakt z chagi (Inonotus obliquus) 30:1 standaryzowany na 10% polisacharydów, otoczka kapsułki (roślinna). Zawartość w kapsułce: ekstrakt z chagi 400 mg, w tym polisacharydy 40 mg.",
@@ -751,7 +740,7 @@ export const productContent: Record<string, ProductContent> = {
         heading: "Czysty skład",
         body: `Tylko ekstrakt z Lion's Mane w roślinnej otoczce kapsułki. ${cleanNoSweeteners}`,
       },
-      developedInSweden,
+      packaging,
     ],
     specs: [
       { label: "Nazwa łacińska", value: "Hericium erinaceus" },
@@ -761,7 +750,6 @@ export const productContent: Record<string, ProductContent> = {
       { label: "Dzienna porcja", value: "1 kapsułka dziennie" },
       { label: "Opakowanie", value: "60 kapsułek – 60 dni" },
       { label: "Kapsułka", value: "Wegańska" },
-      { label: "Opracowano w", value: "Szwecji" },
     ],
     ingredients:
       "Ekstrakt z Lion's Mane (Hericium erinaceus) standaryzowany na 60% polisacharydów, w tym 45% beta-glukanów, otoczka kapsułki (roślinna). Zawartość w kapsułce: ekstrakt 500 mg, w tym polisacharydy 300 mg i beta-glukany 225 mg.",
@@ -800,7 +788,7 @@ export const productContent: Record<string, ProductContent> = {
         heading: "Czysty skład",
         body: `Tylko ekstrakt z cordycepsa w roślinnej otoczce kapsułki. ${cleanNoSweeteners}`,
       },
-      developedInSweden,
+      packaging,
     ],
     specs: [
       { label: "Nazwa łacińska", value: "Cordyceps militaris" },
@@ -810,7 +798,6 @@ export const productContent: Record<string, ProductContent> = {
       { label: "Dzienna porcja", value: "1 kapsułka dziennie" },
       { label: "Opakowanie", value: "60 kapsułek – 60 dni" },
       { label: "Kapsułka", value: "Wegańska" },
-      { label: "Opracowano w", value: "Szwecji" },
     ],
     ingredients:
       "Ekstrakt z cordycepsa (Cordyceps militaris) 8:1 standaryzowany na 40% polisacharydów, otoczka kapsułki (roślinna). Zawartość w kapsułce: ekstrakt z cordycepsa 350 mg, w tym polisacharydy 140 mg.",

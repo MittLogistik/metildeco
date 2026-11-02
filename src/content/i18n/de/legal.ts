@@ -266,7 +266,7 @@ const quality: LegalDoc = {
       items: [
         "Vegane Kapsel ohne Füllstoffe.",
         "Extraktstärke, Menge pro Kapsel und lateinischer Name stehen auf der Dose.",
-        "Die Kapseln werden in einer Kunststoffdose geliefert. Metilde ist eine schwedische Marke; die Rohstoffe stammen aus den Ländern, in denen die Pflanzen zu Hause sind.",
+        "Die Kapseln werden in einer Kunststoffdose geliefert. Die Rohstoffe stammen aus den Ländern, in denen die Pflanzen zu Hause sind.",
         "Chargennummer und Mindesthaltbarkeitsdatum auf jeder Dose.",
       ],
     },

@@ -22,7 +22,7 @@ export const messages: ProductMessages = {
   quality: [
     { t: "Nom latin", d: "L'espèce et la partie de la plante figurent sur chaque pot." },
     { t: "Dosage clair", d: "Le ratio d'extraction et la quantité par gélule figurent sur l'étiquette." },
-    { t: "Développé en Suède", d: "Gélule végane sans agents de charge, conditionnée en pot plastique." },
+    { t: "Gélule végane", d: "Gélule végane sans agents de charge, conditionnée en pot plastique." },
   ],
   faq: "Questions fréquentes",
   disclaimer:

@@ -27,7 +27,7 @@ export const adStyles: AdStyle[] = [
     label: "Pilar runt produkten",
     description: "Produkten i mitten, tunna pilar till fyra fakta. Som Bloom/Athletic Greens, men med innehåll i stället för löften.",
     presets: ["Callout Fan", "Pill Callouts", "Annotated Tilt", "Ingredient Compass", "Capsule Ring"],
-    script: (p) => ({ headline: shortName(p), bullets: [...facts(p).slice(0, 3), "Utvecklad i Sverige"] }),
+    script: (p) => ({ headline: shortName(p), bullets: [...facts(p).slice(0, 3), "Vegansk kapsel"] }),
     layout: "Exactly one product bottle, centered and large. Around it, four short fact labels connected to the bottle with thin hand-drawn arrows or lines. A headline at the top. Generous space, calm composition.",
   },
   {
@@ -36,7 +36,7 @@ export const adStyles: AdStyle[] = [
     description: "Produkten till vänster, rubrik och bocklista till höger. Redaktionell, som AG1.",
     presets: ["Weightless Spec Grid", "Benefit Ladder", "Quiet Numbers", "Zigzag Split"],
     // Sex punkter fyller mallarnas rutnät utan upprepningar
-    script: (p) => ({ headline: "Innehållet, rakt upp och ner.", bullets: [...facts(p), "Vegansk kapsel utan fyllnadsmedel", "Utvecklad i Sverige"].slice(0, 6), extra: [shortName(p)] }),
+    script: (p) => ({ headline: "Innehållet, rakt upp och ner.", bullets: [...facts(p), "Vegansk kapsel utan fyllnadsmedel"].slice(0, 6), extra: [shortName(p)] }),
     layout: "Editorial split layout: the product bottle on the left third, and on the right a headline with a vertical checklist of facts, each with a small green check mark and thin divider lines. Off-white background, lots of air.",
   },
   {
@@ -52,7 +52,7 @@ export const adStyles: AdStyle[] = [
     label: "Notis",
     description: "En telefonnotis över produktbilden: en påminnelse, inget löfte.",
     presets: ["Pickup Screen", "Search Bar Answer", "Slide to Answer", "Accept or Decline"],
-    script: (p) => ({ headline: "Påminnelse", sub: "1 kapsel om dagen", bullets: [shortName(p), "Utvecklad i Sverige"] }),
+    script: (p) => ({ headline: "Påminnelse", sub: "1 kapsel om dagen", bullets: [shortName(p), "Vegansk kapsel"] }),
     layout: "A phone notification card near the top of the image, with the reminder text, over a photo of the product on a calm surface. Nothing else written on the image.",
   },
 ];

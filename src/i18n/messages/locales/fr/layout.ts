@@ -40,7 +40,7 @@ export const messages: LayoutMessages = {
     subscription: "Abonnement",
     articles: "Journal",
     cookies: "Cookies",
-    blurb: "Extraits standardisés de plantes et de champignons, développés en Suède. En gélule végane, sans agents de charge.",
+    blurb: "Extraits standardisés de plantes et de champignons, en gélule végane, sans agents de charge.",
     rights: "Tous droits réservés.",
   },
   trust: {

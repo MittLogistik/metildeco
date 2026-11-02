@@ -10,8 +10,8 @@ import type { Locale } from "@/lib/i18n";
 
 const sv = {
   metaTitle: "Svamp- och växtextrakt i vegansk kapsel",
-  metaDescription: "Standardiserade svamp- och växtextrakt utan fyllnadsmedel, i vegansk kapsel. Utvecklade i Sverige.",
-  eyebrow: "Utvecklad i Sverige · vegansk kapsel",
+  metaDescription: "Standardiserade svamp- och växtextrakt utan fyllnadsmedel, i vegansk kapsel.",
+  eyebrow: "Standardiserade extrakt · vegansk kapsel",
   title: "Rena svamp- och växtextrakt",
   intro: "Standardiserade extrakt utan fyllnadsmedel. Extraktstyrka och dos står på varje burk.",
   cta: "Se produkterna",
@@ -38,8 +38,8 @@ export const campaign: Record<Locale, typeof sv> = {
   pl: plCampaignMessages,
   fi: {
     metaTitle: "Sieni- ja kasviuutteet vegaanisissa kapseleissa",
-    metaDescription: "Standardoituja sieni- ja kasviuutteita ilman täyteaineita, vegaanisissa kapseleissa. Kehitetty Ruotsissa.",
-    eyebrow: "Kehitetty Ruotsissa · vegaaninen kapseli",
+    metaDescription: "Standardoituja sieni- ja kasviuutteita ilman täyteaineita, vegaanisissa kapseleissa.",
+    eyebrow: "Standardoidut uutteet · vegaaninen kapseli",
     title: "Puhtaat sieni- ja kasviuutteet",
     intro: "Standardoituja uutteita ilman täyteaineita. Uutesuhde ja annos on merkitty jokaiseen purkkiin.",
     cta: "Katso tuotteet",
@@ -56,8 +56,8 @@ export const campaign: Record<Locale, typeof sv> = {
   },
   da: {
     metaTitle: "Svampe- og planteekstrakter i vegansk kapsel",
-    metaDescription: "Standardiserede svampe- og planteekstrakter uden fyldstoffer, i vegansk kapsel. Udviklet i Sverige.",
-    eyebrow: "Udviklet i Sverige · vegansk kapsel",
+    metaDescription: "Standardiserede svampe- og planteekstrakter uden fyldstoffer, i vegansk kapsel.",
+    eyebrow: "Standardiserede ekstrakter · vegansk kapsel",
     title: "Rene svampe- og planteekstrakter",
     intro: "Standardiserede ekstrakter uden fyldstoffer. Ekstraktstyrke og dosis står på hver bøtte.",
     cta: "Se produkterne",
@@ -74,8 +74,8 @@ export const campaign: Record<Locale, typeof sv> = {
   },
   nl: {
     metaTitle: "Paddenstoelen- en plantenextracten in vegan capsules",
-    metaDescription: "Gestandaardiseerde paddenstoelen- en plantenextracten zonder vulstoffen, in vegan capsules. Ontwikkeld in Zweden.",
-    eyebrow: "Ontwikkeld in Zweden · vegan capsule",
+    metaDescription: "Gestandaardiseerde paddenstoelen- en plantenextracten zonder vulstoffen, in vegan capsules.",
+    eyebrow: "Gestandaardiseerde extracten · vegan capsule",
     title: "Pure paddenstoelen- en plantenextracten",
     intro: "Gestandaardiseerde extracten zonder vulstoffen. Extractverhouding en dosering staan op elke pot.",
     cta: "Bekijk de producten",

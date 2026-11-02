@@ -266,7 +266,7 @@ const quality: LegalDoc = {
       items: [
         "Vegansk kapsel uden fyldstoffer.",
         "Ekstraktstyrke, mængde pr. kapsel og latinsk navn står på dåsen.",
-        "Kapslerne leveres i en plastdåse. Metilde er et svensk varemærke; råvarerne kommer fra de lande, hvor planterne hører hjemme.",
+        "Kapslerne leveres i en plastdåse. Råvarerne kommer fra de lande, hvor planterne hører hjemme.",
         "Batchnummer og bedst før-dato på hver dåse.",
       ],
     },

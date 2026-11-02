@@ -1,9 +1,9 @@
 import type { HomeMessages } from "../../home";
 
 export const messages: HomeMessages = {
-  title: "Metilde – Compléments alimentaires botaniques purs, développés en Suède",
+  title: "Metilde – Compléments alimentaires botaniques purs",
   description: (freeOver) =>
-    `Champignons fonctionnels, herbes et extraits de plantes sous forme d'extraits standardisés en gélule végane, développés en Suède. Livraison offerte dès ${freeOver}.`,
+    `Champignons fonctionnels, herbes et extraits de plantes sous forme d'extraits standardisés en gélule végane. Livraison offerte dès ${freeOver}.`,
   heroEyebrow: "Gélule végane",
   heroTitle: "Des extraits botaniques purs",
   heroTitleAccent: "pour votre quotidien",

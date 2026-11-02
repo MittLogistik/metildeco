@@ -19,12 +19,12 @@ export const messages: CatalogMessages = {
   // Produktlistan
   listTitle: "Tous les produits – extraits de plantes et de champignons",
   listDescription:
-    "Toute la gamme Metilde d'extraits standardisés de plantes et de champignons : Lion's Mane, Cordyceps, Reishi, Chaga, Maca et plus encore. Développés en Suède.",
+    "Toute la gamme Metilde d'extraits standardisés de plantes et de champignons : Lion's Mane, Cordyceps, Reishi, Chaga, Maca et plus encore.",
   sorts: { utvald: "Sélection", "pris-lag": "Prix croissant", "pris-hog": "Prix décroissant", namn: "A–Z" },
   bundles: "Packs",
   allProducts: "Tous les produits",
   products: "Produits",
-  listIntro: "Des extraits standardisés en gélule végane, développés en Suède et conditionnés en pot plastique.",
+  listIntro: "Des extraits standardisés en gélule végane, conditionnés en pot plastique.",
   categoryNav: "Catégorie",
   all: "Tous",
   sortLabel: "Trier :",

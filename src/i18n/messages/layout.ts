@@ -48,7 +48,7 @@ const sv = {
     subscription: "Prenumeration",
     articles: "Journalen",
     cookies: "Cookies",
-    blurb: "Standardiserade ört- och svampextrakt utvecklade i Sverige. I vegansk kapsel utan fyllnadsmedel.",
+    blurb: "Standardiserade ört- och svampextrakt. I vegansk kapsel utan fyllnadsmedel.",
     rights: "Alla rättigheter förbehållna.",
   },
   trust: {
@@ -162,7 +162,7 @@ export const layout: Record<Locale, typeof sv> = {
       subscription: "Kestotilaus",
       articles: "Journal",
       cookies: "Evästeet",
-      blurb: "Standardoituja yrtti- ja sieniuutteita, kehitetty Ruotsissa. Vegaanisessa kapselissa ilman täyteaineita.",
+      blurb: "Standardoituja yrtti- ja sieniuutteita. Vegaanisessa kapselissa ilman täyteaineita.",
       rights: "Kaikki oikeudet pidätetään.",
     },
     trust: {
@@ -265,7 +265,7 @@ export const layout: Record<Locale, typeof sv> = {
       subscription: "Abonnement",
       articles: "Journalen",
       cookies: "Cookies",
-      blurb: "Standardiserede urte- og svampeekstrakter udviklet i Sverige. I vegansk kapsel uden fyldstoffer.",
+      blurb: "Standardiserede urte- og svampeekstrakter. I vegansk kapsel uden fyldstoffer.",
       rights: "Alle rettigheder forbeholdes.",
     },
     trust: {
@@ -368,7 +368,7 @@ export const layout: Record<Locale, typeof sv> = {
       subscription: "Abonnement",
       articles: "Journal",
       cookies: "Cookies",
-      blurb: "Gestandaardiseerde kruiden- en paddenstoelenextracten, ontwikkeld in Zweden. In veganistische capsules zonder vulstoffen.",
+      blurb: "Gestandaardiseerde kruiden- en paddenstoelenextracten. In veganistische capsules zonder vulstoffen.",
       rights: "Alle rechten voorbehouden.",
     },
     trust: {

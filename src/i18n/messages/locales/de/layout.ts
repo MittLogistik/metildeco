@@ -40,7 +40,7 @@ export const messages: LayoutMessages = {
     subscription: "Abo",
     articles: "Journal",
     cookies: "Cookies",
-    blurb: "Standardisierte Kräuter- und Pilzextrakte, entwickelt in Schweden. In veganen Kapseln ohne Füllstoffe.",
+    blurb: "Standardisierte Kräuter- und Pilzextrakte in veganen Kapseln ohne Füllstoffe.",
     rights: "Alle Rechte vorbehalten.",
   },
   trust: {

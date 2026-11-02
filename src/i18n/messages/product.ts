@@ -29,7 +29,7 @@ const sv = {
   quality: [
     { t: "Latinskt namn", d: "Art och växtdel anges på varje burk." },
     { t: "Tydlig dosering", d: "Extraktstyrka och mängd per kapsel står på etiketten." },
-    { t: "Utvecklat i Sverige", d: "Vegansk kapsel utan fyllnadsmedel, packad i plastburk." },
+    { t: "Vegansk kapsel", d: "Vegansk kapsel utan fyllnadsmedel, packad i plastburk." },
   ],
   faq: "Vanliga frågor",
   disclaimer:
@@ -68,7 +68,7 @@ export const product: Record<Locale, typeof sv> = {
     quality: [
       { t: "Latinankielinen nimi", d: "Laji ja kasvinosa on merkitty jokaiseen purkkiin." },
       { t: "Selkeä annostus", d: "Uutteen vahvuus ja määrä kapselia kohden lukevat etiketissä." },
-      { t: "Kehitetty Ruotsissa", d: "Vegaaninen kapseli ilman täyteaineita, pakattu muovipurkkiin." },
+      { t: "Vegaaninen kapseli", d: "Vegaaninen kapseli ilman täyteaineita, pakattu muovipurkkiin." },
     ],
     faq: "Usein kysyttyä",
     disclaimer:
@@ -97,7 +97,7 @@ export const product: Record<Locale, typeof sv> = {
     quality: [
       { t: "Latinsk navn", d: "Art og plantedel står på hver bøtte." },
       { t: "Tydelig dosering", d: "Ekstraktstyrke og mængde pr. kapsel står på etiketten." },
-      { t: "Udviklet i Sverige", d: "Vegansk kapsel uden fyldstoffer, pakket i plastbøtte." },
+      { t: "Vegansk kapsel", d: "Vegansk kapsel uden fyldstoffer, pakket i plastbøtte." },
     ],
     faq: "Ofte stillede spørgsmål",
     disclaimer:
@@ -126,7 +126,7 @@ export const product: Record<Locale, typeof sv> = {
     quality: [
       { t: "Latijnse naam", d: "Soort en plantendeel staan op elke pot." },
       { t: "Duidelijke dosering", d: "Extractsterkte en hoeveelheid per capsule staan op het etiket." },
-      { t: "Ontwikkeld in Zweden", d: "Veganistische capsule zonder vulstoffen, verpakt in een plastic pot." },
+      { t: "Vegan capsule", d: "Veganistische capsule zonder vulstoffen, verpakt in een plastic pot." },
     ],
     faq: "Veelgestelde vragen",
     disclaimer:

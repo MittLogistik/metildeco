@@ -9,9 +9,9 @@ const plural = (n: number, one: string, few: string, many: string) => {
 };
 
 export const messages: HomeMessages = {
-  title: "Metilde – Czyste suplementy diety z roślin, opracowane w Szwecji",
+  title: "Metilde – Czyste suplementy diety z roślin",
   description: (freeOver: string) =>
-    `Grzyby funkcjonalne, zioła i ekstrakty roślinne jako standaryzowane ekstrakty w wegańskich kapsułkach, opracowane w Szwecji. Darmowa dostawa od ${freeOver}.`,
+    `Grzyby funkcjonalne, zioła i ekstrakty roślinne jako standaryzowane ekstrakty w wegańskich kapsułkach. Darmowa dostawa od ${freeOver}.`,
   heroEyebrow: "Wegańska kapsułka",
   heroTitle: "Czyste ekstrakty roślinne",
   heroTitleAccent: "na każdy dzień",

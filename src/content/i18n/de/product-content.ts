@@ -5,10 +5,10 @@ import type { ProductContent } from "@/content/product-content";
  * Keine gesundheitsbezogenen Angaben – nur Botanik, Herkunft, Extraktion, Form und Dosierung.
  */
 
-const developedInSweden = {
-  heading: "Entwickelt in Schweden",
+const packaging = {
+  heading: "Verpackung und Versand",
   body:
-    "Metilde ist eine schwedische Marke. Das Sortiment wird hier entwickelt, und jede Bestellung wird aus unserem Lager in Schweden verschickt. Die Verpackung ist eine Kunststoffdose mit Schraubdeckel, die den Inhalt zwischen den Einnahmen trocken hält.",
+    "Die Kapseln werden in einer Kunststoffdose mit Schraubdeckel verpackt, die den Inhalt zwischen den Einnahmen trocken hält. Jede Bestellung wird aus unserem Lager in Schweden verschickt.",
 };
 
 const noExceed = "Die empfohlene tägliche Verzehrmenge nicht überschreiten.";
@@ -29,7 +29,7 @@ export const productContent: Record<string, ProductContent> = {
     eyebrow: "Eurycoma longifolia · 200:1 Wurzelextrakt",
     headline: "Reine Wurzel, 450 mg pro Kapsel",
     intro:
-      "Tongkat Ali Elite ist ein konzentrierter 200:1-Extrakt aus der Wurzel von Eurycoma longifolia – auch bekannt als Malaysian Ginseng oder Longjack. Entwickelt in Schweden, in einer veganen Kapsel, ohne Zusatzstoffe.",
+      "Tongkat Ali Elite ist ein konzentrierter 200:1-Extrakt aus der Wurzel von Eurycoma longifolia – auch bekannt als Malaysian Ginseng oder Longjack. In einer veganen Kapsel, ohne Zusatzstoffe.",
     highlights: [
       { label: "Extrakt", value: "200:1" },
       { label: "Pro Kapsel", value: "450 mg" },
@@ -46,7 +46,7 @@ export const productContent: Record<string, ProductContent> = {
         body:
           "Nur Wurzelextrakt in einer pflanzlichen Kapselhülle. Vegan, glutenfrei und gentechnikfrei – ohne Bindemittel, Füllstoffe, Süßungsmittel oder künstliche Konservierungsstoffe.",
       },
-      developedInSweden,
+      packaging,
     ],
     specs: [
       { label: "Lateinischer Name", value: "Eurycoma longifolia" },
@@ -56,7 +56,6 @@ export const productContent: Record<string, ProductContent> = {
       { label: "Tagesdosis", value: "1 Kapsel täglich" },
       { label: "Inhalt", value: "60 Kapseln – 60 Tage" },
       { label: "Kapsel", value: "Vegan (HPMC)" },
-      { label: "Entwickelt in", value: "Schweden" },
     ],
     ingredients:
       "Tongkat-Ali-Extrakt (Eurycoma longifolia, Wurzel) 200:1, Kapselhülle (HPMC). Inhalt pro Kapsel: Tongkat-Ali-Extrakt (200:1) 450 mg.",
@@ -99,7 +98,7 @@ export const productContent: Record<string, ProductContent> = {
         body:
           "Jede Charge wird auf den Gehalt an Eurycomanon standardisiert, sodass jede Kapsel mit 520 mg 20 mg Eurycomanon enthält. So bleibt die Stärke von Charge zu Charge gleich. Eine Kapsel am Tag.",
       },
-      developedInSweden,
+      packaging,
     ],
     specs: [
       { label: "Lateinischer Name", value: "Eurycoma longifolia" },
@@ -110,7 +109,6 @@ export const productContent: Record<string, ProductContent> = {
       { label: "Inhalt", value: "60 Kapseln – 60 Tage" },
       { label: "Verpackung", value: "Kunststoffdose mit Schraubdeckel" },
       { label: "Kapsel", value: "Vegan (HPMC)" },
-      { label: "Entwickelt in", value: "Schweden" },
     ],
     ingredients:
       "Tongkat-Ali-Extrakt (Eurycoma longifolia, Wurzel) 200:1, Kapselhülle (HPMC). Inhalt pro Kapsel: Tongkat-Ali-Extrakt (200:1) 520 mg, davon Eurycomanon 20 mg.",
@@ -142,7 +140,7 @@ export const productContent: Record<string, ProductContent> = {
     eyebrow: "Fadogia agrestis · 20:1 Kräuterextrakt",
     headline: "Reine Pflanze, 450 mg pro Kapsel",
     intro:
-      "Ein 20:1-Extrakt aus Fadogia agrestis, einem Strauch mit langer Tradition in der westafrikanischen Kräuterverwendung. 450 mg pro Kapsel in einer veganen Kapsel – ohne Zusatzstoffe. Entwickelt in Schweden.",
+      "Ein 20:1-Extrakt aus Fadogia agrestis, einem Strauch mit langer Tradition in der westafrikanischen Kräuterverwendung. 450 mg pro Kapsel in einer veganen Kapsel – ohne Zusatzstoffe.",
     highlights: [
       { label: "Extrakt", value: "20:1" },
       { label: "Pro Kapsel", value: "450 mg" },
@@ -159,7 +157,7 @@ export const productContent: Record<string, ProductContent> = {
         body:
           "Nur Fadogia-agrestis-Extrakt in einer pflanzlichen Kapselhülle. Vegan, glutenfrei und gentechnikfrei – ohne Bindemittel, Füllstoffe oder künstliche Konservierungsstoffe.",
       },
-      developedInSweden,
+      packaging,
     ],
     specs: [
       { label: "Lateinischer Name", value: "Fadogia agrestis" },
@@ -168,7 +166,6 @@ export const productContent: Record<string, ProductContent> = {
       { label: "Tagesdosis", value: "1 Kapsel täglich" },
       { label: "Inhalt", value: "60 Kapseln – 60 Tage" },
       { label: "Kapsel", value: "Vegan (HPMC)" },
-      { label: "Entwickelt in", value: "Schweden" },
     ],
     ingredients:
       "Fadogia-agrestis-Extrakt 20:1, Kapselhülle (HPMC). Inhalt pro Kapsel: Fadogia-agrestis-Extrakt (20:1) 450 mg.",
@@ -290,7 +287,6 @@ export const productContent: Record<string, ProductContent> = {
       { label: "Inhalt", value: "60 Kapseln – 30 bis 60 Tage" },
       { label: "Kapselhülle", value: "Pflanzlich (HPMC)" },
       { label: "Verpackung", value: "Kunststoffdose mit Schraubdeckel" },
-      { label: "Entwickelt in", value: "Schweden" },
     ],
     ingredients:
       "Tongkat-Ali-Extrakt (Eurycoma longifolia, Wurzel) 200:1, Kapselhülle (HPMC). Inhalt pro Kapsel: Tongkat-Ali-Extrakt (200:1) 500 mg.",
@@ -399,7 +395,7 @@ export const productContent: Record<string, ProductContent> = {
         heading: "Reine Zusammensetzung",
         body: `Nur Macawurzelextrakt in einer pflanzlichen Kapselhülle. ${cleanNoSweeteners}`,
       },
-      developedInSweden,
+      packaging,
     ],
     specs: [
       { label: "Lateinischer Name", value: "Lepidium meyenii" },
@@ -409,7 +405,6 @@ export const productContent: Record<string, ProductContent> = {
       { label: "Tagesdosis", value: "2 Kapseln täglich" },
       { label: "Inhalt", value: "60 Kapseln – 30 Tage" },
       { label: "Kapsel", value: "Vegan (HPMC)" },
-      { label: "Entwickelt in", value: "Schweden" },
     ],
     ingredients:
       "Maca-Extrakt (Lepidium meyenii, Wurzel) 20:1, Kapselhülle (HPMC). Inhalt pro Kapsel: Macawurzelextrakt (20:1) 470 mg.",
@@ -452,7 +447,7 @@ export const productContent: Record<string, ProductContent> = {
         body:
           "Nur Mariendistelextrakt in einer pflanzlichen Kapselhülle aus Pullulan. Vegan, glutenfrei und gentechnikfrei – frei von Laktose, Soja, Hefe, Weizen und Milch und ohne Farbstoffe, Bindemittel, Füllstoffe oder künstliche Konservierungsstoffe.",
       },
-      developedInSweden,
+      packaging,
     ],
     specs: [
       { label: "Lateinischer Name", value: "Silybum marianum" },
@@ -463,7 +458,6 @@ export const productContent: Record<string, ProductContent> = {
       { label: "Tagesdosis", value: "1 Kapsel täglich" },
       { label: "Inhalt", value: "60 Kapseln – 60 Tage" },
       { label: "Kapsel", value: "Vegan (Pullulan)" },
-      { label: "Entwickelt in", value: "Schweden" },
     ],
     ingredients:
       "Mariendistelextrakt (Silybum marianum, Samen) 20:1, standardisiert auf 80 % Silymarin, Kapselhülle (Pullulan). Inhalt pro Kapsel: Mariendistelextrakt 350 mg, davon Silymarin 280 mg.",
@@ -505,7 +499,7 @@ export const productContent: Record<string, ProductContent> = {
         heading: "Reine Zusammensetzung",
         body: `Nur Brennnesselblattextrakt in einer pflanzlichen Kapselhülle. ${cleanNoSweeteners}`,
       },
-      developedInSweden,
+      packaging,
     ],
     specs: [
       { label: "Lateinischer Name", value: "Urtica dioica" },
@@ -515,7 +509,6 @@ export const productContent: Record<string, ProductContent> = {
       { label: "Tagesdosis", value: "1 Kapsel täglich" },
       { label: "Inhalt", value: "60 Kapseln – 60 Tage" },
       { label: "Kapsel", value: "Vegan" },
-      { label: "Entwickelt in", value: "Schweden" },
     ],
     ingredients:
       "Brennnesselblattextrakt (Urtica dioica, Blatt) 10:1, Kapselhülle (pflanzlich). Inhalt pro Kapsel: Brennnesselblattextrakt 430 mg.",
@@ -554,7 +547,7 @@ export const productContent: Record<string, ProductContent> = {
         heading: "Reine Zusammensetzung",
         body: `Nur Traubenkernextrakt in einer pflanzlichen Kapselhülle. ${cleanNoSweeteners}`,
       },
-      developedInSweden,
+      packaging,
     ],
     specs: [
       { label: "Lateinischer Name", value: "Vitis vinifera" },
@@ -564,7 +557,6 @@ export const productContent: Record<string, ProductContent> = {
       { label: "Tagesdosis", value: "1–2 Kapseln täglich" },
       { label: "Inhalt", value: "60 Kapseln – 30–60 Tage" },
       { label: "Kapsel", value: "Vegan" },
-      { label: "Entwickelt in", value: "Schweden" },
     ],
     ingredients:
       "Traubenkernextrakt (Vitis vinifera, Kern), standardisiert auf 95 % Proanthocyanidine, Kapselhülle (pflanzlich). Inhalt pro Kapsel: Traubenkernextrakt 500 mg, davon Proanthocyanidine 475 mg.",
@@ -606,7 +598,7 @@ export const productContent: Record<string, ProductContent> = {
         heading: "Reine Zusammensetzung",
         body: `Nur Quercetin-Extrakt in einer pflanzlichen Kapselhülle. ${cleanNoSweeteners}`,
       },
-      developedInSweden,
+      packaging,
     ],
     specs: [
       { label: "Inhalt", value: "Quercetin-Extrakt" },
@@ -615,7 +607,6 @@ export const productContent: Record<string, ProductContent> = {
       { label: "Tagesdosis", value: "1 Kapsel täglich" },
       { label: "Verpackung", value: "60 Kapseln – 60 Tage" },
       { label: "Kapsel", value: "Vegan" },
-      { label: "Entwickelt in", value: "Schweden" },
     ],
     ingredients:
       "Quercetin-Extrakt (98 % Quercetin), Kapselhülle (pflanzlich). Inhalt pro Kapsel: Quercetin-Extrakt 500 mg, davon Quercetin 490 mg.",
@@ -654,7 +645,7 @@ export const productContent: Record<string, ProductContent> = {
         heading: "Reine Zusammensetzung",
         body: `Nur Reishi-Extrakt in einer pflanzlichen Kapselhülle. ${cleanNoSweeteners}`,
       },
-      developedInSweden,
+      packaging,
     ],
     specs: [
       { label: "Lateinischer Name", value: "Ganoderma lucidum" },
@@ -663,7 +654,6 @@ export const productContent: Record<string, ProductContent> = {
       { label: "Tagesdosis", value: "1 Kapsel täglich" },
       { label: "Verpackung", value: "60 Kapseln – 60 Tage" },
       { label: "Kapsel", value: "Vegan" },
-      { label: "Entwickelt in", value: "Schweden" },
     ],
     ingredients:
       "Reishi-Extrakt (Ganoderma lucidum), standardisiert auf 40 % Polysaccharide, Kapselhülle (pflanzlich). Inhalt pro Kapsel: Reishi-Extrakt 350 mg, davon Polysaccharide 140 mg.",
@@ -702,7 +692,7 @@ export const productContent: Record<string, ProductContent> = {
         heading: "Reine Zusammensetzung",
         body: `Nur Chaga-Extrakt in einer pflanzlichen Kapselhülle. ${cleanNoSweeteners}`,
       },
-      developedInSweden,
+      packaging,
     ],
     specs: [
       { label: "Lateinischer Name", value: "Inonotus obliquus" },
@@ -712,7 +702,6 @@ export const productContent: Record<string, ProductContent> = {
       { label: "Tagesdosis", value: "1 Kapsel täglich" },
       { label: "Verpackung", value: "60 Kapseln – 60 Tage" },
       { label: "Kapsel", value: "Vegan" },
-      { label: "Entwickelt in", value: "Schweden" },
     ],
     ingredients:
       "Chaga-Extrakt (Inonotus obliquus) 30:1, standardisiert auf 10 % Polysaccharide, Kapselhülle (pflanzlich). Inhalt pro Kapsel: Chaga-Extrakt 400 mg, davon Polysaccharide 40 mg.",
@@ -751,7 +740,7 @@ export const productContent: Record<string, ProductContent> = {
         heading: "Reine Zusammensetzung",
         body: `Nur Lion's-Mane-Extrakt in einer pflanzlichen Kapselhülle. ${cleanNoSweeteners}`,
       },
-      developedInSweden,
+      packaging,
     ],
     specs: [
       { label: "Lateinischer Name", value: "Hericium erinaceus" },
@@ -761,7 +750,6 @@ export const productContent: Record<string, ProductContent> = {
       { label: "Tagesdosis", value: "1 Kapsel täglich" },
       { label: "Verpackung", value: "60 Kapseln – 60 Tage" },
       { label: "Kapsel", value: "Vegan" },
-      { label: "Entwickelt in", value: "Schweden" },
     ],
     ingredients:
       "Lion's-Mane-Extrakt (Hericium erinaceus), standardisiert auf 60 % Polysaccharide, davon 45 % Beta-Glucane, Kapselhülle (pflanzlich). Inhalt pro Kapsel: Extrakt 500 mg, davon Polysaccharide 300 mg und Beta-Glucane 225 mg.",
@@ -800,7 +788,7 @@ export const productContent: Record<string, ProductContent> = {
         heading: "Reine Zusammensetzung",
         body: `Nur Cordyceps-Extrakt in einer pflanzlichen Kapselhülle. ${cleanNoSweeteners}`,
       },
-      developedInSweden,
+      packaging,
     ],
     specs: [
       { label: "Lateinischer Name", value: "Cordyceps militaris" },
@@ -810,7 +798,6 @@ export const productContent: Record<string, ProductContent> = {
       { label: "Tagesdosis", value: "1 Kapsel täglich" },
       { label: "Verpackung", value: "60 Kapseln – 60 Tage" },
       { label: "Kapsel", value: "Vegan" },
-      { label: "Entwickelt in", value: "Schweden" },
     ],
     ingredients:
       "Cordyceps-Extrakt (Cordyceps militaris) 8:1, standardisiert auf 40 % Polysaccharide, Kapselhülle (pflanzlich). Inhalt pro Kapsel: Cordyceps-Extrakt 350 mg, davon Polysaccharide 140 mg.",

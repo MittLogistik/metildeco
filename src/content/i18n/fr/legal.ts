@@ -266,7 +266,7 @@ const quality: LegalDoc = {
       items: [
         "Gélule végane sans agents de charge.",
         "La concentration de l'extrait, la quantité par gélule et le nom latin figurent sur le pot.",
-        "Les gélules sont livrées dans un pot en plastique. Metilde est une marque suédoise ; les matières premières proviennent des pays d'origine des plantes.",
+        "Les gélules sont livrées dans un pot en plastique. Les matières premières proviennent des pays d'origine des plantes.",
         "Numéro de lot et date de durabilité minimale sur chaque pot.",
       ],
     },

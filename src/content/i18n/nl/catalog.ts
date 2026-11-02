@@ -5,7 +5,7 @@ export const catalog: CatalogText = {
   products: {
     "tongkat-ali-elite": {
       name: "Tongkat Ali Elite | 60 capsules",
-      short: "200:1 wortelextract, 450 mg per capsule – ontwikkeld in Zweden.",
+      short: "200:1 wortelextract, 450 mg per capsule.",
       bullets: [
         "200:1 wortelextract van Eurycoma longifolia",
         "450 mg per capsule – 1 capsule per dag",
@@ -14,7 +14,7 @@ export const catalog: CatalogText = {
       ],
       description: [
         "Tongkat Ali Elite is een geconcentreerd 200:1-extract van de wortel van Eurycoma longifolia, ook bekend als Malaysian Ginseng of Longjack.",
-        "Puur wortelextract in een vegan capsule – zonder bindmiddelen, vulstoffen of kunstmatige toevoegingen. Ontwikkeld in Zweden en verpakt in een plastic pot.",
+        "Puur wortelextract in een vegan capsule – zonder bindmiddelen, vulstoffen of kunstmatige toevoegingen. Verpakt in een plastic pot.",
       ],
     },
     "tongkat-premium": {
@@ -28,12 +28,12 @@ export const catalog: CatalogText = {
       ],
       description: [
         "Tongkat Ali Ultra 4% is een 200:1-wortelextract van de wortel van Eurycoma longifolia, ook bekend als Malaysian Ginseng of Longjack. Elke capsule bevat 520 mg extract, waarvan 20 mg eurycomanon.",
-        "Puur wortelextract in een vegan capsule – zonder bindmiddelen, vulstoffen of kunstmatige toevoegingen. Ontwikkeld in Zweden en verpakt in een plastic pot met 60 capsules.",
+        "Puur wortelextract in een vegan capsule – zonder bindmiddelen, vulstoffen of kunstmatige toevoegingen. Verpakt in een plastic pot met 60 capsules.",
       ],
     },
     "fadogia-agrestis": {
       name: "Fadogia Agrestis | 60 capsules",
-      short: "20:1 kruidenextract, 450 mg per capsule – ontwikkeld in Zweden.",
+      short: "20:1 kruidenextract, 450 mg per capsule.",
       bullets: [
         "20:1 extract van Fadogia agrestis",
         "450 mg per capsule – 1 capsule per dag",
@@ -42,7 +42,7 @@ export const catalog: CatalogText = {
       ],
       description: [
         "Fadogia Agrestis is een geconcentreerd 20:1-extract van de Afrikaanse struik Fadogia agrestis, met een lange traditie in het gebruik van kruiden.",
-        "Puur extract in een vegan capsule – zonder bindmiddelen, vulstoffen of kunstmatige toevoegingen. Ontwikkeld in Zweden en verpakt in een plastic pot.",
+        "Puur extract in een vegan capsule – zonder bindmiddelen, vulstoffen of kunstmatige toevoegingen. Verpakt in een plastic pot.",
       ],
     },
     "blue-lotus": {
@@ -70,7 +70,7 @@ export const catalog: CatalogText = {
       ],
       description: [
         "Black Tongkat Ali is een 200:1-wortelextract van Eurycoma longifolia, dezelfde soort als onze gele Tongkat Ali, gemaakt van donkere wortel.",
-        "500 mg extract per capsule in een plantaardige capsulewand, zonder vulstoffen. De aanbevolen dosis is 1–2 capsules per dag. Ontwikkeld in Zweden en verpakt in een plastic pot.",
+        "500 mg extract per capsule in een plantaardige capsulewand, zonder vulstoffen. De aanbevolen dosis is 1–2 capsules per dag. Verpakt in een plastic pot.",
       ],
     },
     ashwagandha: {
@@ -94,7 +94,7 @@ export const catalog: CatalogText = {
         "20:1 extract van macawortel",
         "470 mg per capsule",
         "60 capsules – 30 dagen",
-        "Vegan capsule, ontwikkeld in Zweden",
+        "Vegan capsule zonder vulstoffen",
       ],
       description: [
         "Maca (Lepidium meyenii) is een knolgewas dat hoog in de Andes wordt geteeld en al generaties lang deel uitmaakt van de Peruaanse kruidentraditie.",
@@ -109,7 +109,7 @@ export const catalog: CatalogText = {
         "20:1 extract, 80 % silymarine",
         "350 mg per capsule",
         "60 capsules – 60 dagen",
-        "Vegan capsule, ontwikkeld in Zweden",
+        "Vegan capsule zonder vulstoffen",
       ],
       description: [
         "Mariadistel (Silybum marianum) is een distelplant uit het Middellandse Zeegebied met een lange traditie in het Europese kruidengebruik.",
@@ -124,10 +124,10 @@ export const catalog: CatalogText = {
         "10:1 extract van brandnetelblad",
         "430 mg per capsule",
         "60 capsules – 60 dagen",
-        "Vegan capsule, ontwikkeld in Zweden",
+        "Vegan capsule zonder vulstoffen",
       ],
       description: [
-        "De grote brandnetel (Urtica dioica) is een traditionele plant in het Europese kruidengebruik. Wij gebruiken de bladeren, die worden gedroogd en geconcentreerd tot een 10:1-extract – 430 mg per capsule. Alleen brandnetelbladextract in een plantaardige capsulewand. Vegan, glutenvrij en zonder ggo, zonder bindmiddelen, vulstoffen, zoetstoffen of kunstmatige conserveermiddelen. Ontwikkeld in Zweden en verpakt in een plastic pot.",
+        "De grote brandnetel (Urtica dioica) is een traditionele plant in het Europese kruidengebruik. Wij gebruiken de bladeren, die worden gedroogd en geconcentreerd tot een 10:1-extract – 430 mg per capsule. Alleen brandnetelbladextract in een plantaardige capsulewand. Vegan, glutenvrij en zonder ggo, zonder bindmiddelen, vulstoffen, zoetstoffen of kunstmatige conserveermiddelen. Verpakt in een plastic pot.",
       ],
     },
     druvkarneextrakt: {
@@ -137,7 +137,7 @@ export const catalog: CatalogText = {
         "95 % proanthocyanidinen (OPC)",
         "500 mg per capsule",
         "60 capsules",
-        "Vegan capsule, ontwikkeld in Zweden",
+        "Vegan capsule zonder vulstoffen",
       ],
       description: [
         "Druivenpitten van Vitis vinifera zijn een natuurlijke bron van polyfenolen. Ons extract is gestandaardiseerd op 95 % proanthocyanidinen (OPC) – 500 mg per capsule, waarvan 475 mg OPC. Alleen druivenpitextract in een plantaardige capsulewand. Vegan, glutenvrij en zonder ggo, zonder bindmiddelen, vulstoffen, zoetstoffen of kunstmatige conserveermiddelen. Verpakt in een plastic pot.",
@@ -150,7 +150,7 @@ export const catalog: CatalogText = {
         "98 % zuiver quercetine-extract",
         "500 mg per capsule",
         "60 capsules – 60 dagen",
-        "Vegan capsule, ontwikkeld in Zweden",
+        "Vegan capsule zonder vulstoffen",
       ],
       description: [
         "Quercetine is een flavonoïde die van nature voorkomt in fruit en groenten. Ons extract heeft een zuiverheid van 98 % – 500 mg per capsule, waarvan 490 mg quercetine. Alleen quercetine-extract in een plantaardige capsulewand. Vegan, glutenvrij en zonder ggo, zonder bindmiddelen, vulstoffen, zoetstoffen of kunstmatige conserveermiddelen. Verpakt in een plastic pot.",
@@ -163,7 +163,7 @@ export const catalog: CatalogText = {
         "40 % polysachariden",
         "350 mg per capsule",
         "60 capsules – 60 dagen",
-        "Vegan capsule, ontwikkeld in Zweden",
+        "Vegan capsule zonder vulstoffen",
       ],
       description: [
         "Reishi (Ganoderma lucidum) is een van de bekendste paddenstoelen in de traditionele kruidencultuur. Ons extract is gestandaardiseerd op 40 % polysachariden – 350 mg per capsule, waarvan 140 mg polysachariden. Alleen reishi-extract in een plantaardige capsulewand. Vegan, glutenvrij en zonder ggo, zonder bindmiddelen, vulstoffen, zoetstoffen of kunstmatige conserveermiddelen. Verpakt in een plastic pot.",
@@ -177,12 +177,12 @@ export const catalog: CatalogText = {
         "10 % polysachariden",
         "400 mg per capsule",
         "60 capsules – 60 dagen",
-        "Vegan capsule, ontwikkeld in Zweden",
+        "Vegan capsule zonder vulstoffen",
       ],
       description: [
         "Chaga (Inonotus obliquus) groeit langzaam op berken en neemt gedurende vele jaren voedingsstoffen op uit de boom. Ons extract komt van in het wild geoogste chaga van hoge kwaliteit, 30:1 geconcentreerd en gestandaardiseerd op 10 % polysachariden – 400 mg per capsule.",
         "Alleen chaga-extract in een plantaardige capsulewand: vegan, glutenvrij en zonder ggo, zonder bindmiddelen, vulstoffen, zoetstoffen of kunstmatige conserveermiddelen.",
-        "Ontwikkeld in Zweden, verpakt in een plastic pot. 60 capsules zijn genoeg voor 60 dagen bij 1 capsule per dag.",
+        "Verpakt in een plastic pot. 60 capsules zijn genoeg voor 60 dagen bij 1 capsule per dag.",
       ],
     },
     "lions-mane": {
@@ -193,12 +193,12 @@ export const catalog: CatalogText = {
         "Waarvan 45 % bètaglucanen",
         "500 mg per capsule",
         "60 capsules – 60 dagen",
-        "Vegan capsule, ontwikkeld in Zweden",
+        "Vegan capsule zonder vulstoffen",
       ],
       description: [
         "Lion's Mane (Hericium erinaceus) heeft een lange geschiedenis in de traditionele kruidencultuur van Oost-Azië. Ons extract is gestandaardiseerd op 60 % polysachariden, waarvan 45 % bètaglucanen – 500 mg per capsule.",
         "Alleen Lion's Mane-extract in een plantaardige capsulewand: vegan, glutenvrij en zonder ggo, zonder bindmiddelen, vulstoffen, zoetstoffen of kunstmatige conserveermiddelen.",
-        "Ontwikkeld in Zweden, verpakt in een plastic pot. 60 capsules zijn genoeg voor 60 dagen bij 1 capsule per dag.",
+        "Verpakt in een plastic pot. 60 capsules zijn genoeg voor 60 dagen bij 1 capsule per dag.",
       ],
     },
     cordyceps: {
@@ -209,12 +209,12 @@ export const catalog: CatalogText = {
         "40 % polysachariden",
         "350 mg per capsule",
         "60 capsules – 60 dagen",
-        "Vegan capsule, ontwikkeld in Zweden",
+        "Vegan capsule zonder vulstoffen",
       ],
       description: [
         "Cordyceps (Cordyceps militaris) heeft al lang een plaats in de Oost-Aziatische kruidencultuur. Ons extract is 8:1 geconcentreerd en gestandaardiseerd op 40 % polysachariden – 350 mg per capsule.",
         "Alleen cordyceps-extract in een plantaardige capsulewand: vegan, glutenvrij en zonder ggo, zonder bindmiddelen, vulstoffen, zoetstoffen of kunstmatige conserveermiddelen.",
-        "Ontwikkeld in Zweden, verpakt in een plastic pot. 60 capsules zijn genoeg voor 60 dagen bij 1 capsule per dag.",
+        "Verpakt in een plastic pot. 60 capsules zijn genoeg voor 60 dagen bij 1 capsule per dag.",
       ],
     },
     spirulina: {
@@ -259,7 +259,7 @@ export const catalog: CatalogText = {
       ],
       seoTitle: "Dag- & avondpakket – Tongkat Ali, Fadogia & Blue Lotus",
       seoDescription:
-        "Het dag- & avondpakket: Tongkat Ali Elite 200:1, Fadogia Agrestis 20:1 en Blue Lotus 200:1. 3 × 60 vegan capsules, ontwikkeld in Zweden, gratis verzending.",
+        "Het dag- & avondpakket: Tongkat Ali Elite 200:1, Fadogia Agrestis 20:1 en Blue Lotus 200:1. 3 × 60 vegan capsules, gratis verzending.",
     },
     "tongkat-ali-extract-duo": {
       name: "Tongkat Ali Extract Duo",
@@ -270,18 +270,18 @@ export const catalog: CatalogText = {
       ],
       seoTitle: "Tongkat Ali Extract Duo – twee sterktes in één pakket | Metilde",
       seoDescription:
-        "Tongkat Ali Extract Duo: Tongkat Ali Elite en Ultra 4% in één pakket. Wortelextracten van Eurycoma longifolia, ontwikkeld in Zweden, gratis verzending.",
+        "Tongkat Ali Extract Duo: Tongkat Ali Elite en Ultra 4% in één pakket. Wortelextracten van Eurycoma longifolia, gratis verzending.",
     },
     "tongkat-ali-fadogia-duo": {
       name: "Tongkat Ali & Fadogia Duo",
       short: "Tongkat Ali Elite en Fadogia Agrestis in één pakket – twee extracten in een vegan capsule.",
       description: [
         "De Tongkat Ali & Fadogia Duo bevat een pot Tongkat Ali Elite (200:1-wortelextract van Eurycoma longifolia, 450 mg per capsule) en een pot Fadogia Agrestis (20:1-extract).",
-        "Beide in een vegan capsule zonder vulstoffen, ontwikkeld in Zweden en verpakt in plastic potten. Het pakket wordt altijd gratis verzonden.",
+        "Beide in een vegan capsule zonder vulstoffen en verpakt in plastic potten. Het pakket wordt altijd gratis verzonden.",
       ],
       seoTitle: "Tongkat Ali & Fadogia Duo – Metilde",
       seoDescription:
-        "Ontdek de Tongkat Ali & Fadogia Duo van Metilde: twee extracten, 200:1 en 20:1, in een vegan capsule. Ontwikkeld in Zweden, voor je dagelijkse routine.",
+        "Ontdek de Tongkat Ali & Fadogia Duo van Metilde: twee extracten, 200:1 en 20:1, in een vegan capsule, voor je dagelijkse routine.",
     },
     "tongkat-ali-discovery-trio": {
       name: "Tongkat Ali Discovery Trio",
@@ -289,18 +289,18 @@ export const catalog: CatalogText = {
       description: [
         "De Tongkat Ali Discovery Trio bevat een pot van elk van onze drie Tongkat Ali-varianten. Alle drie zijn 200:1-wortelextracten van Eurycoma longifolia.",
         "Elite bevat 450 mg per capsule en je neemt 1 capsule per dag. Ultra 4% bevat 520 mg per capsule, waarvan 20 mg eurycomanon, en je neemt 1 capsule per dag. Black wordt gemaakt van donkere wortel, bevat 500 mg per capsule en je neemt 1–2 capsules per dag.",
-        "Allemaal in een vegan capsule zonder vulstoffen, ontwikkeld in Zweden en verpakt in plastic potten met 60 capsules. Volg de aanbevolen dosis voor elk product en neem één product tegelijk. Het pakket wordt altijd gratis verzonden.",
+        "Allemaal in een vegan capsule zonder vulstoffen en verpakt in plastic potten met 60 capsules. Volg de aanbevolen dosis voor elk product en neem één product tegelijk. Het pakket wordt altijd gratis verzonden.",
       ],
       seoTitle: "Tongkat Ali Discovery Trio – ontdek het hele assortiment",
       seoDescription:
-        "Tongkat Ali Discovery Trio: Elite, Ultra 4% en Black in één pakket. 200:1-wortelextracten van Eurycoma longifolia, ontwikkeld in Zweden, gratis verzending.",
+        "Tongkat Ali Discovery Trio: Elite, Ultra 4% en Black in één pakket. 200:1-wortelextracten van Eurycoma longifolia, gratis verzending.",
     },
     "metilde-botanical-collection": {
       name: "Metilde Botanical Collection",
       short: "Vier van onze extracten in één pakket: Tongkat Ali Elite, Ultra 4%, Fadogia Agrestis en Blue Lotus.",
       description: [
         "De Metilde Botanical Collection bevat een pot van elk: Tongkat Ali Elite (200:1, 450 mg per capsule), Tongkat Ali Ultra 4% (200:1, 520 mg per capsule, waarvan 20 mg eurycomanon), Fadogia Agrestis (20:1) en Blue Lotus (200:1).",
-        "Allemaal in een vegan capsule zonder vulstoffen, ontwikkeld in Zweden en verpakt in plastic potten met 60 capsules. Volg de aanbevolen dosis op elke pot en begin met één product tegelijk. Het pakket wordt altijd gratis verzonden.",
+        "Allemaal in een vegan capsule zonder vulstoffen en verpakt in plastic potten met 60 capsules. Volg de aanbevolen dosis op elke pot en begin met één product tegelijk. Het pakket wordt altijd gratis verzonden.",
       ],
       seoTitle: "Metilde Botanical Collection – botanische extracten",
       seoDescription:

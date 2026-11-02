@@ -8,9 +8,9 @@ import { messages as plHomeMessages } from "./locales/pl/home";
 import type { Locale } from "@/lib/i18n";
 
 const sv = {
-  title: "Metilde – Rena botaniska kosttillskott utvecklade i Sverige",
+  title: "Metilde – Rena botaniska kosttillskott",
   description: (freeOver: string) =>
-    `Funktionella svampar, örter och växtextrakt som standardiserade extrakt i vegansk kapsel, utvecklade i Sverige. Fri frakt över ${freeOver}.`,
+    `Funktionella svampar, örter och växtextrakt som standardiserade extrakt i vegansk kapsel. Fri frakt över ${freeOver}.`,
   heroEyebrow: "Vegansk kapsel",
   heroTitle: "Rena botaniska extrakt",
   heroTitleAccent: "för en stark vardag",
@@ -57,9 +57,9 @@ export const home: Record<Locale, typeof sv> = {
   en: enHomeMessages,
   pl: plHomeMessages,
   fi: {
-    title: "Metilde – Puhtaita kasviperäisiä ravintolisiä, kehitetty Ruotsissa",
+    title: "Metilde – Puhtaita kasviperäisiä ravintolisiä",
     description: (freeOver) =>
-      `Tongkat Ali, Fadogia Agrestis, Blue Lotus ja toiminnalliset sienet standardoituina uutteina vegaanisessa kapselissa, kehitetty Ruotsissa. Ilmainen toimitus yli ${freeOver} tilauksiin.`,
+      `Tongkat Ali, Fadogia Agrestis, Blue Lotus ja toiminnalliset sienet standardoituina uutteina vegaanisessa kapselissa. Ilmainen toimitus yli ${freeOver} tilauksiin.`,
     heroEyebrow: "Vegaaninen kapseli",
     heroTitle: "Puhtaita kasviuutteita",
     heroTitleAccent: "arkeesi",
@@ -96,9 +96,9 @@ export const home: Record<Locale, typeof sv> = {
     allArticles: "Kaikki artikkelit",
   },
   da: {
-    title: "Metilde – Rene botaniske kosttilskud udviklet i Sverige",
+    title: "Metilde – Rene botaniske kosttilskud",
     description: (freeOver) =>
-      `Tongkat Ali, Fadogia Agrestis, Blue Lotus og funktionelle svampe som standardiserede ekstrakter i vegansk kapsel, udviklet i Sverige. Fri fragt over ${freeOver}.`,
+      `Tongkat Ali, Fadogia Agrestis, Blue Lotus og funktionelle svampe som standardiserede ekstrakter i vegansk kapsel. Fri fragt over ${freeOver}.`,
     heroEyebrow: "Vegansk kapsel",
     heroTitle: "Rene botaniske ekstrakter",
     heroTitleAccent: "til din hverdag",
@@ -135,9 +135,9 @@ export const home: Record<Locale, typeof sv> = {
     allArticles: "Alle artikler",
   },
   nl: {
-    title: "Metilde – Pure botanische voedingssupplementen, ontwikkeld in Zweden",
+    title: "Metilde – Pure botanische voedingssupplementen",
     description: (freeOver) =>
-      `Tongkat Ali, Fadogia Agrestis, Blue Lotus en functionele paddenstoelen als gestandaardiseerde extracten in veganistische capsules, ontwikkeld in Zweden. Gratis verzending vanaf ${freeOver}.`,
+      `Tongkat Ali, Fadogia Agrestis, Blue Lotus en functionele paddenstoelen als gestandaardiseerde extracten in veganistische capsules. Gratis verzending vanaf ${freeOver}.`,
     heroEyebrow: "Veganistische capsule",
     heroTitle: "Pure botanische extracten",
     heroTitleAccent: "voor elke dag",

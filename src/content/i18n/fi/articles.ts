@@ -81,7 +81,7 @@ export const articles: Record<string, ArticleText> = {
       {
         type: "products",
         heading: "Valittu ravintolisä",
-        intro: "Tutustu standardoituun Lion's Mane -uutteeseemme, jossa on 60 % polysakkarideja ja 45 % beetaglukaaneja. Kehitetty Ruotsissa.",
+        intro: "Tutustu standardoituun Lion's Mane -uutteeseemme, jossa on 60 % polysakkarideja ja 45 % beetaglukaaneja.",
         slugs: ["lions-mane"],
       },
     ],
@@ -260,7 +260,7 @@ export const articles: Record<string, ArticleText> = {
       {
         type: "products",
         heading: "Valitut tuotteet",
-        intro: "Cordyceps militaris 8:1-uutteena, 350 mg kapselia kohden. Kehitetty Ruotsissa.",
+        intro: "Cordyceps militaris 8:1-uutteena, 350 mg kapselia kohden.",
         slugs: ["cordyceps"],
       },
     ],

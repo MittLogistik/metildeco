@@ -2,8 +2,8 @@ import type { CampaignMessages } from "../../campaign";
 
 export const messages: CampaignMessages = {
   metaTitle: "Extraits de champignons et de plantes en gélule végane",
-  metaDescription: "Extraits standardisés de champignons et de plantes sans agents de charge, en gélule végane. Développés en Suède.",
-  eyebrow: "Développé en Suède · gélule végane",
+  metaDescription: "Extraits standardisés de champignons et de plantes sans agents de charge, en gélule végane.",
+  eyebrow: "Extraits standardisés · gélule végane",
   title: "Extraits purs de champignons et de plantes",
   intro: "Des extraits standardisés sans agents de charge. Le ratio d'extraction et la dose figurent sur chaque pot.",
   cta: "Voir les produits",

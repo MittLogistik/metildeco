@@ -1,9 +1,9 @@
 import type { HomeMessages } from "../../home";
 
 export const messages: HomeMessages = {
-  title: "Metilde – Pure botanical food supplements developed in Sweden",
+  title: "Metilde – Pure botanical food supplements",
   description: (freeOver) =>
-    `Tongkat Ali, Fadogia Agrestis, Blue Lotus and functional mushrooms as standardised extracts in vegan capsules, developed in Sweden. Free shipping over ${freeOver}.`,
+    `Tongkat Ali, Fadogia Agrestis, Blue Lotus and functional mushrooms as standardised extracts in vegan capsules. Free shipping over ${freeOver}.`,
   heroEyebrow: "Vegan capsule",
   heroTitle: "Pure botanical extracts",
   heroTitleAccent: "for everyday life",

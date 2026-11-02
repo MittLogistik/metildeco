@@ -93,7 +93,7 @@ export const faqGroups: FaqGroup[] = [
     items: [
       {
         q: "Hvor kommer jeres produkter fra?",
-        a: "Metilde er et svensk varemærke, og sortimentet er udviklet i Sverige. Råvarerne og ekstrakterne kommer fra de lande, hvor planterne hører hjemme, for eksempel Tongkat Ali fra Sydøstasien og maca fra Andesbjergene.",
+        a: "Råvarerne og ekstrakterne kommer fra de lande, hvor planterne hører hjemme, for eksempel Tongkat Ali fra Sydøstasien og maca fra Andesbjergene.",
       },
       {
         q: "Hvordan ved jeg, hvilken batch jeg har fået?",

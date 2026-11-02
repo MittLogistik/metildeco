@@ -82,7 +82,7 @@ export const articles: Record<string, ArticleText> = {
       {
         type: "products",
         heading: "Wybrany suplement diety",
-        intro: "Poznaj nasz standaryzowany ekstrakt z Lion's Mane z 60% polisacharydów i 45% beta-glukanów, opracowany w Szwecji.",
+        intro: "Poznaj nasz standaryzowany ekstrakt z Lion's Mane z 60% polisacharydów i 45% beta-glukanów.",
         slugs: ["lions-mane"],
       },
     ],
@@ -263,7 +263,7 @@ export const articles: Record<string, ArticleText> = {
       {
         type: "products",
         heading: "Wybrane produkty",
-        intro: "Cordyceps militaris jako ekstrakt 8:1, 350 mg w kapsułce, opracowany w Szwecji.",
+        intro: "Cordyceps militaris jako ekstrakt 8:1, 350 mg w kapsułce.",
         slugs: ["cordyceps"],
       },
     ],

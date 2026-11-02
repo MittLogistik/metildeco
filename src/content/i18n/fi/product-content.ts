@@ -5,10 +5,10 @@ import type { ProductContent } from "@/content/product-content";
  * Ei terveysväitteitä – vain kasvitiede, alkuperä, uutto, muoto, annostus ja perinteinen käyttö.
  */
 
-const developedInSweden = {
-  heading: "Kehitetty Ruotsissa",
+const packaging = {
+  heading: "Pakkaus ja toimitus",
   body:
-    "Metilde on ruotsalainen tuotemerkki. Valikoimamme kehitetään Ruotsissa, ja jokainen tilaus lähetetään varastostamme Ruotsista. Pakkaus on kierrekorkillinen muovipurkki, joka pitää sisällön kuivana annosten välillä.",
+    "Kapselit pakataan kierrekorkilliseen muovipurkkiin, joka pitää sisällön kuivana annosten välillä. Jokainen tilaus lähetetään varastostamme Ruotsista.",
 };
 
 export const productContent: Record<string, ProductContent> = {
@@ -16,7 +16,7 @@ export const productContent: Record<string, ProductContent> = {
     eyebrow: "Eurycoma longifolia · 200:1-juuriuute",
     headline: "Puhdasta juurta, 450 mg kapselissa",
     intro:
-      "Tongkat Ali Elite on tiivistetty 200:1-uute Eurycoma longifolian juuresta – kasvia kutsutaan myös nimillä Malaysian Ginseng ja Longjack. Kehitetty Ruotsissa, vegaanisessa kapselissa, ilman lisäaineita.",
+      "Tongkat Ali Elite on tiivistetty 200:1-uute Eurycoma longifolian juuresta – kasvia kutsutaan myös nimillä Malaysian Ginseng ja Longjack. Vegaanisessa kapselissa, ilman lisäaineita.",
     highlights: [
       { label: "Uute", value: "200:1" },
       { label: "Kapselissa", value: "450 mg" },
@@ -33,7 +33,7 @@ export const productContent: Record<string, ProductContent> = {
         body:
           "Vain juuriuutetta kasvipohjaisessa kapselikuoressa. Vegaaninen, gluteeniton ja GMO-vapaa – ei sidosaineita, täyteaineita, makeutusaineita tai keinotekoisia säilöntäaineita.",
       },
-      developedInSweden,
+      packaging,
     ],
     specs: [
       { label: "Latinalainen nimi", value: "Eurycoma longifolia" },
@@ -43,7 +43,6 @@ export const productContent: Record<string, ProductContent> = {
       { label: "Päiväannos", value: "1 kapseli päivässä" },
       { label: "Sisältö", value: "60 kapselia – 60 päivää" },
       { label: "Kapseli", value: "Vegaaninen (HPMC)" },
-      { label: "Kehitetty", value: "Ruotsissa" },
     ],
     ingredients:
       "Tongkat Ali -uute (Eurycoma longifolia, juuri) 200:1, kapselikuori (HPMC). Yhdessä kapselissa: Tongkat Ali -uutetta (200:1) 450 mg.",
@@ -94,7 +93,7 @@ export const productContent: Record<string, ProductContent> = {
         body:
           "Jokainen erä standardoidaan eurykomanonipitoisuuden mukaan, joten jokainen 520 mg:n kapseli sisältää 20 mg eurykomanonia. Näin vahvuus pysyy tasaisena erästä toiseen. Yksi kapseli päivässä.",
       },
-      developedInSweden,
+      packaging,
     ],
     specs: [
       { label: "Latinalainen nimi", value: "Eurycoma longifolia" },
@@ -105,7 +104,6 @@ export const productContent: Record<string, ProductContent> = {
       { label: "Sisältö", value: "60 kapselia – 60 päivää" },
       { label: "Pakkaus", value: "Kierrekorkillinen muovipurkki" },
       { label: "Kapseli", value: "Vegaaninen (HPMC)" },
-      { label: "Kehitetty", value: "Ruotsissa" },
     ],
     ingredients:
       "Tongkat Ali -uute (Eurycoma longifolia, juuri) 200:1, kapselikuori (HPMC). Yhdessä kapselissa: Tongkat Ali -uutetta (200:1) 520 mg, josta eurykomanonia 20 mg.",
@@ -140,7 +138,7 @@ export const productContent: Record<string, ProductContent> = {
     eyebrow: "Fadogia agrestis · 20:1-yrttiuute",
     headline: "Puhdasta kasvia, 450 mg kapselissa",
     intro:
-      "20:1-uute Fadogia agrestiksesta, pensaasta, jolla on pitkä perinne länsiafrikkalaisessa yrttikäytössä. 450 mg kapselissa, vegaaninen kapseli – ilman lisäaineita. Kehitetty Ruotsissa.",
+      "20:1-uute Fadogia agrestiksesta, pensaasta, jolla on pitkä perinne länsiafrikkalaisessa yrttikäytössä. 450 mg kapselissa, vegaaninen kapseli – ilman lisäaineita.",
     highlights: [
       { label: "Uute", value: "20:1" },
       { label: "Kapselissa", value: "450 mg" },
@@ -157,7 +155,7 @@ export const productContent: Record<string, ProductContent> = {
         body:
           "Vain Fadogia agrestis -uutetta kasvipohjaisessa kapselikuoressa. Vegaaninen, gluteeniton ja GMO-vapaa – ei sidosaineita, täyteaineita tai keinotekoisia säilöntäaineita.",
       },
-      developedInSweden,
+      packaging,
     ],
     specs: [
       { label: "Latinalainen nimi", value: "Fadogia agrestis" },
@@ -166,7 +164,6 @@ export const productContent: Record<string, ProductContent> = {
       { label: "Päiväannos", value: "1 kapseli päivässä" },
       { label: "Sisältö", value: "60 kapselia – 60 päivää" },
       { label: "Kapseli", value: "Vegaaninen (HPMC)" },
-      { label: "Kehitetty", value: "Ruotsissa" },
     ],
     ingredients:
       "Fadogia agrestis -uute 20:1, kapselikuori (HPMC). Yhdessä kapselissa: Fadogia agrestis -uutetta (20:1) 450 mg.",
@@ -296,7 +293,6 @@ export const productContent: Record<string, ProductContent> = {
       { label: "Sisältö", value: "60 kapselia – 30–60 päivää" },
       { label: "Kapselikuori", value: "Kasvipohjainen (HPMC)" },
       { label: "Pakkaus", value: "Kierrekorkillinen muovipurkki" },
-      { label: "Kehitetty", value: "Ruotsissa" },
     ],
     ingredients:
       "Tongkat Ali -uute (Eurycoma longifolia, juuri) 200:1, kapselikuori (HPMC). Yhdessä kapselissa: Tongkat Ali -uutetta (200:1) 500 mg.",
@@ -347,7 +343,7 @@ export const productContent: Record<string, ProductContent> = {
         body:
           "Vain macajuuriuutetta kasvipohjaisessa kapselikuoressa. Vegaaninen, gluteeniton ja GMO-vapaa – ei sidosaineita, täyteaineita, makeutusaineita tai keinotekoisia säilöntäaineita.",
       },
-      developedInSweden,
+      packaging,
     ],
     specs: [
       { label: "Latinalainen nimi", value: "Lepidium meyenii" },
@@ -357,7 +353,6 @@ export const productContent: Record<string, ProductContent> = {
       { label: "Päiväannos", value: "2 kapselia päivässä" },
       { label: "Sisältö", value: "60 kapselia – 30 päivää" },
       { label: "Kapseli", value: "Vegaaninen (HPMC)" },
-      { label: "Kehitetty", value: "Ruotsissa" },
     ],
     ingredients:
       "Macauute (Lepidium meyenii, juuri) 20:1, kapselikuori (HPMC). Yhdessä kapselissa: macajuuriuutetta (20:1) 470 mg.",
@@ -408,7 +403,7 @@ export const productContent: Record<string, ProductContent> = {
         body:
           "Vain maarianohdakeuutetta kasvipohjaisessa pullulaanikapselissa. Vegaaninen, gluteeniton ja GMO-vapaa – ei sisällä laktoosia, soijaa, hiivaa, vehnää tai maitoa, eikä väriaineita, sidosaineita, täyteaineita tai keinotekoisia säilöntäaineita.",
       },
-      developedInSweden,
+      packaging,
     ],
     specs: [
       { label: "Latinalainen nimi", value: "Silybum marianum" },
@@ -419,7 +414,6 @@ export const productContent: Record<string, ProductContent> = {
       { label: "Päiväannos", value: "1 kapseli päivässä" },
       { label: "Sisältö", value: "60 kapselia – 60 päivää" },
       { label: "Kapseli", value: "Vegaaninen (pullulaani)" },
-      { label: "Kehitetty", value: "Ruotsissa" },
     ],
     ingredients:
       "Maarianohdakeuute (Silybum marianum, siemen) 20:1, standardoitu 80 % silymariiniin, kapselikuori (pullulaani). Yhdessä kapselissa: maarianohdakeuutetta 350 mg, josta silymariinia 280 mg.",
@@ -470,7 +464,7 @@ export const productContent: Record<string, ProductContent> = {
         body:
           "Vain nokkosenlehtiuutetta kasvipohjaisessa kapselikuoressa. Vegaaninen, gluteeniton ja GMO-vapaa – ei sidosaineita, täyteaineita, makeutusaineita tai keinotekoisia säilöntäaineita.",
       },
-      developedInSweden,
+      packaging,
     ],
     specs: [
       { label: "Latinalainen nimi", value: "Urtica dioica" },
@@ -480,7 +474,6 @@ export const productContent: Record<string, ProductContent> = {
       { label: "Päiväannos", value: "1 kapseli päivässä" },
       { label: "Sisältö", value: "60 kapselia – 60 päivää" },
       { label: "Kapseli", value: "Vegaaninen" },
-      { label: "Kehitetty", value: "Ruotsissa" },
     ],
     ingredients:
       "Nokkosenlehtiuute (Urtica dioica, lehti) 10:1, kapselikuori (kasvipohjainen). Yhdessä kapselissa: nokkosenlehtiuutetta 430 mg.",
@@ -531,7 +524,7 @@ export const productContent: Record<string, ProductContent> = {
         body:
           "Vain viinirypäleensiemenuutetta kasvipohjaisessa kapselikuoressa. Vegaaninen, gluteeniton ja GMO-vapaa – ei sidosaineita, täyteaineita, makeutusaineita tai keinotekoisia säilöntäaineita.",
       },
-      developedInSweden,
+      packaging,
     ],
     specs: [
       { label: "Latinalainen nimi", value: "Vitis vinifera" },
@@ -541,7 +534,6 @@ export const productContent: Record<string, ProductContent> = {
       { label: "Päiväannos", value: "1–2 kapselia päivässä" },
       { label: "Sisältö", value: "60 kapselia – 30–60 päivää" },
       { label: "Kapseli", value: "Vegaaninen" },
-      { label: "Kehitetty", value: "Ruotsissa" },
     ],
     ingredients:
       "Viinirypäleensiemenuute (Vitis vinifera, siemen), standardoitu 95 % proantosyanidiineihin, kapselikuori (kasvipohjainen). Yhdessä kapselissa: viinirypäleensiemenuutetta 500 mg, josta proantosyanidiineja 475 mg.",
@@ -592,7 +584,7 @@ export const productContent: Record<string, ProductContent> = {
         body:
           "Vain kversetiiniuutetta kasvipohjaisessa kapselikuoressa. Vegaaninen, gluteeniton ja GMO-vapaa – ei sidosaineita, täyteaineita, makeutusaineita tai keinotekoisia säilöntäaineita.",
       },
-      developedInSweden,
+      packaging,
     ],
     specs: [
       { label: "Sisältö", value: "Kversetiiniuute" },
@@ -601,7 +593,6 @@ export const productContent: Record<string, ProductContent> = {
       { label: "Päiväannos", value: "1 kapseli päivässä" },
       { label: "Pakkaus", value: "60 kapselia – 60 päivää" },
       { label: "Kapseli", value: "Vegaaninen" },
-      { label: "Kehitetty", value: "Ruotsissa" },
     ],
     ingredients:
       "Kversetiiniuute (98 % kversetiiniä), kapselikuori (kasvipohjainen). Yhdessä kapselissa: kversetiiniuutetta 500 mg, josta kversetiiniä 490 mg.",
@@ -652,7 +643,7 @@ export const productContent: Record<string, ProductContent> = {
         body:
           "Vain reishiuutetta kasvipohjaisessa kapselikuoressa. Vegaaninen, gluteeniton ja GMO-vapaa – ei sidosaineita, täyteaineita, makeutusaineita tai keinotekoisia säilöntäaineita.",
       },
-      developedInSweden,
+      packaging,
     ],
     specs: [
       { label: "Latinalainen nimi", value: "Ganoderma lucidum" },
@@ -661,7 +652,6 @@ export const productContent: Record<string, ProductContent> = {
       { label: "Päiväannos", value: "1 kapseli päivässä" },
       { label: "Pakkaus", value: "60 kapselia – 60 päivää" },
       { label: "Kapseli", value: "Vegaaninen" },
-      { label: "Kehitetty", value: "Ruotsissa" },
     ],
     ingredients:
       "Reishiuute (Ganoderma lucidum), standardoitu 40 % polysakkarideihin, kapselikuori (kasvipohjainen). Yhdessä kapselissa: reishiuutetta 350 mg, josta polysakkarideja 140 mg.",
@@ -712,7 +702,7 @@ export const productContent: Record<string, ProductContent> = {
         body:
           "Vain chagauutetta kasvipohjaisessa kapselikuoressa. Vegaaninen, gluteeniton ja GMO-vapaa – ei sidosaineita, täyteaineita, makeutusaineita tai keinotekoisia säilöntäaineita.",
       },
-      developedInSweden,
+      packaging,
     ],
     specs: [
       { label: "Latinalainen nimi", value: "Inonotus obliquus" },
@@ -722,7 +712,6 @@ export const productContent: Record<string, ProductContent> = {
       { label: "Päiväannos", value: "1 kapseli päivässä" },
       { label: "Pakkaus", value: "60 kapselia – 60 päivää" },
       { label: "Kapseli", value: "Vegaaninen" },
-      { label: "Kehitetty", value: "Ruotsissa" },
     ],
     ingredients:
       "Chagauute (Inonotus obliquus) 30:1, standardoitu 10 % polysakkarideihin, kapselikuori (kasvipohjainen). Yhdessä kapselissa: chagauutetta 400 mg, josta polysakkarideja 40 mg.",
@@ -773,7 +762,7 @@ export const productContent: Record<string, ProductContent> = {
         body:
           "Vain Lion's Mane -uutetta kasvipohjaisessa kapselikuoressa. Vegaaninen, gluteeniton ja GMO-vapaa – ei sidosaineita, täyteaineita, makeutusaineita tai keinotekoisia säilöntäaineita.",
       },
-      developedInSweden,
+      packaging,
     ],
     specs: [
       { label: "Latinalainen nimi", value: "Hericium erinaceus" },
@@ -783,7 +772,6 @@ export const productContent: Record<string, ProductContent> = {
       { label: "Päiväannos", value: "1 kapseli päivässä" },
       { label: "Pakkaus", value: "60 kapselia – 60 päivää" },
       { label: "Kapseli", value: "Vegaaninen" },
-      { label: "Kehitetty", value: "Ruotsissa" },
     ],
     ingredients:
       "Lion's Mane -uute (Hericium erinaceus), standardoitu 60 % polysakkarideihin, joista 45 % beetaglukaaneja, kapselikuori (kasvipohjainen). Yhdessä kapselissa: uutetta 500 mg, josta polysakkarideja 300 mg ja beetaglukaaneja 225 mg.",
@@ -834,7 +822,7 @@ export const productContent: Record<string, ProductContent> = {
         body:
           "Vain cordyceps-uutetta kasvipohjaisessa kapselikuoressa. Vegaaninen, gluteeniton ja GMO-vapaa – ei sidosaineita, täyteaineita, makeutusaineita tai keinotekoisia säilöntäaineita.",
       },
-      developedInSweden,
+      packaging,
     ],
     specs: [
       { label: "Latinalainen nimi", value: "Cordyceps militaris" },
@@ -844,7 +832,6 @@ export const productContent: Record<string, ProductContent> = {
       { label: "Päiväannos", value: "1 kapseli päivässä" },
       { label: "Pakkaus", value: "60 kapselia – 60 päivää" },
       { label: "Kapseli", value: "Vegaaninen" },
-      { label: "Kehitetty", value: "Ruotsissa" },
     ],
     ingredients:
       "Cordyceps-uute (Cordyceps militaris) 8:1, standardoitu 40 % polysakkarideihin, kapselikuori (kasvipohjainen). Yhdessä kapselissa: cordyceps-uutetta 350 mg, josta polysakkarideja 140 mg.",

@@ -93,7 +93,7 @@ export const faqGroups: FaqGroup[] = [
     items: [
       {
         q: "Where do your products come from?",
-        a: "Metilde is a Swedish brand and the range is developed in Sweden. The raw materials and extracts come from the countries where the plants are native, for example Tongkat Ali from Southeast Asia and maca from the Andes.",
+        a: "The raw materials and extracts come from the countries where the plants are native, for example Tongkat Ali from Southeast Asia and maca from the Andes.",
       },
       {
         q: "How do I know which batch I have received?",

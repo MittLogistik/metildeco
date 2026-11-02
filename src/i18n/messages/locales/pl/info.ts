@@ -95,7 +95,7 @@ export const messages: InfoMessages = {
       ["Bez komplikacji", "Podajemy dokładnie, co zawiera każdy produkt. Bez ozdobników, bez ukrytych dodatków."],
       ["Dostajesz to, za co płacisz", "Surowce, kapsułki, opakowanie. Na to wydajemy pieniądze – nie na drogie kampanie reklamowe."],
       ["Prawdziwa subskrypcja", "15% rabatu, darmowa dostawa i pełna kontrola. Wstrzymaj, zmień lub zakończ, kiedy chcesz."],
-      ["Szwedzka marka", "Ofertę tworzymy w Szwecji i stąd wysyłamy każde zamówienie."],
+      ["Wysyłka ze Szwecji", "Każde zamówienie wysyłamy z naszego magazynu w Szwecji."],
     ] as [string, string][],
     companyEyebrow: "Firma",
     companyTitle: "O firmie",

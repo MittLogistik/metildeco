@@ -5,10 +5,10 @@ import type { ProductContent } from "@/content/product-content";
  * Geen gezondheidsclaims – alleen botanie, herkomst, extractie, vorm en dosering.
  */
 
-const developedInSweden = {
-  heading: "Ontwikkeld in Zweden",
+const packaging = {
+  heading: "Verpakking en levering",
   body:
-    "Metilde is een Zweeds merk. Het assortiment wordt hier ontwikkeld en elke bestelling wordt verzonden vanuit ons magazijn in Zweden. De verpakking is een plastic pot met schroefdeksel die de inhoud droog houdt tussen de doses door.",
+    "De capsules worden verpakt in een plastic pot met schroefdeksel die de inhoud droog houdt tussen de doseringen. Elke bestelling wordt verzonden vanuit ons magazijn in Zweden.",
 };
 
 const noExceed = "De aanbevolen dagelijkse dosis niet overschrijden.";
@@ -29,7 +29,7 @@ export const productContent: Record<string, ProductContent> = {
     eyebrow: "Eurycoma longifolia · 200:1 wortelextract",
     headline: "Pure wortel, 450 mg per capsule",
     intro:
-      "Tongkat Ali Elite is een geconcentreerd 200:1-extract van de wortel van Eurycoma longifolia – ook bekend als Malaysian Ginseng of Longjack. Ontwikkeld in Zweden, in een vegan capsule, zonder toevoegingen.",
+      "Tongkat Ali Elite is een geconcentreerd 200:1-extract van de wortel van Eurycoma longifolia – ook bekend als Malaysian Ginseng of Longjack. In een vegan capsule, zonder toevoegingen.",
     highlights: [
       { label: "Extract", value: "200:1" },
       { label: "Per capsule", value: "450 mg" },
@@ -46,7 +46,7 @@ export const productContent: Record<string, ProductContent> = {
         body:
           "Alleen wortelextract in een plantaardige capsulewand. Vegan, glutenvrij en zonder ggo – geen bindmiddelen, vulstoffen, zoetstoffen of kunstmatige conserveermiddelen.",
       },
-      developedInSweden,
+      packaging,
     ],
     specs: [
       { label: "Latijnse naam", value: "Eurycoma longifolia" },
@@ -56,7 +56,6 @@ export const productContent: Record<string, ProductContent> = {
       { label: "Dagelijkse dosis", value: "1 capsule per dag" },
       { label: "Inhoud", value: "60 capsules – 60 dagen" },
       { label: "Capsule", value: "Vegan (HPMC)" },
-      { label: "Ontwikkeld in", value: "Zweden" },
     ],
     ingredients:
       "Tongkat Ali-extract (Eurycoma longifolia, wortel) 200:1, capsulewand (HPMC). Inhoud per capsule: Tongkat Ali-extract (200:1) 450 mg.",
@@ -99,7 +98,7 @@ export const productContent: Record<string, ProductContent> = {
         body:
           "Elke batch wordt gestandaardiseerd op het gehalte aan eurycomanon, zodat elke capsule van 520 mg 20 mg eurycomanon bevat. Zo blijft de sterkte gelijk van batch tot batch. Eén capsule per dag.",
       },
-      developedInSweden,
+      packaging,
     ],
     specs: [
       { label: "Latijnse naam", value: "Eurycoma longifolia" },
@@ -110,7 +109,6 @@ export const productContent: Record<string, ProductContent> = {
       { label: "Inhoud", value: "60 capsules – 60 dagen" },
       { label: "Verpakking", value: "Plastic pot met schroefdeksel" },
       { label: "Capsule", value: "Vegan (HPMC)" },
-      { label: "Ontwikkeld in", value: "Zweden" },
     ],
     ingredients:
       "Tongkat Ali-extract (Eurycoma longifolia, wortel) 200:1, capsulewand (HPMC). Inhoud per capsule: Tongkat Ali-extract (200:1) 520 mg, waarvan eurycomanon 20 mg.",
@@ -142,7 +140,7 @@ export const productContent: Record<string, ProductContent> = {
     eyebrow: "Fadogia agrestis · 20:1 kruidenextract",
     headline: "Pure plant, 450 mg per capsule",
     intro:
-      "Een 20:1-extract van Fadogia agrestis, een struik met een lange traditie in het West-Afrikaanse kruidengebruik. 450 mg per capsule in een vegan capsule – zonder toevoegingen. Ontwikkeld in Zweden.",
+      "Een 20:1-extract van Fadogia agrestis, een struik met een lange traditie in het West-Afrikaanse kruidengebruik. 450 mg per capsule in een vegan capsule – zonder toevoegingen.",
     highlights: [
       { label: "Extract", value: "20:1" },
       { label: "Per capsule", value: "450 mg" },
@@ -159,7 +157,7 @@ export const productContent: Record<string, ProductContent> = {
         body:
           "Alleen Fadogia agrestis-extract in een plantaardige capsulewand. Vegan, glutenvrij en zonder ggo – geen bindmiddelen, vulstoffen of kunstmatige conserveermiddelen.",
       },
-      developedInSweden,
+      packaging,
     ],
     specs: [
       { label: "Latijnse naam", value: "Fadogia agrestis" },
@@ -168,7 +166,6 @@ export const productContent: Record<string, ProductContent> = {
       { label: "Dagelijkse dosis", value: "1 capsule per dag" },
       { label: "Inhoud", value: "60 capsules – 60 dagen" },
       { label: "Capsule", value: "Vegan (HPMC)" },
-      { label: "Ontwikkeld in", value: "Zweden" },
     ],
     ingredients:
       "Fadogia agrestis-extract 20:1, capsulewand (HPMC). Inhoud per capsule: Fadogia agrestis-extract (20:1) 450 mg.",
@@ -290,7 +287,6 @@ export const productContent: Record<string, ProductContent> = {
       { label: "Inhoud", value: "60 capsules – 30 tot 60 dagen" },
       { label: "Capsulewand", value: "Plantaardig (HPMC)" },
       { label: "Verpakking", value: "Plastic pot met schroefdeksel" },
-      { label: "Ontwikkeld in", value: "Zweden" },
     ],
     ingredients:
       "Tongkat Ali-extract (Eurycoma longifolia, wortel) 200:1, capsulewand (HPMC). Inhoud per capsule: Tongkat Ali-extract (200:1) 500 mg.",
@@ -399,7 +395,7 @@ export const productContent: Record<string, ProductContent> = {
         heading: "Pure samenstelling",
         body: `Alleen macawortelextract in een plantaardige capsulewand. ${cleanNoSweeteners}`,
       },
-      developedInSweden,
+      packaging,
     ],
     specs: [
       { label: "Latijnse naam", value: "Lepidium meyenii" },
@@ -409,7 +405,6 @@ export const productContent: Record<string, ProductContent> = {
       { label: "Dagelijkse dosis", value: "2 capsules per dag" },
       { label: "Inhoud", value: "60 capsules – 30 dagen" },
       { label: "Capsule", value: "Vegan (HPMC)" },
-      { label: "Ontwikkeld in", value: "Zweden" },
     ],
     ingredients:
       "Maca-extract (Lepidium meyenii, wortel) 20:1, capsulewand (HPMC). Inhoud per capsule: macawortelextract (20:1) 470 mg.",
@@ -452,7 +447,7 @@ export const productContent: Record<string, ProductContent> = {
         body:
           "Alleen mariadistelextract in een plantaardige capsulewand van pullulan. Vegan, glutenvrij en zonder ggo – vrij van lactose, soja, gist, tarwe en melk, en zonder kleurstoffen, bindmiddelen, vulstoffen of kunstmatige conserveermiddelen.",
       },
-      developedInSweden,
+      packaging,
     ],
     specs: [
       { label: "Latijnse naam", value: "Silybum marianum" },
@@ -463,7 +458,6 @@ export const productContent: Record<string, ProductContent> = {
       { label: "Dagelijkse dosis", value: "1 capsule per dag" },
       { label: "Inhoud", value: "60 capsules – 60 dagen" },
       { label: "Capsule", value: "Vegan (pullulan)" },
-      { label: "Ontwikkeld in", value: "Zweden" },
     ],
     ingredients:
       "Mariadistelextract (Silybum marianum, zaad) 20:1 gestandaardiseerd op 80 % silymarine, capsulewand (pullulan). Inhoud per capsule: mariadistelextract 350 mg, waarvan silymarine 280 mg.",
@@ -505,7 +499,7 @@ export const productContent: Record<string, ProductContent> = {
         heading: "Pure samenstelling",
         body: `Alleen brandnetelbladextract in een plantaardige capsulewand. ${cleanNoSweeteners}`,
       },
-      developedInSweden,
+      packaging,
     ],
     specs: [
       { label: "Latijnse naam", value: "Urtica dioica" },
@@ -515,7 +509,6 @@ export const productContent: Record<string, ProductContent> = {
       { label: "Dagelijkse dosis", value: "1 capsule per dag" },
       { label: "Inhoud", value: "60 capsules – 60 dagen" },
       { label: "Capsule", value: "Vegan" },
-      { label: "Ontwikkeld in", value: "Zweden" },
     ],
     ingredients:
       "Brandnetelbladextract (Urtica dioica, blad) 10:1, capsulewand (plantaardig). Inhoud per capsule: brandnetelbladextract 430 mg.",
@@ -554,7 +547,7 @@ export const productContent: Record<string, ProductContent> = {
         heading: "Pure samenstelling",
         body: `Alleen druivenpitextract in een plantaardige capsulewand. ${cleanNoSweeteners}`,
       },
-      developedInSweden,
+      packaging,
     ],
     specs: [
       { label: "Latijnse naam", value: "Vitis vinifera" },
@@ -564,7 +557,6 @@ export const productContent: Record<string, ProductContent> = {
       { label: "Dagelijkse dosis", value: "1–2 capsules per dag" },
       { label: "Inhoud", value: "60 capsules – 30–60 dagen" },
       { label: "Capsule", value: "Vegan" },
-      { label: "Ontwikkeld in", value: "Zweden" },
     ],
     ingredients:
       "Druivenpitextract (Vitis vinifera, pit) gestandaardiseerd op 95 % proanthocyanidinen, capsulewand (plantaardig). Inhoud per capsule: druivenpitextract 500 mg, waarvan proanthocyanidinen 475 mg.",
@@ -606,7 +598,7 @@ export const productContent: Record<string, ProductContent> = {
         heading: "Pure samenstelling",
         body: `Alleen quercetine-extract in een plantaardige capsulewand. ${cleanNoSweeteners}`,
       },
-      developedInSweden,
+      packaging,
     ],
     specs: [
       { label: "Inhoud", value: "Quercetine-extract" },
@@ -615,7 +607,6 @@ export const productContent: Record<string, ProductContent> = {
       { label: "Dagelijkse dosis", value: "1 capsule per dag" },
       { label: "Verpakking", value: "60 capsules – 60 dagen" },
       { label: "Capsule", value: "Vegan" },
-      { label: "Ontwikkeld in", value: "Zweden" },
     ],
     ingredients:
       "Quercetine-extract (98 % quercetine), capsulewand (plantaardig). Inhoud per capsule: quercetine-extract 500 mg, waarvan quercetine 490 mg.",
@@ -654,7 +645,7 @@ export const productContent: Record<string, ProductContent> = {
         heading: "Pure samenstelling",
         body: `Alleen reishi-extract in een plantaardige capsulewand. ${cleanNoSweeteners}`,
       },
-      developedInSweden,
+      packaging,
     ],
     specs: [
       { label: "Latijnse naam", value: "Ganoderma lucidum" },
@@ -663,7 +654,6 @@ export const productContent: Record<string, ProductContent> = {
       { label: "Dagelijkse dosis", value: "1 capsule per dag" },
       { label: "Verpakking", value: "60 capsules – 60 dagen" },
       { label: "Capsule", value: "Vegan" },
-      { label: "Ontwikkeld in", value: "Zweden" },
     ],
     ingredients:
       "Reishi-extract (Ganoderma lucidum) gestandaardiseerd op 40 % polysachariden, capsulewand (plantaardig). Inhoud per capsule: reishi-extract 350 mg, waarvan polysachariden 140 mg.",
@@ -702,7 +692,7 @@ export const productContent: Record<string, ProductContent> = {
         heading: "Pure samenstelling",
         body: `Alleen chaga-extract in een plantaardige capsulewand. ${cleanNoSweeteners}`,
       },
-      developedInSweden,
+      packaging,
     ],
     specs: [
       { label: "Latijnse naam", value: "Inonotus obliquus" },
@@ -712,7 +702,6 @@ export const productContent: Record<string, ProductContent> = {
       { label: "Dagelijkse dosis", value: "1 capsule per dag" },
       { label: "Verpakking", value: "60 capsules – 60 dagen" },
       { label: "Capsule", value: "Vegan" },
-      { label: "Ontwikkeld in", value: "Zweden" },
     ],
     ingredients:
       "Chaga-extract (Inonotus obliquus) 30:1 gestandaardiseerd op 10 % polysachariden, capsulewand (plantaardig). Inhoud per capsule: chaga-extract 400 mg, waarvan polysachariden 40 mg.",
@@ -751,7 +740,7 @@ export const productContent: Record<string, ProductContent> = {
         heading: "Pure samenstelling",
         body: `Alleen Lion's Mane-extract in een plantaardige capsulewand. ${cleanNoSweeteners}`,
       },
-      developedInSweden,
+      packaging,
     ],
     specs: [
       { label: "Latijnse naam", value: "Hericium erinaceus" },
@@ -761,7 +750,6 @@ export const productContent: Record<string, ProductContent> = {
       { label: "Dagelijkse dosis", value: "1 capsule per dag" },
       { label: "Verpakking", value: "60 capsules – 60 dagen" },
       { label: "Capsule", value: "Vegan" },
-      { label: "Ontwikkeld in", value: "Zweden" },
     ],
     ingredients:
       "Lion's Mane-extract (Hericium erinaceus) gestandaardiseerd op 60 % polysachariden, waarvan 45 % bètaglucanen, capsulewand (plantaardig). Inhoud per capsule: extract 500 mg, waarvan polysachariden 300 mg en bètaglucanen 225 mg.",
@@ -800,7 +788,7 @@ export const productContent: Record<string, ProductContent> = {
         heading: "Pure samenstelling",
         body: `Alleen cordyceps-extract in een plantaardige capsulewand. ${cleanNoSweeteners}`,
       },
-      developedInSweden,
+      packaging,
     ],
     specs: [
       { label: "Latijnse naam", value: "Cordyceps militaris" },
@@ -810,7 +798,6 @@ export const productContent: Record<string, ProductContent> = {
       { label: "Dagelijkse dosis", value: "1 capsule per dag" },
       { label: "Verpakking", value: "60 capsules – 60 dagen" },
       { label: "Capsule", value: "Vegan" },
-      { label: "Ontwikkeld in", value: "Zweden" },
     ],
     ingredients:
       "Cordyceps-extract (Cordyceps militaris) 8:1 gestandaardiseerd op 40 % polysachariden, capsulewand (plantaardig). Inhoud per capsule: cordyceps-extract 350 mg, waarvan polysachariden 140 mg.",

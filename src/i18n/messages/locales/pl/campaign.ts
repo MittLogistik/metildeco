@@ -2,8 +2,8 @@ import type { CampaignMessages } from "../../campaign";
 
 export const messages: CampaignMessages = {
   metaTitle: "Ekstrakty z grzybów i roślin w wegańskich kapsułkach",
-  metaDescription: "Standaryzowane ekstrakty z grzybów i roślin bez wypełniaczy, w wegańskich kapsułkach. Opracowane w Szwecji.",
-  eyebrow: "Opracowane w Szwecji · wegańska kapsułka",
+  metaDescription: "Standaryzowane ekstrakty z grzybów i roślin bez wypełniaczy, w wegańskich kapsułkach.",
+  eyebrow: "Wegańska kapsułka · bez wypełniaczy",
   title: "Czyste ekstrakty z grzybów i roślin",
   intro: "Standaryzowane ekstrakty bez wypełniaczy. Moc ekstraktu i dawka są podane na każdym opakowaniu.",
   cta: "Zobacz produkty",

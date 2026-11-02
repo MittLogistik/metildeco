@@ -5,10 +5,10 @@ import type { ProductContent } from "@/content/product-content";
  * Aucune allégation de santé – uniquement botanique, origine, extraction, forme et dosage.
  */
 
-const developedInSweden = {
-  heading: "Conçu en Suède",
+const packaging = {
+  heading: "Emballage et livraison",
   body:
-    "Metilde est une marque suédoise. La gamme est élaborée ici et chaque commande est expédiée depuis notre entrepôt en Suède. L'emballage est un pot en plastique à couvercle vissé qui garde le contenu au sec entre les prises.",
+    "Les gélules sont conditionnées dans un pot en plastique à couvercle vissé qui garde le contenu au sec entre les prises. Chaque commande est expédiée depuis notre entrepôt en Suède.",
 };
 
 const noExceed = "Ne pas dépasser la dose journalière recommandée.";
@@ -33,7 +33,7 @@ export const productContent: Record<string, ProductContent> = {
     eyebrow: "Eurycoma longifolia · extrait de racine 200:1",
     headline: "Racine pure, 450 mg par gélule",
     intro:
-      "Tongkat Ali Elite est un extrait concentré 200:1 de la racine d'Eurycoma longifolia – aussi appelée Malaysian Ginseng ou Longjack. Conçu en Suède, en gélule végane, sans additifs.",
+      "Tongkat Ali Elite est un extrait concentré 200:1 de la racine d'Eurycoma longifolia – aussi appelée Malaysian Ginseng ou Longjack. En gélule végane, sans additifs.",
     highlights: [
       { label: "Extrait", value: "200:1" },
       { label: "Par gélule", value: "450 mg" },
@@ -50,7 +50,7 @@ export const productContent: Record<string, ProductContent> = {
         body:
           "Uniquement de l'extrait de racine dans une enveloppe de gélule d'origine végétale. Végane, sans gluten et sans OGM – sans liants, agents de charge, édulcorants ni conservateurs artificiels.",
       },
-      developedInSweden,
+      packaging,
     ],
     specs: [
       { label: "Nom latin", value: "Eurycoma longifolia" },
@@ -60,7 +60,6 @@ export const productContent: Record<string, ProductContent> = {
       { label: "Dose journalière", value: "1 gélule par jour" },
       { label: "Contenu", value: "60 gélules – 60 jours" },
       { label: "Gélule", value: "Végane (HPMC)" },
-      { label: "Conçu en", value: "Suède" },
     ],
     ingredients:
       "Extrait de Tongkat Ali (Eurycoma longifolia, racine) 200:1, enveloppe de la gélule (HPMC). Teneur par gélule : extrait de Tongkat Ali (200:1) 450 mg.",
@@ -103,7 +102,7 @@ export const productContent: Record<string, ProductContent> = {
         body:
           "Chaque lot est standardisé sur sa teneur en eurycomanone, de sorte que chaque gélule de 520 mg contient 20 mg d'eurycomanone. La concentration reste ainsi constante d'un lot à l'autre. Une gélule par jour.",
       },
-      developedInSweden,
+      packaging,
     ],
     specs: [
       { label: "Nom latin", value: "Eurycoma longifolia" },
@@ -114,7 +113,6 @@ export const productContent: Record<string, ProductContent> = {
       { label: "Contenu", value: "60 gélules – 60 jours" },
       { label: "Conditionnement", value: "Pot en plastique à couvercle vissé" },
       { label: "Gélule", value: "Végane (HPMC)" },
-      { label: "Conçu en", value: "Suède" },
     ],
     ingredients:
       "Extrait de Tongkat Ali (Eurycoma longifolia, racine) 200:1, enveloppe de la gélule (HPMC). Teneur par gélule : extrait de Tongkat Ali (200:1) 520 mg, dont eurycomanone 20 mg.",
@@ -146,7 +144,7 @@ export const productContent: Record<string, ProductContent> = {
     eyebrow: "Fadogia agrestis · extrait de plante 20:1",
     headline: "Plante pure, 450 mg par gélule",
     intro:
-      "Un extrait 20:1 de Fadogia agrestis, un arbuste à la longue tradition dans l'herboristerie d'Afrique de l'Ouest. 450 mg par gélule, en gélule végane – sans additifs. Conçu en Suède.",
+      "Un extrait 20:1 de Fadogia agrestis, un arbuste à la longue tradition dans l'herboristerie d'Afrique de l'Ouest. 450 mg par gélule, en gélule végane – sans additifs.",
     highlights: [
       { label: "Extrait", value: "20:1" },
       { label: "Par gélule", value: "450 mg" },
@@ -163,7 +161,7 @@ export const productContent: Record<string, ProductContent> = {
         body:
           "Uniquement de l'extrait de Fadogia agrestis dans une enveloppe de gélule d'origine végétale. Végane, sans gluten et sans OGM – sans liants, agents de charge ni conservateurs artificiels.",
       },
-      developedInSweden,
+      packaging,
     ],
     specs: [
       { label: "Nom latin", value: "Fadogia agrestis" },
@@ -172,7 +170,6 @@ export const productContent: Record<string, ProductContent> = {
       { label: "Dose journalière", value: "1 gélule par jour" },
       { label: "Contenu", value: "60 gélules – 60 jours" },
       { label: "Gélule", value: "Végane (HPMC)" },
-      { label: "Conçu en", value: "Suède" },
     ],
     ingredients:
       "Extrait de Fadogia agrestis 20:1, enveloppe de la gélule (HPMC). Teneur par gélule : extrait de Fadogia agrestis (20:1) 450 mg.",
@@ -294,7 +291,6 @@ export const productContent: Record<string, ProductContent> = {
       { label: "Contenu", value: "60 gélules – 30 à 60 jours" },
       { label: "Enveloppe", value: "Végétale (HPMC)" },
       { label: "Conditionnement", value: "Pot en plastique à couvercle vissé" },
-      { label: "Conçu en", value: "Suède" },
     ],
     ingredients:
       "Extrait de Tongkat Ali (Eurycoma longifolia, racine) 200:1, enveloppe de la gélule (HPMC). Teneur par gélule : extrait de Tongkat Ali (200:1) 500 mg.",
@@ -403,7 +399,7 @@ export const productContent: Record<string, ProductContent> = {
         heading: "Une composition pure",
         body: `Uniquement de l'extrait de racine de maca dans une enveloppe de gélule d'origine végétale. ${cleanNoSweeteners}`,
       },
-      developedInSweden,
+      packaging,
     ],
     specs: [
       { label: "Nom latin", value: "Lepidium meyenii" },
@@ -413,7 +409,6 @@ export const productContent: Record<string, ProductContent> = {
       { label: "Dose journalière", value: "2 gélules par jour" },
       { label: "Contenu", value: "60 gélules – 30 jours" },
       { label: "Gélule", value: "Végane (HPMC)" },
-      { label: "Conçu en", value: "Suède" },
     ],
     ingredients:
       "Extrait de maca (Lepidium meyenii, racine) 20:1, enveloppe de la gélule (HPMC). Teneur par gélule : extrait de racine de maca (20:1) 470 mg.",
@@ -456,7 +451,7 @@ export const productContent: Record<string, ProductContent> = {
         body:
           "Uniquement de l'extrait de chardon-Marie dans une enveloppe de gélule végétale en pullulane. Végane, sans gluten et sans OGM – sans lactose, soja, levure, blé ni lait, et sans colorants, liants, agents de charge ni conservateurs artificiels.",
       },
-      developedInSweden,
+      packaging,
     ],
     specs: [
       { label: "Nom latin", value: "Silybum marianum" },
@@ -467,7 +462,6 @@ export const productContent: Record<string, ProductContent> = {
       { label: "Dose journalière", value: "1 gélule par jour" },
       { label: "Contenu", value: "60 gélules – 60 jours" },
       { label: "Gélule", value: "Végane (pullulane)" },
-      { label: "Conçu en", value: "Suède" },
     ],
     ingredients:
       "Extrait de chardon-Marie (Silybum marianum, graine) 20:1 standardisé à 80 % de silymarine, enveloppe de la gélule (pullulane). Teneur par gélule : extrait de chardon-Marie 350 mg, dont silymarine 280 mg.",
@@ -509,7 +503,7 @@ export const productContent: Record<string, ProductContent> = {
         heading: "Une composition pure",
         body: `Uniquement de l'extrait de feuille d'ortie dans une enveloppe de gélule d'origine végétale. ${cleanNoSweeteners}`,
       },
-      developedInSweden,
+      packaging,
     ],
     specs: [
       { label: "Nom latin", value: "Urtica dioica" },
@@ -519,7 +513,6 @@ export const productContent: Record<string, ProductContent> = {
       { label: "Dose journalière", value: "1 gélule par jour" },
       { label: "Contenu", value: "60 gélules – 60 jours" },
       { label: "Gélule", value: "Végane" },
-      { label: "Conçu en", value: "Suède" },
     ],
     ingredients:
       "Extrait de feuille d'ortie (Urtica dioica, feuille) 10:1, enveloppe de la gélule (végétale). Teneur par gélule : extrait de feuille d'ortie 430 mg.",
@@ -558,7 +551,7 @@ export const productContent: Record<string, ProductContent> = {
         heading: "Une composition pure",
         body: `Uniquement de l'extrait de pépins de raisin dans une enveloppe de gélule d'origine végétale. ${cleanNoSweeteners}`,
       },
-      developedInSweden,
+      packaging,
     ],
     specs: [
       { label: "Nom latin", value: "Vitis vinifera" },
@@ -568,7 +561,6 @@ export const productContent: Record<string, ProductContent> = {
       { label: "Dose journalière", value: "1–2 gélules par jour" },
       { label: "Contenu", value: "60 gélules – 30–60 jours" },
       { label: "Gélule", value: "Végane" },
-      { label: "Conçu en", value: "Suède" },
     ],
     ingredients:
       "Extrait de pépins de raisin (Vitis vinifera, pépin) standardisé à 95 % de proanthocyanidines, enveloppe de la gélule (végétale). Teneur par gélule : extrait de pépins de raisin 500 mg, dont proanthocyanidines 475 mg.",
@@ -610,7 +602,7 @@ export const productContent: Record<string, ProductContent> = {
         heading: "Une composition pure",
         body: `Uniquement de l'extrait de quercétine dans une enveloppe de gélule d'origine végétale. ${cleanNoSweeteners}`,
       },
-      developedInSweden,
+      packaging,
     ],
     specs: [
       { label: "Contenu", value: "Extrait de quercétine" },
@@ -619,7 +611,6 @@ export const productContent: Record<string, ProductContent> = {
       { label: "Dose journalière", value: "1 gélule par jour" },
       { label: "Conditionnement", value: "60 gélules – 60 jours" },
       { label: "Gélule", value: "Végane" },
-      { label: "Conçu en", value: "Suède" },
     ],
     ingredients:
       "Extrait de quercétine (98 % de quercétine), enveloppe de la gélule (végétale). Teneur par gélule : extrait de quercétine 500 mg, dont quercétine 490 mg.",
@@ -658,7 +649,7 @@ export const productContent: Record<string, ProductContent> = {
         heading: "Une composition pure",
         body: `Uniquement de l'extrait de reishi dans une enveloppe de gélule d'origine végétale. ${cleanNoSweeteners}`,
       },
-      developedInSweden,
+      packaging,
     ],
     specs: [
       { label: "Nom latin", value: "Ganoderma lucidum" },
@@ -667,7 +658,6 @@ export const productContent: Record<string, ProductContent> = {
       { label: "Dose journalière", value: "1 gélule par jour" },
       { label: "Conditionnement", value: "60 gélules – 60 jours" },
       { label: "Gélule", value: "Végane" },
-      { label: "Conçu en", value: "Suède" },
     ],
     ingredients:
       "Extrait de reishi (Ganoderma lucidum) standardisé à 40 % de polysaccharides, enveloppe de la gélule (végétale). Teneur par gélule : extrait de reishi 350 mg, dont polysaccharides 140 mg.",
@@ -706,7 +696,7 @@ export const productContent: Record<string, ProductContent> = {
         heading: "Une composition pure",
         body: `Uniquement de l'extrait de chaga dans une enveloppe de gélule d'origine végétale. ${cleanNoSweeteners}`,
       },
-      developedInSweden,
+      packaging,
     ],
     specs: [
       { label: "Nom latin", value: "Inonotus obliquus" },
@@ -716,7 +706,6 @@ export const productContent: Record<string, ProductContent> = {
       { label: "Dose journalière", value: "1 gélule par jour" },
       { label: "Conditionnement", value: "60 gélules – 60 jours" },
       { label: "Gélule", value: "Végane" },
-      { label: "Conçu en", value: "Suède" },
     ],
     ingredients:
       "Extrait de chaga (Inonotus obliquus) 30:1 standardisé à 10 % de polysaccharides, enveloppe de la gélule (végétale). Teneur par gélule : extrait de chaga 400 mg, dont polysaccharides 40 mg.",
@@ -755,7 +744,7 @@ export const productContent: Record<string, ProductContent> = {
         heading: "Une composition pure",
         body: `Uniquement de l'extrait de Lion's Mane dans une enveloppe de gélule d'origine végétale. ${cleanNoSweeteners}`,
       },
-      developedInSweden,
+      packaging,
     ],
     specs: [
       { label: "Nom latin", value: "Hericium erinaceus" },
@@ -765,7 +754,6 @@ export const productContent: Record<string, ProductContent> = {
       { label: "Dose journalière", value: "1 gélule par jour" },
       { label: "Conditionnement", value: "60 gélules – 60 jours" },
       { label: "Gélule", value: "Végane" },
-      { label: "Conçu en", value: "Suède" },
     ],
     ingredients:
       "Extrait de Lion's Mane (Hericium erinaceus) standardisé à 60 % de polysaccharides, dont 45 % de bêta-glucanes, enveloppe de la gélule (végétale). Teneur par gélule : extrait 500 mg, dont polysaccharides 300 mg et bêta-glucanes 225 mg.",
@@ -804,7 +792,7 @@ export const productContent: Record<string, ProductContent> = {
         heading: "Une composition pure",
         body: `Uniquement de l'extrait de cordyceps dans une enveloppe de gélule d'origine végétale. ${cleanNoSweeteners}`,
       },
-      developedInSweden,
+      packaging,
     ],
     specs: [
       { label: "Nom latin", value: "Cordyceps militaris" },
@@ -814,7 +802,6 @@ export const productContent: Record<string, ProductContent> = {
       { label: "Dose journalière", value: "1 gélule par jour" },
       { label: "Conditionnement", value: "60 gélules – 60 jours" },
       { label: "Gélule", value: "Végane" },
-      { label: "Conçu en", value: "Suède" },
     ],
     ingredients:
       "Extrait de cordyceps (Cordyceps militaris) 8:1 standardisé à 40 % de polysaccharides, enveloppe de la gélule (végétale). Teneur par gélule : extrait de cordyceps 350 mg, dont polysaccharides 140 mg.",

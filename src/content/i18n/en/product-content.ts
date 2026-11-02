@@ -5,10 +5,10 @@ import type { ProductContent } from "@/content/product-content";
  * No health claims – only botany, origin, extraction, format and dosage.
  */
 
-const developedInSweden = {
-  heading: "Developed in Sweden",
+const packaging = {
+  heading: "Packaging and delivery",
   body:
-    "Metilde is a Swedish brand. The range is developed here and every order ships from our warehouse in Sweden. The packaging is a plastic jar with a screw lid that keeps the contents dry between doses.",
+    "The capsules are packed in a plastic jar with a screw lid that keeps the contents dry between doses. Every order ships from our warehouse in Sweden.",
 };
 
 const noExceed = "Do not exceed the recommended daily dose.";
@@ -29,7 +29,7 @@ export const productContent: Record<string, ProductContent> = {
     eyebrow: "Eurycoma longifolia · 200:1 root extract",
     headline: "Pure root, 450 mg per capsule",
     intro:
-      "Tongkat Ali Elite is a concentrated 200:1 extract of the root of Eurycoma longifolia – also known as Malaysian Ginseng or Longjack. Developed in Sweden, in a vegan capsule, with no additives.",
+      "Tongkat Ali Elite is a concentrated 200:1 extract of the root of Eurycoma longifolia – also known as Malaysian Ginseng or Longjack. In a vegan capsule, with no additives.",
     highlights: [
       { label: "Extract", value: "200:1" },
       { label: "Per capsule", value: "450 mg" },
@@ -46,7 +46,7 @@ export const productContent: Record<string, ProductContent> = {
         body:
           "Nothing but root extract in a plant-based capsule shell. Vegan, gluten-free and GMO-free – no binders, fillers, sweeteners or artificial preservatives.",
       },
-      developedInSweden,
+      packaging,
     ],
     specs: [
       { label: "Latin name", value: "Eurycoma longifolia" },
@@ -56,7 +56,6 @@ export const productContent: Record<string, ProductContent> = {
       { label: "Daily dose", value: "1 capsule daily" },
       { label: "Contents", value: "60 capsules – 60 days" },
       { label: "Capsule", value: "Vegan (HPMC)" },
-      { label: "Developed in", value: "Sweden" },
     ],
     ingredients:
       "Tongkat Ali extract (Eurycoma longifolia, root) 200:1, capsule shell (HPMC). Content per capsule: Tongkat Ali extract (200:1) 450 mg.",
@@ -99,7 +98,7 @@ export const productContent: Record<string, ProductContent> = {
         body:
           "Every batch is standardised for its eurycomanone content, so that each 520 mg capsule contains 20 mg eurycomanone. This keeps the strength consistent from batch to batch. One capsule a day.",
       },
-      developedInSweden,
+      packaging,
     ],
     specs: [
       { label: "Latin name", value: "Eurycoma longifolia" },
@@ -110,7 +109,6 @@ export const productContent: Record<string, ProductContent> = {
       { label: "Contents", value: "60 capsules – 60 days" },
       { label: "Packaging", value: "Plastic jar with screw lid" },
       { label: "Capsule", value: "Vegan (HPMC)" },
-      { label: "Developed in", value: "Sweden" },
     ],
     ingredients:
       "Tongkat Ali extract (Eurycoma longifolia, root) 200:1, capsule shell (HPMC). Content per capsule: Tongkat Ali extract (200:1) 520 mg, of which eurycomanone 20 mg.",
@@ -142,7 +140,7 @@ export const productContent: Record<string, ProductContent> = {
     eyebrow: "Fadogia agrestis · 20:1 herbal extract",
     headline: "Pure plant, 450 mg per capsule",
     intro:
-      "A 20:1 extract of Fadogia agrestis, a shrub with a long tradition in West African herbal use. 450 mg per capsule in a vegan capsule – with no additives. Developed in Sweden.",
+      "A 20:1 extract of Fadogia agrestis, a shrub with a long tradition in West African herbal use. 450 mg per capsule in a vegan capsule – with no additives.",
     highlights: [
       { label: "Extract", value: "20:1" },
       { label: "Per capsule", value: "450 mg" },
@@ -159,7 +157,7 @@ export const productContent: Record<string, ProductContent> = {
         body:
           "Nothing but Fadogia agrestis extract in a plant-based capsule shell. Vegan, gluten-free and GMO-free – no binders, fillers or artificial preservatives.",
       },
-      developedInSweden,
+      packaging,
     ],
     specs: [
       { label: "Latin name", value: "Fadogia agrestis" },
@@ -168,7 +166,6 @@ export const productContent: Record<string, ProductContent> = {
       { label: "Daily dose", value: "1 capsule daily" },
       { label: "Contents", value: "60 capsules – 60 days" },
       { label: "Capsule", value: "Vegan (HPMC)" },
-      { label: "Developed in", value: "Sweden" },
     ],
     ingredients:
       "Fadogia agrestis extract 20:1, capsule shell (HPMC). Content per capsule: Fadogia agrestis extract (20:1) 450 mg.",
@@ -290,7 +287,6 @@ export const productContent: Record<string, ProductContent> = {
       { label: "Contents", value: "60 capsules – 30 to 60 days" },
       { label: "Capsule shell", value: "Plant-based (HPMC)" },
       { label: "Packaging", value: "Plastic jar with screw lid" },
-      { label: "Developed in", value: "Sweden" },
     ],
     ingredients:
       "Tongkat Ali extract (Eurycoma longifolia, root) 200:1, capsule shell (HPMC). Content per capsule: Tongkat Ali extract (200:1) 500 mg.",
@@ -399,7 +395,7 @@ export const productContent: Record<string, ProductContent> = {
         heading: "Clean composition",
         body: `Nothing but maca root extract in a plant-based capsule shell. ${cleanNoSweeteners}`,
       },
-      developedInSweden,
+      packaging,
     ],
     specs: [
       { label: "Latin name", value: "Lepidium meyenii" },
@@ -409,7 +405,6 @@ export const productContent: Record<string, ProductContent> = {
       { label: "Daily dose", value: "2 capsules daily" },
       { label: "Contents", value: "60 capsules – 30 days" },
       { label: "Capsule", value: "Vegan (HPMC)" },
-      { label: "Developed in", value: "Sweden" },
     ],
     ingredients:
       "Maca extract (Lepidium meyenii, root) 20:1, capsule shell (HPMC). Content per capsule: maca root extract (20:1) 470 mg.",
@@ -452,7 +447,7 @@ export const productContent: Record<string, ProductContent> = {
         body:
           "Nothing but milk thistle extract in a plant-based pullulan capsule shell. Vegan, gluten-free and GMO-free – free from lactose, soy, yeast, wheat and milk, and with no colourings, binders, fillers or artificial preservatives.",
       },
-      developedInSweden,
+      packaging,
     ],
     specs: [
       { label: "Latin name", value: "Silybum marianum" },
@@ -463,7 +458,6 @@ export const productContent: Record<string, ProductContent> = {
       { label: "Daily dose", value: "1 capsule daily" },
       { label: "Contents", value: "60 capsules – 60 days" },
       { label: "Capsule", value: "Vegan (pullulan)" },
-      { label: "Developed in", value: "Sweden" },
     ],
     ingredients:
       "Milk thistle extract (Silybum marianum, seed) 20:1 standardised to 80 % silymarin, capsule shell (pullulan). Content per capsule: milk thistle extract 350 mg, of which silymarin 280 mg.",
@@ -505,7 +499,7 @@ export const productContent: Record<string, ProductContent> = {
         heading: "Clean composition",
         body: `Nothing but nettle leaf extract in a plant-based capsule shell. ${cleanNoSweeteners}`,
       },
-      developedInSweden,
+      packaging,
     ],
     specs: [
       { label: "Latin name", value: "Urtica dioica" },
@@ -515,7 +509,6 @@ export const productContent: Record<string, ProductContent> = {
       { label: "Daily dose", value: "1 capsule daily" },
       { label: "Contents", value: "60 capsules – 60 days" },
       { label: "Capsule", value: "Vegan" },
-      { label: "Developed in", value: "Sweden" },
     ],
     ingredients:
       "Nettle leaf extract (Urtica dioica, leaf) 10:1, capsule shell (plant-based). Content per capsule: nettle leaf extract 430 mg.",
@@ -554,7 +547,7 @@ export const productContent: Record<string, ProductContent> = {
         heading: "Clean composition",
         body: `Nothing but grape seed extract in a plant-based capsule shell. ${cleanNoSweeteners}`,
       },
-      developedInSweden,
+      packaging,
     ],
     specs: [
       { label: "Latin name", value: "Vitis vinifera" },
@@ -564,7 +557,6 @@ export const productContent: Record<string, ProductContent> = {
       { label: "Daily dose", value: "1–2 capsules daily" },
       { label: "Contents", value: "60 capsules – 30–60 days" },
       { label: "Capsule", value: "Vegan" },
-      { label: "Developed in", value: "Sweden" },
     ],
     ingredients:
       "Grape seed extract (Vitis vinifera, seed) standardised to 95 % proanthocyanidins, capsule shell (plant-based). Content per capsule: grape seed extract 500 mg, of which proanthocyanidins 475 mg.",
@@ -606,7 +598,7 @@ export const productContent: Record<string, ProductContent> = {
         heading: "Clean composition",
         body: `Nothing but quercetin extract in a plant-based capsule shell. ${cleanNoSweeteners}`,
       },
-      developedInSweden,
+      packaging,
     ],
     specs: [
       { label: "Contents", value: "Quercetin extract" },
@@ -615,7 +607,6 @@ export const productContent: Record<string, ProductContent> = {
       { label: "Daily dose", value: "1 capsule daily" },
       { label: "Packaging", value: "60 capsules – 60 days" },
       { label: "Capsule", value: "Vegan" },
-      { label: "Developed in", value: "Sweden" },
     ],
     ingredients:
       "Quercetin extract (98 % quercetin), capsule shell (plant-based). Content per capsule: quercetin extract 500 mg, of which quercetin 490 mg.",
@@ -654,7 +645,7 @@ export const productContent: Record<string, ProductContent> = {
         heading: "Clean composition",
         body: `Nothing but reishi extract in a plant-based capsule shell. ${cleanNoSweeteners}`,
       },
-      developedInSweden,
+      packaging,
     ],
     specs: [
       { label: "Latin name", value: "Ganoderma lucidum" },
@@ -663,7 +654,6 @@ export const productContent: Record<string, ProductContent> = {
       { label: "Daily dose", value: "1 capsule daily" },
       { label: "Packaging", value: "60 capsules – 60 days" },
       { label: "Capsule", value: "Vegan" },
-      { label: "Developed in", value: "Sweden" },
     ],
     ingredients:
       "Reishi extract (Ganoderma lucidum) standardised to 40 % polysaccharides, capsule shell (plant-based). Content per capsule: reishi extract 350 mg, of which polysaccharides 140 mg.",
@@ -702,7 +692,7 @@ export const productContent: Record<string, ProductContent> = {
         heading: "Clean composition",
         body: `Nothing but chaga extract in a plant-based capsule shell. ${cleanNoSweeteners}`,
       },
-      developedInSweden,
+      packaging,
     ],
     specs: [
       { label: "Latin name", value: "Inonotus obliquus" },
@@ -712,7 +702,6 @@ export const productContent: Record<string, ProductContent> = {
       { label: "Daily dose", value: "1 capsule daily" },
       { label: "Packaging", value: "60 capsules – 60 days" },
       { label: "Capsule", value: "Vegan" },
-      { label: "Developed in", value: "Sweden" },
     ],
     ingredients:
       "Chaga extract (Inonotus obliquus) 30:1 standardised to 10 % polysaccharides, capsule shell (plant-based). Content per capsule: chaga extract 400 mg, of which polysaccharides 40 mg.",
@@ -751,7 +740,7 @@ export const productContent: Record<string, ProductContent> = {
         heading: "Clean composition",
         body: `Nothing but Lion's Mane extract in a plant-based capsule shell. ${cleanNoSweeteners}`,
       },
-      developedInSweden,
+      packaging,
     ],
     specs: [
       { label: "Latin name", value: "Hericium erinaceus" },
@@ -761,7 +750,6 @@ export const productContent: Record<string, ProductContent> = {
       { label: "Daily dose", value: "1 capsule daily" },
       { label: "Packaging", value: "60 capsules – 60 days" },
       { label: "Capsule", value: "Vegan" },
-      { label: "Developed in", value: "Sweden" },
     ],
     ingredients:
       "Lion's Mane extract (Hericium erinaceus) standardised to 60 % polysaccharides, of which 45 % beta-glucans, capsule shell (plant-based). Content per capsule: extract 500 mg, of which polysaccharides 300 mg and beta-glucans 225 mg.",
@@ -800,7 +788,7 @@ export const productContent: Record<string, ProductContent> = {
         heading: "Clean composition",
         body: `Nothing but cordyceps extract in a plant-based capsule shell. ${cleanNoSweeteners}`,
       },
-      developedInSweden,
+      packaging,
     ],
     specs: [
       { label: "Latin name", value: "Cordyceps militaris" },
@@ -810,7 +798,6 @@ export const productContent: Record<string, ProductContent> = {
       { label: "Daily dose", value: "1 capsule daily" },
       { label: "Packaging", value: "60 capsules – 60 days" },
       { label: "Capsule", value: "Vegan" },
-      { label: "Developed in", value: "Sweden" },
     ],
     ingredients:
       "Cordyceps extract (Cordyceps militaris) 8:1 standardised to 40 % polysaccharides, capsule shell (plant-based). Content per capsule: cordyceps extract 350 mg, of which polysaccharides 140 mg.",

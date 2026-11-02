@@ -46,7 +46,7 @@ export type Concept = {
 
 const shortName = (p: Product) => p.name.replace(/ \|.*$/, "");
 const facts = (p: Product, n = 4) => p.bullets.filter((b) => b.length <= 46).slice(0, n);
-const madeIn = "Utvecklad i Sverige";
+const madeIn = "Vegansk kapsel";
 const q = (s: string) => `"${s}"`;
 const list = (items: string[]) => items.map(q).join(", ");
 

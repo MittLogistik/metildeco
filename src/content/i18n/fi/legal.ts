@@ -266,7 +266,7 @@ const quality: LegalDoc = {
       items: [
         "Vegaaninen kapseli ilman täyteaineita.",
         "Uutteen vahvuus, määrä kapselia kohden ja latinankielinen nimi on merkitty purkkiin.",
-        "Kapselit toimitetaan muovipurkissa. Metilde on ruotsalainen tuotemerkki; raaka-aineet tulevat maista, joissa kasvit luonnostaan kasvavat.",
+        "Kapselit toimitetaan muovipurkissa. Raaka-aineet tulevat maista, joissa kasvit luonnostaan kasvavat.",
         "Jokaisessa purkissa on eränumero ja parasta ennen -päiväys.",
       ],
     },

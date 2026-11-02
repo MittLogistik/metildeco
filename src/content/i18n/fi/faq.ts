@@ -93,7 +93,7 @@ export const faqGroups: FaqGroup[] = [
     items: [
       {
         q: "Mistä tuotteenne tulevat?",
-        a: "Metilde on ruotsalainen tuotemerkki, ja valikoima kehitetään Ruotsissa. Raaka-aineet ja uutteet tulevat maista, joissa kasvit luonnostaan kasvavat, esimerkiksi Tongkat Ali Kaakkois-Aasiasta ja maca Andeilta.",
+        a: "Raaka-aineet ja uutteet tulevat maista, joissa kasvit luonnostaan kasvavat, esimerkiksi Tongkat Ali Kaakkois-Aasiasta ja maca Andeilta.",
       },
       {
         q: "Mistä tiedän, minkä erän olen saanut?",

@@ -5,7 +5,7 @@ export const catalog: CatalogText = {
   products: {
     "tongkat-ali-elite": {
       name: "Tongkat Ali Elite | 60 kapsułek",
-      short: "Ekstrakt z korzenia 200:1, 450 mg na kapsułkę – opracowany w Szwecji.",
+      short: "Ekstrakt z korzenia 200:1, 450 mg na kapsułkę.",
       bullets: [
         "Ekstrakt 200:1 z korzenia Eurycoma longifolia",
         "450 mg na kapsułkę – 1 kapsułka dziennie",
@@ -14,7 +14,7 @@ export const catalog: CatalogText = {
       ],
       description: [
         "Tongkat Ali Elite to skoncentrowany ekstrakt 200:1 z korzenia Eurycoma longifolia, znanej też jako Malaysian Ginseng lub Longjack.",
-        "Czysty ekstrakt z korzenia w wegańskiej kapsułce – bez substancji wiążących, wypełniaczy i sztucznych dodatków. Opracowany w Szwecji i pakowany w plastikowy słoik.",
+        "Czysty ekstrakt z korzenia w wegańskiej kapsułce – bez substancji wiążących, wypełniaczy i sztucznych dodatków. Pakowany w plastikowy słoik.",
       ],
     },
     "tongkat-premium": {
@@ -28,12 +28,12 @@ export const catalog: CatalogText = {
       ],
       description: [
         "Tongkat Ali Ultra 4% to ekstrakt 200:1 z korzenia Eurycoma longifolia, znanej też jako Malaysian Ginseng lub Longjack. Każda kapsułka zawiera 520 mg ekstraktu, w tym 20 mg eurykomanonu.",
-        "Czysty ekstrakt z korzenia w wegańskiej kapsułce – bez substancji wiążących, wypełniaczy i sztucznych dodatków. Opracowany w Szwecji i pakowany w plastikowy słoik z 60 kapsułkami.",
+        "Czysty ekstrakt z korzenia w wegańskiej kapsułce – bez substancji wiążących, wypełniaczy i sztucznych dodatków. Pakowany w plastikowy słoik z 60 kapsułkami.",
       ],
     },
     "fadogia-agrestis": {
       name: "Fadogia Agrestis | 60 kapsułek",
-      short: "Ekstrakt ziołowy 20:1, 450 mg na kapsułkę – opracowany w Szwecji.",
+      short: "Ekstrakt ziołowy 20:1, 450 mg na kapsułkę.",
       bullets: [
         "Ekstrakt 20:1 z Fadogia agrestis",
         "450 mg na kapsułkę – 1 kapsułka dziennie",
@@ -42,7 +42,7 @@ export const catalog: CatalogText = {
       ],
       description: [
         "Fadogia Agrestis to skoncentrowany ekstrakt 20:1 z afrykańskiego krzewu Fadogia agrestis, o długiej tradycji stosowania w tradycyjnym zielarstwie.",
-        "Czysty ekstrakt w wegańskiej kapsułce – bez substancji wiążących, wypełniaczy i sztucznych dodatków. Opracowany w Szwecji i pakowany w plastikowy słoik.",
+        "Czysty ekstrakt w wegańskiej kapsułce – bez substancji wiążących, wypełniaczy i sztucznych dodatków. Pakowany w plastikowy słoik.",
       ],
     },
     "blue-lotus": {
@@ -70,7 +70,7 @@ export const catalog: CatalogText = {
       ],
       description: [
         "Black Tongkat Ali to ekstrakt 200:1 z korzenia Eurycoma longifolia – tego samego gatunku co nasza żółta Tongkat Ali – wytwarzany z ciemnego korzenia.",
-        "500 mg ekstraktu na kapsułkę w roślinnej otoczce, bez wypełniaczy. Zalecana porcja to 1–2 kapsułki dziennie. Opracowany w Szwecji i pakowany w plastikowy słoik.",
+        "500 mg ekstraktu na kapsułkę w roślinnej otoczce, bez wypełniaczy. Zalecana porcja to 1–2 kapsułki dziennie. Pakowany w plastikowy słoik.",
       ],
     },
     ashwagandha: {
@@ -94,7 +94,7 @@ export const catalog: CatalogText = {
         "Ekstrakt 20:1 z korzenia maca",
         "470 mg na kapsułkę",
         "60 kapsułek – 30 dni",
-        "Wegańska kapsułka, opracowana w Szwecji",
+        "Wegańska kapsułka bez wypełniaczy",
       ],
       description: [
         "Maca (Lepidium meyenii) to roślina korzeniowa uprawiana wysoko w Andach, od pokoleń obecna w peruwiańskiej tradycji zielarskiej.",
@@ -109,7 +109,7 @@ export const catalog: CatalogText = {
         "Ekstrakt 20:1, 80% sylimaryny",
         "350 mg na kapsułkę",
         "60 kapsułek – 60 dni",
-        "Wegańska kapsułka, opracowana w Szwecji",
+        "Wegańska kapsułka bez wypełniaczy",
       ],
       description: [
         "Ostropest plamisty (Silybum marianum) to roślina z rodziny ostowatych pochodząca z regionu Morza Śródziemnego, z długą tradycją w europejskim zielarstwie.",
@@ -124,10 +124,10 @@ export const catalog: CatalogText = {
         "Ekstrakt 10:1 z liści pokrzywy",
         "430 mg na kapsułkę",
         "60 kapsułek – 60 dni",
-        "Wegańska kapsułka, opracowana w Szwecji",
+        "Wegańska kapsułka bez wypełniaczy",
       ],
       description: [
-        "Pokrzywa zwyczajna (Urtica dioica) to tradycyjna roślina w europejskim zielarstwie. Wykorzystujemy liście, które są suszone i koncentrowane do ekstraktu 10:1 – 430 mg na kapsułkę. Wyłącznie ekstrakt z liści pokrzywy w roślinnej otoczce kapsułki. Wegański, bezglutenowy i bez GMO, bez substancji wiążących, wypełniaczy, słodzików i sztucznych konserwantów. Opracowany w Szwecji i pakowany w plastikowy słoik.",
+        "Pokrzywa zwyczajna (Urtica dioica) to tradycyjna roślina w europejskim zielarstwie. Wykorzystujemy liście, które są suszone i koncentrowane do ekstraktu 10:1 – 430 mg na kapsułkę. Wyłącznie ekstrakt z liści pokrzywy w roślinnej otoczce kapsułki. Wegański, bezglutenowy i bez GMO, bez substancji wiążących, wypełniaczy, słodzików i sztucznych konserwantów. Pakowany w plastikowy słoik.",
       ],
     },
     druvkarneextrakt: {
@@ -137,7 +137,7 @@ export const catalog: CatalogText = {
         "95% proantocyjanidyn (OPC)",
         "500 mg na kapsułkę",
         "60 kapsułek",
-        "Wegańska kapsułka, opracowana w Szwecji",
+        "Wegańska kapsułka bez wypełniaczy",
       ],
       description: [
         "Pestki winogron Vitis vinifera są naturalnym źródłem polifenoli. Nasz ekstrakt jest standaryzowany na 95% proantocyjanidyn (OPC) – 500 mg na kapsułkę, w tym 475 mg OPC. Wyłącznie ekstrakt z pestek winogron w roślinnej otoczce kapsułki. Wegański, bezglutenowy i bez GMO, bez substancji wiążących, wypełniaczy, słodzików i sztucznych konserwantów. Pakowany w plastikowy słoik.",
@@ -150,7 +150,7 @@ export const catalog: CatalogText = {
         "Ekstrakt kwercetyny o czystości 98%",
         "500 mg na kapsułkę",
         "60 kapsułek – 60 dni",
-        "Wegańska kapsułka, opracowana w Szwecji",
+        "Wegańska kapsułka bez wypełniaczy",
       ],
       description: [
         "Kwercetyna to flawonoid występujący naturalnie w owocach i warzywach. Nasz ekstrakt ma czystość 98% – 500 mg na kapsułkę, w tym 490 mg kwercetyny. Wyłącznie ekstrakt kwercetyny w roślinnej otoczce kapsułki. Wegański, bezglutenowy i bez GMO, bez substancji wiążących, wypełniaczy, słodzików i sztucznych konserwantów. Pakowany w plastikowy słoik.",
@@ -163,7 +163,7 @@ export const catalog: CatalogText = {
         "40% polisacharydów",
         "350 mg na kapsułkę",
         "60 kapsułek – 60 dni",
-        "Wegańska kapsułka, opracowana w Szwecji",
+        "Wegańska kapsułka bez wypełniaczy",
       ],
       description: [
         "Reishi (Ganoderma lucidum) to jeden z najbardziej znanych grzybów w tradycyjnej kulturze zielarskiej. Nasz ekstrakt jest standaryzowany na 40% polisacharydów – 350 mg na kapsułkę, w tym 140 mg polisacharydów. Wyłącznie ekstrakt z reishi w roślinnej otoczce kapsułki. Wegański, bezglutenowy i bez GMO, bez substancji wiążących, wypełniaczy, słodzików i sztucznych konserwantów. Pakowany w plastikowy słoik.",
@@ -177,12 +177,12 @@ export const catalog: CatalogText = {
         "10% polisacharydów",
         "400 mg na kapsułkę",
         "60 kapsułek – 60 dni",
-        "Wegańska kapsułka, opracowana w Szwecji",
+        "Wegańska kapsułka bez wypełniaczy",
       ],
       description: [
         "Chaga (Inonotus obliquus) rośnie powoli na brzozach i przez wiele lat pobiera z drzewa składniki odżywcze. Nasz ekstrakt pochodzi z wysokiej jakości, dziko zbieranej chagi, jest skoncentrowany 30:1 i standaryzowany na 10% polisacharydów – 400 mg na kapsułkę.",
         "Wyłącznie ekstrakt z chagi w roślinnej otoczce kapsułki: wegański, bezglutenowy i bez GMO, bez substancji wiążących, wypełniaczy, słodzików i sztucznych konserwantów.",
-        "Opracowany w Szwecji, pakowany w plastikowy słoik. 60 kapsułek wystarcza na 60 dni przy 1 kapsułce dziennie.",
+        "Pakowany w plastikowy słoik. 60 kapsułek wystarcza na 60 dni przy 1 kapsułce dziennie.",
       ],
     },
     "lions-mane": {
@@ -193,12 +193,12 @@ export const catalog: CatalogText = {
         "W tym 45% beta-glukanów",
         "500 mg na kapsułkę",
         "60 kapsułek – 60 dni",
-        "Wegańska kapsułka, opracowana w Szwecji",
+        "Wegańska kapsułka bez wypełniaczy",
       ],
       description: [
         "Lion's Mane (Hericium erinaceus) ma długą historię w tradycyjnej kulturze zielarskiej Azji Wschodniej. Nasz ekstrakt jest standaryzowany na 60% polisacharydów, w tym 45% beta-glukanów – 500 mg na kapsułkę.",
         "Wyłącznie ekstrakt z Lion's Mane w roślinnej otoczce kapsułki: wegański, bezglutenowy i bez GMO, bez substancji wiążących, wypełniaczy, słodzików i sztucznych konserwantów.",
-        "Opracowany w Szwecji, pakowany w plastikowy słoik. 60 kapsułek wystarcza na 60 dni przy 1 kapsułce dziennie.",
+        "Pakowany w plastikowy słoik. 60 kapsułek wystarcza na 60 dni przy 1 kapsułce dziennie.",
       ],
     },
     cordyceps: {
@@ -209,12 +209,12 @@ export const catalog: CatalogText = {
         "40% polisacharydów",
         "350 mg na kapsułkę",
         "60 kapsułek – 60 dni",
-        "Wegańska kapsułka, opracowana w Szwecji",
+        "Wegańska kapsułka bez wypełniaczy",
       ],
       description: [
         "Cordyceps (Cordyceps militaris) od dawna ma swoje miejsce we wschodnioazjatyckiej kulturze zielarskiej. Nasz ekstrakt jest skoncentrowany 8:1 i standaryzowany na 40% polisacharydów – 350 mg na kapsułkę.",
         "Wyłącznie ekstrakt z cordycepsa w roślinnej otoczce kapsułki: wegański, bezglutenowy i bez GMO, bez substancji wiążących, wypełniaczy, słodzików i sztucznych konserwantów.",
-        "Opracowany w Szwecji, pakowany w plastikowy słoik. 60 kapsułek wystarcza na 60 dni przy 1 kapsułce dziennie.",
+        "Pakowany w plastikowy słoik. 60 kapsułek wystarcza na 60 dni przy 1 kapsułce dziennie.",
       ],
     },
     spirulina: {
@@ -259,7 +259,7 @@ export const catalog: CatalogText = {
       ],
       seoTitle: "Zestaw Dzień i wieczór – Tongkat Ali, Fadogia i Blue Lotus",
       seoDescription:
-        "Zestaw Dzień i wieczór: Tongkat Ali Elite 200:1, Fadogia Agrestis 20:1 i Blue Lotus 200:1. 3 × 60 wegańskich kapsułek, opracowane w Szwecji, darmowa dostawa.",
+        "Zestaw Dzień i wieczór: Tongkat Ali Elite 200:1, Fadogia Agrestis 20:1 i Blue Lotus 200:1. 3 × 60 wegańskich kapsułek, darmowa dostawa.",
     },
     "tongkat-ali-extract-duo": {
       name: "Tongkat Ali Extract Duo",
@@ -270,18 +270,18 @@ export const catalog: CatalogText = {
       ],
       seoTitle: "Tongkat Ali Extract Duo – dwie moce w jednym zestawie | Metilde",
       seoDescription:
-        "Tongkat Ali Extract Duo: Tongkat Ali Elite i Ultra 4% w jednym zestawie. Ekstrakty z korzenia Eurycoma longifolia, opracowane w Szwecji, darmowa dostawa.",
+        "Tongkat Ali Extract Duo: Tongkat Ali Elite i Ultra 4% w jednym zestawie. Ekstrakty z korzenia Eurycoma longifolia, darmowa dostawa.",
     },
     "tongkat-ali-fadogia-duo": {
       name: "Tongkat Ali & Fadogia Duo",
       short: "Tongkat Ali Elite i Fadogia Agrestis w jednym zestawie – dwa ekstrakty w wegańskich kapsułkach.",
       description: [
         "Tongkat Ali & Fadogia Duo zawiera opakowanie Tongkat Ali Elite (ekstrakt 200:1 z korzenia Eurycoma longifolia, 450 mg na kapsułkę) i opakowanie Fadogia Agrestis (ekstrakt 20:1).",
-        "Oba w wegańskich kapsułkach bez wypełniaczy, opracowane w Szwecji i pakowane w plastikowe słoiki. Zestaw zawsze ma darmową dostawę.",
+        "Oba w wegańskich kapsułkach bez wypełniaczy, pakowane w plastikowe słoiki. Zestaw zawsze ma darmową dostawę.",
       ],
       seoTitle: "Tongkat Ali & Fadogia Duo – Metilde",
       seoDescription:
-        "Poznaj Tongkat Ali & Fadogia Duo od Metilde: dwa ekstrakty, 200:1 i 20:1, w wegańskich kapsułkach. Opracowane w Szwecji, do Twojej codziennej rutyny.",
+        "Poznaj Tongkat Ali & Fadogia Duo od Metilde: dwa ekstrakty, 200:1 i 20:1, w wegańskich kapsułkach, do Twojej codziennej rutyny.",
     },
     "tongkat-ali-discovery-trio": {
       name: "Tongkat Ali Discovery Trio",
@@ -289,18 +289,18 @@ export const catalog: CatalogText = {
       description: [
         "Tongkat Ali Discovery Trio zawiera po jednym opakowaniu każdego z naszych trzech wariantów Tongkat Ali. Wszystkie to ekstrakty 200:1 z korzenia Eurycoma longifolia.",
         "Elite ma 450 mg na kapsułkę i przyjmuje się 1 kapsułkę dziennie. Ultra 4% ma 520 mg na kapsułkę, w tym 20 mg eurykomanonu, i przyjmuje się 1 kapsułkę dziennie. Black powstaje z ciemnego korzenia, ma 500 mg na kapsułkę i przyjmuje się 1–2 kapsułki dziennie.",
-        "Wszystkie w wegańskich kapsułkach bez wypełniaczy, opracowane w Szwecji i pakowane w plastikowe słoiki po 60 kapsułek. Stosuj zalecaną porcję każdego produktu i przyjmuj jeden produkt naraz. Zestaw zawsze ma darmową dostawę.",
+        "Wszystkie w wegańskich kapsułkach bez wypełniaczy, pakowane w plastikowe słoiki po 60 kapsułek. Stosuj zalecaną porcję każdego produktu i przyjmuj jeden produkt naraz. Zestaw zawsze ma darmową dostawę.",
       ],
       seoTitle: "Tongkat Ali Discovery Trio – poznaj całą linię",
       seoDescription:
-        "Tongkat Ali Discovery Trio: Elite, Ultra 4% i Black w jednym zestawie. Ekstrakty 200:1 z korzenia Eurycoma longifolia, opracowane w Szwecji, darmowa dostawa.",
+        "Tongkat Ali Discovery Trio: Elite, Ultra 4% i Black w jednym zestawie. Ekstrakty 200:1 z korzenia Eurycoma longifolia, darmowa dostawa.",
     },
     "metilde-botanical-collection": {
       name: "Metilde Botanical Collection",
       short: "Cztery nasze ekstrakty w jednym zestawie: Tongkat Ali Elite, Ultra 4%, Fadogia Agrestis i Blue Lotus.",
       description: [
         "Metilde Botanical Collection zawiera po jednym opakowaniu: Tongkat Ali Elite (200:1, 450 mg na kapsułkę), Tongkat Ali Ultra 4% (200:1, 520 mg na kapsułkę, w tym 20 mg eurykomanonu), Fadogia Agrestis (20:1) i Blue Lotus (200:1).",
-        "Wszystkie w wegańskich kapsułkach bez wypełniaczy, opracowane w Szwecji i pakowane w plastikowe słoiki po 60 kapsułek. Stosuj zalecaną porcję podaną na każdym opakowaniu i zaczynaj od jednego produktu naraz. Zestaw zawsze ma darmową dostawę.",
+        "Wszystkie w wegańskich kapsułkach bez wypełniaczy, pakowane w plastikowe słoiki po 60 kapsułek. Stosuj zalecaną porcję podaną na każdym opakowaniu i zaczynaj od jednego produktu naraz. Zestaw zawsze ma darmową dostawę.",
       ],
       seoTitle: "Metilde Botanical Collection – ekstrakty roślinne",
       seoDescription:

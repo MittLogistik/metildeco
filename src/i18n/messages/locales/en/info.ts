@@ -95,7 +95,7 @@ export const messages: InfoMessages = {
       ["No hassle", "We list exactly what each product contains. No fluff, no hidden additives."],
       ["You get what you pay for", "Raw materials, capsules, packaging. That's where our money goes – not on expensive advertising campaigns."],
       ["A real subscription", "15% off, free shipping and full control. Pause, change or cancel whenever you like."],
-      ["Swedish brand", "The range is developed in Sweden and every order ships from Sweden."],
+      ["Shipped from Sweden", "Every order ships from our warehouse in Sweden."],
     ],
     companyEyebrow: "The company",
     companyTitle: "About the company",

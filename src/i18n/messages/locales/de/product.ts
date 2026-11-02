@@ -22,7 +22,7 @@ export const messages: ProductMessages = {
   quality: [
     { t: "Lateinischer Name", d: "Art und Pflanzenteil stehen auf jeder Dose." },
     { t: "Klare Dosierung", d: "Extraktstärke und Menge pro Kapsel stehen auf dem Etikett." },
-    { t: "Entwickelt in Schweden", d: "Vegane Kapsel ohne Füllstoffe, verpackt in einer Kunststoffdose." },
+    { t: "Vegane Kapsel", d: "Vegane Kapsel ohne Füllstoffe, verpackt in einer Kunststoffdose." },
   ],
   faq: "Häufige Fragen",
   disclaimer:

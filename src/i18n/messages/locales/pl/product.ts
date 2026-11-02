@@ -22,7 +22,7 @@ export const messages: ProductMessages = {
   quality: [
     { t: "Nazwa łacińska", d: "Gatunek i część rośliny są podane na każdym opakowaniu." },
     { t: "Jasne dawkowanie", d: "Moc ekstraktu i ilość na kapsułkę są podane na etykiecie." },
-    { t: "Opracowane w Szwecji", d: "Wegańska kapsułka bez wypełniaczy, pakowana w plastikowy słoik." },
+    { t: "Wegańska kapsułka", d: "Wegańska kapsułka bez wypełniaczy, pakowana w plastikowy słoik." },
   ],
   faq: "Najczęściej zadawane pytania",
   disclaimer:

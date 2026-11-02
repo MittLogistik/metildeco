@@ -1,9 +1,9 @@
 import type { HomeMessages } from "../../home";
 
 export const messages: HomeMessages = {
-  title: "Metilde – Reine botanische Nahrungsergänzungsmittel, entwickelt in Schweden",
+  title: "Metilde – Reine botanische Nahrungsergänzungsmittel",
   description: (freeOver) =>
-    `Funktionelle Pilze, Kräuter und Pflanzenextrakte als standardisierte Extrakte in veganen Kapseln, entwickelt in Schweden. Kostenloser Versand ab ${freeOver}.`,
+    `Funktionelle Pilze, Kräuter und Pflanzenextrakte als standardisierte Extrakte in veganen Kapseln. Kostenloser Versand ab ${freeOver}.`,
   heroEyebrow: "Vegane Kapsel",
   heroTitle: "Reine botanische Extrakte",
   heroTitleAccent: "für jeden Tag",

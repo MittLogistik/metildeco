@@ -22,7 +22,7 @@ export const messages: ProductMessages = {
   quality: [
     { t: "Latin name", d: "Species and plant part are stated on every jar." },
     { t: "Clear dosage", d: "Extract strength and amount per capsule are on the label." },
-    { t: "Developed in Sweden", d: "Vegan capsule with no fillers, packed in a plastic jar." },
+    { t: "Vegan capsule", d: "Vegan capsule with no fillers, packed in a plastic jar." },
   ],
   faq: "Frequently asked questions",
   disclaimer:

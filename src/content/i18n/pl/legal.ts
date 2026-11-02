@@ -266,7 +266,7 @@ const quality: LegalDoc = {
       items: [
         "Wegańska kapsułka bez wypełniaczy.",
         "Stopień koncentracji ekstraktu, ilość w kapsułce i nazwa łacińska są podane na opakowaniu.",
-        "Kapsułki dostarczamy w plastikowym pojemniku. Metilde to szwedzka marka; surowce pochodzą z krajów, w których rośliny naturalnie występują.",
+        "Kapsułki dostarczamy w plastikowym pojemniku. Surowce pochodzą z krajów, w których rośliny naturalnie występują.",
         "Numer partii i data minimalnej trwałości na każdym opakowaniu.",
       ],
     },

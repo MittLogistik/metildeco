@@ -40,7 +40,7 @@ export const messages: LayoutMessages = {
     subscription: "Subscription",
     articles: "Journal",
     cookies: "Cookies",
-    blurb: "Standardised herbal and mushroom extracts developed in Sweden. In vegan capsules with no fillers.",
+    blurb: "Standardised herbal and mushroom extracts in vegan capsules with no fillers.",
     rights: "All rights reserved.",
   },
   trust: {

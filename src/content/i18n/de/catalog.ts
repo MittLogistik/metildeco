@@ -5,7 +5,7 @@ export const catalog: CatalogText = {
   products: {
     "tongkat-ali-elite": {
       name: "Tongkat Ali Elite | 60 Kapseln",
-      short: "200:1-Wurzelextrakt, 450 mg pro Kapsel – entwickelt in Schweden.",
+      short: "200:1-Wurzelextrakt, 450 mg pro Kapsel.",
       bullets: [
         "200:1-Wurzelextrakt aus Eurycoma longifolia",
         "450 mg pro Kapsel – 1 Kapsel täglich",
@@ -14,7 +14,7 @@ export const catalog: CatalogText = {
       ],
       description: [
         "Tongkat Ali Elite ist ein konzentrierter 200:1-Extrakt aus der Wurzel von Eurycoma longifolia, auch bekannt als Malaysian Ginseng oder Longjack.",
-        "Reiner Wurzelextrakt in einer veganen Kapsel – ohne Bindemittel, Füllstoffe oder künstliche Zusätze. Entwickelt in Schweden und in einer Kunststoffdose verpackt.",
+        "Reiner Wurzelextrakt in einer veganen Kapsel – ohne Bindemittel, Füllstoffe oder künstliche Zusätze. Verpackt in einer Kunststoffdose.",
       ],
     },
     "tongkat-premium": {
@@ -28,12 +28,12 @@ export const catalog: CatalogText = {
       ],
       description: [
         "Tongkat Ali Ultra 4% ist ein 200:1-Wurzelextrakt aus der Wurzel von Eurycoma longifolia, auch bekannt als Malaysian Ginseng oder Longjack. Jede Kapsel enthält 520 mg Extrakt, davon 20 mg Eurycomanon.",
-        "Reiner Wurzelextrakt in einer veganen Kapsel – ohne Bindemittel, Füllstoffe oder künstliche Zusätze. Entwickelt in Schweden und in einer Kunststoffdose mit 60 Kapseln verpackt.",
+        "Reiner Wurzelextrakt in einer veganen Kapsel – ohne Bindemittel, Füllstoffe oder künstliche Zusätze. Verpackt in einer Kunststoffdose mit 60 Kapseln.",
       ],
     },
     "fadogia-agrestis": {
       name: "Fadogia Agrestis | 60 Kapseln",
-      short: "20:1-Kräuterextrakt, 450 mg pro Kapsel – entwickelt in Schweden.",
+      short: "20:1-Kräuterextrakt, 450 mg pro Kapsel.",
       bullets: [
         "20:1-Extrakt aus Fadogia agrestis",
         "450 mg pro Kapsel – 1 Kapsel täglich",
@@ -42,7 +42,7 @@ export const catalog: CatalogText = {
       ],
       description: [
         "Fadogia Agrestis ist ein konzentrierter 20:1-Extrakt aus dem afrikanischen Strauch Fadogia agrestis, der eine lange Tradition in der Kräuterverwendung hat.",
-        "Reiner Extrakt in einer veganen Kapsel – ohne Bindemittel, Füllstoffe oder künstliche Zusätze. Entwickelt in Schweden und in einer Kunststoffdose verpackt.",
+        "Reiner Extrakt in einer veganen Kapsel – ohne Bindemittel, Füllstoffe oder künstliche Zusätze. Verpackt in einer Kunststoffdose.",
       ],
     },
     "blue-lotus": {
@@ -70,7 +70,7 @@ export const catalog: CatalogText = {
       ],
       description: [
         "Black Tongkat Ali ist ein 200:1-Wurzelextrakt aus Eurycoma longifolia – dieselbe Art wie unser gelbes Tongkat Ali, hergestellt aus dunkler Wurzel.",
-        "500 mg Extrakt pro Kapsel in einer pflanzlichen Kapselhülle, ohne Füllstoffe. Die empfohlene Dosis beträgt 1–2 Kapseln pro Tag. Entwickelt in Schweden und in einer Kunststoffdose verpackt.",
+        "500 mg Extrakt pro Kapsel in einer pflanzlichen Kapselhülle, ohne Füllstoffe. Die empfohlene Dosis beträgt 1–2 Kapseln pro Tag. Verpackt in einer Kunststoffdose.",
       ],
     },
     ashwagandha: {
@@ -94,7 +94,7 @@ export const catalog: CatalogText = {
         "20:1-Extrakt aus Macawurzel",
         "470 mg pro Kapsel",
         "60 Kapseln – 30 Tage",
-        "Vegane Kapsel, entwickelt in Schweden",
+        "Vegane Kapsel ohne Füllstoffe",
       ],
       description: [
         "Maca (Lepidium meyenii) ist eine Wurzelknolle, die hoch oben in den Anden angebaut wird und seit Generationen zur peruanischen Kräutertradition gehört.",
@@ -109,7 +109,7 @@ export const catalog: CatalogText = {
         "20:1-Extrakt, 80 % Silymarin",
         "350 mg pro Kapsel",
         "60 Kapseln – 60 Tage",
-        "Vegane Kapsel, entwickelt in Schweden",
+        "Vegane Kapsel ohne Füllstoffe",
       ],
       description: [
         "Die Mariendistel (Silybum marianum) ist eine Distelpflanze aus dem Mittelmeerraum mit langer Tradition in der europäischen Kräuterverwendung.",
@@ -124,10 +124,10 @@ export const catalog: CatalogText = {
         "10:1-Extrakt aus Brennnesselblättern",
         "430 mg pro Kapsel",
         "60 Kapseln – 60 Tage",
-        "Vegane Kapsel, entwickelt in Schweden",
+        "Vegane Kapsel ohne Füllstoffe",
       ],
       description: [
-        "Die Große Brennnessel (Urtica dioica) ist eine traditionelle Pflanze in der europäischen Kräuterverwendung. Wir verwenden die Blätter, die getrocknet und zu einem 10:1-Extrakt konzentriert werden – 430 mg pro Kapsel. Nur Brennnesselblattextrakt in einer pflanzlichen Kapselhülle. Vegan, glutenfrei und ohne Gentechnik, ohne Bindemittel, Füllstoffe, Süßungsmittel oder künstliche Konservierungsstoffe. Entwickelt in Schweden und in einer Kunststoffdose verpackt.",
+        "Die Große Brennnessel (Urtica dioica) ist eine traditionelle Pflanze in der europäischen Kräuterverwendung. Wir verwenden die Blätter, die getrocknet und zu einem 10:1-Extrakt konzentriert werden – 430 mg pro Kapsel. Nur Brennnesselblattextrakt in einer pflanzlichen Kapselhülle. Vegan, glutenfrei und ohne Gentechnik, ohne Bindemittel, Füllstoffe, Süßungsmittel oder künstliche Konservierungsstoffe. Verpackt in einer Kunststoffdose.",
       ],
     },
     druvkarneextrakt: {
@@ -137,7 +137,7 @@ export const catalog: CatalogText = {
         "95 % Proanthocyanidine (OPC)",
         "500 mg pro Kapsel",
         "60 Kapseln",
-        "Vegane Kapsel, entwickelt in Schweden",
+        "Vegane Kapsel ohne Füllstoffe",
       ],
       description: [
         "Traubenkerne von Vitis vinifera sind eine natürliche Quelle für Polyphenole. Unser Extrakt ist auf 95 % Proanthocyanidine (OPC) standardisiert – 500 mg pro Kapsel, davon 475 mg OPC. Nur Traubenkernextrakt in einer pflanzlichen Kapselhülle. Vegan, glutenfrei und ohne Gentechnik, ohne Bindemittel, Füllstoffe, Süßungsmittel oder künstliche Konservierungsstoffe. In einer Kunststoffdose verpackt.",
@@ -150,7 +150,7 @@ export const catalog: CatalogText = {
         "98 % reiner Quercetin-Extrakt",
         "500 mg pro Kapsel",
         "60 Kapseln – 60 Tage",
-        "Vegane Kapsel, entwickelt in Schweden",
+        "Vegane Kapsel ohne Füllstoffe",
       ],
       description: [
         "Quercetin ist ein Flavonoid, das natürlich in Obst und Gemüse vorkommt. Unser Extrakt hat eine Reinheit von 98 % – 500 mg pro Kapsel, davon 490 mg Quercetin. Nur Quercetin-Extrakt in einer pflanzlichen Kapselhülle. Vegan, glutenfrei und ohne Gentechnik, ohne Bindemittel, Füllstoffe, Süßungsmittel oder künstliche Konservierungsstoffe. In einer Kunststoffdose verpackt.",
@@ -163,7 +163,7 @@ export const catalog: CatalogText = {
         "40 % Polysaccharide",
         "350 mg pro Kapsel",
         "60 Kapseln – 60 Tage",
-        "Vegane Kapsel, entwickelt in Schweden",
+        "Vegane Kapsel ohne Füllstoffe",
       ],
       description: [
         "Reishi (Ganoderma lucidum) ist einer der meistbeachteten Pilze der traditionellen Kräuterkultur. Unser Extrakt ist auf 40 % Polysaccharide standardisiert – 350 mg pro Kapsel, davon 140 mg Polysaccharide. Nur Reishi-Extrakt in einer pflanzlichen Kapselhülle. Vegan, glutenfrei und ohne Gentechnik, ohne Bindemittel, Füllstoffe, Süßungsmittel oder künstliche Konservierungsstoffe. In einer Kunststoffdose verpackt.",
@@ -177,12 +177,12 @@ export const catalog: CatalogText = {
         "10 % Polysaccharide",
         "400 mg pro Kapsel",
         "60 Kapseln – 60 Tage",
-        "Vegane Kapsel, entwickelt in Schweden",
+        "Vegane Kapsel ohne Füllstoffe",
       ],
       description: [
         "Chaga (Inonotus obliquus) wächst langsam an Birken und nimmt über viele Jahre Nährstoffe aus dem Baum auf. Unser Extrakt stammt aus hochwertigem, wild gesammeltem Chaga, ist 30:1 konzentriert und auf 10 % Polysaccharide standardisiert – 400 mg pro Kapsel.",
         "Nur Chaga-Extrakt in einer pflanzlichen Kapselhülle: vegan, glutenfrei und ohne Gentechnik, ohne Bindemittel, Füllstoffe, Süßungsmittel oder künstliche Konservierungsstoffe.",
-        "Entwickelt in Schweden, in einer Kunststoffdose verpackt. 60 Kapseln reichen bei 1 Kapsel täglich für 60 Tage.",
+        "Verpackt in einer Kunststoffdose. 60 Kapseln reichen bei 1 Kapsel täglich für 60 Tage.",
       ],
     },
     "lions-mane": {
@@ -193,12 +193,12 @@ export const catalog: CatalogText = {
         "Davon 45 % Beta-Glucane",
         "500 mg pro Kapsel",
         "60 Kapseln – 60 Tage",
-        "Vegane Kapsel, entwickelt in Schweden",
+        "Vegane Kapsel ohne Füllstoffe",
       ],
       description: [
         "Lion's Mane (Hericium erinaceus) hat eine lange Geschichte in der traditionellen Kräuterkultur Ostasiens. Unser Extrakt ist auf 60 % Polysaccharide standardisiert, davon 45 % Beta-Glucane – 500 mg pro Kapsel.",
         "Nur Lion's-Mane-Extrakt in einer pflanzlichen Kapselhülle: vegan, glutenfrei und ohne Gentechnik, ohne Bindemittel, Füllstoffe, Süßungsmittel oder künstliche Konservierungsstoffe.",
-        "Entwickelt in Schweden, in einer Kunststoffdose verpackt. 60 Kapseln reichen bei 1 Kapsel täglich für 60 Tage.",
+        "Verpackt in einer Kunststoffdose. 60 Kapseln reichen bei 1 Kapsel täglich für 60 Tage.",
       ],
     },
     cordyceps: {
@@ -209,12 +209,12 @@ export const catalog: CatalogText = {
         "40 % Polysaccharide",
         "350 mg pro Kapsel",
         "60 Kapseln – 60 Tage",
-        "Vegane Kapsel, entwickelt in Schweden",
+        "Vegane Kapsel ohne Füllstoffe",
       ],
       description: [
         "Cordyceps (Cordyceps militaris) hat seit Langem einen Platz in der ostasiatischen Kräuterkultur. Unser Extrakt ist 8:1 konzentriert und auf 40 % Polysaccharide standardisiert – 350 mg pro Kapsel.",
         "Nur Cordyceps-Extrakt in einer pflanzlichen Kapselhülle: vegan, glutenfrei und ohne Gentechnik, ohne Bindemittel, Füllstoffe, Süßungsmittel oder künstliche Konservierungsstoffe.",
-        "Entwickelt in Schweden, in einer Kunststoffdose verpackt. 60 Kapseln reichen bei 1 Kapsel täglich für 60 Tage.",
+        "Verpackt in einer Kunststoffdose. 60 Kapseln reichen bei 1 Kapsel täglich für 60 Tage.",
       ],
     },
     spirulina: {
@@ -259,7 +259,7 @@ export const catalog: CatalogText = {
       ],
       seoTitle: "Tag- & Abend-Set – Tongkat Ali, Fadogia & Blue Lotus",
       seoDescription:
-        "Das Tag- & Abend-Set: Tongkat Ali Elite 200:1, Fadogia Agrestis 20:1 und Blue Lotus 200:1. 3 × 60 vegane Kapseln, entwickelt in Schweden, kostenloser Versand.",
+        "Das Tag- & Abend-Set: Tongkat Ali Elite 200:1, Fadogia Agrestis 20:1 und Blue Lotus 200:1. 3 × 60 vegane Kapseln, kostenloser Versand.",
     },
     "tongkat-ali-extract-duo": {
       name: "Tongkat Ali Extract Duo",
@@ -270,18 +270,18 @@ export const catalog: CatalogText = {
       ],
       seoTitle: "Tongkat Ali Extract Duo – zwei Stärken in einem Set | Metilde",
       seoDescription:
-        "Tongkat Ali Extract Duo: Tongkat Ali Elite und Ultra 4% in einem Set. Wurzelextrakte aus Eurycoma longifolia, entwickelt in Schweden, kostenloser Versand.",
+        "Tongkat Ali Extract Duo: Tongkat Ali Elite und Ultra 4% in einem Set. Wurzelextrakte aus Eurycoma longifolia, kostenloser Versand.",
     },
     "tongkat-ali-fadogia-duo": {
       name: "Tongkat Ali & Fadogia Duo",
       short: "Tongkat Ali Elite und Fadogia Agrestis in einem Set – zwei Extrakte in veganer Kapsel.",
       description: [
         "Das Tongkat Ali & Fadogia Duo enthält eine Dose Tongkat Ali Elite (200:1-Wurzelextrakt aus Eurycoma longifolia, 450 mg pro Kapsel) und eine Dose Fadogia Agrestis (20:1-Extrakt).",
-        "Beide in einer veganen Kapsel ohne Füllstoffe, entwickelt in Schweden und in Kunststoffdosen verpackt. Das Set wird immer kostenlos verschickt.",
+        "Beide in einer veganen Kapsel ohne Füllstoffe, verpackt in Kunststoffdosen. Das Set wird immer kostenlos verschickt.",
       ],
       seoTitle: "Tongkat Ali & Fadogia Duo – Metilde",
       seoDescription:
-        "Entdecke das Tongkat Ali & Fadogia Duo von Metilde: zwei Extrakte, 200:1 und 20:1, in veganer Kapsel. Entwickelt in Schweden, für deine tägliche Routine.",
+        "Entdecke das Tongkat Ali & Fadogia Duo von Metilde: zwei Extrakte, 200:1 und 20:1, in veganer Kapsel, für deine tägliche Routine.",
     },
     "tongkat-ali-discovery-trio": {
       name: "Tongkat Ali Discovery Trio",
@@ -289,18 +289,18 @@ export const catalog: CatalogText = {
       description: [
         "Das Tongkat Ali Discovery Trio enthält je eine Dose unserer drei Tongkat-Ali-Varianten. Alle drei sind 200:1-Wurzelextrakte aus Eurycoma longifolia.",
         "Elite enthält 450 mg pro Kapsel, genommen wird 1 Kapsel pro Tag. Ultra 4% enthält 520 mg pro Kapsel, davon 20 mg Eurycomanon, genommen wird 1 Kapsel pro Tag. Black wird aus dunkler Wurzel hergestellt, enthält 500 mg pro Kapsel, genommen werden 1–2 Kapseln pro Tag.",
-        "Alle in einer veganen Kapsel ohne Füllstoffe, entwickelt in Schweden und in Kunststoffdosen mit 60 Kapseln verpackt. Halte dich an die empfohlene Dosis jedes Produkts und nimm jeweils nur ein Produkt. Das Set wird immer kostenlos verschickt.",
+        "Alle in einer veganen Kapsel ohne Füllstoffe, verpackt in Kunststoffdosen mit 60 Kapseln. Halte dich an die empfohlene Dosis jedes Produkts und nimm jeweils nur ein Produkt. Das Set wird immer kostenlos verschickt.",
       ],
       seoTitle: "Tongkat Ali Discovery Trio – das ganze Sortiment entdecken",
       seoDescription:
-        "Tongkat Ali Discovery Trio: Elite, Ultra 4% und Black in einem Set. 200:1-Wurzelextrakte aus Eurycoma longifolia, entwickelt in Schweden, kostenloser Versand.",
+        "Tongkat Ali Discovery Trio: Elite, Ultra 4% und Black in einem Set. 200:1-Wurzelextrakte aus Eurycoma longifolia, kostenloser Versand.",
     },
     "metilde-botanical-collection": {
       name: "Metilde Botanical Collection",
       short: "Vier unserer Extrakte in einem Set: Tongkat Ali Elite, Ultra 4%, Fadogia Agrestis und Blue Lotus.",
       description: [
         "Die Metilde Botanical Collection enthält je eine Dose Tongkat Ali Elite (200:1, 450 mg pro Kapsel), Tongkat Ali Ultra 4% (200:1, 520 mg pro Kapsel, davon 20 mg Eurycomanon), Fadogia Agrestis (20:1) und Blue Lotus (200:1).",
-        "Alle in einer veganen Kapsel ohne Füllstoffe, entwickelt in Schweden und in Kunststoffdosen mit 60 Kapseln verpackt. Halte dich an die empfohlene Dosis auf jeder Dose und beginne mit jeweils einem Produkt. Das Set wird immer kostenlos verschickt.",
+        "Alle in einer veganen Kapsel ohne Füllstoffe, verpackt in Kunststoffdosen mit 60 Kapseln. Halte dich an die empfohlene Dosis auf jeder Dose und beginne mit jeweils einem Produkt. Das Set wird immer kostenlos verschickt.",
       ],
       seoTitle: "Metilde Botanical Collection – botanische Extrakte",
       seoDescription:
