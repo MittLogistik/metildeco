@@ -49,7 +49,7 @@ export const messages: LayoutMessages = {
     additivesTitle: "Sans additifs superflus",
     additivesText: "L'extrait et l'enveloppe de la gélule – rien d'autre.",
     shippingTitle: (amount) => `Livraison offerte dès ${amount}`,
-    shippingText: "Commandé en semaine avant 12 h (heure suédoise), expédié le jour même.",
+    shippingText: "Commandé en semaine avant 12 h (CET), expédié le jour même.",
     returnsTitle: "30 jours de droit de rétractation",
     returnsText: "Sur les produits non ouverts – plus que les 14 jours prévus par la loi.",
   },

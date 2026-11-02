@@ -36,7 +36,7 @@ export const messages: CatalogMessages = {
   youSave: "You save",
   bundleFreeShipping: "Free shipping on this bundle",
   freeShippingOver: (amount) => `Free shipping over ${amount}`,
-  sameDay: "Ships the same working day for orders placed before 12:00 (Swedish time)",
+  sameDay: "Ships the same working day for orders placed before 12:00 (CET)",
   securePayment: "Secure payment with",
   description: "Description",
   moreBundles: "More bundles",

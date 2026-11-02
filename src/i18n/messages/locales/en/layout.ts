@@ -49,7 +49,7 @@ export const messages: LayoutMessages = {
     additivesTitle: "No unnecessary additives",
     additivesText: "Extract and capsule shell – nothing else.",
     shippingTitle: (amount) => `Free shipping over ${amount}`,
-    shippingText: "Ships the same working day for orders placed before 12:00 (Swedish time).",
+    shippingText: "Ships the same working day for orders placed before 12:00 (CET).",
     returnsTitle: "30-day right of withdrawal",
     returnsText: "On unopened products – longer than the statutory 14 days.",
   },

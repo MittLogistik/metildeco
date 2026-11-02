@@ -21,7 +21,7 @@ const helpBlock: LegalBlock[] = [
 ];
 
 const disputeText =
-  "Wenn wir uns nicht einigen können, findest du Informationen und Unterstützung bei grenzüberschreitenden Streitigkeiten beim Netz der Europäischen Verbraucherzentren (ECC-Net) in deinem Land, und du kannst dich an das zuständige Gericht in deinem Wohnsitzland wenden. Auf den Vertrag ist schwedisches Recht anwendbar. Die zwingenden Verbraucherschutzvorschriften des Landes, in dem du wohnst, bleiben davon unberührt.";
+  "Wenn wir uns nicht einigen können, findest du Informationen und Unterstützung bei grenzüberschreitenden Streitigkeiten beim Netz der Europäischen Verbraucherzentren (ECC-Net) in deinem Land, und du kannst dich an das zuständige Gericht in deinem Wohnsitzland wenden. Es gelten die zwingenden Verbraucherschutzvorschriften des Landes, in dem du wohnst.";
 
 /* ------------------------------ Datenschutz ------------------------------ */
 
@@ -60,7 +60,7 @@ const privacy: LegalDoc = {
       rows: [
         ["Deine Bestellung bearbeiten und liefern, Rücksendungen und Erstattungen abwickeln", "Vertragserfüllung", "Während der Abwicklung der Bestellung sowie für die Dauer der Gewährleistungsfrist"],
         ["Dein Konto und deine Abos verwalten", "Vertragserfüllung", "Bis du dein Konto löschst"],
-        ["Buchhaltung und steuerliche Pflichten", "Rechtliche Verpflichtung (schwedisches Buchführungsgesetz)", "7 Jahre"],
+        ["Buchhaltung und steuerliche Pflichten", "Rechtliche Verpflichtung (geltende Buchführungsvorschriften)", "7 Jahre"],
         ["Kundenservice und Reklamationen", "Berechtigtes Interesse", "36 Monate nach Abschluss des Vorgangs"],
         ["Newsletter und Marketing", "Einwilligung", "Bis du deine Einwilligung widerrufst"],
         ["Analyse und Verbesserung der Website", "Einwilligung (nicht notwendige Cookies)", "Bis zu 24 Monate"],
@@ -102,7 +102,7 @@ const privacy: LegalDoc = {
     },
     {
       type: "p",
-      text: `Schreib an {epost}, um ein Recht auszuüben. Wir antworten innerhalb von 30 Tagen. Wenn du mit unserem Umgang mit deinen Daten nicht zufrieden bist, kannst du dich bei der Datenschutzaufsichtsbehörde in deinem Land beschweren oder bei unserer Aufsichtsbehörde in Schweden, Integritetsskyddsmyndigheten (IMY), imy.se.`,
+      text: `Schreib an {epost}, um ein Recht auszuüben. Wir antworten innerhalb von 30 Tagen. Wenn du mit unserem Umgang mit deinen Daten nicht zufrieden bist, kannst du dich bei der Datenschutzaufsichtsbehörde in deinem Land beschweren.`,
     },
     { type: "h2", text: "Sicherheit" },
     {
@@ -151,7 +151,7 @@ const terms: LegalDoc = {
     { type: "shippingTable" },
     {
       type: "p",
-      text: "Bestellungen, die an einem Werktag vor 12:00 Uhr (schwedischer Zeit) eingehen, verschicken wir normalerweise noch am selben Tag aus unserem Lager in Schweden. Bestellungen nach Deutschland, Österreich und Luxemburg gehen mit PostNord als Brief mit Sendungsverfolgung; die Lieferzeit beträgt normalerweise 3–6 Werktage. Du erhältst einen Link zur Sendungsverfolgung per E-Mail, sobald die Sendung uns verlässt. Für nicht abgeholte Sendungen berechnen wir die tatsächlichen Versandkosten für Hin- und Rückweg.",
+      text: "Bestellungen, die an einem Werktag vor 12:00 Uhr (CET) eingehen, verschicken wir normalerweise noch am selben Tag aus unserem Lager. Bestellungen nach Deutschland, Österreich und Luxemburg gehen mit PostNord als Brief mit Sendungsverfolgung; die Lieferzeit beträgt normalerweise 3–6 Werktage. Du erhältst einen Link zur Sendungsverfolgung per E-Mail, sobald die Sendung uns verlässt. Für nicht abgeholte Sendungen berechnen wir die tatsächlichen Versandkosten für Hin- und Rückweg.",
     },
     { type: "h2", text: "Abo" },
     {
@@ -182,7 +182,7 @@ const terms: LegalDoc = {
     { type: "h2", text: "Reklamation und mangelhafte Ware" },
     {
       type: "p",
-      text: `Du hast drei Jahre Reklamationsrecht nach dem schwedischen Verbraucherkaufgesetz (konsumentköplagen). Schreib an {epost} mit deiner Bestellnummer und einem Foto des Mangels. Eine anerkannte Reklamation lösen wir mit einer neuen Ware oder einer Erstattung, und wir übernehmen die Rücksendekosten.`,
+      text: `Du hast das gesetzliche Gewährleistungsrecht nach dem Verbraucherrecht, das für dich gilt. Schreib an {epost} mit deiner Bestellnummer und einem Foto des Mangels. Eine anerkannte Reklamation lösen wir mit einer neuen Ware oder einer Erstattung, und wir übernehmen die Rücksendekosten.`,
     },
     { type: "h2", text: "Produktinformationen" },
     {
@@ -296,7 +296,7 @@ const shipping: LegalDoc = {
   title: "Versand & Lieferung",
   updated,
   intro:
-    "Bestellungen, die an Werktagen vor 12:00 Uhr (schwedischer Zeit) eingehen, werden noch am selben Tag verpackt und aus unserem Lager in Schweden verschickt. Kostenloser Versand ab einem Bestellwert von 79 €.",
+    "Bestellungen, die an Werktagen vor 12:00 Uhr (CET) eingehen, werden noch am selben Tag verpackt und aus unserem Lager verschickt. Kostenloser Versand ab einem Bestellwert von 79 €.",
   metaTitle: "Versand & Lieferung – Versandkosten, Lieferzeiten und Sendungsverfolgung",
   metaDescription:
     "Versandkosten und Lieferzeiten von Metilde nach Deutschland, Österreich und Luxemburg, kostenloser Versand ab 79 €, Sendungsverfolgung, nicht abgeholte Sendungen und was bei beschädigter Lieferung gilt.",
@@ -304,13 +304,13 @@ const shipping: LegalDoc = {
     { type: "h2", text: "Bearbeitungszeit" },
     {
       type: "p",
-      text: "Wir verpacken Bestellungen an Werktagen. Bestellungen, die vor 12:00 Uhr (schwedischer Zeit) eingehen, werden am selben Tag verschickt, spätere Bestellungen am nächsten Werktag. Während Aktionen und rund um Feiertage kann das Verpacken einen Tag länger dauern.",
+      text: "Wir verpacken Bestellungen an Werktagen. Bestellungen, die vor 12:00 Uhr (CET) eingehen, werden am selben Tag verschickt, spätere Bestellungen am nächsten Werktag. Während Aktionen und rund um Feiertage kann das Verpacken einen Tag länger dauern.",
     },
     { type: "h2", text: "Versandkosten und Lieferzeiten" },
     { type: "shippingTable" },
     {
       type: "p",
-      text: "Alle Preise enthalten die Mehrwertsteuer. Über diese Seite liefern wir an Adressen in Deutschland, Österreich und Luxemburg. Die Bestellungen gehen mit PostNord als Brief mit Sendungsverfolgung aus unserem Lager in Schweden; die Lieferzeit beträgt normalerweise 3–6 Werktage. Der Versand kostet 8,00 €, ab einem Bestellwert von 79 € ist er kostenlos. Abos und Sets werden immer kostenlos verschickt. Da die Sendung innerhalb der EU bleibt, zahlst du keine Zölle oder Einfuhrabgaben.",
+      text: "Alle Preise enthalten die Mehrwertsteuer. Über diese Seite liefern wir an Adressen in Deutschland, Österreich und Luxemburg. Die Bestellungen gehen mit PostNord als Brief mit Sendungsverfolgung aus unserem Lager; die Lieferzeit beträgt normalerweise 3–6 Werktage. Der Versand kostet 8,00 €, ab einem Bestellwert von 79 € ist er kostenlos. Abos und Sets werden immer kostenlos verschickt. Da die Sendung innerhalb der EU bleibt, zahlst du keine Zölle oder Einfuhrabgaben.",
     },
     { type: "h2", text: "Deine Bestellung verfolgen" },
     {
@@ -380,7 +380,7 @@ const returns: LegalDoc = {
     { type: "h2", text: "Reklamation" },
     {
       type: "p",
-      text: "Du hast drei Jahre Reklamationsrecht für mangelhafte Ware nach dem schwedischen Verbraucherkaufgesetz (konsumentköplagen). Melde den Mangel innerhalb einer angemessenen Frist, nachdem du ihn entdeckt hast – innerhalb von zwei Monaten gilt immer als angemessen. Füge Fotos und die Chargennummer vom Etikett bei.",
+      text: "Für mangelhafte Ware hast du das gesetzliche Gewährleistungsrecht nach dem Verbraucherrecht, das für dich gilt. Melde den Mangel innerhalb einer angemessenen Frist, nachdem du ihn entdeckt hast – innerhalb von zwei Monaten gilt immer als angemessen. Füge Fotos und die Chargennummer vom Etikett bei.",
     },
     { type: "h2", text: "Ausnahmen" },
     {
@@ -406,7 +406,7 @@ const sustainability: LegalDoc = {
     "Weniger, aber bessere Produkte, Verpackungen, die sich recyceln lassen, und eine Lieferkette, die wir erklären können. So sieht es heute aus – und daran arbeiten wir weiter.",
   metaTitle: "Nachhaltigkeit – Verpackungen, Versand und Rohstoffe",
   metaDescription:
-    "So arbeitet Metilde an Nachhaltigkeit: recycelbare Verpackungen, gebündelter Versand aus einem Lager in Schweden und dokumentierte Rohstoffe.",
+    "So arbeitet Metilde an Nachhaltigkeit: recycelbare Verpackungen, gebündelter Versand aus einem Lager und dokumentierte Rohstoffe.",
   blocks: [
     { type: "h2", text: "Wie wir denken" },
     {
@@ -425,7 +425,7 @@ const sustainability: LegalDoc = {
     { type: "h2", text: "Versand" },
     {
       type: "p",
-      text: "Wir verschicken aus einem einzigen Lager in Schweden, vorzugsweise als Brief und an Abholstellen, weil gebündelte Routen weniger Kilometer pro Sendung bedeuten. Abos können zu einer Lieferung zusammengelegt werden, sodass mehrere Produkte gemeinsam reisen.",
+      text: "Wir verschicken aus einem einzigen Lager, vorzugsweise als Brief und an Abholstellen, weil gebündelte Routen weniger Kilometer pro Sendung bedeuten. Abos können zu einer Lieferung zusammengelegt werden, sodass mehrere Produkte gemeinsam reisen.",
     },
     { type: "h2", text: "Rohstoffe und soziale Verantwortung" },
     {

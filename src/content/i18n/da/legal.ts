@@ -21,7 +21,7 @@ const helpBlock: LegalBlock[] = [
 ];
 
 const disputeText =
-  "Hvis vi ikke kan blive enige, kan du klage til Nævnenes Hus (Forbrugerklagenævnet), naevneneshus.dk. Vi følger nævnets afgørelser. Aftalen er underlagt svensk ret. Det begrænser ikke de ufravigelige rettigheder, du har som forbruger efter dansk lovgivning.";
+  "Hvis vi ikke kan blive enige, kan du klage til Nævnenes Hus (Forbrugerklagenævnet), naevneneshus.dk. Vi følger nævnets afgørelser. Du bevarer altid de ufravigelige rettigheder, du har som forbruger efter dansk lovgivning.";
 
 /* ------------------------------ Privatliv ------------------------------ */
 
@@ -60,7 +60,7 @@ const privacy: LegalDoc = {
       rows: [
         ["Behandle og levere din ordre, håndtere returneringer og tilbagebetalinger", "Opfyldelse af aftale", "Mens ordren behandles samt i reklamationsperioden"],
         ["Administrere din konto og dine abonnementer", "Opfyldelse af aftale", "Indtil du sletter din konto"],
-        ["Bogføring og skatteforpligtelser", "Retlig forpligtelse (den svenske bogføringslov)", "7 år"],
+        ["Bogføring og skatteforpligtelser", "Retlig forpligtelse (gældende bogføringsregler)", "7 år"],
         ["Kundeservice og reklamationer", "Legitim interesse", "36 måneder efter afsluttet sag"],
         ["Nyhedsbrev og markedsføring", "Samtykke", "Indtil du trækker samtykket tilbage"],
         ["Analyse og forbedring af websitet", "Samtykke (ikke-nødvendige cookies)", "Op til 24 måneder"],
@@ -102,7 +102,7 @@ const privacy: LegalDoc = {
     },
     {
       type: "p",
-      text: `Skriv til {epost} for at bruge en rettighed. Vi svarer inden for 30 dage. Er du utilfreds med, hvordan vi behandler dine oplysninger, kan du klage til Datatilsynet i Danmark, datatilsynet.dk, eller til vores tilsynsmyndighed i Sverige, Integritetsskyddsmyndigheten (IMY), imy.se.`,
+      text: `Skriv til {epost} for at bruge en rettighed. Vi svarer inden for 30 dage. Er du utilfreds med, hvordan vi behandler dine oplysninger, kan du klage til Datatilsynet i Danmark, datatilsynet.dk.`,
     },
     { type: "h2", text: "Sikkerhed" },
     {
@@ -151,7 +151,7 @@ const terms: LegalDoc = {
     { type: "shippingTable" },
     {
       type: "p",
-      text: "Ordrer, der afgives før kl. 12.00 (svensk tid) på en hverdag, sendes normalt samme dag fra vores lager i Sverige. Ordrer til Danmark sendes med PostNord som sporbart brev, og leveringstiden er normalt 2–5 hverdage. Du får et sporingslink på e-mail, så snart forsendelsen forlader os. For forsendelser, der ikke bliver afhentet, opkræves de faktiske omkostninger til fragt frem og tilbage.",
+      text: "Ordrer, der afgives før kl. 12.00 (CET) på en hverdag, sendes normalt samme dag fra vores lager. Ordrer til Danmark sendes med PostNord som sporbart brev, og leveringstiden er normalt 2–5 hverdage. Du får et sporingslink på e-mail, så snart forsendelsen forlader os. For forsendelser, der ikke bliver afhentet, opkræves de faktiske omkostninger til fragt frem og tilbage.",
     },
     { type: "h2", text: "Abonnement" },
     {
@@ -182,7 +182,7 @@ const terms: LegalDoc = {
     { type: "h2", text: "Reklamation og defekte varer" },
     {
       type: "p",
-      text: `Du har tre års reklamationsret efter den svenske forbrugerkøbslov (konsumentköplagen). Kontakt {epost} med ordrenummer og et billede af fejlen. En godkendt reklamation afhjælpes med en ny vare eller tilbagebetaling, og vi betaler returfragten.`,
+      text: `Du har den lovbestemte reklamationsret efter den forbrugerlovgivning, der gælder for dig. Kontakt {epost} med ordrenummer og et billede af fejlen. En godkendt reklamation afhjælpes med en ny vare eller tilbagebetaling, og vi betaler returfragten.`,
     },
     { type: "h2", text: "Produktinformation" },
     {
@@ -296,7 +296,7 @@ const shipping: LegalDoc = {
   title: "Fragt & levering",
   updated,
   intro:
-    "Bestillinger, der afgives før kl. 12.00 (svensk tid) på hverdage, pakkes og sendes samme dag fra vores lager i Sverige. Fri fragt på alle ordrer over 469 kr.",
+    "Bestillinger, der afgives før kl. 12.00 (CET) på hverdage, pakkes og sendes samme dag fra vores lager. Fri fragt på alle ordrer over 469 kr.",
   metaTitle: "Fragt & levering – fragtpriser, leveringstider og sporing",
   metaDescription:
     "Metildes fragtpriser og leveringstider til Danmark, fri fragt over 469 kr., sporing, forsendelser der ikke afhentes, og hvad der gælder ved beskadiget levering.",
@@ -304,13 +304,13 @@ const shipping: LegalDoc = {
     { type: "h2", text: "Ekspeditionstid" },
     {
       type: "p",
-      text: "Vi pakker ordrer på hverdage. Bestillinger, der kommer ind før kl. 12.00 (svensk tid), sendes samme dag, senere ordrer næste hverdag. I kampagneperioder og omkring helligdage kan pakningen tage en dag ekstra.",
+      text: "Vi pakker ordrer på hverdage. Bestillinger, der kommer ind før kl. 12.00 (CET), sendes samme dag, senere ordrer næste hverdag. I kampagneperioder og omkring helligdage kan pakningen tage en dag ekstra.",
     },
     { type: "h2", text: "Fragtpriser og leveringstider" },
     { type: "shippingTable" },
     {
       type: "p",
-      text: "Alle priser er inklusive moms. Vi leverer til adresser i Sverige, Finland og Danmark. Ordrer til Danmark sendes med PostNord som sporbart brev fra vores lager i Sverige, og leveringstiden er normalt 2–5 hverdage. Fragten koster 46 kr., og der er fri fragt på ordrer over 469 kr. Abonnementer og pakker sendes altid gratis. Da forsendelsen sker inden for EU, kommer der ingen told eller importafgifter.",
+      text: "Alle priser er inklusive moms. Vi leverer til adresser i Sverige, Finland og Danmark. Ordrer til Danmark sendes med PostNord som sporbart brev fra vores lager, og leveringstiden er normalt 2–5 hverdage. Fragten koster 46 kr., og der er fri fragt på ordrer over 469 kr. Abonnementer og pakker sendes altid gratis. Da forsendelsen sker inden for EU, kommer der ingen told eller importafgifter.",
     },
     { type: "h2", text: "Spor din ordre" },
     {
@@ -380,7 +380,7 @@ const returns: LegalDoc = {
     { type: "h2", text: "Reklamation" },
     {
       type: "p",
-      text: "Du har tre års reklamationsret for defekte varer efter den svenske forbrugerkøbslov (konsumentköplagen). Anmeld fejlen inden for rimelig tid, efter du har opdaget den – inden for to måneder er altid rimelig tid. Vedhæft fotos og batchnummeret, der står på etiketten.",
+      text: "Du har den lovbestemte reklamationsret for defekte varer efter den forbrugerlovgivning, der gælder for dig. Anmeld fejlen inden for rimelig tid, efter du har opdaget den – inden for to måneder er altid rimelig tid. Vedhæft fotos og batchnummeret, der står på etiketten.",
     },
     { type: "h2", text: "Undtagelser" },
     {
@@ -406,7 +406,7 @@ const sustainability: LegalDoc = {
     "Færre, men bedre produkter, emballage der kan genanvendes, og en leverandørkæde, vi kan forklare. Sådan ser det ud i dag – og det arbejder vi videre med.",
   metaTitle: "Bæredygtighed – emballage, fragt og råvarer",
   metaDescription:
-    "Sådan arbejder Metilde med bæredygtighed: genanvendelig emballage, samlet fragt fra ét lager i Sverige og dokumenterede råvarer.",
+    "Sådan arbejder Metilde med bæredygtighed: genanvendelig emballage, samlet fragt fra ét lager og dokumenterede råvarer.",
   blocks: [
     { type: "h2", text: "Sådan tænker vi" },
     {
@@ -425,7 +425,7 @@ const sustainability: LegalDoc = {
     { type: "h2", text: "Fragt" },
     {
       type: "p",
-      text: "Vi sender fra ét enkelt lager i Sverige, primært som brev og til udleveringssteder, fordi samlede ruter betyder færre kilometer pr. forsendelse. Abonnementer kan slås sammen til én levering, så flere produkter rejser sammen.",
+      text: "Vi sender fra ét enkelt lager, primært som brev og til udleveringssteder, fordi samlede ruter betyder færre kilometer pr. forsendelse. Abonnementer kan slås sammen til én levering, så flere produkter rejser sammen.",
     },
     { type: "h2", text: "Råvarer og socialt ansvar" },
     {

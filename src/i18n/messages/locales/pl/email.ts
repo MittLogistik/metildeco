@@ -10,7 +10,7 @@ export const messages: EmailText = {
   renewalNoDate: "Twoja subskrypcja została odnowiona, a paczka jest właśnie pakowana.",
   orderNumber: "Numer zamówienia",
   received:
-    "Otrzymaliśmy Twoją płatność. Zamówienia złożone w dni robocze do 12:00 (czasu szwedzkiego) wysyłamy ze Szwecji tego samego dnia.",
+    "Otrzymaliśmy Twoją płatność. Zamówienia złożone w dni robocze do 12:00 (CET) wysyłamy tego samego dnia.",
   subscription: "subskrypcja",
   gift: "prezent",
   discount: "Rabat",

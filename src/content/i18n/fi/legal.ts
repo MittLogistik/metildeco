@@ -57,7 +57,7 @@ const privacy: LegalDoc = {
       rows: [
         ["Tilauksesi käsittely ja toimitus, palautusten ja hyvitysten hoitaminen", "Sopimuksen täyttäminen", "Tilauksen ajan sekä virheilmoitusajan"],
         ["Tilisi ja kestotilaustesi hallinnointi", "Sopimuksen täyttäminen", "Kunnes poistat tilisi"],
-        ["Kirjanpito ja verovelvoitteet", "Lakisääteinen velvoite (Ruotsin kirjanpitolaki)", "7 vuotta"],
+        ["Kirjanpito ja verovelvoitteet", "Lakisääteinen velvoite (sovellettavat kirjanpitosäännöt)", "7 vuotta"],
         ["Asiakaspalvelu ja reklamaatiot", "Oikeutettu etu", "36 kuukautta asian päättymisestä"],
         ["Uutiskirje ja markkinointi", "Suostumus", "Kunnes peruutat suostumuksesi"],
         ["Sivuston analysointi ja kehittäminen", "Suostumus (muut kuin välttämättömät evästeet)", "Enintään 24 kuukautta"],
@@ -99,7 +99,7 @@ const privacy: LegalDoc = {
     },
     {
       type: "p",
-      text: `Lähetä sähköpostia osoitteeseen {epost}, jos haluat käyttää jotakin oikeuksistasi. Vastaamme 30 päivän kuluessa. Jos olet tyytymätön tapaan, jolla käsittelemme tietojasi, voit tehdä valituksen Ruotsin tietosuojaviranomaiselle (Integritetsskyddsmyndigheten, IMY, imy.se) tai asuinmaasi valvontaviranomaiselle, Suomessa tietosuojavaltuutetun toimistolle (tietosuoja.fi).`,
+      text: `Lähetä sähköpostia osoitteeseen {epost}, jos haluat käyttää jotakin oikeuksistasi. Vastaamme 30 päivän kuluessa. Jos olet tyytymätön tapaan, jolla käsittelemme tietojasi, voit tehdä valituksen asuinmaasi valvontaviranomaiselle, Suomessa tietosuojavaltuutetun toimistolle (tietosuoja.fi).`,
     },
     { type: "h2", text: "Tietoturva" },
     {
@@ -148,7 +148,7 @@ const terms: LegalDoc = {
     { type: "shippingTable" },
     {
       type: "p",
-      text: "Arkipäivisin ennen klo 12.00 (Ruotsin aikaa) tehdyt tilaukset lähetetään yleensä samana päivänä varastostamme Ruotsista. Suomeen tilaukset lähetetään PostNordin kautta kirjeenä seurannalla, ja toimitus kestää yleensä 2–5 arkipäivää. Saat seurantalinkin sähköpostitse heti, kun lähetys on lähtenyt meiltä. Noutamatta jätetystä lähetyksestä veloitamme todelliset meno- ja paluukuljetuksen kustannukset.",
+      text: "Arkipäivisin ennen klo 12.00 (CET) tehdyt tilaukset lähetetään yleensä samana päivänä varastostamme. Suomeen tilaukset lähetetään PostNordin kautta kirjeenä seurannalla, ja toimitus kestää yleensä 2–5 arkipäivää. Saat seurantalinkin sähköpostitse heti, kun lähetys on lähtenyt meiltä. Noutamatta jätetystä lähetyksestä veloitamme todelliset meno- ja paluukuljetuksen kustannukset.",
     },
     { type: "h2", text: "Kestotilaus" },
     {
@@ -179,7 +179,7 @@ const terms: LegalDoc = {
     { type: "h2", text: "Reklamaatio ja virheelliset tuotteet" },
     {
       type: "p",
-      text: `Sinulla on kolmen vuoden reklamaatio-oikeus Ruotsin kuluttajankauppalain (konsumentköplagen) mukaisesti. Ota yhteyttä osoitteeseen {epost} ja kerro tilausnumerosi sekä liitä kuva virheestä. Hyväksytty reklamaatio korjataan uudella tuotteella tai hyvityksellä, ja me maksamme palautuksen postikulut.`,
+      text: `Sinulla on lakisääteinen reklamaatio-oikeus sinuun sovellettavan kuluttajansuojalainsäädännön mukaisesti. Ota yhteyttä osoitteeseen {epost} ja kerro tilausnumerosi sekä liitä kuva virheestä. Hyväksytty reklamaatio korjataan uudella tuotteella tai hyvityksellä, ja me maksamme palautuksen postikulut.`,
     },
     { type: "h2", text: "Tuotetiedot" },
     {
@@ -189,7 +189,7 @@ const terms: LegalDoc = {
     { type: "h2", text: "Riitojen ratkaiseminen" },
     {
       type: "p",
-      text: "Jos emme pääse yhteisymmärrykseen, voit kääntyä Kuluttajaneuvonnan puoleen (kkv.fi) ja saattaa asian Kuluttajariitalautakunnan käsiteltäväksi (kuluttajariita.fi). Noudatamme lautakunnan suosituksia. Sopimukseen sovelletaan Ruotsin lakia, mutta tämä ei rajoita Suomen lain mukaisia pakottavia kuluttajansuojaoikeuksiasi.",
+      text: "Jos emme pääse yhteisymmärrykseen, voit kääntyä Kuluttajaneuvonnan puoleen (kkv.fi) ja saattaa asian Kuluttajariitalautakunnan käsiteltäväksi (kuluttajariita.fi). Noudatamme lautakunnan suosituksia. Suomen lain mukaiset pakottavat kuluttajansuojaoikeutesi ovat aina voimassa.",
     },
   ],
 };
@@ -296,7 +296,7 @@ const shipping: LegalDoc = {
   title: "Toimitus",
   updated,
   intro:
-    "Arkipäivisin ennen klo 12.00 (Ruotsin aikaa) tehdyt tilaukset pakataan ja lähetetään samana päivänä varastostamme Ruotsista. Ilmainen toimitus yli 65 € tilauksille.",
+    "Arkipäivisin ennen klo 12.00 (CET) tehdyt tilaukset pakataan ja lähetetään samana päivänä varastostamme. Ilmainen toimitus yli 65 € tilauksille.",
   metaTitle: "Toimitus – toimituskulut, toimitusajat ja seuranta",
   metaDescription:
     "Metilden toimituskulut ja toimitusajat Suomeen, ilmainen toimitus yli 65 € tilauksille, lähetysten seuranta, noutamattomat lähetykset ja vahingoittuneet toimitukset.",
@@ -304,13 +304,13 @@ const shipping: LegalDoc = {
     { type: "h2", text: "Käsittelyaika" },
     {
       type: "p",
-      text: "Pakkaamme tilaukset arkipäivisin. Ennen klo 12.00 (Ruotsin aikaa) saapuneet tilaukset lähetetään samana päivänä, myöhemmin saapuneet seuraavana arkipäivänä. Kampanjoiden ja pyhäpäivien aikana pakkaaminen voi kestää päivän pidempään.",
+      text: "Pakkaamme tilaukset arkipäivisin. Ennen klo 12.00 (CET) saapuneet tilaukset lähetetään samana päivänä, myöhemmin saapuneet seuraavana arkipäivänä. Kampanjoiden ja pyhäpäivien aikana pakkaaminen voi kestää päivän pidempään.",
     },
     { type: "h2", text: "Toimituskulut ja toimitusajat" },
     { type: "shippingTable" },
     {
       type: "p",
-      text: "Kaikki hinnat sisältävät arvonlisäveron. Toimitamme Ruotsiin, Suomeen ja Tanskaan. Suomeen tilaukset lähetetään varastostamme Ruotsista, PostNordin kautta kirjeenä seurannalla, ja toimitus kestää yleensä 2–5 arkipäivää. Toimitus Suomeen maksaa 6,50 €, ja yli 65 € tilaukset toimitetaan ilmaiseksi. Kestotilaukset ja tuotepaketit toimitetaan aina ilmaiseksi. EU:n sisäisistä toimituksista ei peritä tulleja eikä tuontimaksuja.",
+      text: "Kaikki hinnat sisältävät arvonlisäveron. Toimitamme Ruotsiin, Suomeen ja Tanskaan. Suomeen tilaukset lähetetään varastostamme PostNordin kautta kirjeenä seurannalla, ja toimitus kestää yleensä 2–5 arkipäivää. Toimitus Suomeen maksaa 6,50 €, ja yli 65 € tilaukset toimitetaan ilmaiseksi. Kestotilaukset ja tuotepaketit toimitetaan aina ilmaiseksi. EU:n sisäisistä toimituksista ei peritä tulleja eikä tuontimaksuja.",
     },
     { type: "h2", text: "Seuraa tilaustasi" },
     {
@@ -380,7 +380,7 @@ const returns: LegalDoc = {
     { type: "h2", text: "Reklamaatio" },
     {
       type: "p",
-      text: "Sinulla on kolmen vuoden reklamaatio-oikeus virheellisistä tuotteista Ruotsin kuluttajankauppalain (konsumentköplagen) mukaisesti. Ilmoita virheestä kohtuullisessa ajassa sen havaitsemisesta – kahden kuukauden kuluessa tehty ilmoitus katsotaan aina tehdyksi kohtuullisessa ajassa. Liitä mukaan kuvat ja tuotteen etiketissä oleva eränumero.",
+      text: "Sinulla on virheellisistä tuotteista lakisääteinen reklamaatio-oikeus sinuun sovellettavan kuluttajansuojalainsäädännön mukaisesti. Ilmoita virheestä kohtuullisessa ajassa sen havaitsemisesta – kahden kuukauden kuluessa tehty ilmoitus katsotaan aina tehdyksi kohtuullisessa ajassa. Liitä mukaan kuvat ja tuotteen etiketissä oleva eränumero.",
     },
     { type: "h2", text: "Poikkeukset" },
     {
@@ -393,7 +393,7 @@ const returns: LegalDoc = {
     { type: "h2", text: "Riitojen ratkaiseminen" },
     {
       type: "p",
-      text: "Jos emme pääse yhteisymmärrykseen, voit kääntyä Kuluttajaneuvonnan puoleen (kkv.fi) ja saattaa asian Kuluttajariitalautakunnan käsiteltäväksi (kuluttajariita.fi). Noudatamme lautakunnan suosituksia. Sopimukseen sovelletaan Ruotsin lakia, mutta tämä ei rajoita Suomen lain mukaisia pakottavia kuluttajansuojaoikeuksiasi.",
+      text: "Jos emme pääse yhteisymmärrykseen, voit kääntyä Kuluttajaneuvonnan puoleen (kkv.fi) ja saattaa asian Kuluttajariitalautakunnan käsiteltäväksi (kuluttajariita.fi). Noudatamme lautakunnan suosituksia. Suomen lain mukaiset pakottavat kuluttajansuojaoikeutesi ovat aina voimassa.",
     },
     ...helpBlock,
   ],
@@ -409,7 +409,7 @@ const sustainability: LegalDoc = {
     "Vähemmän mutta parempia tuotteita, kierrätettävät pakkaukset ja toimitusketju, jonka osaamme selittää. Tältä tilanne näyttää tänään – ja tämän parissa jatkamme työtä.",
   metaTitle: "Vastuullisuus – pakkaukset, kuljetukset ja raaka-aineet",
   metaDescription:
-    "Näin Metilde toimii vastuullisesti: kierrätettävät pakkaukset, keskitetyt lähetykset yhdestä varastosta Ruotsissa ja dokumentoidut raaka-aineet.",
+    "Näin Metilde toimii vastuullisesti: kierrätettävät pakkaukset, keskitetyt lähetykset yhdestä varastosta ja dokumentoidut raaka-aineet.",
   blocks: [
     { type: "h2", text: "Näin ajattelemme" },
     {
@@ -428,7 +428,7 @@ const sustainability: LegalDoc = {
     { type: "h2", text: "Kuljetukset" },
     {
       type: "p",
-      text: "Lähetämme kaikki tilaukset yhdestä varastosta Ruotsissa, ensisijaisesti kirjeinä ja noutopisteisiin, koska yhdistetyt reitit tarkoittavat vähemmän kilometrejä pakettia kohden. Kestotilaukset voidaan yhdistää yhdeksi toimitukseksi, jolloin useampi tuote kulkee yhdessä.",
+      text: "Lähetämme kaikki tilaukset yhdestä varastosta, ensisijaisesti kirjeinä ja noutopisteisiin, koska yhdistetyt reitit tarkoittavat vähemmän kilometrejä pakettia kohden. Kestotilaukset voidaan yhdistää yhdeksi toimitukseksi, jolloin useampi tuote kulkee yhdessä.",
     },
     { type: "h2", text: "Raaka-aineet ja sosiaalinen vastuu" },
     {

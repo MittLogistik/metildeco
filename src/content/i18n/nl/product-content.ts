@@ -8,7 +8,7 @@ import type { ProductContent } from "@/content/product-content";
 const packaging = {
   heading: "Verpakking en levering",
   body:
-    "De capsules worden verpakt in een plastic pot met schroefdeksel die de inhoud droog houdt tussen de doseringen. Elke bestelling wordt verzonden vanuit ons magazijn in Zweden.",
+    "De capsules worden verpakt in een plastic pot met schroefdeksel die de inhoud droog houdt tussen de doseringen. Elke bestelling wordt verzonden vanuit ons magazijn.",
 };
 
 const noExceed = "De aanbevolen dagelijkse dosis niet overschrijden.";

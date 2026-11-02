@@ -48,7 +48,7 @@ export const messages: CatalogMessages = {
   youSave: "Oszczędzasz",
   bundleFreeShipping: "Darmowa dostawa tego zestawu",
   freeShippingOver: (amount: string) => `Darmowa dostawa od ${amount}`,
-  sameDay: "W dni robocze wysyłka tego samego dnia przy zamówieniu do 12:00 (czasu szwedzkiego)",
+  sameDay: "W dni robocze wysyłka tego samego dnia przy zamówieniu do 12:00 (CET)",
   securePayment: "Bezpieczna płatność przez",
   description: "Opis",
   moreBundles: "Więcej zestawów",

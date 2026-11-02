@@ -21,7 +21,7 @@ const helpBlock: LegalBlock[] = [
 ];
 
 const disputeText =
-  "Si nous ne parvenons pas à un accord, vous pouvez obtenir des informations et de l'aide gratuites auprès du Centre européen des consommateurs de votre pays (réseau ECC-Net) et soumettre le litige à la juridiction compétente de votre pays de résidence. Le contrat est régi par le droit suédois. Cela ne limite pas les droits impératifs dont vous bénéficiez en tant que consommateur en vertu du droit de votre pays de résidence.";
+  "Si nous ne parvenons pas à un accord, vous pouvez obtenir des informations et de l'aide gratuites auprès du Centre européen des consommateurs de votre pays (réseau ECC-Net) et soumettre le litige à la juridiction compétente de votre pays de résidence. Les droits impératifs dont vous bénéficiez en tant que consommateur en vertu du droit de votre pays de résidence s'appliquent.";
 
 /* ------------------------------ Confidentialité ------------------------------ */
 
@@ -60,7 +60,7 @@ const privacy: LegalDoc = {
       rows: [
         ["Traiter et livrer votre commande, gérer les retours et les remboursements", "Exécution du contrat", "Pendant la commande et la durée de la garantie"],
         ["Gérer votre compte et vos abonnements", "Exécution du contrat", "Jusqu'à la suppression de votre compte"],
-        ["Comptabilité et obligations fiscales", "Obligation légale (loi comptable suédoise)", "7 ans"],
+        ["Comptabilité et obligations fiscales", "Obligation légale (règles comptables applicables)", "7 ans"],
         ["Service client et réclamations", "Intérêt légitime", "36 mois après la clôture du dossier"],
         ["Newsletter et marketing", "Consentement", "Jusqu'au retrait de votre consentement"],
         ["Analyse et amélioration du site", "Consentement (cookies non essentiels)", "Jusqu'à 24 mois"],
@@ -102,7 +102,7 @@ const privacy: LegalDoc = {
     },
     {
       type: "p",
-      text: `Écrivez à {epost} pour exercer un droit. Nous répondons sous 30 jours. Si vous n'êtes pas satisfait de la manière dont nous traitons vos données, vous pouvez introduire une réclamation auprès de l'autorité de protection des données de votre pays de résidence (en France, la CNIL, cnil.fr) ou auprès de notre autorité de contrôle en Suède, Integritetsskyddsmyndigheten (IMY), imy.se.`,
+      text: `Écrivez à {epost} pour exercer un droit. Nous répondons sous 30 jours. Si vous n'êtes pas satisfait de la manière dont nous traitons vos données, vous pouvez introduire une réclamation auprès de l'autorité de protection des données de votre pays de résidence (en France, la CNIL, cnil.fr).`,
     },
     { type: "h2", text: "Sécurité" },
     {
@@ -151,7 +151,7 @@ const terms: LegalDoc = {
     { type: "shippingTable" },
     {
       type: "p",
-      text: "Les commandes passées un jour ouvré avant 12 h (heure suédoise) sont normalement expédiées le jour même depuis notre entrepôt en Suède. Les commandes à destination de la France, de la Belgique et du Luxembourg partent avec PostNord en lettre suivie ; le délai de livraison est normalement de 3 à 6 jours ouvrés. Vous recevez un lien de suivi par e-mail dès que l'envoi quitte nos locaux. Pour les colis non retirés, nous facturons les frais réels d'expédition aller et retour.",
+      text: "Les commandes passées un jour ouvré avant 12 h (CET) sont normalement expédiées le jour même depuis notre entrepôt. Les commandes à destination de la France, de la Belgique et du Luxembourg partent avec PostNord en lettre suivie ; le délai de livraison est normalement de 3 à 6 jours ouvrés. Vous recevez un lien de suivi par e-mail dès que l'envoi quitte nos locaux. Pour les colis non retirés, nous facturons les frais réels d'expédition aller et retour.",
     },
     { type: "h2", text: "Abonnement" },
     {
@@ -182,7 +182,7 @@ const terms: LegalDoc = {
     { type: "h2", text: "Réclamations et produits défectueux" },
     {
       type: "p",
-      text: `Vous bénéficiez d'un droit de réclamation de trois ans en vertu de la loi suédoise sur la vente aux consommateurs (konsumentköplagen), sans préjudice de la garantie légale de conformité applicable dans votre pays. Écrivez à {epost} en indiquant votre numéro de commande et en joignant une photo du défaut. Une réclamation acceptée donne lieu à un nouveau produit ou à un remboursement, et nous prenons en charge les frais de retour.`,
+      text: `Vous bénéficiez du droit de réclamation prévu par le droit de la consommation qui vous est applicable, notamment la garantie légale de conformité. Écrivez à {epost} en indiquant votre numéro de commande et en joignant une photo du défaut. Une réclamation acceptée donne lieu à un nouveau produit ou à un remboursement, et nous prenons en charge les frais de retour.`,
     },
     { type: "h2", text: "Informations sur les produits" },
     {
@@ -296,7 +296,7 @@ const shipping: LegalDoc = {
   title: "Expédition & livraison",
   updated,
   intro:
-    "Les commandes reçues les jours ouvrés avant 12 h (heure suédoise) sont préparées et expédiées le jour même depuis notre entrepôt en Suède. Livraison offerte dès 79 € d'achat.",
+    "Les commandes reçues les jours ouvrés avant 12 h (CET) sont préparées et expédiées le jour même depuis notre entrepôt. Livraison offerte dès 79 € d'achat.",
   metaTitle: "Expédition & livraison – frais de port, délais et suivi",
   metaDescription:
     "Frais de port et délais de livraison de Metilde vers la France, la Belgique et le Luxembourg, livraison offerte dès 79 €, suivi, colis non retirés et ce qui s'applique en cas de livraison endommagée.",
@@ -304,13 +304,13 @@ const shipping: LegalDoc = {
     { type: "h2", text: "Délai de préparation" },
     {
       type: "p",
-      text: "Nous préparons les commandes les jours ouvrés. Les commandes reçues avant 12 h (heure suédoise) sont expédiées le jour même, les commandes plus tardives le jour ouvré suivant. Pendant les promotions et autour des jours fériés, la préparation peut prendre un jour de plus.",
+      text: "Nous préparons les commandes les jours ouvrés. Les commandes reçues avant 12 h (CET) sont expédiées le jour même, les commandes plus tardives le jour ouvré suivant. Pendant les promotions et autour des jours fériés, la préparation peut prendre un jour de plus.",
     },
     { type: "h2", text: "Frais de port et délais de livraison" },
     { type: "shippingTable" },
     {
       type: "p",
-      text: "Tous les prix s'entendent TVA comprise. Nous livrons notamment en France, en Belgique et au Luxembourg. Les commandes à destination de ces pays partent de notre entrepôt en Suède avec PostNord en lettre suivie ; le délai de livraison est normalement de 3 à 6 jours ouvrés. Les frais de port s'élèvent à 8,00 €, et la livraison est offerte pour toute commande supérieure à 79 €. Les abonnements et les packs sont toujours livrés gratuitement. L'envoi restant au sein de l'UE, vous ne payez aucun droit de douane ni frais d'importation.",
+      text: "Tous les prix s'entendent TVA comprise. Nous livrons notamment en France, en Belgique et au Luxembourg. Les commandes à destination de ces pays partent de notre entrepôt avec PostNord en lettre suivie ; le délai de livraison est normalement de 3 à 6 jours ouvrés. Les frais de port s'élèvent à 8,00 €, et la livraison est offerte pour toute commande supérieure à 79 €. Les abonnements et les packs sont toujours livrés gratuitement. L'envoi restant au sein de l'UE, vous ne payez aucun droit de douane ni frais d'importation.",
     },
     { type: "h2", text: "Suivre votre commande" },
     {
@@ -380,7 +380,7 @@ const returns: LegalDoc = {
     { type: "h2", text: "Réclamations" },
     {
       type: "p",
-      text: "Vous bénéficiez d'un droit de réclamation de trois ans pour les produits défectueux en vertu de la loi suédoise sur la vente aux consommateurs (konsumentköplagen), sans préjudice de la garantie légale de conformité applicable dans votre pays. Signalez le défaut dans un délai raisonnable après l'avoir constaté – un délai de deux mois est toujours considéré comme raisonnable. Joignez des photos et le numéro de lot figurant sur l'étiquette.",
+      text: "Pour les produits défectueux, vous bénéficiez du droit de réclamation prévu par le droit de la consommation qui vous est applicable, notamment la garantie légale de conformité. Signalez le défaut dans un délai raisonnable après l'avoir constaté – un délai de deux mois est toujours considéré comme raisonnable. Joignez des photos et le numéro de lot figurant sur l'étiquette.",
     },
     { type: "h2", text: "Exceptions" },
     {
@@ -406,7 +406,7 @@ const sustainability: LegalDoc = {
     "Moins de produits mais de meilleurs, des emballages recyclables et une chaîne d'approvisionnement que nous pouvons expliquer. Voici où nous en sommes aujourd'hui – et ce sur quoi nous continuons de travailler.",
   metaTitle: "Durabilité – emballages, expédition et matières premières",
   metaDescription:
-    "Comment Metilde travaille sur la durabilité : emballages recyclables, expédition groupée depuis un seul entrepôt en Suède et matières premières documentées.",
+    "Comment Metilde travaille sur la durabilité : emballages recyclables, expédition groupée depuis un seul entrepôt et matières premières documentées.",
   blocks: [
     { type: "h2", text: "Notre approche" },
     {
@@ -425,7 +425,7 @@ const sustainability: LegalDoc = {
     { type: "h2", text: "Expédition" },
     {
       type: "p",
-      text: "Nous expédions depuis un seul entrepôt en Suède, de préférence en lettre et vers des points de retrait, car des tournées groupées signifient moins de kilomètres par envoi. Les abonnements peuvent être regroupés en une seule livraison afin que plusieurs produits voyagent ensemble.",
+      text: "Nous expédions depuis un seul entrepôt, de préférence en lettre et vers des points de retrait, car des tournées groupées signifient moins de kilomètres par envoi. Les abonnements peuvent être regroupés en une seule livraison afin que plusieurs produits voyagent ensemble.",
     },
     { type: "h2", text: "Matières premières et responsabilité sociale" },
     {

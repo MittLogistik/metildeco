@@ -37,7 +37,7 @@ export const faqGroups: FaqGroup[] = [
       },
       {
         q: "Hur lång är leveranstiden?",
-        a: "Ordrar lagda före kl. 12.00 på vardagar skickas samma dag från vårt lager i Sverige. Leveranstiden inom Sverige är normalt 1–3 arbetsdagar.",
+        a: "Ordrar lagda före kl. 12.00 på vardagar skickas samma dag från vårt lager. Leveranstiden inom Sverige är normalt 1–3 arbetsdagar.",
       },
       {
         q: "Levererar ni utanför Sverige?",

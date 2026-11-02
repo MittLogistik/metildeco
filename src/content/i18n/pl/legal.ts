@@ -21,7 +21,7 @@ const helpBlock: LegalBlock[] = [
 ];
 
 const disputeText =
-  "Jeśli nie dojdziemy do porozumienia, informacje o swoich prawach i możliwościach uzyskasz w Europejskim Centrum Konsumenckim w Polsce, które pomaga w sporach z przedsiębiorcami z innych krajów UE. Spór możesz też skierować do właściwego sądu w Polsce. Do umowy stosuje się prawo szwedzkie. Nie ogranicza to bezwzględnie obowiązujących praw, które przysługują Ci jako konsumentowi na podstawie prawa polskiego.";
+  "Jeśli nie dojdziemy do porozumienia, informacje o swoich prawach i możliwościach uzyskasz w Europejskim Centrum Konsumenckim w Polsce, które pomaga w sporach z przedsiębiorcami z innych krajów UE. Spór możesz też skierować do właściwego sądu w Polsce. Zawsze przysługują Ci bezwzględnie obowiązujące prawa konsumenta wynikające z prawa polskiego.";
 
 /* ------------------------------ Prywatność ------------------------------ */
 
@@ -60,7 +60,7 @@ const privacy: LegalDoc = {
       rows: [
         ["Realizacja i dostawa zamówienia, obsługa zwrotów i refundacji", "Wykonanie umowy", "W trakcie realizacji zamówienia oraz przez okres reklamacyjny"],
         ["Zarządzanie Twoim kontem i subskrypcjami", "Wykonanie umowy", "Do usunięcia konta"],
-        ["Księgowość i obowiązki podatkowe", "Obowiązek prawny (szwedzka ustawa o rachunkowości)", "7 lat"],
+        ["Księgowość i obowiązki podatkowe", "Obowiązek prawny (obowiązujące przepisy o rachunkowości)", "7 lat"],
         ["Obsługa klienta i reklamacje", "Prawnie uzasadniony interes", "36 miesięcy od zamknięcia sprawy"],
         ["Newsletter i marketing", "Zgoda", "Do wycofania zgody"],
         ["Analiza i ulepszanie strony", "Zgoda (pliki cookie inne niż niezbędne)", "Do 24 miesięcy"],
@@ -102,7 +102,7 @@ const privacy: LegalDoc = {
     },
     {
       type: "p",
-      text: `Aby skorzystać z któregoś z tych praw, napisz na {epost}. Odpowiadamy w ciągu 30 dni. Jeśli nie podoba Ci się sposób, w jaki postępujemy z Twoimi danymi, możesz złożyć skargę do Prezesa Urzędu Ochrony Danych Osobowych (UODO), uodo.gov.pl, lub do naszego organu nadzorczego w Szwecji, Integritetsskyddsmyndigheten (IMY), imy.se.`,
+      text: `Aby skorzystać z któregoś z tych praw, napisz na {epost}. Odpowiadamy w ciągu 30 dni. Jeśli nie podoba Ci się sposób, w jaki postępujemy z Twoimi danymi, możesz złożyć skargę do Prezesa Urzędu Ochrony Danych Osobowych (UODO), uodo.gov.pl.`,
     },
     { type: "h2", text: "Bezpieczeństwo" },
     {
@@ -151,7 +151,7 @@ const terms: LegalDoc = {
     { type: "shippingTable" },
     {
       type: "p",
-      text: "Zamówienia złożone w dzień roboczy przed godziną 12:00 zwykle wysyłamy tego samego dnia z naszego magazynu w Szwecji. Zamówienia do Polski wysyłamy przez PostNord jako przesyłkę listową z możliwością śledzenia; czas dostawy wynosi zwykle 3–6 dni roboczych. Link do śledzenia przesyłki otrzymasz e-mailem, gdy tylko paczka od nas wyjedzie. Za przesyłki nieodebrane pobieramy faktyczny koszt wysyłki w obie strony.",
+      text: "Zamówienia złożone w dzień roboczy przed godziną 12:00 zwykle wysyłamy tego samego dnia z naszego magazynu. Zamówienia do Polski wysyłamy przez PostNord jako przesyłkę listową z możliwością śledzenia; czas dostawy wynosi zwykle 3–6 dni roboczych. Link do śledzenia przesyłki otrzymasz e-mailem, gdy tylko paczka od nas wyjedzie. Za przesyłki nieodebrane pobieramy faktyczny koszt wysyłki w obie strony.",
     },
     { type: "h2", text: "Subskrypcja" },
     {
@@ -182,7 +182,7 @@ const terms: LegalDoc = {
     { type: "h2", text: "Reklamacje i wadliwe produkty" },
     {
       type: "p",
-      text: `Na złożenie reklamacji masz trzy lata zgodnie ze szwedzką ustawą o sprzedaży konsumenckiej (konsumentköplagen). Napisz na {epost}, podając numer zamówienia, i dołącz zdjęcie wady. Uznaną reklamację rozpatrujemy, wysyłając nowy produkt lub zwracając pieniądze, a koszt odesłania pokrywamy my.`,
+      text: `Reklamację możesz złożyć w ramach ustawowego prawa do reklamacji, które przysługuje Ci na podstawie mającego do Ciebie zastosowanie prawa konsumenckiego. Napisz na {epost}, podając numer zamówienia, i dołącz zdjęcie wady. Uznaną reklamację rozpatrujemy, wysyłając nowy produkt lub zwracając pieniądze, a koszt odesłania pokrywamy my.`,
     },
     { type: "h2", text: "Informacje o produktach" },
     {
@@ -296,7 +296,7 @@ const shipping: LegalDoc = {
   title: "Wysyłka i dostawa",
   updated,
   intro:
-    "Zamówienia złożone w dni robocze przed godziną 12:00 pakujemy i wysyłamy tego samego dnia z naszego magazynu w Szwecji. Darmowa wysyłka przy zamówieniach powyżej 339 zł.",
+    "Zamówienia złożone w dni robocze przed godziną 12:00 pakujemy i wysyłamy tego samego dnia z naszego magazynu. Darmowa wysyłka przy zamówieniach powyżej 339 zł.",
   metaTitle: "Wysyłka i dostawa – koszty, czas dostawy i śledzenie",
   metaDescription:
     "Koszty i czas dostawy Metilde do Polski, darmowa wysyłka powyżej 339 zł, śledzenie przesyłki, nieodebrane paczki i co zrobić w razie uszkodzenia przesyłki.",
@@ -310,7 +310,7 @@ const shipping: LegalDoc = {
     { type: "shippingTable" },
     {
       type: "p",
-      text: "Wszystkie ceny zawierają VAT. W tym sklepie dostarczamy zamówienia na adresy w Polsce. Zamówienia do Polski wysyłamy przez PostNord jako przesyłkę listową z możliwością śledzenia, z naszego magazynu w Szwecji; czas dostawy wynosi zwykle 3–6 dni roboczych. Wysyłka kosztuje 34 zł, a przy zamówieniach powyżej 339 zł jest darmowa. Subskrypcje i zestawy zawsze wysyłamy za darmo. Przesyłka nie opuszcza UE, więc nie płacisz cła ani opłat importowych.",
+      text: "Wszystkie ceny zawierają VAT. W tym sklepie dostarczamy zamówienia na adresy w Polsce. Zamówienia do Polski wysyłamy przez PostNord jako przesyłkę listową z możliwością śledzenia, z naszego magazynu; czas dostawy wynosi zwykle 3–6 dni roboczych. Wysyłka kosztuje 34 zł, a przy zamówieniach powyżej 339 zł jest darmowa. Subskrypcje i zestawy zawsze wysyłamy za darmo. Przesyłka nie opuszcza UE, więc nie płacisz cła ani opłat importowych.",
     },
     { type: "h2", text: "Śledzenie zamówienia" },
     {
@@ -380,7 +380,7 @@ const returns: LegalDoc = {
     { type: "h2", text: "Reklamacje" },
     {
       type: "p",
-      text: "Na reklamację wadliwych produktów masz trzy lata zgodnie ze szwedzką ustawą o sprzedaży konsumenckiej (konsumentköplagen). Zgłoś wadę w rozsądnym terminie od jej wykrycia – termin dwóch miesięcy zawsze uznaje się za rozsądny. Dołącz zdjęcia i numer partii podany na etykiecie.",
+      text: "Wadliwe produkty możesz reklamować w ramach ustawowego prawa do reklamacji, które przysługuje Ci na podstawie mającego do Ciebie zastosowanie prawa konsumenckiego. Zgłoś wadę w rozsądnym terminie od jej wykrycia – termin dwóch miesięcy zawsze uznaje się za rozsądny. Dołącz zdjęcia i numer partii podany na etykiecie.",
     },
     { type: "h2", text: "Wyjątki" },
     {
@@ -406,7 +406,7 @@ const sustainability: LegalDoc = {
     "Mniej, ale lepszych produktów, opakowania nadające się do recyklingu i łańcuch dostaw, który potrafimy wyjaśnić. Tak to wygląda dziś – i nad tym pracujemy dalej.",
   metaTitle: "Zrównoważony rozwój – opakowania, wysyłka i surowce",
   metaDescription:
-    "Jak Metilde dba o zrównoważony rozwój: opakowania nadające się do recyklingu, zbiorcza wysyłka z jednego magazynu w Szwecji i udokumentowane surowce.",
+    "Jak Metilde dba o zrównoważony rozwój: opakowania nadające się do recyklingu, zbiorcza wysyłka z jednego magazynu i udokumentowane surowce.",
   blocks: [
     { type: "h2", text: "Nasze podejście" },
     {
@@ -425,7 +425,7 @@ const sustainability: LegalDoc = {
     { type: "h2", text: "Wysyłka" },
     {
       type: "p",
-      text: "Wysyłamy z jednego magazynu w Szwecji, przede wszystkim jako przesyłki listowe i do punktów odbioru, ponieważ zbiorcze trasy oznaczają mniej kilometrów na paczkę. Subskrypcje można łączyć w jedną dostawę, aby kilka produktów podróżowało razem.",
+      text: "Wysyłamy z jednego magazynu, przede wszystkim jako przesyłki listowe i do punktów odbioru, ponieważ zbiorcze trasy oznaczają mniej kilometrów na paczkę. Subskrypcje można łączyć w jedną dostawę, aby kilka produktów podróżowało razem.",
     },
     { type: "h2", text: "Surowce i odpowiedzialność społeczna" },
     {

@@ -57,7 +57,7 @@ export const messages: LayoutMessages = {
     additivesTitle: "Bez zbędnych dodatków",
     additivesText: "Ekstrakt i otoczka kapsułki – nic więcej.",
     shippingTitle: (amount: string) => `Darmowa dostawa od ${amount}`,
-    shippingText: "Zamówienia złożone w dni robocze do 12:00 (czasu szwedzkiego) wysyłamy tego samego dnia.",
+    shippingText: "Zamówienia złożone w dni robocze do 12:00 (CET) wysyłamy tego samego dnia.",
     returnsTitle: "30 dni na odstąpienie od umowy",
     returnsText: "Dla nieotwartych produktów – dłużej niż ustawowe 14 dni.",
   },

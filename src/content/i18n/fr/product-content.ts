@@ -8,7 +8,7 @@ import type { ProductContent } from "@/content/product-content";
 const packaging = {
   heading: "Emballage et livraison",
   body:
-    "Les gélules sont conditionnées dans un pot en plastique à couvercle vissé qui garde le contenu au sec entre les prises. Chaque commande est expédiée depuis notre entrepôt en Suède.",
+    "Les gélules sont conditionnées dans un pot en plastique à couvercle vissé qui garde le contenu au sec entre les prises. Chaque commande est expédiée depuis notre entrepôt.",
 };
 
 const noExceed = "Ne pas dépasser la dose journalière recommandée.";

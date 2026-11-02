@@ -57,7 +57,7 @@ export const productContent: Record<string, ProductContent> = {
       {
         heading: "Förpackning och leverans",
         body:
-          "Kapslarna packas i en plastburk med skruvlock som håller innehållet torrt mellan doserna. Varje order skickas från vårt lager i Sverige.",
+          "Kapslarna packas i en plastburk med skruvlock som håller innehållet torrt mellan doserna. Varje order skickas från vårt lager.",
       },
     ],
     specs: [
@@ -122,7 +122,7 @@ export const productContent: Record<string, ProductContent> = {
       {
         heading: "Förpackning och leverans",
         body:
-          "Kapslarna packas i en plastburk med skruvlock som håller innehållet torrt mellan doserna. Varje order skickas från vårt lager i Sverige.",
+          "Kapslarna packas i en plastburk med skruvlock som håller innehållet torrt mellan doserna. Varje order skickas från vårt lager.",
       },
     ],
     specs: [
@@ -241,7 +241,7 @@ export const productContent: Record<string, ProductContent> = {
       {
         heading: "Förpackning och leverans",
         body:
-          "Kapslarna packas i en plastburk med skruvlock som håller innehållet torrt mellan doserna. Varje order skickas från vårt lager i Sverige.",
+          "Kapslarna packas i en plastburk med skruvlock som håller innehållet torrt mellan doserna. Varje order skickas från vårt lager.",
       },
     ],
     specs: [
@@ -646,7 +646,7 @@ export const productContent: Record<string, ProductContent> = {
       {
         heading: "Förpackning och leverans",
         body:
-          "Kapslarna packas i en plastburk med skruvlock som håller innehållet torrt mellan doserna. Varje order skickas från vårt lager i Sverige.",
+          "Kapslarna packas i en plastburk med skruvlock som håller innehållet torrt mellan doserna. Varje order skickas från vårt lager.",
       },
     ],
     specs: [
@@ -710,7 +710,7 @@ export const productContent: Record<string, ProductContent> = {
       {
         heading: "Förpackning och leverans",
         body:
-          "Kapslarna packas i en plastburk med skruvlock som håller innehållet torrt mellan doserna. Varje order skickas från vårt lager i Sverige.",
+          "Kapslarna packas i en plastburk med skruvlock som håller innehållet torrt mellan doserna. Varje order skickas från vårt lager.",
       },
     ],
     specs: [
@@ -775,7 +775,7 @@ export const productContent: Record<string, ProductContent> = {
       {
         heading: "Förpackning och leverans",
         body:
-          "Kapslarna packas i en plastburk med skruvlock som håller innehållet torrt mellan doserna. Varje order skickas från vårt lager i Sverige.",
+          "Kapslarna packas i en plastburk med skruvlock som håller innehållet torrt mellan doserna. Varje order skickas från vårt lager.",
       },
     ],
     specs: [
@@ -839,7 +839,7 @@ export const productContent: Record<string, ProductContent> = {
       {
         heading: "Förpackning och leverans",
         body:
-          "Kapslarna packas i en plastburk med skruvlock som håller innehållet torrt mellan doserna. Varje order skickas från vårt lager i Sverige.",
+          "Kapslarna packas i en plastburk med skruvlock som håller innehållet torrt mellan doserna. Varje order skickas från vårt lager.",
       },
     ],
     specs: [
@@ -902,7 +902,7 @@ export const productContent: Record<string, ProductContent> = {
       {
         heading: "Förpackning och leverans",
         body:
-          "Kapslarna packas i en plastburk med skruvlock som håller innehållet torrt mellan doserna. Varje order skickas från vårt lager i Sverige.",
+          "Kapslarna packas i en plastburk med skruvlock som håller innehållet torrt mellan doserna. Varje order skickas från vårt lager.",
       },
     ],
     specs: [
@@ -964,7 +964,7 @@ export const productContent: Record<string, ProductContent> = {
       {
         heading: "Förpackning och leverans",
         body:
-          "Kapslarna packas i en plastburk med skruvlock som håller innehållet torrt mellan doserna. Varje order skickas från vårt lager i Sverige.",
+          "Kapslarna packas i en plastburk med skruvlock som håller innehållet torrt mellan doserna. Varje order skickas från vårt lager.",
       },
     ],
     specs: [
@@ -1026,7 +1026,7 @@ export const productContent: Record<string, ProductContent> = {
       {
         heading: "Förpackning och leverans",
         body:
-          "Kapslarna packas i en plastburk med skruvlock som håller innehållet torrt mellan doserna. Varje order skickas från vårt lager i Sverige.",
+          "Kapslarna packas i en plastburk med skruvlock som håller innehållet torrt mellan doserna. Varje order skickas från vårt lager.",
       },
     ],
     specs: [
@@ -1089,7 +1089,7 @@ export const productContent: Record<string, ProductContent> = {
       {
         heading: "Förpackning och leverans",
         body:
-          "Kapslarna packas i en plastburk med skruvlock som håller innehållet torrt mellan doserna. Varje order skickas från vårt lager i Sverige.",
+          "Kapslarna packas i en plastburk med skruvlock som håller innehållet torrt mellan doserna. Varje order skickas från vårt lager.",
       },
     ],
     specs: [
@@ -1152,7 +1152,7 @@ export const productContent: Record<string, ProductContent> = {
       {
         heading: "Förpackning och leverans",
         body:
-          "Kapslarna packas i en plastburk med skruvlock som håller innehållet torrt mellan doserna. Varje order skickas från vårt lager i Sverige.",
+          "Kapslarna packas i en plastburk med skruvlock som håller innehållet torrt mellan doserna. Varje order skickas från vårt lager.",
       },
     ],
     specs: [

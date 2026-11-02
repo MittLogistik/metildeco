@@ -40,7 +40,7 @@ export const messages: CatalogMessages = {
   youSave: "Vous économisez",
   bundleFreeShipping: "Livraison offerte pour ce pack",
   freeShippingOver: (amount) => `Livraison offerte dès ${amount}`,
-  sameDay: "Expédié le jour même pour toute commande passée avant 12 h (heure suédoise) en semaine",
+  sameDay: "Expédié le jour même pour toute commande passée avant 12 h (CET) en semaine",
   securePayment: "Paiement sécurisé avec",
   description: "Description",
   moreBundles: "Plus de packs",

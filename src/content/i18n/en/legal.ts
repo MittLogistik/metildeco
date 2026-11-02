@@ -21,7 +21,7 @@ const helpBlock: LegalBlock[] = [
 ];
 
 const disputeText =
-  "If we cannot reach an agreement together, you can find information about your rights and options from the Competition and Consumer Protection Commission (CCPC), ccpc.ie, and you can bring your dispute before the competent court in Ireland. Swedish law applies to the agreement. This does not limit the mandatory rights you have as a consumer under Irish law.";
+  "If we cannot reach an agreement together, you can find information about your rights and options from the Competition and Consumer Protection Commission (CCPC), ccpc.ie, and you can bring your dispute before the competent court in Ireland. The mandatory rights you have as a consumer under Irish law apply.";
 
 /* ------------------------------ Privacy ------------------------------ */
 
@@ -60,7 +60,7 @@ const privacy: LegalDoc = {
       rows: [
         ["Processing and delivering your order, handling returns and refunds", "Performance of a contract", "While the order is in progress and for the complaint period"],
         ["Managing your account and subscriptions", "Performance of a contract", "Until you delete your account"],
-        ["Accounting and tax obligations", "Legal obligation (Swedish Accounting Act)", "7 years"],
+        ["Accounting and tax obligations", "Legal obligation (applicable bookkeeping rules)", "7 years"],
         ["Customer service and complaints", "Legitimate interest", "36 months after the case is closed"],
         ["Newsletter and marketing", "Consent", "Until you withdraw your consent"],
         ["Analysing and improving the website", "Consent (non-essential cookies)", "Up to 24 months"],
@@ -102,7 +102,7 @@ const privacy: LegalDoc = {
     },
     {
       type: "p",
-      text: `Email {epost} to exercise a right. We reply within 30 days. If you are unhappy with how we handle your data, you can lodge a complaint with the Data Protection Commission, dataprotection.ie, or with our supervisory authority in Sweden, Integritetsskyddsmyndigheten (IMY), imy.se.`,
+      text: `Email {epost} to exercise a right. We reply within 30 days. If you are unhappy with how we handle your data, you can lodge a complaint with the Data Protection Commission, dataprotection.ie.`,
     },
     { type: "h2", text: "Security" },
     {
@@ -151,7 +151,7 @@ const terms: LegalDoc = {
     { type: "shippingTable" },
     {
       type: "p",
-      text: "Orders placed before 12:00 (Swedish time) on a working day are normally dispatched the same day from our warehouse in Sweden. Orders to Ireland are sent with PostNord as a tracked letter; delivery normally takes 3–6 working days. You will receive a tracking link by email as soon as the parcel leaves us. For parcels that are not collected, we charge the actual cost of shipping there and back.",
+      text: "Orders placed before 12:00 (CET) on a working day are normally dispatched the same day from our warehouse. Orders to Ireland are sent with PostNord as a tracked letter; delivery normally takes 3–6 working days. You will receive a tracking link by email as soon as the parcel leaves us. For parcels that are not collected, we charge the actual cost of shipping there and back.",
     },
     { type: "h2", text: "Subscription" },
     {
@@ -182,7 +182,7 @@ const terms: LegalDoc = {
     { type: "h2", text: "Complaints and faulty products" },
     {
       type: "p",
-      text: `You have a three-year right to complain under the Swedish Consumer Sales Act (konsumentköplagen). Email {epost} with your order number and a photo of the fault. An approved complaint is resolved with a new product or a refund, and we pay the return shipping.`,
+      text: `You have the statutory right to complain under the consumer law that applies to you. Email {epost} with your order number and a photo of the fault. An approved complaint is resolved with a new product or a refund, and we pay the return shipping.`,
     },
     { type: "h2", text: "Product information" },
     {
@@ -296,7 +296,7 @@ const shipping: LegalDoc = {
   title: "Shipping & delivery",
   updated,
   intro:
-    "Orders placed before 12:00 (Swedish time) on working days are packed and dispatched the same day from our warehouse in Sweden. Free shipping on orders over €79.",
+    "Orders placed before 12:00 (CET) on working days are packed and dispatched the same day from our warehouse. Free shipping on orders over €79.",
   metaTitle: "Shipping & delivery – shipping costs, delivery times and tracking",
   metaDescription:
     "Metilde's shipping costs and delivery times to Ireland, free shipping over €79, tracking, uncollected parcels and what applies if a delivery is damaged.",
@@ -304,13 +304,13 @@ const shipping: LegalDoc = {
     { type: "h2", text: "Processing time" },
     {
       type: "p",
-      text: "We pack orders on working days. Orders received before 12:00 (Swedish time) are dispatched the same day, later orders the next working day. During promotions and around public holidays, packing may take an extra day.",
+      text: "We pack orders on working days. Orders received before 12:00 (CET) are dispatched the same day, later orders the next working day. During promotions and around public holidays, packing may take an extra day.",
     },
     { type: "h2", text: "Shipping costs and delivery times" },
     { type: "shippingTable" },
     {
       type: "p",
-      text: "All prices include VAT. From this website we deliver to addresses in Ireland. Orders to Ireland are sent with PostNord as a tracked letter from our warehouse in Sweden; delivery normally takes 3–6 working days. Shipping costs €8.00, and orders over €79 ship free. Subscriptions and bundles always ship free. As the parcel stays within the EU, you pay no customs duties or import charges.",
+      text: "All prices include VAT. From this website we deliver to addresses in Ireland. Orders to Ireland are sent with PostNord as a tracked letter from our warehouse; delivery normally takes 3–6 working days. Shipping costs €8.00, and orders over €79 ship free. Subscriptions and bundles always ship free. As the parcel stays within the EU, you pay no customs duties or import charges.",
     },
     { type: "h2", text: "Tracking your order" },
     {
@@ -380,7 +380,7 @@ const returns: LegalDoc = {
     { type: "h2", text: "Complaints" },
     {
       type: "p",
-      text: "You have a three-year right to complain about faulty products under the Swedish Consumer Sales Act (konsumentköplagen). Report the fault within a reasonable time after discovering it – within two months is always considered reasonable. Include photos and the batch number shown on the label.",
+      text: "You have the statutory right to complain about faulty products under the consumer law that applies to you. Report the fault within a reasonable time after discovering it – within two months is always considered reasonable. Include photos and the batch number shown on the label.",
     },
     { type: "h2", text: "Exceptions" },
     {
@@ -406,7 +406,7 @@ const sustainability: LegalDoc = {
     "Fewer but better products, packaging that can be recycled and a supply chain we can explain. This is where we are today – and what we are continuing to work on.",
   metaTitle: "Sustainability – packaging, shipping and raw materials",
   metaDescription:
-    "How Metilde works on sustainability: recyclable packaging, consolidated shipping from a single warehouse in Sweden and documented raw materials.",
+    "How Metilde works on sustainability: recyclable packaging, consolidated shipping from a single warehouse and documented raw materials.",
   blocks: [
     { type: "h2", text: "How we think about it" },
     {
@@ -425,7 +425,7 @@ const sustainability: LegalDoc = {
     { type: "h2", text: "Shipping" },
     {
       type: "p",
-      text: "We ship from a single warehouse in Sweden, preferably as letters and to collection points, because consolidated routes mean fewer kilometres per parcel. Subscriptions can be combined into one delivery so that several products travel together.",
+      text: "We ship from a single warehouse, preferably as letters and to collection points, because consolidated routes mean fewer kilometres per parcel. Subscriptions can be combined into one delivery so that several products travel together.",
     },
     { type: "h2", text: "Raw materials and social responsibility" },
     {

@@ -8,7 +8,7 @@ export const messages: EmailText = {
   renewalWithDate: (d) => `Dein Abo wurde verlängert. Die nächste Packung wird so verschickt, dass sie voraussichtlich um den ${d} bei dir ankommt.`,
   renewalNoDate: "Dein Abo wurde verlängert und das Paket wird jetzt gepackt.",
   orderNumber: "Bestellnummer",
-  received: "Wir haben deine Zahlung erhalten. Bestellungen, die an Werktagen bis 12:00 Uhr (schwedische Zeit) eingehen, werden noch am selben Tag aus Schweden verschickt.",
+  received: "Wir haben deine Zahlung erhalten. Bestellungen, die an Werktagen bis 12:00 Uhr (CET) eingehen, werden noch am selben Tag verschickt.",
   subscription: "Abo",
   gift: "Geschenk",
   discount: "Rabatt",

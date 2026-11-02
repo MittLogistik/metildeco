@@ -8,7 +8,7 @@ import type { ProductContent } from "@/content/product-content";
 const packaging = {
   heading: "Verpackung und Versand",
   body:
-    "Die Kapseln werden in einer Kunststoffdose mit Schraubdeckel verpackt, die den Inhalt zwischen den Einnahmen trocken hält. Jede Bestellung wird aus unserem Lager in Schweden verschickt.",
+    "Die Kapseln werden in einer Kunststoffdose mit Schraubdeckel verpackt, die den Inhalt zwischen den Einnahmen trocken hält. Jede Bestellung wird aus unserem Lager verschickt.",
 };
 
 const noExceed = "Die empfohlene tägliche Verzehrmenge nicht überschreiten.";

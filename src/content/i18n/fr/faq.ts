@@ -35,11 +35,11 @@ export const faqGroups: FaqGroup[] = [
       },
       {
         q: "Quel est le délai de livraison ?",
-        a: "Les commandes passées en semaine avant 12 h (heure suédoise) sont expédiées le jour même depuis notre entrepôt en Suède. Le délai de livraison vers la France, la Belgique et le Luxembourg est normalement de 3 à 6 jours ouvrés.",
+        a: "Les commandes passées en semaine avant 12 h (CET) sont expédiées le jour même depuis notre entrepôt. Le délai de livraison vers la France, la Belgique et le Luxembourg est normalement de 3 à 6 jours ouvrés.",
       },
       {
         q: "Livrez-vous en France, en Belgique et au Luxembourg ?",
-        a: "Oui. Les commandes vers la France, la Belgique et le Luxembourg sont envoyées par PostNord en lettre suivie depuis notre entrepôt en Suède. Comme l'envoi reste au sein de l'UE, vous ne payez ni frais de douane ni taxes d'importation.",
+        a: "Oui. Les commandes vers la France, la Belgique et le Luxembourg sont envoyées par PostNord en lettre suivie depuis notre entrepôt. Comme l'envoi reste au sein de l'UE, vous ne payez ni frais de douane ni taxes d'importation.",
       },
       {
         q: "Comment suivre mon colis ?",

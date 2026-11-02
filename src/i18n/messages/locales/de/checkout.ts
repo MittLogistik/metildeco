@@ -53,7 +53,7 @@ export const messages: CheckoutMessages = {
     giftCardAnd: " und an ",
     giftCardAfter: ". Der Code wird im Bezahlschritt eingegeben und ist ein Jahr gültig.",
     receivedBefore: (isSub) => `Wir haben dein${isSub ? " Abo" : "e Bestellung"} erhalten und schicken eine Bestätigung an `,
-    receivedAfter: ". Bestellungen, die an Werktagen bis 12:00 Uhr (schwedische Zeit) eingehen, werden noch am selben Tag verschickt.",
+    receivedAfter: ". Bestellungen, die an Werktagen bis 12:00 Uhr (CET) eingehen, werden noch am selben Tag verschickt.",
     orderNumber: "Bestellnummer",
     discount: "Rabatt",
     shipping: "Versand",

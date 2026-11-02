@@ -53,7 +53,7 @@ export const messages: CheckoutMessages = {
     giftCardAnd: " and to ",
     giftCardAfter: ". The code is entered at the payment step and is valid for one year.",
     receivedBefore: (isSub) => `We have received your ${isSub ? "subscription" : "order"} and will send a confirmation to `,
-    receivedAfter: ". Orders placed before 12:00 (Swedish time) on working days ship the same day.",
+    receivedAfter: ". Orders placed before 12:00 (CET) on working days ship the same day.",
     orderNumber: "Order number",
     discount: "Discount",
     shipping: "Shipping",

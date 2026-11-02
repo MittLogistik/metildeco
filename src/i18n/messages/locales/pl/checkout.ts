@@ -54,7 +54,7 @@ export const messages: CheckoutMessages = {
     giftCardAfter: ". Kod wpisuje się w kroku płatności i jest ważny przez rok.",
     receivedBefore: (isSub: boolean) =>
       `Otrzymaliśmy ${isSub ? "Twoją subskrypcję" : "Twoje zamówienie"} i wyślemy potwierdzenie na adres `,
-    receivedAfter: ". Zamówienia złożone w dni robocze do 12:00 (czasu szwedzkiego) wysyłamy tego samego dnia.",
+    receivedAfter: ". Zamówienia złożone w dni robocze do 12:00 (CET) wysyłamy tego samego dnia.",
     orderNumber: "Numer zamówienia",
     discount: "Rabat",
     shipping: "Dostawa",

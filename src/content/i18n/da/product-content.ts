@@ -8,7 +8,7 @@ import type { ProductContent } from "@/content/product-content";
 const packaging = {
   heading: "Emballage og levering",
   body:
-    "Kapslerne pakkes i en plastbøtte med skruelåg, der holder indholdet tørt mellem doserne. Alle ordrer sendes fra vores lager i Sverige.",
+    "Kapslerne pakkes i en plastbøtte med skruelåg, der holder indholdet tørt mellem doserne. Alle ordrer sendes fra vores lager.",
 };
 
 export const productContent: Record<string, ProductContent> = {

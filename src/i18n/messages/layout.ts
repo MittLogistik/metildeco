@@ -377,7 +377,7 @@ export const layout: Record<Locale, typeof sv> = {
       additivesTitle: "Zonder onnodige toevoegingen",
       additivesText: "Extract en capsulewand – verder niets.",
       shippingTitle: (amount) => `Gratis verzending vanaf ${amount}`,
-      shippingText: "Op werkdagen vóór 12.00 uur (Zweedse tijd) besteld, dezelfde dag verzonden.",
+      shippingText: "Op werkdagen vóór 12.00 uur (CET) besteld, dezelfde dag verzonden.",
       returnsTitle: "30 dagen bedenktijd",
       returnsText: "Op ongeopende producten – langer dan de wettelijke 14 dagen.",
     },

@@ -7,7 +7,7 @@ export const messages: ProductMessages = {
   inclVat: "TTC",
   soldOut: "Épuisé – réassort en cours",
   lowStock: (n) => `En stock – plus que ${n}`,
-  inStock: "En stock – expédié le jour même pour toute commande passée en semaine avant 12 h (heure suédoise)",
+  inStock: "En stock – expédié le jour même pour toute commande passée en semaine avant 12 h (CET)",
   shippingFrom: (from, freeOver) => `Livraison à partir de ${from}, offerte dès ${freeOver}.`,
   deliveryTime: (min, max) => `Délai de livraison ${min}–${max} jours ouvrés`,
   returnRight: "30 jours de droit de rétractation",

@@ -84,7 +84,7 @@ const privacy: LegalDoc = {
       rows: [
         ["Behandla och leverera din order, hantera returer och återbetalningar", "Fullgörande av avtal", "Under orderns gång samt reklamationstiden"],
         ["Hantera ditt konto och dina prenumerationer", "Fullgörande av avtal", "Tills du raderar ditt konto"],
-        ["Bokföring och skatteskyldigheter", "Rättslig förpliktelse (bokföringslagen)", "7 år"],
+        ["Bokföring och skatteskyldigheter", "Rättslig förpliktelse (bokföringsregler)", "7 år"],
         ["Kundservice och reklamationer", "Berättigat intresse", "36 månader efter avslutat ärende"],
         ["Nyhetsbrev och marknadsföring", "Samtycke", "Tills du återkallar samtycket"],
         ["Analys och förbättring av sajten", "Samtycke (icke nödvändiga cookies)", "Upp till 24 månader"],
@@ -175,7 +175,7 @@ const terms: LegalDoc = {
     { type: "shippingTable" },
     {
       type: "p",
-      text: "Order som läggs före kl. 12.00 en vardag skickas normalt samma dag från vårt lager i Sverige. Du får en spårningslänk via e-post så snart paketet lämnar oss. Outlöst paket debiteras den faktiska kostnaden för frakt tur och retur.",
+      text: "Order som läggs före kl. 12.00 en vardag skickas normalt samma dag från vårt lager. Du får en spårningslänk via e-post så snart paketet lämnar oss. Outlöst paket debiteras den faktiska kostnaden för frakt tur och retur.",
     },
     { type: "h2", text: "Prenumeration" },
     {
@@ -216,7 +216,7 @@ const terms: LegalDoc = {
     { type: "h2", text: "Tvist" },
     {
       type: "p",
-      text: "Om vi inte kommer överens kan du vända dig till Allmänna reklamationsnämnden (ARN), Box 174, 101 23 Stockholm, arn.se. Vi följer ARN:s rekommendationer. Svensk lag tillämpas på avtalet.",
+      text: "Om vi inte kommer överens kan du vända dig till Allmänna reklamationsnämnden (ARN), Box 174, 101 23 Stockholm, arn.se. Vi följer ARN:s rekommendationer.",
     },
   ],
 };
@@ -324,7 +324,7 @@ const shipping: LegalDoc = {
   title: "Frakt & leverans",
   updated,
   intro:
-    "Beställningar lagda före kl. 12.00 på vardagar packas och skickas samma dag från vårt lager i Sverige. Fri frakt på alla ordrar över 499 kr.",
+    "Beställningar lagda före kl. 12.00 på vardagar packas och skickas samma dag från vårt lager. Fri frakt på alla ordrar över 499 kr.",
   metaTitle: "Frakt & leverans – fraktpriser, leveranstider och spårning",
   metaDescription:
     "Metildes fraktpriser och leveranstider i Sverige, fri frakt över 499 kr, spårning, outlösta paket och vad som gäller vid skadad leverans.",
@@ -437,7 +437,7 @@ const sustainability: LegalDoc = {
     "Färre men bättre produkter, förpackningar som går att återvinna och en leverantörskedja vi kan förklara. Så här ser det ut idag – och det här jobbar vi vidare med.",
   metaTitle: "Hållbarhet – förpackningar, frakt och råvaror",
   metaDescription:
-    "Så arbetar Metilde med hållbarhet: återvinningsbara förpackningar, samlad frakt från ett lager i Sverige och dokumenterade råvaror.",
+    "Så arbetar Metilde med hållbarhet: återvinningsbara förpackningar, samlad frakt från ett och samma lager och dokumenterade råvaror.",
   blocks: [
     { type: "h2", text: "Så tänker vi" },
     {
@@ -456,7 +456,7 @@ const sustainability: LegalDoc = {
     { type: "h2", text: "Frakt" },
     {
       type: "p",
-      text: "Vi skickar från ett enda lager i Sverige, i första hand som brev och till ombud eftersom samlade rutter innebär färre kilometer per paket. Prenumerationer kan slås ihop till en leverans så att flera produkter reser tillsammans.",
+      text: "Vi skickar från ett enda lager, i första hand som brev och till ombud eftersom samlade rutter innebär färre kilometer per paket. Prenumerationer kan slås ihop till en leverans så att flera produkter reser tillsammans.",
     },
     { type: "h2", text: "Råvaror och socialt ansvar" },
     {

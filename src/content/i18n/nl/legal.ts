@@ -21,7 +21,7 @@ const helpBlock: LegalBlock[] = [
 ];
 
 const disputeText =
-  "Komen we er samen niet uit, dan vind je informatie over je rechten en mogelijkheden bij ConsuWijzer, consuwijzer.nl, en kun je je geschil voorleggen aan de bevoegde Nederlandse rechter. Op de overeenkomst is Zweeds recht van toepassing. Dat beperkt de dwingende rechten die je als consument hebt op grond van het Nederlandse recht niet.";
+  "Komen we er samen niet uit, dan vind je informatie over je rechten en mogelijkheden bij ConsuWijzer, consuwijzer.nl, en kun je je geschil voorleggen aan de bevoegde Nederlandse rechter. De dwingende rechten die je als consument hebt op grond van het Nederlandse recht blijven altijd van toepassing.";
 
 /* ------------------------------ Privacy ------------------------------ */
 
@@ -60,7 +60,7 @@ const privacy: LegalDoc = {
       rows: [
         ["Je bestelling verwerken en leveren, retouren en terugbetalingen afhandelen", "Uitvoering van de overeenkomst", "Zolang de bestelling loopt en gedurende de reclamatietermijn"],
         ["Je account en abonnementen beheren", "Uitvoering van de overeenkomst", "Tot je je account verwijdert"],
-        ["Boekhouding en fiscale verplichtingen", "Wettelijke verplichting (Zweedse boekhoudwet)", "7 jaar"],
+        ["Boekhouding en fiscale verplichtingen", "Wettelijke verplichting (toepasselijke boekhoudregels)", "7 jaar"],
         ["Klantenservice en reclamaties", "Gerechtvaardigd belang", "36 maanden na afsluiting van de zaak"],
         ["Nieuwsbrief en marketing", "Toestemming", "Tot je je toestemming intrekt"],
         ["Analyse en verbetering van de website", "Toestemming (niet-noodzakelijke cookies)", "Tot 24 maanden"],
@@ -102,7 +102,7 @@ const privacy: LegalDoc = {
     },
     {
       type: "p",
-      text: `Mail naar {epost} om een recht uit te oefenen. We antwoorden binnen 30 dagen. Ben je niet tevreden over hoe we met je gegevens omgaan, dan kun je een klacht indienen bij de Autoriteit Persoonsgegevens, autoriteitpersoonsgegevens.nl, of bij onze toezichthouder in Zweden, Integritetsskyddsmyndigheten (IMY), imy.se.`,
+      text: `Mail naar {epost} om een recht uit te oefenen. We antwoorden binnen 30 dagen. Ben je niet tevreden over hoe we met je gegevens omgaan, dan kun je een klacht indienen bij de Autoriteit Persoonsgegevens, autoriteitpersoonsgegevens.nl.`,
     },
     { type: "h2", text: "Beveiliging" },
     {
@@ -151,7 +151,7 @@ const terms: LegalDoc = {
     { type: "shippingTable" },
     {
       type: "p",
-      text: "Bestellingen die op een werkdag vóór 12.00 uur (Zweedse tijd) worden geplaatst, versturen we normaal gesproken dezelfde dag vanuit ons magazijn in Zweden. Bestellingen naar Nederland gaan met PostNord als brief met track & trace; de levertijd is normaal 3–6 werkdagen. Je ontvangt een track & trace-link per e-mail zodra de zending bij ons vertrekt. Voor zendingen die niet worden afgehaald, rekenen we de werkelijke verzendkosten heen en terug.",
+      text: "Bestellingen die op een werkdag vóór 12.00 uur (CET) worden geplaatst, versturen we normaal gesproken dezelfde dag vanuit ons magazijn. Bestellingen naar Nederland gaan met PostNord als brief met track & trace; de levertijd is normaal 3–6 werkdagen. Je ontvangt een track & trace-link per e-mail zodra de zending bij ons vertrekt. Voor zendingen die niet worden afgehaald, rekenen we de werkelijke verzendkosten heen en terug.",
     },
     { type: "h2", text: "Abonnement" },
     {
@@ -182,7 +182,7 @@ const terms: LegalDoc = {
     { type: "h2", text: "Reclamaties en defecte producten" },
     {
       type: "p",
-      text: `Je hebt drie jaar reclamatierecht volgens de Zweedse consumentenkoopwet (konsumentköplagen). Mail naar {epost} met je ordernummer en een foto van het defect. Een goedgekeurde reclamatie lossen we op met een nieuw product of een terugbetaling, en wij betalen de retourkosten.`,
+      text: `Je hebt het wettelijke reclamatierecht volgens het consumentenrecht dat op jou van toepassing is. Mail naar {epost} met je ordernummer en een foto van het defect. Een goedgekeurde reclamatie lossen we op met een nieuw product of een terugbetaling, en wij betalen de retourkosten.`,
     },
     { type: "h2", text: "Productinformatie" },
     {
@@ -296,7 +296,7 @@ const shipping: LegalDoc = {
   title: "Verzending & levering",
   updated,
   intro:
-    "Bestellingen die op werkdagen vóór 12.00 uur (Zweedse tijd) binnenkomen, worden dezelfde dag ingepakt en verzonden vanuit ons magazijn in Zweden. Gratis verzending bij bestellingen boven 79 €.",
+    "Bestellingen die op werkdagen vóór 12.00 uur (CET) binnenkomen, worden dezelfde dag ingepakt en verzonden vanuit ons magazijn. Gratis verzending bij bestellingen boven 79 €.",
   metaTitle: "Verzending & levering – verzendkosten, levertijden en track & trace",
   metaDescription:
     "Verzendkosten en levertijden van Metilde naar Nederland, gratis verzending boven 79 €, track & trace, niet-afgehaalde zendingen en wat er geldt bij een beschadigde levering.",
@@ -304,13 +304,13 @@ const shipping: LegalDoc = {
     { type: "h2", text: "Verwerkingstijd" },
     {
       type: "p",
-      text: "We pakken bestellingen in op werkdagen. Bestellingen die vóór 12.00 uur (Zweedse tijd) binnenkomen, worden dezelfde dag verzonden, latere bestellingen de volgende werkdag. Tijdens acties en rond feestdagen kan het inpakken een dag langer duren.",
+      text: "We pakken bestellingen in op werkdagen. Bestellingen die vóór 12.00 uur (CET) binnenkomen, worden dezelfde dag verzonden, latere bestellingen de volgende werkdag. Tijdens acties en rond feestdagen kan het inpakken een dag langer duren.",
     },
     { type: "h2", text: "Verzendkosten en levertijden" },
     { type: "shippingTable" },
     {
       type: "p",
-      text: "Alle prijzen zijn inclusief btw. We leveren aan adressen in Zweden, Finland, Denemarken en Nederland. Bestellingen naar Nederland gaan met PostNord als brief met track & trace vanuit ons magazijn in Zweden; de levertijd is normaal 3–6 werkdagen. De verzendkosten zijn 8,00 €, en bij bestellingen boven 79 € is de verzending gratis. Abonnementen en bundels worden altijd gratis verzonden. Omdat de zending binnen de EU blijft, betaal je geen douanekosten of invoerheffingen.",
+      text: "Alle prijzen zijn inclusief btw. We leveren aan adressen in Zweden, Finland, Denemarken en Nederland. Bestellingen naar Nederland gaan met PostNord als brief met track & trace vanuit ons magazijn; de levertijd is normaal 3–6 werkdagen. De verzendkosten zijn 8,00 €, en bij bestellingen boven 79 € is de verzending gratis. Abonnementen en bundels worden altijd gratis verzonden. Omdat de zending binnen de EU blijft, betaal je geen douanekosten of invoerheffingen.",
     },
     { type: "h2", text: "Je bestelling volgen" },
     {
@@ -380,7 +380,7 @@ const returns: LegalDoc = {
     { type: "h2", text: "Reclamaties" },
     {
       type: "p",
-      text: "Je hebt drie jaar reclamatierecht voor defecte producten volgens de Zweedse consumentenkoopwet (konsumentköplagen). Meld het defect binnen een redelijke termijn nadat je het hebt ontdekt – binnen twee maanden geldt altijd als redelijk. Stuur foto's mee en het batchnummer dat op het etiket staat.",
+      text: "Je hebt het wettelijke reclamatierecht voor defecte producten volgens het consumentenrecht dat op jou van toepassing is. Meld het defect binnen een redelijke termijn nadat je het hebt ontdekt – binnen twee maanden geldt altijd als redelijk. Stuur foto's mee en het batchnummer dat op het etiket staat.",
     },
     { type: "h2", text: "Uitzonderingen" },
     {
@@ -406,7 +406,7 @@ const sustainability: LegalDoc = {
     "Minder maar betere producten, verpakkingen die gerecycled kunnen worden en een leveranciersketen die we kunnen uitleggen. Zo ziet het er vandaag uit – en hier werken we verder aan.",
   metaTitle: "Duurzaamheid – verpakkingen, verzending en grondstoffen",
   metaDescription:
-    "Zo werkt Metilde aan duurzaamheid: recyclebare verpakkingen, gebundelde verzending vanuit één magazijn in Zweden en gedocumenteerde grondstoffen.",
+    "Zo werkt Metilde aan duurzaamheid: recyclebare verpakkingen, gebundelde verzending vanuit één magazijn en gedocumenteerde grondstoffen.",
   blocks: [
     { type: "h2", text: "Hoe we erover denken" },
     {
@@ -425,7 +425,7 @@ const sustainability: LegalDoc = {
     { type: "h2", text: "Verzending" },
     {
       type: "p",
-      text: "We verzenden vanuit één magazijn in Zweden, bij voorkeur als brief en naar afhaalpunten, omdat gebundelde routes minder kilometers per zending betekenen. Abonnementen kunnen worden samengevoegd tot één levering, zodat meerdere producten samen reizen.",
+      text: "We verzenden vanuit één magazijn, bij voorkeur als brief en naar afhaalpunten, omdat gebundelde routes minder kilometers per zending betekenen. Abonnementen kunnen worden samengevoegd tot één levering, zodat meerdere producten samen reizen.",
     },
     { type: "h2", text: "Grondstoffen en maatschappelijke verantwoordelijkheid" },
     {

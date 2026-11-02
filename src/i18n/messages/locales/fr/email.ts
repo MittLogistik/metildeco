@@ -8,7 +8,7 @@ export const messages: EmailText = {
   renewalWithDate: (d) => `Votre abonnement a été renouvelé. Le prochain colis sera expédié de façon à vous parvenir aux alentours du ${d}.`,
   renewalNoDate: "Votre abonnement a été renouvelé et le colis est en cours de préparation.",
   orderNumber: "Numéro de commande",
-  received: "Nous avons bien reçu votre paiement. Les commandes passées en semaine avant 12 h (heure suédoise) sont expédiées depuis la Suède le jour même.",
+  received: "Nous avons bien reçu votre paiement. Les commandes passées en semaine avant 12 h (CET) sont expédiées le jour même.",
   subscription: "abonnement",
   gift: "cadeau",
   discount: "Remise",

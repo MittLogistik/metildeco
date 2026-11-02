@@ -23,8 +23,8 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function ContactPage() {
   const { locale, r } = await getI18n();
   const t = info[locale].contact;
-  // Svenska öppettider får "(svensk tid)" här; övriga språk har tidszonen i själva texten där den behövs
-  const hours = locale === "sv" ? `${company.hours} (${t.swedishTime})` : hoursFor(locale);
+  // Öppettiderna på sidans språk; utanför Sverige med tidszonen (CET) i texten
+  const hours = hoursFor(locale);
   return (
     <Container className="py-8 sm:py-12">
       <Breadcrumbs items={[{ label: t.title }]} />

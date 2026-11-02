@@ -35,11 +35,11 @@ export const faqGroups: FaqGroup[] = [
       },
       {
         q: "Jak długo trwa dostawa?",
-        a: "Zamówienia złożone w dni robocze do 12:00 (czasu szwedzkiego) wysyłamy tego samego dnia z naszego magazynu w Szwecji. Dostawa do Polski trwa zwykle 3–6 dni roboczych.",
+        a: "Zamówienia złożone w dni robocze do 12:00 (CET) wysyłamy tego samego dnia z naszego magazynu. Dostawa do Polski trwa zwykle 3–6 dni roboczych.",
       },
       {
         q: "Czy dostarczacie do Polski?",
-        a: "Tak. Zamówienia do Polski wysyłamy z naszego magazynu w Szwecji przez PostNord jako list ze śledzeniem. Przesyłka nie opuszcza UE, więc nie płacisz cła ani opłat importowych.",
+        a: "Tak. Zamówienia do Polski wysyłamy z naszego magazynu przez PostNord jako list ze śledzeniem. Przesyłka nie opuszcza UE, więc nie płacisz cła ani opłat importowych.",
       },
       {
         q: "Jak śledzić paczkę?",

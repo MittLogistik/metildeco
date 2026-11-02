@@ -36,7 +36,7 @@ export const messages: CatalogMessages = {
   youSave: "Du sparst",
   bundleFreeShipping: "Kostenloser Versand für dieses Set",
   freeShippingOver: (amount) => `Kostenloser Versand ab ${amount}`,
-  sameDay: "An Werktagen Versand am selben Tag bei Bestellung bis 12:00 Uhr (schwedische Zeit)",
+  sameDay: "An Werktagen Versand am selben Tag bei Bestellung bis 12:00 Uhr (CET)",
   securePayment: "Sicher bezahlen mit",
   description: "Beschreibung",
   moreBundles: "Weitere Sets",

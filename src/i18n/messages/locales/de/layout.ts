@@ -49,7 +49,7 @@ export const messages: LayoutMessages = {
     additivesTitle: "Ohne unnötige Zusätze",
     additivesText: "Extrakt und Kapselhülle – sonst nichts.",
     shippingTitle: (amount) => `Kostenloser Versand ab ${amount}`,
-    shippingText: "An Werktagen bis 12 Uhr (schwedische Zeit) bestellt, am selben Tag verschickt.",
+    shippingText: "An Werktagen bis 12 Uhr (CET) bestellt, am selben Tag verschickt.",
     returnsTitle: "30 Tage Widerrufsrecht",
     returnsText: "Für ungeöffnete Produkte – länger als die gesetzlichen 14 Tage.",
   },

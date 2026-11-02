@@ -7,7 +7,7 @@ export const messages: ProductMessages = {
   inclVat: "incl. VAT",
   soldOut: "Sold out – more on the way",
   lowStock: (n) => `In stock – only ${n} left`,
-  inStock: "In stock – ships the same working day if ordered before 12:00 (Swedish time)",
+  inStock: "In stock – ships the same working day if ordered before 12:00 (CET)",
   shippingFrom: (from, freeOver) => `Shipping from ${from}, free shipping over ${freeOver}.`,
   deliveryTime: (min, max) => `Delivery time ${min}–${max} working days`,
   returnRight: "30-day right of withdrawal",

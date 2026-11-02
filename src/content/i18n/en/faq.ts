@@ -35,11 +35,11 @@ export const faqGroups: FaqGroup[] = [
       },
       {
         q: "How long does delivery take?",
-        a: "Orders placed before 12:00 (Swedish time) on working days are sent the same day from our warehouse in Sweden. Delivery to Ireland normally takes 3–6 working days.",
+        a: "Orders placed before 12:00 (CET) on working days are sent the same day from our warehouse. Delivery to Ireland normally takes 3–6 working days.",
       },
       {
         q: "Do you deliver to Ireland?",
-        a: "Yes. Orders to Ireland are sent with PostNord as a tracked letter from our warehouse in Sweden. As the parcel stays within the EU, there are no customs duties or import charges.",
+        a: "Yes. Orders to Ireland are sent with PostNord as a tracked letter from our warehouse. As the parcel stays within the EU, there are no customs duties or import charges.",
       },
       {
         q: "How do I track my parcel?",

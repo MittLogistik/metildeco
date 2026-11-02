@@ -25,7 +25,7 @@ export default function CareersPage() {
         as="h1"
         eyebrow="Karriär"
         title="Jobba hos oss"
-        intro="Metilde är ett litet svenskt team som bygger rena botaniska extrakt med hög kvalitet. Vi växer i lugn takt och rekryterar sällan – men när vi gör det gör vi det här."
+        intro="Metilde är ett litet team som bygger rena botaniska extrakt med hög kvalitet. Vi växer i lugn takt och rekryterar sällan – men när vi gör det gör vi det här."
         className="mt-6"
       />
       <section className="mt-10 max-w-3xl rounded-card bg-sand-soft p-6 sm:p-8">
