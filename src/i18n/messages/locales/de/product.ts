@@ -9,7 +9,7 @@ export const messages: ProductMessages = {
   lowStock: (n) => `Auf Lager – nur noch ${n} Stück`,
   inStock: "Auf Lager – an Werktagen bis 12 Uhr (CET) bestellt, am selben Tag verschickt",
   shippingFrom: (from, freeOver) => `Versand ab ${from}, kostenloser Versand ab ${freeOver}.`,
-  deliveryTime: (min, max) => `Lieferzeit ${min}–${max} Werktage`,
+  deliveryTime: (min, max) => `Lieferzeit ${min}–${max} Werktage aus unserem Lager in der EU`,
   returnRight: "30 Tage Widerrufsrecht",
   securePayment: "Sicher bezahlen mit",
   summary: "Das Produkt im Überblick",

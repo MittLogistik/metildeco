@@ -151,7 +151,7 @@ const terms: LegalDoc = {
     { type: "shippingTable" },
     {
       type: "p",
-      text: "Les commandes passées un jour ouvré avant 12 h (CET) sont normalement expédiées le jour même depuis notre entrepôt. Les commandes à destination de la France, de la Belgique et du Luxembourg partent avec PostNord en lettre suivie ; le délai de livraison est normalement de 3 à 6 jours ouvrés. Vous recevez un lien de suivi par e-mail dès que l'envoi quitte nos locaux. Pour les colis non retirés, nous facturons les frais réels d'expédition aller et retour.",
+      text: "Les commandes passées un jour ouvré avant 12 h (CET) sont normalement expédiées le jour même depuis notre entrepôt situé dans l'UE. Les commandes à destination de la France, de la Belgique et du Luxembourg partent avec PostNord en lettre suivie ; le délai de livraison est normalement de 3 à 6 jours ouvrés. Vous recevez un lien de suivi par e-mail dès que l'envoi quitte nos locaux. Pour les colis non retirés, nous facturons les frais réels d'expédition aller et retour.",
     },
     { type: "h2", text: "Abonnement" },
     {
@@ -296,7 +296,7 @@ const shipping: LegalDoc = {
   title: "Expédition & livraison",
   updated,
   intro:
-    "Les commandes reçues les jours ouvrés avant 12 h (CET) sont préparées et expédiées le jour même depuis notre entrepôt. Livraison offerte dès 79 € d'achat.",
+    "Les commandes reçues les jours ouvrés avant 12 h (CET) sont préparées et expédiées le jour même depuis notre entrepôt situé dans l'UE. Livraison offerte dès 79 € d'achat.",
   metaTitle: "Expédition & livraison – frais de port, délais et suivi",
   metaDescription:
     "Frais de port et délais de livraison de Metilde vers la France, la Belgique et le Luxembourg, livraison offerte dès 79 €, suivi, colis non retirés et ce qui s'applique en cas de livraison endommagée.",
@@ -310,7 +310,7 @@ const shipping: LegalDoc = {
     { type: "shippingTable" },
     {
       type: "p",
-      text: "Tous les prix s'entendent TVA comprise. Nous livrons notamment en France, en Belgique et au Luxembourg. Les commandes à destination de ces pays partent de notre entrepôt avec PostNord en lettre suivie ; le délai de livraison est normalement de 3 à 6 jours ouvrés. Les frais de port s'élèvent à 8,00 €, et la livraison est offerte pour toute commande supérieure à 79 €. Les abonnements et les packs sont toujours livrés gratuitement. L'envoi restant au sein de l'UE, vous ne payez aucun droit de douane ni frais d'importation.",
+      text: "Tous les prix s'entendent TVA comprise. Nous livrons notamment en France, en Belgique et au Luxembourg. Les commandes à destination de ces pays partent de notre entrepôt situé dans l'UE avec PostNord en lettre suivie ; le délai de livraison est normalement de 3 à 6 jours ouvrés. Les frais de port s'élèvent à 8,00 €, et la livraison est offerte pour toute commande supérieure à 79 €. Les abonnements et les packs sont toujours livrés gratuitement. L'envoi restant au sein de l'UE, vous ne payez aucun droit de douane ni frais d'importation.",
     },
     { type: "h2", text: "Suivre votre commande" },
     {

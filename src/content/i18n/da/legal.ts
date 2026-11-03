@@ -151,7 +151,7 @@ const terms: LegalDoc = {
     { type: "shippingTable" },
     {
       type: "p",
-      text: "Ordrer, der afgives før kl. 12.00 (CET) på en hverdag, sendes normalt samme dag fra vores lager. Ordrer til Danmark sendes med PostNord som sporbart brev, og leveringstiden er normalt 2–5 hverdage. Du får et sporingslink på e-mail, så snart forsendelsen forlader os. For forsendelser, der ikke bliver afhentet, opkræves de faktiske omkostninger til fragt frem og tilbage.",
+      text: "Ordrer, der afgives før kl. 12.00 (CET) på en hverdag, sendes normalt samme dag fra vores lager i EU. Ordrer til Danmark sendes med PostNord som sporbart brev, og leveringstiden er normalt 2–5 hverdage. Du får et sporingslink på e-mail, så snart forsendelsen forlader os. For forsendelser, der ikke bliver afhentet, opkræves de faktiske omkostninger til fragt frem og tilbage.",
     },
     { type: "h2", text: "Abonnement" },
     {
@@ -296,7 +296,7 @@ const shipping: LegalDoc = {
   title: "Fragt & levering",
   updated,
   intro:
-    "Bestillinger, der afgives før kl. 12.00 (CET) på hverdage, pakkes og sendes samme dag fra vores lager. Fri fragt på alle ordrer over 469 kr.",
+    "Bestillinger, der afgives før kl. 12.00 (CET) på hverdage, pakkes og sendes samme dag fra vores lager i EU. Fri fragt på alle ordrer over 469 kr.",
   metaTitle: "Fragt & levering – fragtpriser, leveringstider og sporing",
   metaDescription:
     "Metildes fragtpriser og leveringstider til Danmark, fri fragt over 469 kr., sporing, forsendelser der ikke afhentes, og hvad der gælder ved beskadiget levering.",
@@ -310,7 +310,7 @@ const shipping: LegalDoc = {
     { type: "shippingTable" },
     {
       type: "p",
-      text: "Alle priser er inklusive moms. Vi leverer til adresser i Sverige, Finland og Danmark. Ordrer til Danmark sendes med PostNord som sporbart brev fra vores lager, og leveringstiden er normalt 2–5 hverdage. Fragten koster 46 kr., og der er fri fragt på ordrer over 469 kr. Abonnementer og pakker sendes altid gratis. Da forsendelsen sker inden for EU, kommer der ingen told eller importafgifter.",
+      text: "Alle priser er inklusive moms. Vi leverer til adresser i Sverige, Finland og Danmark. Ordrer til Danmark sendes med PostNord som sporbart brev fra vores lager i EU, og leveringstiden er normalt 2–5 hverdage. Fragten koster 46 kr., og der er fri fragt på ordrer over 469 kr. Abonnementer og pakker sendes altid gratis. Da forsendelsen sker inden for EU, kommer der ingen told eller importafgifter.",
     },
     { type: "h2", text: "Spor din ordre" },
     {

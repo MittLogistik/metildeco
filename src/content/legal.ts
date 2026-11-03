@@ -175,7 +175,7 @@ const terms: LegalDoc = {
     { type: "shippingTable" },
     {
       type: "p",
-      text: "Order som läggs före kl. 12.00 en vardag skickas normalt samma dag från vårt lager. Du får en spårningslänk via e-post så snart paketet lämnar oss. Outlöst paket debiteras den faktiska kostnaden för frakt tur och retur.",
+      text: "Order som läggs före kl. 12.00 en vardag skickas normalt samma dag från vårt lager i EU. Du får en spårningslänk via e-post så snart paketet lämnar oss. Outlöst paket debiteras den faktiska kostnaden för frakt tur och retur.",
     },
     { type: "h2", text: "Prenumeration" },
     {
@@ -324,7 +324,7 @@ const shipping: LegalDoc = {
   title: "Frakt & leverans",
   updated,
   intro:
-    "Beställningar lagda före kl. 12.00 på vardagar packas och skickas samma dag från vårt lager. Fri frakt på alla ordrar över 499 kr.",
+    "Beställningar lagda före kl. 12.00 på vardagar packas och skickas samma dag från vårt lager i EU. Fri frakt på alla ordrar över 499 kr.",
   metaTitle: "Frakt & leverans – fraktpriser, leveranstider och spårning",
   metaDescription:
     "Metildes fraktpriser och leveranstider i Sverige, fri frakt över 499 kr, spårning, outlösta paket och vad som gäller vid skadad leverans.",

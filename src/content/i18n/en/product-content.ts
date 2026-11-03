@@ -8,7 +8,7 @@ import type { ProductContent } from "@/content/product-content";
 const packaging = {
   heading: "Packaging and delivery",
   body:
-    "The capsules are packed in a plastic jar with a screw lid that keeps the contents dry between doses. Every order ships from our warehouse.",
+    "The capsules are packed in a plastic jar with a screw lid that keeps the contents dry between doses. Every order ships from our warehouse in the EU.",
 };
 
 const noExceed = "Do not exceed the recommended daily dose.";

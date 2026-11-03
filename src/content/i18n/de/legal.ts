@@ -151,7 +151,7 @@ const terms: LegalDoc = {
     { type: "shippingTable" },
     {
       type: "p",
-      text: "Bestellungen, die an einem Werktag vor 12:00 Uhr (CET) eingehen, verschicken wir normalerweise noch am selben Tag aus unserem Lager. Bestellungen nach Deutschland, Österreich und Luxemburg gehen mit PostNord als Brief mit Sendungsverfolgung; die Lieferzeit beträgt normalerweise 3–6 Werktage. Du erhältst einen Link zur Sendungsverfolgung per E-Mail, sobald die Sendung uns verlässt. Für nicht abgeholte Sendungen berechnen wir die tatsächlichen Versandkosten für Hin- und Rückweg.",
+      text: "Bestellungen, die an einem Werktag vor 12:00 Uhr (CET) eingehen, verschicken wir normalerweise noch am selben Tag aus unserem Lager in der EU. Bestellungen nach Deutschland, Österreich und Luxemburg gehen mit PostNord als Brief mit Sendungsverfolgung; die Lieferzeit beträgt normalerweise 3–6 Werktage. Du erhältst einen Link zur Sendungsverfolgung per E-Mail, sobald die Sendung uns verlässt. Für nicht abgeholte Sendungen berechnen wir die tatsächlichen Versandkosten für Hin- und Rückweg.",
     },
     { type: "h2", text: "Abo" },
     {
@@ -296,7 +296,7 @@ const shipping: LegalDoc = {
   title: "Versand & Lieferung",
   updated,
   intro:
-    "Bestellungen, die an Werktagen vor 12:00 Uhr (CET) eingehen, werden noch am selben Tag verpackt und aus unserem Lager verschickt. Kostenloser Versand ab einem Bestellwert von 79 €.",
+    "Bestellungen, die an Werktagen vor 12:00 Uhr (CET) eingehen, werden noch am selben Tag verpackt und aus unserem Lager in der EU verschickt. Kostenloser Versand ab einem Bestellwert von 79 €.",
   metaTitle: "Versand & Lieferung – Versandkosten, Lieferzeiten und Sendungsverfolgung",
   metaDescription:
     "Versandkosten und Lieferzeiten von Metilde nach Deutschland, Österreich und Luxemburg, kostenloser Versand ab 79 €, Sendungsverfolgung, nicht abgeholte Sendungen und was bei beschädigter Lieferung gilt.",
@@ -310,7 +310,7 @@ const shipping: LegalDoc = {
     { type: "shippingTable" },
     {
       type: "p",
-      text: "Alle Preise enthalten die Mehrwertsteuer. Über diese Seite liefern wir an Adressen in Deutschland, Österreich und Luxemburg. Die Bestellungen gehen mit PostNord als Brief mit Sendungsverfolgung aus unserem Lager; die Lieferzeit beträgt normalerweise 3–6 Werktage. Der Versand kostet 8,00 €, ab einem Bestellwert von 79 € ist er kostenlos. Abos und Sets werden immer kostenlos verschickt. Da die Sendung innerhalb der EU bleibt, zahlst du keine Zölle oder Einfuhrabgaben.",
+      text: "Alle Preise enthalten die Mehrwertsteuer. Über diese Seite liefern wir an Adressen in Deutschland, Österreich und Luxemburg. Die Bestellungen gehen mit PostNord als Brief mit Sendungsverfolgung aus unserem Lager in der EU; die Lieferzeit beträgt normalerweise 3–6 Werktage. Der Versand kostet 8,00 €, ab einem Bestellwert von 79 € ist er kostenlos. Abos und Sets werden immer kostenlos verschickt. Da die Sendung innerhalb der EU bleibt, zahlst du keine Zölle oder Einfuhrabgaben.",
     },
     { type: "h2", text: "Deine Bestellung verfolgen" },
     {

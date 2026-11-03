@@ -8,7 +8,7 @@ import type { ProductContent } from "@/content/product-content";
 const packaging = {
   heading: "Pakkaus ja toimitus",
   body:
-    "Kapselit pakataan kierrekorkilliseen muovipurkkiin, joka pitää sisällön kuivana annosten välillä. Jokainen tilaus lähetetään varastostamme.",
+    "Kapselit pakataan kierrekorkilliseen muovipurkkiin, joka pitää sisällön kuivana annosten välillä. Jokainen tilaus lähetetään EU:ssa sijaitsevasta varastostamme.",
 };
 
 export const productContent: Record<string, ProductContent> = {

@@ -9,7 +9,7 @@ export const messages: ProductMessages = {
   lowStock: (n) => `En stock – plus que ${n}`,
   inStock: "En stock – expédié le jour même pour toute commande passée en semaine avant 12 h (CET)",
   shippingFrom: (from, freeOver) => `Livraison à partir de ${from}, offerte dès ${freeOver}.`,
-  deliveryTime: (min, max) => `Délai de livraison ${min}–${max} jours ouvrés`,
+  deliveryTime: (min, max) => `Délai de livraison ${min}–${max} jours ouvrés depuis notre entrepôt situé dans l'UE`,
   returnRight: "30 jours de droit de rétractation",
   securePayment: "Paiement sécurisé avec",
   summary: "Le produit en bref",

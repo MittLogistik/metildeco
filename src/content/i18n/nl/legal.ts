@@ -151,7 +151,7 @@ const terms: LegalDoc = {
     { type: "shippingTable" },
     {
       type: "p",
-      text: "Bestellingen die op een werkdag vóór 12.00 uur (CET) worden geplaatst, versturen we normaal gesproken dezelfde dag vanuit ons magazijn. Bestellingen naar Nederland gaan met PostNord als brief met track & trace; de levertijd is normaal 3–6 werkdagen. Je ontvangt een track & trace-link per e-mail zodra de zending bij ons vertrekt. Voor zendingen die niet worden afgehaald, rekenen we de werkelijke verzendkosten heen en terug.",
+      text: "Bestellingen die op een werkdag vóór 12.00 uur (CET) worden geplaatst, versturen we normaal gesproken dezelfde dag vanuit ons magazijn in de EU. Bestellingen naar Nederland gaan met PostNord als brief met track & trace; de levertijd is normaal 3–6 werkdagen. Je ontvangt een track & trace-link per e-mail zodra de zending bij ons vertrekt. Voor zendingen die niet worden afgehaald, rekenen we de werkelijke verzendkosten heen en terug.",
     },
     { type: "h2", text: "Abonnement" },
     {
@@ -296,7 +296,7 @@ const shipping: LegalDoc = {
   title: "Verzending & levering",
   updated,
   intro:
-    "Bestellingen die op werkdagen vóór 12.00 uur (CET) binnenkomen, worden dezelfde dag ingepakt en verzonden vanuit ons magazijn. Gratis verzending bij bestellingen boven 79 €.",
+    "Bestellingen die op werkdagen vóór 12.00 uur (CET) binnenkomen, worden dezelfde dag ingepakt en verzonden vanuit ons magazijn in de EU. Gratis verzending bij bestellingen boven 79 €.",
   metaTitle: "Verzending & levering – verzendkosten, levertijden en track & trace",
   metaDescription:
     "Verzendkosten en levertijden van Metilde naar Nederland, gratis verzending boven 79 €, track & trace, niet-afgehaalde zendingen en wat er geldt bij een beschadigde levering.",
@@ -310,7 +310,7 @@ const shipping: LegalDoc = {
     { type: "shippingTable" },
     {
       type: "p",
-      text: "Alle prijzen zijn inclusief btw. We leveren aan adressen in Zweden, Finland, Denemarken en Nederland. Bestellingen naar Nederland gaan met PostNord als brief met track & trace vanuit ons magazijn; de levertijd is normaal 3–6 werkdagen. De verzendkosten zijn 8,00 €, en bij bestellingen boven 79 € is de verzending gratis. Abonnementen en bundels worden altijd gratis verzonden. Omdat de zending binnen de EU blijft, betaal je geen douanekosten of invoerheffingen.",
+      text: "Alle prijzen zijn inclusief btw. We leveren aan adressen in Zweden, Finland, Denemarken en Nederland. Bestellingen naar Nederland gaan met PostNord als brief met track & trace vanuit ons magazijn in de EU; de levertijd is normaal 3–6 werkdagen. De verzendkosten zijn 8,00 €, en bij bestellingen boven 79 € is de verzending gratis. Abonnementen en bundels worden altijd gratis verzonden. Omdat de zending binnen de EU blijft, betaal je geen douanekosten of invoerheffingen.",
     },
     { type: "h2", text: "Je bestelling volgen" },
     {

@@ -9,7 +9,7 @@ export const messages: ProductMessages = {
   lowStock: (n) => `In stock – only ${n} left`,
   inStock: "In stock – ships the same working day if ordered before 12:00 (CET)",
   shippingFrom: (from, freeOver) => `Shipping from ${from}, free shipping over ${freeOver}.`,
-  deliveryTime: (min, max) => `Delivery time ${min}–${max} working days`,
+  deliveryTime: (min, max) => `Delivery time ${min}–${max} working days from our warehouse in the EU`,
   returnRight: "30-day right of withdrawal",
   securePayment: "Secure payment with",
   summary: "Product at a glance",

@@ -35,11 +35,11 @@ export const faqGroups: FaqGroup[] = [
       },
       {
         q: "Hvor lang er leveringstiden?",
-        a: "Ordrer afgivet før kl. 12.00 (CET) på hverdage sendes samme dag fra vores lager. Leveringstiden til Danmark er normalt 2–5 hverdage.",
+        a: "Ordrer afgivet før kl. 12.00 (CET) på hverdage sendes samme dag fra vores lager i EU. Leveringstiden til Danmark er normalt 2–5 hverdage.",
       },
       {
         q: "Leverer I til Danmark?",
-        a: "Ja. Vi leverer til adresser i Sverige, Finland og Danmark. Ordrer til Danmark sendes med PostNord som sporbart brev fra vores lager. Da forsendelsen sker inden for EU, kommer der ingen told eller importafgifter.",
+        a: "Ja. Vi leverer til adresser i Sverige, Finland og Danmark. Ordrer til Danmark sendes med PostNord som sporbart brev fra vores lager i EU. Da forsendelsen sker inden for EU, kommer der ingen told eller importafgifter.",
       },
       {
         q: "Hvordan sporer jeg min forsendelse?",

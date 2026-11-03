@@ -151,7 +151,7 @@ const terms: LegalDoc = {
     { type: "shippingTable" },
     {
       type: "p",
-      text: "Orders placed before 12:00 (CET) on a working day are normally dispatched the same day from our warehouse. Orders to Ireland are sent with PostNord as a tracked letter; delivery normally takes 3–6 working days. You will receive a tracking link by email as soon as the parcel leaves us. For parcels that are not collected, we charge the actual cost of shipping there and back.",
+      text: "Orders placed before 12:00 (CET) on a working day are normally dispatched the same day from our warehouse in the EU. Orders to Ireland are sent with PostNord as a tracked letter; delivery normally takes 3–6 working days. You will receive a tracking link by email as soon as the parcel leaves us. For parcels that are not collected, we charge the actual cost of shipping there and back.",
     },
     { type: "h2", text: "Subscription" },
     {
@@ -296,7 +296,7 @@ const shipping: LegalDoc = {
   title: "Shipping & delivery",
   updated,
   intro:
-    "Orders placed before 12:00 (CET) on working days are packed and dispatched the same day from our warehouse. Free shipping on orders over €79.",
+    "Orders placed before 12:00 (CET) on working days are packed and dispatched the same day from our warehouse in the EU. Free shipping on orders over €79.",
   metaTitle: "Shipping & delivery – shipping costs, delivery times and tracking",
   metaDescription:
     "Metilde's shipping costs and delivery times to Ireland, free shipping over €79, tracking, uncollected parcels and what applies if a delivery is damaged.",
@@ -310,7 +310,7 @@ const shipping: LegalDoc = {
     { type: "shippingTable" },
     {
       type: "p",
-      text: "All prices include VAT. From this website we deliver to addresses in Ireland. Orders to Ireland are sent with PostNord as a tracked letter from our warehouse; delivery normally takes 3–6 working days. Shipping costs €8.00, and orders over €79 ship free. Subscriptions and bundles always ship free. As the parcel stays within the EU, you pay no customs duties or import charges.",
+      text: "All prices include VAT. From this website we deliver to addresses in Ireland. Orders to Ireland are sent with PostNord as a tracked letter from our warehouse in the EU; delivery normally takes 3–6 working days. Shipping costs €8.00, and orders over €79 ship free. Subscriptions and bundles always ship free. As the parcel stays within the EU, you pay no customs duties or import charges.",
     },
     { type: "h2", text: "Tracking your order" },
     {

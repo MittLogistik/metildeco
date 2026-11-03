@@ -151,7 +151,7 @@ const terms: LegalDoc = {
     { type: "shippingTable" },
     {
       type: "p",
-      text: "Zamówienia złożone w dzień roboczy przed godziną 12:00 zwykle wysyłamy tego samego dnia z naszego magazynu. Zamówienia do Polski wysyłamy przez PostNord jako przesyłkę listową z możliwością śledzenia; czas dostawy wynosi zwykle 3–6 dni roboczych. Link do śledzenia przesyłki otrzymasz e-mailem, gdy tylko paczka od nas wyjedzie. Za przesyłki nieodebrane pobieramy faktyczny koszt wysyłki w obie strony.",
+      text: "Zamówienia złożone w dzień roboczy przed godziną 12:00 zwykle wysyłamy tego samego dnia z naszego magazynu w UE. Zamówienia do Polski wysyłamy przez PostNord jako przesyłkę listową z możliwością śledzenia; czas dostawy wynosi zwykle 3–6 dni roboczych. Link do śledzenia przesyłki otrzymasz e-mailem, gdy tylko paczka od nas wyjedzie. Za przesyłki nieodebrane pobieramy faktyczny koszt wysyłki w obie strony.",
     },
     { type: "h2", text: "Subskrypcja" },
     {
@@ -296,7 +296,7 @@ const shipping: LegalDoc = {
   title: "Wysyłka i dostawa",
   updated,
   intro:
-    "Zamówienia złożone w dni robocze przed godziną 12:00 pakujemy i wysyłamy tego samego dnia z naszego magazynu. Darmowa wysyłka przy zamówieniach powyżej 339 zł.",
+    "Zamówienia złożone w dni robocze przed godziną 12:00 pakujemy i wysyłamy tego samego dnia z naszego magazynu w UE. Darmowa wysyłka przy zamówieniach powyżej 339 zł.",
   metaTitle: "Wysyłka i dostawa – koszty, czas dostawy i śledzenie",
   metaDescription:
     "Koszty i czas dostawy Metilde do Polski, darmowa wysyłka powyżej 339 zł, śledzenie przesyłki, nieodebrane paczki i co zrobić w razie uszkodzenia przesyłki.",
@@ -310,7 +310,7 @@ const shipping: LegalDoc = {
     { type: "shippingTable" },
     {
       type: "p",
-      text: "Wszystkie ceny zawierają VAT. W tym sklepie dostarczamy zamówienia na adresy w Polsce. Zamówienia do Polski wysyłamy przez PostNord jako przesyłkę listową z możliwością śledzenia, z naszego magazynu; czas dostawy wynosi zwykle 3–6 dni roboczych. Wysyłka kosztuje 34 zł, a przy zamówieniach powyżej 339 zł jest darmowa. Subskrypcje i zestawy zawsze wysyłamy za darmo. Przesyłka nie opuszcza UE, więc nie płacisz cła ani opłat importowych.",
+      text: "Wszystkie ceny zawierają VAT. W tym sklepie dostarczamy zamówienia na adresy w Polsce. Zamówienia do Polski wysyłamy przez PostNord jako przesyłkę listową z możliwością śledzenia, z naszego magazynu w UE; czas dostawy wynosi zwykle 3–6 dni roboczych. Wysyłka kosztuje 34 zł, a przy zamówieniach powyżej 339 zł jest darmowa. Subskrypcje i zestawy zawsze wysyłamy za darmo. Przesyłka nie opuszcza UE, więc nie płacisz cła ani opłat importowych.",
     },
     { type: "h2", text: "Śledzenie zamówienia" },
     {

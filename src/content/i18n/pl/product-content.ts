@@ -8,7 +8,7 @@ import type { ProductContent } from "@/content/product-content";
 const packaging = {
   heading: "Opakowanie i dostawa",
   body:
-    "Kapsułki pakujemy w plastikowy słoik z zakrętką, który utrzymuje zawartość suchą między kolejnymi dawkami. Każde zamówienie wysyłamy z naszego magazynu.",
+    "Kapsułki pakujemy w plastikowy słoik z zakrętką, który utrzymuje zawartość suchą między kolejnymi dawkami. Każde zamówienie wysyłamy z naszego magazynu w UE.",
 };
 
 const noExceed = "Nie przekraczaj zalecanej dziennej porcji.";

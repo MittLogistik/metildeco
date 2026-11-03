@@ -9,7 +9,7 @@ export const messages: ProductMessages = {
   lowStock: (n: number) => `Dostępny – ostatnie ${n} szt.`,
   inStock: "Dostępny – zamówienia złożone w dni robocze do 12:00 (CET) wysyłamy tego samego dnia",
   shippingFrom: (from: string, freeOver: string) => `Dostawa od ${from}, darmowa dostawa od ${freeOver}.`,
-  deliveryTime: (min: number, max: number) => `Czas dostawy ${min}–${max} dni roboczych`,
+  deliveryTime: (min: number, max: number) => `Czas dostawy ${min}–${max} dni roboczych z naszego magazynu w UE`,
   returnRight: "30 dni na odstąpienie od umowy",
   securePayment: "Bezpieczna płatność przez",
   summary: "Produkt w skrócie",

@@ -35,11 +35,11 @@ export const faqGroups: FaqGroup[] = [
       },
       {
         q: "Kuinka kauan toimitus kestää?",
-        a: "Arkipäivisin ennen klo 12.00 (CET) tehdyt tilaukset lähetetään samana päivänä varastostamme. Toimitus Suomeen kestää yleensä 2–5 arkipäivää.",
+        a: "Arkipäivisin ennen klo 12.00 (CET) tehdyt tilaukset lähetetään samana päivänä EU:ssa sijaitsevasta varastostamme. Toimitus Suomeen kestää yleensä 2–5 arkipäivää.",
       },
       {
         q: "Mihin maihin toimitatte?",
-        a: "Toimitamme Ruotsiin, Suomeen ja Tanskaan. Suomeen tilaukset lähetetään PostNordin kautta kirjeenä seurannalla varastostamme. EU:n sisäisistä toimituksista ei peritä tulleja eikä tuontimaksuja.",
+        a: "Toimitamme Ruotsiin, Suomeen ja Tanskaan. Suomeen tilaukset lähetetään PostNordin kautta kirjeenä seurannalla EU:ssa sijaitsevasta varastostamme. EU:n sisäisistä toimituksista ei peritä tulleja eikä tuontimaksuja.",
       },
       {
         q: "Miten seuraan pakettiani?",

@@ -35,11 +35,11 @@ export const faqGroups: FaqGroup[] = [
       },
       {
         q: "Wie lange dauert die Lieferung?",
-        a: "Bestellungen, die an Werktagen bis 12:00 Uhr (CET) eingehen, verschicken wir noch am selben Tag aus unserem Lager. Die Lieferzeit nach Deutschland, Österreich und Luxemburg beträgt normalerweise 3–6 Werktage.",
+        a: "Bestellungen, die an Werktagen bis 12:00 Uhr (CET) eingehen, verschicken wir noch am selben Tag aus unserem Lager in der EU. Die Lieferzeit nach Deutschland, Österreich und Luxemburg beträgt normalerweise 3–6 Werktage.",
       },
       {
         q: "Liefert ihr nach Deutschland, Österreich und Luxemburg?",
-        a: "Ja. Bestellungen nach Deutschland, Österreich und Luxemburg gehen mit PostNord als Brief mit Sendungsverfolgung aus unserem Lager. Da die Sendung innerhalb der EU bleibt, zahlst du keinen Zoll und keine Einfuhrabgaben.",
+        a: "Ja. Bestellungen nach Deutschland, Österreich und Luxemburg gehen mit PostNord als Brief mit Sendungsverfolgung aus unserem Lager in der EU. Da die Sendung innerhalb der EU bleibt, zahlst du keinen Zoll und keine Einfuhrabgaben.",
       },
       {
         q: "Wie verfolge ich mein Paket?",

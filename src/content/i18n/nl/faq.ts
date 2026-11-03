@@ -35,11 +35,11 @@ export const faqGroups: FaqGroup[] = [
       },
       {
         q: "Hoe lang is de levertijd?",
-        a: "Bestellingen die op werkdagen vóór 12.00 uur (CET) worden geplaatst, versturen we dezelfde dag vanuit ons magazijn. De levertijd naar Nederland is normaal 3–6 werkdagen.",
+        a: "Bestellingen die op werkdagen vóór 12.00 uur (CET) worden geplaatst, versturen we dezelfde dag vanuit ons magazijn in de EU. De levertijd naar Nederland is normaal 3–6 werkdagen.",
       },
       {
         q: "Leveren jullie in Nederland?",
-        a: "Ja. We leveren aan adressen in Zweden, Finland, Denemarken en Nederland. Bestellingen naar Nederland gaan met PostNord als brief met track & trace vanuit ons magazijn. Omdat de zending binnen de EU blijft, betaal je geen douanekosten of invoerheffingen.",
+        a: "Ja. We leveren aan adressen in Zweden, Finland, Denemarken en Nederland. Bestellingen naar Nederland gaan met PostNord als brief met track & trace vanuit ons magazijn in de EU. Omdat de zending binnen de EU blijft, betaal je geen douanekosten of invoerheffingen.",
       },
       {
         q: "Hoe volg ik mijn zending?",

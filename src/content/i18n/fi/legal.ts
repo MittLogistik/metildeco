@@ -148,7 +148,7 @@ const terms: LegalDoc = {
     { type: "shippingTable" },
     {
       type: "p",
-      text: "Arkipäivisin ennen klo 12.00 (CET) tehdyt tilaukset lähetetään yleensä samana päivänä varastostamme. Suomeen tilaukset lähetetään PostNordin kautta kirjeenä seurannalla, ja toimitus kestää yleensä 2–5 arkipäivää. Saat seurantalinkin sähköpostitse heti, kun lähetys on lähtenyt meiltä. Noutamatta jätetystä lähetyksestä veloitamme todelliset meno- ja paluukuljetuksen kustannukset.",
+      text: "Arkipäivisin ennen klo 12.00 (CET) tehdyt tilaukset lähetetään yleensä samana päivänä EU:ssa sijaitsevasta varastostamme. Suomeen tilaukset lähetetään PostNordin kautta kirjeenä seurannalla, ja toimitus kestää yleensä 2–5 arkipäivää. Saat seurantalinkin sähköpostitse heti, kun lähetys on lähtenyt meiltä. Noutamatta jätetystä lähetyksestä veloitamme todelliset meno- ja paluukuljetuksen kustannukset.",
     },
     { type: "h2", text: "Kestotilaus" },
     {
@@ -296,7 +296,7 @@ const shipping: LegalDoc = {
   title: "Toimitus",
   updated,
   intro:
-    "Arkipäivisin ennen klo 12.00 (CET) tehdyt tilaukset pakataan ja lähetetään samana päivänä varastostamme. Ilmainen toimitus yli 65 € tilauksille.",
+    "Arkipäivisin ennen klo 12.00 (CET) tehdyt tilaukset pakataan ja lähetetään samana päivänä EU:ssa sijaitsevasta varastostamme. Ilmainen toimitus yli 65 € tilauksille.",
   metaTitle: "Toimitus – toimituskulut, toimitusajat ja seuranta",
   metaDescription:
     "Metilden toimituskulut ja toimitusajat Suomeen, ilmainen toimitus yli 65 € tilauksille, lähetysten seuranta, noutamattomat lähetykset ja vahingoittuneet toimitukset.",
@@ -310,7 +310,7 @@ const shipping: LegalDoc = {
     { type: "shippingTable" },
     {
       type: "p",
-      text: "Kaikki hinnat sisältävät arvonlisäveron. Toimitamme Ruotsiin, Suomeen ja Tanskaan. Suomeen tilaukset lähetetään varastostamme PostNordin kautta kirjeenä seurannalla, ja toimitus kestää yleensä 2–5 arkipäivää. Toimitus Suomeen maksaa 6,50 €, ja yli 65 € tilaukset toimitetaan ilmaiseksi. Kestotilaukset ja tuotepaketit toimitetaan aina ilmaiseksi. EU:n sisäisistä toimituksista ei peritä tulleja eikä tuontimaksuja.",
+      text: "Kaikki hinnat sisältävät arvonlisäveron. Toimitamme Ruotsiin, Suomeen ja Tanskaan. Suomeen tilaukset lähetetään EU:ssa sijaitsevasta varastostamme PostNordin kautta kirjeenä seurannalla, ja toimitus kestää yleensä 2–5 arkipäivää. Toimitus Suomeen maksaa 6,50 €, ja yli 65 € tilaukset toimitetaan ilmaiseksi. Kestotilaukset ja tuotepaketit toimitetaan aina ilmaiseksi. EU:n sisäisistä toimituksista ei peritä tulleja eikä tuontimaksuja.",
     },
     { type: "h2", text: "Seuraa tilaustasi" },
     {
