@@ -292,6 +292,15 @@ export default async function ProductPage({ params }: PageProps<"/[lang]/produkt
                       <dd className="font-medium">{s.value}</dd>
                     </div>
                   ))}
+                  {/* Skick och vad som ingår – krav i Microsoft Merchant Center. */}
+                  <div className="grid grid-cols-[minmax(0,1fr)_minmax(0,1.4fr)] gap-4 py-3 text-sm">
+                    <dt className="text-muted">{t.included}</dt>
+                    <dd className="font-medium">{t.includedPack(product.name.split("|")[1]?.trim() ?? "", product.name)}</dd>
+                  </div>
+                  <div className="grid grid-cols-[minmax(0,1fr)_minmax(0,1.4fr)] gap-4 py-3 text-sm">
+                    <dt className="text-muted">{t.condition}</dt>
+                    <dd className="font-medium">{t.conditionNew}</dd>
+                  </div>
                   {product.sku ? (
                     <div className="grid grid-cols-[minmax(0,1fr)_minmax(0,1.4fr)] gap-4 py-3 text-sm">
                       <dt className="text-muted">{t.sku}</dt>
