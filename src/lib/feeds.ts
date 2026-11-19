@@ -101,6 +101,29 @@ const shipping = (price: number, alwaysFree: boolean, c: Ctx): string => {
     .join("");
 };
 
+/**
+ * Etiketter för budgivning i Google Ads: custom_label_0 = paket/singel,
+ * custom_label_1 = produktlinje ("tongkat" för allt med Tongkat Ali, annars "ovrigt").
+ */
+const labels = (bundle: boolean, slugs: string[]) =>
+  [tag("g:custom_label_0", bundle ? "paket" : "singel"), tag("g:custom_label_1", slugs.some((s) => s.includes("tongkat")) ? "tongkat" : "ovrigt")].join("\n");
+
+const baseName = (p: Product) => p.name.split("|")[0]!.trim();
+
+/**
+ * Shopping matchar sökningar främst mot titeln. Ett paket vars namn inte nämner någon av
+ * produkterna ("Tag- & Abend-Set") får innehållet efter ett tankstreck; paket som redan
+ * nämner dem (t.ex. "Tongkat Ali Extract Duo") lämnas som de är.
+ */
+const bundleTitle = (b: Bundle): string => {
+  const names = [...new Set(b.items.map((i) => baseName(i.product)))];
+  const lower = b.name.toLowerCase();
+  const mentions = names.some((n) => lower.includes(n.split(/\s+/).slice(0, 2).join(" ").toLowerCase()));
+  if (mentions || names.length === 0) return clip(b.name, 150);
+  const list = names.length > 1 ? `${names.slice(0, -1).join(", ")} & ${names.at(-1)}` : names[0]!;
+  return clip(`${b.name} – ${list}`, 150);
+};
+
 const productItem = (p: Product, c: Ctx): string => {
   const images = imagesFor(p).map(abs);
   const onSale = p.oldPrice !== null && p.oldPrice > p.price;
@@ -125,6 +148,7 @@ ${tag("g:product_type", p.category)}
 ${p.variant ? tag("g:item_group_id", p.variant.group) : ""}
 ${p.weightGrams ? tag("g:shipping_weight", `${p.weightGrams} g`) : ""}
 ${unitPricing(unitCount(p))}
+${labels(false, [p.slug])}
 ${tag("g:adult", "no")}
 </item>`;
 };
@@ -133,7 +157,7 @@ const bundleItem = (b: Bundle, c: Ctx): string => {
   const images = b.images.map(abs);
   return `<item>
 ${tag("g:id", b.sku ?? `paket-${b.slug}`)}
-${tag("title", clip(b.name, 150))}
+${tag("title", bundleTitle(b))}
 ${tag("description", clip([b.short, ...b.description, `${feedText[c.locale].contains}: ${b.items.map((i) => `${i.qty} × ${i.product.name}`).join(", ")}.`].join("\n\n"), 5000))}
 ${tag("link", abs(routesOf(c.locale).bundle(b.slug)))}
 ${tag("g:image_link", images[0])}
@@ -149,6 +173,7 @@ ${tag("g:product_type", feedText[c.locale].bundleType)}
 ${tag("g:is_bundle", "yes")}
 ${b.freeShipping ? tag("g:shipping_label", "paket") : ""}
 ${unitPricing(bundleCount(b))}
+${labels(true, b.items.map((i) => i.product.slug))}
 ${tag("g:adult", "no")}
 </item>`;
 };

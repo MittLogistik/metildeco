@@ -58,6 +58,7 @@ quiz, presentkort, spåra order, mitt konto, samarbeten/jobba hos oss, fler spr�
 - **gtag-kön måste få `arguments`-objekt**, inte arrayer (`dataLayer.push(arguments)` som i Googles snippet). Före 2026-09-30 pushades arrayer och inga händelser nådde Google.
 - Köp skickas från tacksidan (`GooglePurchase`) som `conversion` med `send_to = <tagg-id>/<NEXT_PUBLIC_GOOGLE_ADS_PURCHASE_LABEL>`, ordernummer som `transaction_id` och totalbelopp i SEK. Utan etikett skickas bara standardhändelsen `purchase`. Förbättrade konverteringar är på i Google Ads: tacksidan ger kundens e-post som `user_data` (bara med samtycke), taggen hashar den i webbläsaren. Konverteringen skickas även utan samtycke, då som cookiefri signal. Etiketten hämtas i Google Ads under Mål → Konverteringar → Köp → "Ställ in manuellt via kod".
 - Googles egen "Testa installation" hittar inte taggen (crawlern ger inget samtycke). Testa i ett riktigt fönster efter Acceptera alla, med Tag Assistant.
+- Google-feederna har `custom_label_0` (paket/singel) och `custom_label_1` (tongkat/ovrigt) för budgivning; paket vars namn inte nämner någon ingående produkt får innehållet i titeln (`bundleTitle`).
 - Google-feeden (`/feeds/google.xml`) skickar jämförpris: `unit_pricing_measure` = antal kapslar (`unitCount` från namnet) och `unit_pricing_base_measure` = 1 ct. Paket = summan av innehållet.
 
 ## Microsoft Advertising (UET-tagg)
