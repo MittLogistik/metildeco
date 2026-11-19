@@ -49,11 +49,12 @@ const put = async (path: string, body: Buffer, contentType: string) => {
   if (up.error) throw new Error(`Uppladdning ${path}: ${up.error.message}`);
   return db.storage.from("product-media").getPublicUrl(path).data.publicUrl;
 };
-const videoUrl = await put(`${base}.mp4`, fs.readFileSync(file), "video/mp4");
+// Omslaget i lagringen (granskaren och admin behöver en adress); videon går direkt till Meta,
+// eftersom bucketen inte tar så stora filer.
 const thumbnailUrl = await put(`${base}-thumb.jpg`, thumb, "image/jpeg");
-console.log("Video:", videoUrl, "\nOmslag:", thumbnailUrl);
+console.log("Omslag:", thumbnailUrl);
 
-const { id: videoId } = await meta.uploadVideo(videoUrl, `${sale.id}-${slug}`);
+const { id: videoId } = await meta.uploadVideoFile(fs.readFileSync(file), `${slug}.mp4`, `${sale.id}-${slug}`);
 console.log("Meta-video", videoId, "– väntar på bearbetning…");
 await meta.waitForVideo(videoId);
 const thumbHash = await meta.uploadImage(thumbnailUrl, `${sale.id}-${slug}-video-thumb`);

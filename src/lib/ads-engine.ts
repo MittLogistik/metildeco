@@ -733,23 +733,54 @@ export async function buildSaleCampaign(o: SaleCampaignOptions): Promise<BuildRe
   });
   await log([{ decision: { level: "campaign", id: campaign.id, name: `${SALE_PREFIX}${label}`, action: "note", reason: `${sale.id}: kampanj för ${label} skapad (pausad), budget ${o.dailyBudget}/dag, slutar ${sale.end}`, campaignId: campaign.id }, applied: true, source }]);
 
+  const ads = await saleImageAds({ locale, campaignId: campaign.id, adsetId: adset.id, linkBase: o.linkBase, notes, source }, products, o.images);
+  return { campaignId: campaign.id, adsetId: adset.id, ads, notes };
+}
+
+/** Marknadens befintliga kampanjannonsgrupp (skapad av buildSaleCampaign), hittad på namnet. */
+async function findSaleAdSet(locale: Locale) {
+  const name = `${SALE_PREFIX}${countriesOf(locale).join("+")} · ${markets[locale].languageName}`;
+  const tree = await meta.listTree();
+  const adset = tree.flatMap((c) => (c.adsets?.data ?? []).map((a) => ({ ...a, campaign: c }))).find((a) => a.name === name);
+  if (!adset) throw new Error(`Hittar ingen annonsgrupp "${name}" – skapa marknadens kampanj först.`);
+  return adset;
+}
+
+/** Lägger bildannonser för fler produkter i marknadens befintliga kampanjannonsgrupp. */
+export async function addSaleImageAds(o: Omit<SaleCampaignOptions, "dailyBudget">): Promise<BuildResult> {
+  if (!activeCampaign()) throw new Error("Ingen kampanj pågår.");
+  const catalog = await getCatalog(o.locale);
+  const products = Object.keys(o.images).map((slug) => {
+    const p = catalog.products.find((x) => x.slug === slug);
+    if (!p) throw new Error(`${slug} finns inte i katalogen för ${o.locale}.`);
+    if (!isInStock(p)) throw new Error(`${slug} är slut i lager.`);
+    return p;
+  });
+  const adset = await findSaleAdSet(o.locale);
+  const notes: string[] = [];
+  const ads = await saleImageAds({ locale: o.locale, campaignId: adset.campaign.id, adsetId: adset.id, linkBase: o.linkBase, notes, source: o.source ?? "admin" }, products, o.images);
+  return { campaignId: adset.campaign.id, adsetId: adset.id, ads, notes };
+}
+
+async function saleImageAds(ctx: SaleAdContext, products: Product[], images: SaleCampaignOptions["images"]): Promise<BuildResult["ads"]> {
+  const sale = activeCampaign()!;
+  const { locale, notes } = ctx;
   const ads: BuildResult["ads"] = [];
-  const ctx: SaleAdContext = { locale, campaignId: campaign.id, adsetId: adset.id, linkBase: o.linkBase, notes, source };
   for (const p of products) {
     let feedHash: string, storyHash: string;
     try {
-      feedHash = await meta.uploadImage(o.images[p.slug]!.feed, `${sale.id}-${locale}-${p.slug}-feed`);
-      storyHash = await meta.uploadImage(o.images[p.slug]!.story, `${sale.id}-${locale}-${p.slug}-story`);
+      feedHash = await meta.uploadImage(images[p.slug]!.feed, `${sale.id}-${locale}-${p.slug}-feed`);
+      storyHash = await meta.uploadImage(images[p.slug]!.story, `${sale.id}-${locale}-${p.slug}-story`);
     } catch (e) {
       notes.push(`${p.slug}: bilden kunde inte laddas upp (${e instanceof Error ? e.message : e}).`);
       continue;
     }
     for (const angle of ["price", "product"] as const) {
-      const ad = await makeSaleAd(ctx, p, angle, { kind: "image", feedHash, storyHash, previewUrl: o.images[p.slug]!.feed });
+      const ad = await makeSaleAd(ctx, p, angle, { kind: "image", feedHash, storyHash, previewUrl: images[p.slug]!.feed });
       if (ad) ads.push(ad);
     }
   }
-  return { campaignId: campaign.id, adsetId: adset.id, ads, notes };
+  return ads;
 }
 
 type SaleAdContext = { locale: Locale; campaignId: string; adsetId: string; linkBase?: string; notes: string[]; source: string };
@@ -833,11 +864,7 @@ async function makeSaleAd(ctx: SaleAdContext, p: Product, angle: "price" | "prod
 export async function addSaleVideoAd(o: { locale: Locale; slug: string; videoId: string; thumbHash: string; thumbnailUrl: string; linkBase?: string; source?: string }): Promise<{ ad: BuildResult["ads"][number] | null; notes: string[] }> {
   const sale = activeCampaign();
   if (!sale) throw new Error("Ingen kampanj pågår.");
-  const market = markets[o.locale];
-  const name = `${SALE_PREFIX}${countriesOf(o.locale).join("+")} · ${market.languageName}`;
-  const tree = await meta.listTree();
-  const adset = tree.flatMap((c) => (c.adsets?.data ?? []).map((a) => ({ ...a, campaign: c }))).find((a) => a.name === name && a.campaign.effective_status !== "DELETED");
-  if (!adset) throw new Error(`Hittar ingen annonsgrupp "${name}" – skapa marknadens kampanj först.`);
+  const adset = await findSaleAdSet(o.locale);
   const p = (await getCatalog(o.locale)).products.find((x) => x.slug === o.slug);
   if (!p) throw new Error(`${o.slug} finns inte på ${o.locale}.`);
   if (!isInStock(p)) throw new Error(`${o.slug} är slut i lager.`);

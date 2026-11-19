@@ -167,4 +167,4 @@ quiz, presentkort, spåra order, mitt konto, samarbeten/jobba hos oss, fler spr�
 - Bilden: `src/lib/ad-sale-image.ts` (packshot på svart, rabatt och slutdatum på språket), renderas i Chrome och lagras i `ads/<kampanj-id>/<språk>/`.
 - Körs lokalt: `npx tsx --env-file=.env.local --import ./scripts/server-shim.mjs scripts/meta-sale.mts [fi,da,…] [--budget=10] [--products=a,b] [--images-only]`. `server-shim.mjs` gör servermoduler (server-only, next/cache) körbara i tsx.
 - Video: `scripts/meta-sale-video.mts <slug> "<mp4>" [språk] [--thumb=s]` – laddar upp en gång, väntar på Metas bearbetning, en annons per marknad i befintlig annonsgrupp.
-- Black Week 2026: 7 kampanjer (fi, da, nl, de, fr, en, pl), Ashwagandha + Pine Pollen (enda i lager som inte är novel food), 10 USD/dag var, skapade 2026-11-19.
+- Black Week 2026: 7 kampanjer (fi, da, nl, de, fr, en, pl), 10 USD/dag var, skapade 2026-11-19. Bildannonser för allt i lager (Ashwagandha, Pine Pollen, Tongkat Ali Elite/Black, Fadogia, Blue Lotus; Ultra utelämnad, 3 i lager) + videon för Tongkat Ali Elite. Novel food annonseras på alla marknader utom sv (Albins beslut). `--add` lägger annonser i befintlig kampanj.

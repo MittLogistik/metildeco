@@ -2,11 +2,11 @@
 // lägger dem i lagringen och skapar en PAUSAD kampanj per marknad via annonsmotorn.
 //
 // Användning:
-//   npx tsx --env-file=.env.local --import ./scripts/server-shim.mjs scripts/meta-sale.mts [språk,...] [--budget=10] [--products=a,b] [--images-only]
+//   npx tsx --env-file=.env.local --import ./scripts/server-shim.mjs scripts/meta-sale.mts [språk,...] [--budget=10] [--products=a,b] [--images-only] [--add]
 // Utan språk: alla marknader utom sv. Kräver Chrome (CHROME_PATH) för bilderna.
 import puppeteer from "puppeteer-core";
 import { saleImageHtml, saleImageSize, type SaleImageFormat } from "@/lib/ad-sale-image";
-import { buildSaleCampaign } from "@/lib/ads-engine";
+import { addSaleImageAds, buildSaleCampaign } from "@/lib/ads-engine";
 import { activeCampaign } from "@/lib/campaign";
 import { getCatalog } from "@/lib/catalog";
 import { locales, type Locale } from "@/lib/i18n";
@@ -19,6 +19,8 @@ const targets = (args.find((a) => !a.startsWith("--"))?.split(",") ?? locales.fi
 const budget = Number(flag("budget") ?? 10);
 const slugs = (flag("products") ?? "ashwagandha,pine-pollen").split(",");
 const imagesOnly = args.includes("--images-only");
+// --add: lägg annonserna i marknadens befintliga kampanj i stället för att skapa en ny
+const addToExisting = args.includes("--add");
 
 const sale = activeCampaign();
 if (!sale) throw new Error("Ingen kampanj pågår.");
@@ -55,7 +57,7 @@ try {
     console.log(`\n== ${locale}: bilder`);
     for (const [slug, i] of Object.entries(images)) console.log(`  ${slug}\n    ${i.feed}\n    ${i.story}`);
     if (imagesOnly) continue;
-    const res = await buildSaleCampaign({ locale, dailyBudget: budget, images, source: "script" });
+    const res = addToExisting ? await addSaleImageAds({ locale, images, source: "script" }) : await buildSaleCampaign({ locale, dailyBudget: budget, images, source: "script" });
     console.log(`== ${locale}: kampanj ${res.campaignId}, annonsgrupp ${res.adsetId}, ${res.ads.length} annonser`);
     for (const a of res.ads) console.log(`  ${a.id} ${a.name} (poäng ${a.score ?? "–"})`);
     for (const n of res.notes) console.log(`  ! ${n}`);

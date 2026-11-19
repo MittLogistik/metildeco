@@ -387,6 +387,18 @@ export const uploadImage = async (url: string, name: string) => {
 
 export const uploadVideo = (fileUrl: string, name: string) => call<{ id: string }>("POST", `${adAccount()}/advideos`, { file_url: fileUrl, name });
 
+/** Laddar upp en videofil direkt (multipart) – för filer som är för stora för lagringens bucket. */
+export async function uploadVideoFile(bytes: Buffer, filename: string, name: string): Promise<{ id: string }> {
+  const form = new FormData();
+  form.set("access_token", token());
+  form.set("name", name);
+  form.set("source", new Blob([new Uint8Array(bytes)], { type: "video/mp4" }), filename);
+  const res = await fetch(`${API}/${adAccount()}/advideos`, { method: "POST", body: form });
+  const data = (await res.json()) as { id?: string; error?: { message?: string; error_user_msg?: string } };
+  if (!res.ok || !data.id) throw new Error(`Meta videouppladdning: ${data.error?.error_user_msg ?? data.error?.message ?? res.status}`);
+  return { id: data.id };
+}
+
 /** Väntar tills Meta bearbetat videon – annonser kan inte skapas innan dess. */
 export async function waitForVideo(videoId: string, timeoutMs = 600_000) {
   const start = Date.now();
