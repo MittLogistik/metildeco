@@ -40,7 +40,7 @@ export async function generateMetadata({ params }: LayoutProps<"/[lang]">): Prom
   return {
     metadataBase: new URL(site.url),
     title: { default: t.siteTitle, template: "%s | Metilde" },
-    description: t.siteDescription(formatPrice(freeShippingOver(lang), m.currency)),
+    description: t.siteDescription(formatPrice(freeShippingOver(lang), m.currency, lang)),
     openGraph: { siteName: "Metilde", type: "website", locale: m.ogLocale },
     robots: site.indexable ? { index: true, follow: true } : { index: false, follow: false },
     other: { "facebook-domain-verification": "6mbl1dqomix8d4ri5ufmx9lqoau62k" },

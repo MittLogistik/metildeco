@@ -34,7 +34,7 @@ export function OfferBuyBox({ product, inStock, gifts }: { product: Product; inS
   const { locale } = useI18n();
   const t = cartMessages[locale];
   const currency = cart.currency;
-  const fmt = (n: number) => formatPrice(n, currency);
+  const fmt = (n: number) => formatPrice(n, currency, locale);
   const packQty = Math.max(2, product.offerPackQty);
   const [option, setOption] = useState<OptionId>(gifts.length ? "pack" : "sub1");
   const [giftSlug, setGiftSlug] = useState<string | null>(gifts[0]?.slug ?? null);
@@ -234,6 +234,7 @@ function OptionCard({
   currency: string;
   saveLabel: (pct: number, amount: string) => string;
 }) {
+  const { locale } = useI18n();
   return (
     <div
       role="radio"
@@ -265,7 +266,7 @@ function OptionCard({
           <p className="text-xs text-muted">{sub}</p>
           {pct && save ? (
             <p className="mt-1.5 inline-flex items-center gap-1.5 rounded-full bg-success/12 px-2 py-0.5 text-[11px] font-bold text-success">
-              {saveLabel(pct, formatPrice(save, currency))}
+              {saveLabel(pct, formatPrice(save, currency, locale))}
             </p>
           ) : null}
           <ul className="mt-1.5 space-y-0.5 text-xs">
@@ -279,8 +280,8 @@ function OptionCard({
           {children}
         </div>
         <div className="shrink-0 self-start text-right">
-          <p className="text-base font-bold tabular-nums leading-tight">{formatPrice(price, currency)}</p>
-          {list !== null && list > price ? <p className="text-[11px] text-muted line-through tabular-nums">{formatPrice(list, currency)}</p> : null}
+          <p className="text-base font-bold tabular-nums leading-tight">{formatPrice(price, currency, locale)}</p>
+          {list !== null && list > price ? <p className="text-[11px] text-muted line-through tabular-nums">{formatPrice(list, currency, locale)}</p> : null}
         </div>
       </div>
     </div>

@@ -66,9 +66,9 @@ export function ProductCard({ product, priority = false, locale = defaultLocale 
         ) : null}
         <div className="mt-auto flex items-end justify-between gap-3 pt-3">
           <div>
-            <p className={`text-base font-semibold tabular-nums ${onCampaign ? "text-sale" : ""}`}>{formatPrice(product.price, currency)}</p>
+            <p className={`text-base font-semibold tabular-nums ${onCampaign ? "text-sale" : ""}`}>{formatPrice(product.price, currency, locale)}</p>
             {product.oldPrice ? (
-              <p className="text-xs text-muted line-through tabular-nums">{formatPrice(product.oldPrice, currency)}</p>
+              <p className="text-xs text-muted line-through tabular-nums">{formatPrice(product.oldPrice, currency, locale)}</p>
             ) : null}
           </div>
           <QuickAddButton slug={product.slug} disabled={!inStock} />

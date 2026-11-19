@@ -10,7 +10,7 @@ export function CartTotals() {
   const cart = useCart();
   const { locale } = useI18n();
   const t = cartMessages[locale];
-  const fmt = (n: number) => formatPrice(n, cart.currency);
+  const fmt = (n: number) => formatPrice(n, cart.currency, locale);
   return (
     <dl className="space-y-1.5 text-sm">
       <div className="flex justify-between">

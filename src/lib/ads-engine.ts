@@ -795,7 +795,7 @@ async function makeSaleAd(ctx: SaleAdContext, p: Product, angle: "price" | "prod
   const t = blackWeek[locale];
   const endLabel = campaignEndLabel(sale.end, market.intl);
   const rate = cheapestRate(locale);
-  const fmt = (n: number) => formatPrice(n, market.currency);
+  const fmt = (n: number) => formatPrice(n, market.currency, locale);
   const base = (ctx.linkBase ?? (site.indexable ? site.url : "https://metilde.com")).replace(/\/$/, "");
   const name = p.name.split("|")[0]!.trim();
   const link = `${base}${routesOf(locale).product(p.slug)}`;

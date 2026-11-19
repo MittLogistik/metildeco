@@ -35,8 +35,8 @@ export function ShippingTable({ locale = "sv" }: { locale?: Locale }) {
           time: t.days(m.deliveryDays[0], m.deliveryDays[1]),
           cost:
             r.freeOver !== null
-              ? t.freeOver(formatPrice(r.price, m.currency), formatPrice(r.freeOver, m.currency))
-              : formatPrice(r.price, m.currency),
+              ? t.freeOver(formatPrice(r.price, m.currency, locale), formatPrice(r.freeOver, m.currency, locale))
+              : formatPrice(r.price, m.currency, locale),
         }));
   return (
     <table>

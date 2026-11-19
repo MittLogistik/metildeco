@@ -34,7 +34,7 @@ export async function sendOrderConfirmation(order: OrderRecord, items: OrderItem
   if (!order.email) return;
   const locale: Locale = isLocale(order.locale) ? order.locale : "sv";
   const t = emailText[locale];
-  const money = (n: number) => formatPrice(n, order.currency);
+  const money = (n: number) => formatPrice(n, order.currency, locale);
   const isRenewal = order.kind === "renewal";
   const deliverAt = order.deliver_at ? new Date(order.deliver_at).toLocaleDateString(markets[locale].intl, { day: "numeric", month: "long" }) : null;
   const subject = isRenewal ? t.subjectRenewal(order.order_number) : t.subjectOrder(order.order_number);

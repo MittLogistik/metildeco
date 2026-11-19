@@ -38,7 +38,7 @@ export function Checkout() {
   const cart = useCart();
   const { locale, r } = useI18n();
   const t = checkoutMessages[locale];
-  const fmt = (n: number) => formatPrice(n, cart.currency);
+  const fmt = (n: number) => formatPrice(n, cart.currency, locale);
   const router = useRouter();
   const params = useSearchParams();
   const [submitting, setSubmitting] = useState(false);

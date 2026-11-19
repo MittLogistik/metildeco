@@ -16,7 +16,7 @@ export function CartLineRow({ line, onNavigate, compact = false }: { line: Resol
   const cart = useCart();
   const { locale, r } = useI18n();
   const t = cartMessages[locale];
-  const fmt = (n: number) => formatPrice(n, cart.currency);
+  const fmt = (n: number) => formatPrice(n, cart.currency, locale);
   const isSub = line.plan === "sub";
   const subUnit = line.product ? subscriptionPrices(line.product, site.subscriptionDiscount, cart.currency).first : null;
   const bw = cart.campaign ? blackWeek[locale] : null;

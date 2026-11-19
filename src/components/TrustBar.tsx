@@ -14,7 +14,7 @@ export function TrustBar({ compact = false }: { compact?: boolean }) {
   const items = [
     { icon: FlaskIcon, title: t.contentTitle, text: t.contentText, href: r.quality },
     { icon: LeafIcon, title: t.additivesTitle, text: t.additivesText, href: r.quality },
-    { icon: TruckIcon, title: t.shippingTitle(formatPrice(freeShippingOver(locale), market.currency)), text: t.shippingText, href: r.shipping },
+    { icon: TruckIcon, title: t.shippingTitle(formatPrice(freeShippingOver(locale), market.currency, locale)), text: t.shippingText, href: r.shipping },
     { icon: RefreshIcon, title: t.returnsTitle, text: t.returnsText, href: r.returns },
   ];
   if (compact) {

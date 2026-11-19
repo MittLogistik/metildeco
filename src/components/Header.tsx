@@ -36,7 +36,7 @@ export function Header() {
         <div className="bg-primary text-primary-fg">
           <Container className="flex min-h-9 items-center justify-center py-1.5 text-center text-xs font-medium tracking-wide">
             <p>
-              {t.freeShipping(formatPrice(freeShippingOver(locale), market.currency))} <span className="mx-2 opacity-50">·</span> {t.sameDay}
+              {t.freeShipping(formatPrice(freeShippingOver(locale), market.currency, locale))} <span className="mx-2 opacity-50">·</span> {t.sameDay}
             </p>
           </Container>
         </div>

@@ -5,7 +5,7 @@ import { site } from "@/lib/site";
 import { offerGiftSlugs, subscriptionPrices, tieredUnitPrice, type SlimProduct } from "@/lib/products";
 import type { SlimBundle } from "@/lib/bundles";
 import type { CatalogSnapshot } from "@/lib/catalog";
-import type { Currency } from "@/lib/i18n";
+import type { Currency, Locale } from "@/lib/i18n";
 import { cheapestRate, shippingCost } from "@/lib/shipping";
 import { formatPrice } from "@/lib/format";
 import { useI18n } from "@/i18n/client";
@@ -71,7 +71,7 @@ type Labels = (typeof cartMessages)[keyof typeof cartMessages] & { campaignDisco
  * Korgen i localStorage delas mellan /sv, /fi och /da. Raderna bär inga priser: allt räknas
  * från aktuellt språks katalog, och en rad vars vara inte säljs på språket visas inte (null).
  */
-const resolve = (line: CartLine, catalog: CatalogSnapshot, t: Labels): ResolvedLine | null => {
+const resolve = (line: CartLine, catalog: CatalogSnapshot, t: Labels, locale: Locale): ResolvedLine | null => {
   if (line.kind === "bundle") {
     const bundle = catalog.bundles.find((b) => b.slug === line.slug);
     if (!bundle) return null;
@@ -102,7 +102,7 @@ const resolve = (line: CartLine, catalog: CatalogSnapshot, t: Labels): ResolvedL
       listPrice: product.price,
       recurringPrice: null,
       lineTotal: 0,
-      discountLabel: t.giftValue(formatPrice(product.price, catalog.currency)),
+      discountLabel: t.giftValue(formatPrice(product.price, catalog.currency, locale)),
       freeShipping: true,
       product,
     };
@@ -161,7 +161,7 @@ export function CartProvider({ catalog, children }: { catalog: CatalogSnapshot; 
       return next;
     });
     track("add_to_cart");
-    const resolved = resolve(line, catalog, t);
+    const resolved = resolve(line, catalog, t, locale);
     metaTrack("AddToCart", {
       content_ids: [metaContentId(line.kind, line.slug, resolved?.product?.sku ?? resolved?.bundle?.sku)],
       content_name: resolved?.name,
@@ -170,7 +170,7 @@ export function CartProvider({ catalog, children }: { catalog: CatalogSnapshot; 
       currency: catalog.currency,
     });
     setOpen(true);
-  }, [catalog, t]);
+  }, [catalog, t, locale]);
 
   const addProduct = useCallback(
     (slug: string, qty = 1, plan: Plan = "once", intervalDays: 30 | 60 | 90 = 30) =>
@@ -196,7 +196,7 @@ export function CartProvider({ catalog, children }: { catalog: CatalogSnapshot; 
         return next;
       });
       track("add_to_cart");
-      const resolved = resolve({ key, kind: "product", slug, qty, plan: "sub", intervalDays }, catalog, t);
+      const resolved = resolve({ key, kind: "product", slug, qty, plan: "sub", intervalDays }, catalog, t, locale);
       metaTrack("AddToCart", {
         content_ids: [metaContentId("product", slug, resolved?.product?.sku)],
         content_name: resolved?.name,
@@ -206,7 +206,7 @@ export function CartProvider({ catalog, children }: { catalog: CatalogSnapshot; 
       });
       setOpen(true);
     },
-    [catalog, t],
+    [catalog, t, locale],
   );
   const setQty = useCallback((key: string, qty: number) => {
     cartStore.update((prev) =>
@@ -236,7 +236,7 @@ export function CartProvider({ catalog, children }: { catalog: CatalogSnapshot; 
   const value = useMemo<CartState>(() => {
     const resolved = lines
       .filter((l) => l.plan !== "gift" || giftQualifies(l.slug, lines, catalog))
-      .map((l) => resolve(l, catalog, t))
+      .map((l) => resolve(l, catalog, t, locale))
       .filter((l): l is ResolvedLine => l !== null);
     const subtotal = resolved.reduce((s, l) => s + l.lineTotal, 0);
     const listTotal = resolved.reduce((s, l) => s + l.listPrice * l.qty, 0);

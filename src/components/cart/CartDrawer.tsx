@@ -63,7 +63,7 @@ export function CartDrawer() {
               {cart.freeShippingRemaining > 0 ? (
                 <p>
                   {t.remainingBefore}
-                  <strong>{formatPrice(cart.freeShippingRemaining, cart.currency)}</strong>
+                  <strong>{formatPrice(cart.freeShippingRemaining, cart.currency, locale)}</strong>
                   {t.remainingAfter}
                 </p>
               ) : (

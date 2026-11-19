@@ -31,7 +31,7 @@ export const faqGroups: FaqGroup[] = [
     items: [
       {
         q: "How much is shipping?",
-        a: "Shipping to Ireland costs 8.00 €, and shipping is free on all orders over 79 €. Subscriptions and bundles always ship free. Current prices are on the Shipping & delivery page.",
+        a: "Shipping to Ireland costs €8.00, and shipping is free on all orders over €79. Subscriptions and bundles always ship free. Current prices are on the Shipping & delivery page.",
       },
       {
         q: "How long does delivery take?",
@@ -57,7 +57,7 @@ export const faqGroups: FaqGroup[] = [
       },
       {
         q: "How do I make a return?",
-        a: `Email ${company.email} with your order number and the items concerned. You'll receive a return label and instructions within one working day. If you withdraw from the purchase, you pay the return shipping and 8.00 € is deducted from the refund. We refund you within 14 days of receiving the return.`,
+        a: `Email ${company.email} with your order number and the items concerned. You'll receive a return label and instructions within one working day. If you withdraw from the purchase, you pay the return shipping and €8.00 is deducted from the refund. We refund you within 14 days of receiving the return.`,
       },
       {
         q: "What do I do if a product is damaged?",

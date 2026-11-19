@@ -25,7 +25,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const t = home[locale];
   return {
     title: t.title,
-    description: t.description(formatPrice(freeShippingOver(locale), market.currency)),
+    description: t.description(formatPrice(freeShippingOver(locale), market.currency, locale)),
     alternates: alternates(r.home),
   };
 }
@@ -90,7 +90,7 @@ export default async function HomePage() {
                 </li>
               ) : null}
               <li className="flex items-center gap-1.5">
-                <CheckIcon size={15} className="text-primary" /> {t.freeShippingOver(formatPrice(freeShippingOver(locale), market.currency))}
+                <CheckIcon size={15} className="text-primary" /> {t.freeShippingOver(formatPrice(freeShippingOver(locale), market.currency, locale))}
               </li>
               <li className="flex items-center gap-1.5">
                 <CheckIcon size={15} className="text-primary" /> {t.returnRight}

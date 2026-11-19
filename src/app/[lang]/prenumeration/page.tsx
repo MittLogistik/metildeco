@@ -88,7 +88,7 @@ export default async function SubscriptionPage() {
               intro={t.exampleIntro(pct)}
             />
             <ul className="mt-6 space-y-2 text-sm">
-              {t.exampleChecks(pct, formatPrice(0, currency)).map((c) => (
+              {t.exampleChecks(pct, formatPrice(0, currency, locale)).map((c) => (
                 <li key={c} className="flex items-center gap-2">
                   <CheckIcon size={15} className="text-primary" /> {c}
                 </li>
@@ -100,22 +100,22 @@ export default async function SubscriptionPage() {
             <dl className="mt-4 space-y-3 text-sm">
               <div className="flex justify-between">
                 <dt>{t.oneTime}</dt>
-                <dd className="tabular-nums">{t.perDelivery(formatPrice(example.regularPrice, currency))}</dd>
+                <dd className="tabular-nums">{t.perDelivery(formatPrice(example.regularPrice, currency, locale))}</dd>
               </div>
               <div className="flex justify-between font-medium">
                 <dt>{t.subscriptionLabel}</dt>
                 <dd className="tabular-nums">
-                  <span className="mr-2 text-muted line-through">{formatPrice(example.regularPrice, currency)}</span>
-                  {t.perDelivery(formatPrice(subPrice, currency))}
+                  <span className="mr-2 text-muted line-through">{formatPrice(example.regularPrice, currency, locale)}</span>
+                  {t.perDelivery(formatPrice(subPrice, currency, locale))}
                 </dd>
               </div>
               <div className="flex justify-between">
                 <dt>{t.shipping}</dt>
-                <dd className="tabular-nums">{formatPrice(0, currency)}</dd>
+                <dd className="tabular-nums">{formatPrice(0, currency, locale)}</dd>
               </div>
               <div className="flex justify-between border-t border-line pt-3 text-base font-semibold">
                 <dt>{t.yearly}</dt>
-                <dd className="tabular-nums">{formatPrice(yearly, currency)}</dd>
+                <dd className="tabular-nums">{formatPrice(yearly, currency, locale)}</dd>
               </div>
             </dl>
             <p className="mt-3 text-xs text-muted">{t.exampleNote}</p>

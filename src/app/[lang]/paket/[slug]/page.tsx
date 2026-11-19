@@ -110,7 +110,7 @@ export default async function BundlePage({ params }: PageProps<"/[lang]/paket/[s
                     </Link>
                     <span className="block text-xs text-muted">{it.blurb ?? it.product.short}</span>
                   </span>
-                  <span className="text-sm text-muted tabular-nums">{formatPrice(it.product.price * it.qty, currency)}</span>
+                  <span className="text-sm text-muted tabular-nums">{formatPrice(it.product.price * it.qty, currency, locale)}</span>
                 </li>
               ))}
             </ul>
@@ -126,20 +126,20 @@ export default async function BundlePage({ params }: PageProps<"/[lang]/paket/[s
             <dl className="mt-6 space-y-1.5 text-sm">
               <div className="flex justify-between text-muted">
                 <dt>{t.valueSeparately}</dt>
-                <dd className="tabular-nums">{formatPrice(bundle.value, currency)}</dd>
+                <dd className="tabular-nums">{formatPrice(bundle.value, currency, locale)}</dd>
               </div>
               <div className="flex justify-between text-lg font-semibold">
                 <dt>{t.bundlePrice}</dt>
                 <dd className={`tabular-nums ${campaign ? "text-sale" : ""}`}>
-                  {campaign ? <span className="mr-2 text-sm font-normal text-muted line-through">{formatPrice(bundle.regularPrice, currency)}</span> : null}
-                  {formatPrice(bundle.price, currency)}
+                  {campaign ? <span className="mr-2 text-sm font-normal text-muted line-through">{formatPrice(bundle.regularPrice, currency, locale)}</span> : null}
+                  {formatPrice(bundle.price, currency, locale)}
                 </dd>
               </div>
-              {campaign ? <p className="text-right text-xs text-muted">{bw.lowestPrice(formatPrice(bundle.regularPrice, currency))}</p> : null}
+              {campaign ? <p className="text-right text-xs text-muted">{bw.lowestPrice(formatPrice(bundle.regularPrice, currency, locale))}</p> : null}
               <div className="flex justify-between text-success">
                 <dt>{t.youSave}</dt>
                 <dd className="tabular-nums">
-                  {formatPrice(bundle.value - bundle.price, currency)} ({bundle.discount} %)
+                  {formatPrice(bundle.value - bundle.price, currency, locale)} ({bundle.discount} %)
                 </dd>
               </div>
             </dl>
@@ -149,7 +149,7 @@ export default async function BundlePage({ params }: PageProps<"/[lang]/paket/[s
             </div>
             <ul className="mt-4 space-y-1.5 text-sm text-muted">
               <li className="flex items-center gap-2">
-                <CheckIcon size={15} className="text-primary" /> {bundle.freeShipping ? t.bundleFreeShipping : t.freeShippingOver(formatPrice(freeShippingOver(locale), currency))}
+                <CheckIcon size={15} className="text-primary" /> {bundle.freeShipping ? t.bundleFreeShipping : t.freeShippingOver(formatPrice(freeShippingOver(locale), currency, locale))}
               </li>
               <li className="flex items-center gap-2">
                 <CheckIcon size={15} className="text-primary" /> {t.sameDay}

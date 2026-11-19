@@ -51,7 +51,7 @@ export async function generateMetadata({ params }: PageProps<"/[lang]/produkt/[s
   if (!product) return { title: productMessages[locale].notFound };
   const content = productContentFor(slug, locale);
   return {
-    title: `${product.name} – ${formatPrice(product.price, market.currency)}`,
+    title: `${product.name} – ${formatPrice(product.price, market.currency, locale)}`,
     description: content?.intro ?? product.short,
     alternates: alternates(r.product(slug), { only: await localesWith(slug) }),
     openGraph: {
@@ -197,11 +197,11 @@ export default async function ProductPage({ params }: PageProps<"/[lang]/produkt
               </p>
             ) : null}
             <div className={`${campaign ? "mt-3" : "mt-6"} flex flex-wrap items-baseline gap-x-3 gap-y-1`}>
-              <p className={`text-3xl font-semibold tabular-nums ${campaign ? "text-sale" : ""}`}>{formatPrice(product.price, currency)}</p>
-              {product.oldPrice ? <p className="text-lg text-muted line-through tabular-nums">{formatPrice(product.oldPrice, currency)}</p> : null}
+              <p className={`text-3xl font-semibold tabular-nums ${campaign ? "text-sale" : ""}`}>{formatPrice(product.price, currency, locale)}</p>
+              {product.oldPrice ? <p className="text-lg text-muted line-through tabular-nums">{formatPrice(product.oldPrice, currency, locale)}</p> : null}
               <p className="text-sm text-muted">{t.inclVat}</p>
             </div>
-            {campaign && product.oldPrice ? <p className="mt-1 text-xs text-muted">{bw.lowestPrice(formatPrice(product.oldPrice, currency))}</p> : null}
+            {campaign && product.oldPrice ? <p className="mt-1 text-xs text-muted">{bw.lowestPrice(formatPrice(product.oldPrice, currency, locale))}</p> : null}
 
             <div className="mt-6">
               <BuyBoxSwitch product={product} inStock={inStock} gifts={gifts} mode={experiment.mode} split={experiment.split} />
@@ -213,7 +213,7 @@ export default async function ProductPage({ params }: PageProps<"/[lang]/produkt
                 {!inStock ? t.soldOut : lowStock ? t.lowStock(product.stock) : t.inStock}
               </p>
               <p className="text-muted">
-                {t.shippingFrom(formatPrice(shipFrom, currency), formatPrice(freeOver, currency))}{" "}
+                {t.shippingFrom(formatPrice(shipFrom, currency, locale), formatPrice(freeOver, currency, locale))}{" "}
                 <Link href={routes.shipping} className="underline underline-offset-2 hover:text-foreground">
                   {t.deliveryTime(dMin, dMax)}
                 </Link>

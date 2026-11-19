@@ -69,7 +69,7 @@ export default async function ThankYouPage({ searchParams }: PageProps<"/[lang]/
 
   // Beloppen visas i orderns valuta (den kunden betalade i), inte sidans.
   const currency = (saved?.order.currency || session.currency || market.currency).toUpperCase();
-  const fmt = (n: number) => formatPrice(n, currency);
+  const fmt = (n: number) => formatPrice(n, currency, locale);
   const orderNumber = saved?.order.order_number ?? session.id.replace(/^cs_(test|live)_/, "").slice(-8).toUpperCase();
   const lines = saved
     ? saved.items.map((i) => ({ key: i.product_slug + i.plan, label: `${i.qty} × ${i.name}${i.plan.startsWith("sub") ? t.subSuffix : ""}`, total: i.line_total }))

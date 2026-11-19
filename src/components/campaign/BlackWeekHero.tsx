@@ -67,8 +67,8 @@ export function BlackWeekHero({ campaign, locale, products, hasBundles }: { camp
                   </span>
                   <span className="mt-2 block truncate text-xs text-white/70 sm:text-sm">{p.name.split("|")[0]!.trim()}</span>
                   <span className="block text-sm font-semibold tabular-nums sm:text-base">
-                    {formatPrice(p.price, market.currency)}
-                    {p.oldPrice ? <span className="ml-1.5 text-xs font-normal text-white/45 line-through">{formatPrice(p.oldPrice, market.currency)}</span> : null}
+                    {formatPrice(p.price, market.currency, locale)}
+                    {p.oldPrice ? <span className="ml-1.5 text-xs font-normal text-white/45 line-through">{formatPrice(p.oldPrice, market.currency, locale)}</span> : null}
                   </span>
                 </Link>
               </li>

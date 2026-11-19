@@ -48,12 +48,12 @@ export function BundleCard({ bundle, locale = defaultLocale }: { bundle: Bundle;
         </h3>
         <div className="mt-auto pt-3">
           <p className={`text-base font-semibold tabular-nums ${campaignOff > 0 ? "text-sale" : ""}`}>
-            {formatPrice(bundle.price, currency)}
-            {campaignOff > 0 ? <span className="ml-1.5 text-xs font-normal text-muted line-through">{formatPrice(bundle.regularPrice, currency)}</span> : null}
+            {formatPrice(bundle.price, currency, locale)}
+            {campaignOff > 0 ? <span className="ml-1.5 text-xs font-normal text-muted line-through">{formatPrice(bundle.regularPrice, currency, locale)}</span> : null}
           </p>
           {bundle.value > bundle.price ? (
             <p className="text-xs text-muted tabular-nums">
-              {t.boughtSeparately(formatPrice(bundle.value, currency))}
+              {t.boughtSeparately(formatPrice(bundle.value, currency, locale))}
             </p>
           ) : null}
         </div>

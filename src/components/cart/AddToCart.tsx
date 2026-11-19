@@ -22,7 +22,7 @@ export function ProductBuyBox({ product, inStock }: { product: Product; inStock:
   const [added, setAdded] = useState(false);
   const t = useLabels();
   const currency = cart.currency;
-  const fmt = (n: number) => formatPrice(n, currency);
+  const fmt = (n: number) => formatPrice(n, currency, locale);
 
   // Under kampanj: första leveransen till kampanjpris, sedan vanlig prenumerationsrabatt
   const sub = subscriptionPrices(product, site.subscriptionDiscount, currency);
@@ -230,6 +230,7 @@ export function BundleBuyButton({ slug, inStock, price }: { slug: string; inStoc
   const cart = useCart();
   const [added, setAdded] = useState(false);
   const t = useLabels();
+  const { locale } = useI18n();
   return (
     <Button
       size="lg"
@@ -241,7 +242,7 @@ export function BundleBuyButton({ slug, inStock, price }: { slug: string; inStoc
         setTimeout(() => setAdded(false), 1800);
       }}
     >
-      {!inStock ? t.tempOut : added ? t.addedToCart : `${t.addBundle} · ${formatPrice(price, cart.currency)}`}
+      {!inStock ? t.tempOut : added ? t.addedToCart : `${t.addBundle} · ${formatPrice(price, cart.currency, locale)}`}
     </Button>
   );
 }
