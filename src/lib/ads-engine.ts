@@ -1,13 +1,19 @@
 import "server-only";
 import { angles, productHooks, retargetingAngles, type AdAngle } from "@/content/ad-copy";
-import { templateCopy, writeAdCopy, writeAdCopyFromImage } from "./ad-writer";
+import { templateCopy, writeAdCopy, writeAdCopyFromImage, writeSaleCopy, type AdCopy } from "./ad-writer";
+import { saleUntil } from "./ad-sale-image";
+import { activeCampaign } from "./campaign";
+import { formatPrice } from "./format";
+import { countriesOf, markets, type Locale } from "./i18n";
+import { cheapestRate } from "./shipping";
+import { blackWeek, campaignEndLabel } from "@/i18n/messages/blackweek";
 import { groupScore, listCreativeGroups } from "./ad-images";
 import { minImageScore, qaConfigured, reviewAd } from "./ad-qa";
-import { getProduct } from "./catalog";
+import { getCatalog, getProduct } from "./catalog";
 import { META_PIXEL_ID } from "./meta";
 import * as meta from "./meta-ads";
-import { primaryImage, type Product } from "./products";
-import { routes } from "./routes";
+import { isInStock, primaryImage, type Product } from "./products";
+import { routes, routesOf } from "./routes";
 import { site } from "./site";
 import { supabaseAdmin, supabaseConfigured } from "./supabase";
 
@@ -662,4 +668,180 @@ export async function reviewAds(o: { apply: boolean; source: string; mediaBase?:
   }
   await log(decisions.filter((d) => d.action !== "keep" && !(d.action === "iterate" && o.apply)).map((decision) => ({ decision, applied: o.apply, source: o.source })));
   return decisions;
+}
+
+/* ------------------------------ Kampanj per marknad (Black Week) ------------------------------ */
+
+export const SALE_PREFIX = "Black Week · ";
+
+/** Annonsens språk på engelska, för skrivaren och granskaren. */
+const languageOf: Record<Locale, string> = { sv: "Swedish", fi: "Finnish", da: "Danish", nl: "Dutch", de: "German", fr: "French", en: "English", pl: "Polish" };
+
+/**
+ * Språkinriktning där en marknads länder delas med en annan marknad (Belgien på /nl och /fr,
+ * Luxemburg på /de och /fr): bara de som använder Facebook på språket nås. Metas språk-id.
+ */
+const adLocales: Partial<Record<Locale, number[]>> = { nl: [14], fr: [1003], de: [5] };
+
+export type SaleCampaignOptions = {
+  locale: Locale;
+  /** Daglig budget i kontots valuta (USD). */
+  dailyBudget: number;
+  /** Produkter att annonsera (slug) och deras kampanjbilder: flöde 1:1 och story 9:16, publika adresser. */
+  images: Record<string, { feed: string; story: string }>;
+  linkBase?: string;
+  source?: string;
+};
+
+/**
+ * En pausad kampanj för en marknad under en pågående prisväxling (Black Week): en annonsgrupp
+ * med marknadens länder (och språk där länder delas), som slutar leverera när kampanjen slutar,
+ * och två annonser per produkt (erbjudandet först / råvaran först) på marknadens språk.
+ * Texten skrivs av AI med kampanjens riktiga priser och granskas; underkänns den används den
+ * översatta mallen från blackweek.ts, och underkänns även den skapas ingen annons.
+ */
+export async function buildSaleCampaign(o: SaleCampaignOptions): Promise<BuildResult> {
+  if (!meta.adsConfigured()) throw new Error("META_ADS_TOKEN eller META_AD_ACCOUNT_ID saknas.");
+  if (!process.env.META_PAGE_ID) throw new Error("META_PAGE_ID saknas.");
+  const sale = activeCampaign();
+  if (!sale) throw new Error("Ingen kampanj pågår – kampanjannonser skapas bara medan den är aktiv.");
+  const { locale } = o;
+  const market = markets[locale];
+  const catalog = await getCatalog(locale);
+  const countries = countriesOf(locale);
+  const label = `${countries.join("+")} · ${market.languageName}`;
+  const notes: string[] = [];
+  const source = o.source ?? "admin";
+
+  const products = Object.keys(o.images).map((slug) => {
+    const p = catalog.products.find((x) => x.slug === slug);
+    if (!p) throw new Error(`${slug} finns inte i katalogen för ${locale}.`);
+    if (!isInStock(p)) throw new Error(`${slug} är slut i lager.`);
+    if (!p.oldPrice) throw new Error(`${slug} har inget kampanjpris på ${locale}.`);
+    return p;
+  });
+
+  const campaign = await meta.createCampaign(`${SALE_PREFIX}${label} · ${today()}`);
+  const adset = await meta.createAdSet({
+    name: `${SALE_PREFIX}${label}`,
+    campaignId: campaign.id,
+    dailyBudget: o.dailyBudget,
+    pixelId: META_PIXEL_ID,
+    countries,
+    locales: adLocales[locale],
+    endTime: sale.end,
+  });
+  await log([{ decision: { level: "campaign", id: campaign.id, name: `${SALE_PREFIX}${label}`, action: "note", reason: `${sale.id}: kampanj för ${label} skapad (pausad), budget ${o.dailyBudget}/dag, slutar ${sale.end}`, campaignId: campaign.id }, applied: true, source }]);
+
+  const ads: BuildResult["ads"] = [];
+  const ctx: SaleAdContext = { locale, campaignId: campaign.id, adsetId: adset.id, linkBase: o.linkBase, notes, source };
+  for (const p of products) {
+    let feedHash: string, storyHash: string;
+    try {
+      feedHash = await meta.uploadImage(o.images[p.slug]!.feed, `${sale.id}-${locale}-${p.slug}-feed`);
+      storyHash = await meta.uploadImage(o.images[p.slug]!.story, `${sale.id}-${locale}-${p.slug}-story`);
+    } catch (e) {
+      notes.push(`${p.slug}: bilden kunde inte laddas upp (${e instanceof Error ? e.message : e}).`);
+      continue;
+    }
+    for (const angle of ["price", "product"] as const) {
+      const ad = await makeSaleAd(ctx, p, angle, { kind: "image", feedHash, storyHash, previewUrl: o.images[p.slug]!.feed });
+      if (ad) ads.push(ad);
+    }
+  }
+  return { campaignId: campaign.id, adsetId: adset.id, ads, notes };
+}
+
+type SaleAdContext = { locale: Locale; campaignId: string; adsetId: string; linkBase?: string; notes: string[]; source: string };
+type SaleMedia = { kind: "image"; feedHash: string; storyHash: string; previewUrl: string } | { kind: "video"; videoId: string; thumbHash: string; previewUrl: string };
+
+/** Skriver, granskar och skapar en pausad kampanjannons. Underkänd text → omskrivning → mall → ingen annons. */
+async function makeSaleAd(ctx: SaleAdContext, p: Product, angle: "price" | "product", media: SaleMedia): Promise<BuildResult["ads"][number] | null> {
+  const sale = activeCampaign();
+  if (!sale) throw new Error("Ingen kampanj pågår.");
+  const { locale, notes } = ctx;
+  const market = markets[locale];
+  const t = blackWeek[locale];
+  const endLabel = campaignEndLabel(sale.end, market.intl);
+  const rate = cheapestRate(locale);
+  const fmt = (n: number) => formatPrice(n, market.currency);
+  const base = (ctx.linkBase ?? (site.indexable ? site.url : "https://metilde.com")).replace(/\/$/, "");
+  const name = p.name.split("|")[0]!.trim();
+  const link = `${base}${routesOf(locale).product(p.slug)}`;
+  const facts = [
+    `${sale.percent} % off everything (all products and bundles) – ${t.name}, until ${endLabel} 23:59 (CET). After that, regular prices apply.`,
+    `${name}: now ${fmt(p.price)}, regular price ${fmt(p.oldPrice ?? p.regularPrice)}. ${p.variant?.size ?? ""}`.trim(),
+    `Shipping ${fmt(rate.price)}, free shipping over ${fmt(rate.freeOver ?? 0)}. Ships from our warehouse in the EU.`,
+    "30-day right of withdrawal on unopened products.",
+    "The sale cannot be combined with other discount codes.",
+  ];
+  const template: AdCopy = {
+    primaryText: `${t.name} 🖤 ${t.heroTitle(sale.percent)}\n\n${name}: ${fmt(p.price)} (${t.ordinary(fmt(p.oldPrice ?? p.regularPrice))})\n\n${t.heroLead(endLabel)} ${t.terms}`,
+    headline: `${name} ${t.badge(sale.percent)}`.slice(0, 40),
+    description: saleUntil(locale, sale).slice(0, 40),
+    source: "mall",
+  };
+  const adName = `${sale.id} · ${locale} · ${p.slug} · ${media.kind === "video" ? "video" : angle}`;
+  const review = (c: AdCopy) => reviewAd({ ...c, imageUrl: media.previewUrl, product: p, language: languageOf[locale], context: facts.join(" ") });
+  let copy = (await writeSaleCopy({ product: p, language: languageOf[locale], facts, angle, notes })) ?? template;
+  let r = qaConfigured() ? await review(copy) : null;
+  if (r?.verdict === "reject" && copy.source === "ai") {
+    const why = r.issues.join("; ") || r.notes;
+    notes.push(`${adName}: texten underkändes (${r.score}) – skrivs om: ${why}`);
+    copy = (await writeSaleCopy({ product: p, language: languageOf[locale], facts, angle, notes, avoid: why })) ?? template;
+    r = await review(copy);
+    if (r.verdict === "reject" && copy.source === "ai") {
+      notes.push(`${adName}: underkänd igen (${r.score}) – mallen används.`);
+      copy = template;
+      r = await review(copy);
+    }
+  }
+  const failId = `${ctx.campaignId}-${p.slug}-${media.kind}-${angle}`;
+  let decision: Decision;
+  let result: BuildResult["ads"][number] | null = null;
+  if (r?.verdict === "reject") {
+    const why = `underkänd av granskningen (${r.score}): ${r.issues.join("; ") || r.notes}`;
+    notes.push(`${adName}: ${why}`);
+    decision = { level: "ad", id: failId, name: adName, action: "note", reason: `Annonsen skapades inte: ${why}`.slice(0, 500), campaignId: ctx.campaignId, adsetId: ctx.adsetId };
+  } else {
+    try {
+      const common = { name: adName, pageId: process.env.META_PAGE_ID!, instagramActorId: process.env.META_INSTAGRAM_ACTOR_ID || undefined, primaryText: copy.primaryText, headline: copy.headline, description: copy.description, link };
+      const creative =
+        media.kind === "video"
+          ? await meta.createCreative({ ...common, videoId: media.videoId, imageHash: media.thumbHash })
+          : await meta.createPlacementCreative({ ...common, feedHash: media.feedHash, storyHash: media.storyHash });
+      const ad = await meta.createAd(adName, ctx.adsetId, creative.id, "PAUSED");
+      result = { id: ad.id, name: adName, score: r?.score ?? null };
+      if (supabaseConfigured())
+        await supabaseAdmin().from("ad_variants").insert({ ad_id: ad.id, campaign_id: ctx.campaignId, adset_id: ctx.adsetId, product_slug: p.slug, angle_id: `${sale.id}-${media.kind === "video" ? "video" : angle}`, group_id: null, media_label: `${sale.id}-${locale}`, parent_ad_id: null, ad_score: r?.score ?? null, ad_review: r, primary_text: copy.primaryText, headline: copy.headline, description: copy.description ?? null, image_url: media.previewUrl, copy_source: copy.source });
+      decision = { level: "ad", id: ad.id, name: adName, action: "note", reason: `Skapad (pausad)${r ? `, granskningspoäng ${r.score}` : ""}, text: ${copy.source}`, campaignId: ctx.campaignId, adsetId: ctx.adsetId };
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : String(e);
+      notes.push(`${adName}: ${msg}`);
+      decision = { level: "ad", id: failId, name: adName, action: "note", reason: `Annonsen skapades inte: ${msg}`.slice(0, 500), campaignId: ctx.campaignId, adsetId: ctx.adsetId };
+    }
+  }
+  await log([{ decision, applied: true, source: ctx.source }]);
+  return result;
+}
+
+/**
+ * Lägger en videoannons i marknadens befintliga kampanjannonsgrupp (skapad av buildSaleCampaign).
+ * Videon laddas upp en gång (meta.uploadVideo + waitForVideo) och används på alla marknader;
+ * texten skrivs på marknadens språk och länken går till produkten på det språket.
+ */
+export async function addSaleVideoAd(o: { locale: Locale; slug: string; videoId: string; thumbHash: string; thumbnailUrl: string; linkBase?: string; source?: string }): Promise<{ ad: BuildResult["ads"][number] | null; notes: string[] }> {
+  const sale = activeCampaign();
+  if (!sale) throw new Error("Ingen kampanj pågår.");
+  const market = markets[o.locale];
+  const name = `${SALE_PREFIX}${countriesOf(o.locale).join("+")} · ${market.languageName}`;
+  const tree = await meta.listTree();
+  const adset = tree.flatMap((c) => (c.adsets?.data ?? []).map((a) => ({ ...a, campaign: c }))).find((a) => a.name === name && a.campaign.effective_status !== "DELETED");
+  if (!adset) throw new Error(`Hittar ingen annonsgrupp "${name}" – skapa marknadens kampanj först.`);
+  const p = (await getCatalog(o.locale)).products.find((x) => x.slug === o.slug);
+  if (!p) throw new Error(`${o.slug} finns inte på ${o.locale}.`);
+  if (!isInStock(p)) throw new Error(`${o.slug} är slut i lager.`);
+  const notes: string[] = [];
+  const ad = await makeSaleAd({ locale: o.locale, campaignId: adset.campaign.id, adsetId: adset.id, linkBase: o.linkBase, notes, source: o.source ?? "admin" }, p, "price", { kind: "video", videoId: o.videoId, thumbHash: o.thumbHash, previewUrl: o.thumbnailUrl });
+  return { ad, notes };
 }

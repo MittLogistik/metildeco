@@ -165,6 +165,10 @@ export type AdSetSpec = {
   pixelId: string;
   /** Ålder och land; Sverige som standard. */
   countries?: string[];
+  /** Metas språk-id (sök type=adlocale), t.ex. 14 nederländska, 1003 franska, 5 tyska. Utelämnat = alla språk. */
+  locales?: number[];
+  /** Annonsgruppen slutar leverera vid denna tid (ISO), t.ex. när en kampanj tar slut. */
+  endTime?: string;
   ageMin?: number;
   ageMax?: number;
   productUrl?: string;
@@ -196,8 +200,10 @@ export const createAdSet = (s: AdSetSpec) =>
     optimization_goal: "OFFSITE_CONVERSIONS",
     bid_strategy: "LOWEST_COST_WITHOUT_CAP",
     promoted_object: { pixel_id: s.pixelId, custom_event_type: "PURCHASE" },
+    end_time: s.endTime,
     targeting: {
       geo_locations: { countries: s.countries ?? ["SE"] },
+      locales: s.locales,
       age_min: s.ageMin ?? 25,
       age_max: s.ageMax ?? 65,
       targeting_automation: { advantage_audience: 1 },

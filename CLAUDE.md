@@ -160,3 +160,10 @@ quiz, presentkort, spåra order, mitt konto, samarbeten/jobba hos oss, fler spr�
 - Design: svart topprad med nedräkning (`components/campaign/CampaignBar`), svart banner överst på startsidan (`BlackWeekHero`, sidans h1), svarta märken (`Badge tone="campaign"`), kampanjpris i `text-sale`. Texter på alla språk i `src/i18n/messages/blackweek.ts`.
 - Feeds: `g:price` = ordinarie, `g:sale_price` + `g:sale_price_effective_date`. Cron `/api/cron/campaign` (var 10:e min) förnyar katalogen inom 30 min efter start/slut, så att statiska sidor inte visar kampanjpris när kassan tagit ordinarie.
 - Ny kampanj: lägg till i `campaigns` med nytt id och datum. Texterna i blackweek.ts är Black Week-specifika.
+
+## Kampanjannonser per marknad (Meta)
+- `buildSaleCampaign` (ads-engine.ts) skapar en PAUSAD kampanj per marknad under en pågående kampanj: prefix "Black Week · ", annonsgrupp med `countriesOf(locale)`, språkinriktning där länder delas (`adLocales`: nl 14, fr 1003, de 5), `end_time` = kampanjens slut, två annonser per produkt (pris/produkt). `addSaleVideoAd` lägger en video i marknadens befintliga annonsgrupp. Granskningsregeln (reviewAds) rör dem inte.
+- Texten skrivs på marknadens språk av `writeSaleCopy` (gpt-5.4 via `AD_SALE_MODEL`, gpt-4o skrev stel finska) med kampanjens riktiga priser; spärrlista på alla språk (`bannedAnyLanguage`, även "effektiv/tehokas" och Sverige). Reserv = mall av `blackweek.ts`.
+- Bilden: `src/lib/ad-sale-image.ts` (packshot på svart, rabatt och slutdatum på språket), renderas i Chrome och lagras i `ads/<kampanj-id>/<språk>/`.
+- Körs lokalt: `npx tsx --env-file=.env.local --import ./scripts/server-shim.mjs scripts/meta-sale.mts [fi,da,…] [--budget=10] [--products=a,b] [--images-only]`. `server-shim.mjs` gör servermoduler (server-only, next/cache) körbara i tsx.
+- Black Week 2026: 7 kampanjer (fi, da, nl, de, fr, en, pl), Ashwagandha + Pine Pollen (enda i lager som inte är novel food), 10 USD/dag var, skapade 2026-11-19.

@@ -7,7 +7,7 @@ const env = Object.fromEntries(
     .readFileSync(".env.local", "utf8")
     .split(/\r?\n/)
     .filter((l) => l.includes("=") && !l.startsWith("#"))
-    .map((l) => [l.slice(0, l.indexOf("=")).trim(), l.slice(l.indexOf("=") + 1).trim()]),
+    .map((l) => [l.slice(0, l.indexOf("=")).trim(), l.slice(l.indexOf("=") + 1).trim().replace(/^"(.*)"$/, "$1")]),
 );
 const token = env.META_ADS_TOKEN;
 const act = `act_${env.META_AD_ACCOUNT_ID}`;

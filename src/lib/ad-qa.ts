@@ -107,17 +107,22 @@ export async function reviewImage(o: { referenceUrl: string; imageUrl: string; p
   return review(prompt, [o.referenceUrl, o.imageUrl], minImageScore());
 }
 
-/** Granskar en färdig annons: text + bild tillsammans, regler och fakta. */
-export async function reviewAd(o: { primaryText: string; headline: string; description?: string; imageUrl: string; product: Product }): Promise<Review> {
+/**
+ * Granskar en färdig annons: text + bild tillsammans, regler och fakta.
+ * `language` = annonsens språk (svenska som standard), `context` = verifierade villkor utöver produktfakta (t.ex. kampanjpris).
+ */
+export async function reviewAd(o: { primaryText: string; headline: string; description?: string; imageUrl: string; product: Product; language?: string; context?: string }): Promise<Review> {
   const facts = [o.product.short, ...o.product.bullets].filter(Boolean).join(" · ");
   const prompt = [
     `Du granskar en Meta-annons (Facebook/Instagram) för det svenska kosttillskottsmärket Metilde innan den publiceras. Bilden är annonsens bild.`,
     `Produkt: ${o.product.name}. Verifierade produktfakta: ${facts}`,
+    o.context ? `Verifierade villkor och priser (får nämnas): ${o.context}` : "",
     `Primärtext: """${o.primaryText}"""`,
     `Rubrik: """${o.headline}"""`,
     o.description ? `Beskrivning: """${o.description}"""` : "",
-    `Viktigt: text som är tryckt på produktens egen etikett i bilden (t.ex. produktnamn, extraktstyrka, dos, ikoner och ord på förpackningen som Energy, Performance, Vitality, Food supplement) är förpackningens innehåll och ska INTE bedömas som annonspåståenden. Bedöm bara annonstexten och text som lagts till i bilden utanför förpackningen.`,
-    `Underkänn (verdict "reject") om texten innehåller hälsopåståenden eller antyder effekt på kropp eller sinne (energi, testosteron, sömn, stress, fokus, libido, immunförsvar, prestation, återhämtning, viktnedgång, "naturlig boost" osv.), medicinska termer, före/efter, garantier, jämförelser med läkemedel, eller riktar sig till personliga egenskaper ("du som är över 40", "män med låg…"). Underkänn också om texten påstår fakta som inte finns i produktfakta (dos, styrka, innehåll, certifieringar), om språket inte är korrekt svenska, eller om bilden innehåller text som strider mot samma regler.`,
+    `Viktigt: text som är tryckt på produktens egen etikett i bilden (t.ex. produktnamn, extraktstyrka, dos, ikoner och ord på förpackningen som Energy, Performance, Vitality, Food supplement) är förpackningens innehåll och ska INTE bedömas som annonspåståenden. Bedöm bara annonstexten och text som lagts till i bilden utanför förpackningen. Etikettens tryck (t.ex. ENERGY, PERFORMANCE, VITALITY, FOOD SUPPLEMENT, 60 CAPSULES, WITHANOLIDES, CRACKED CELL WALLS) får aldrig nämnas bland problemen eller dra ner poängen.`,
+    o.context ? `Text i bilden som anger kampanjen (t.ex. "BLACK WEEK", rabatten i procent och slutdatumet) är tillåten när den stämmer med villkoren ovan.` : "",
+    `Underkänn (verdict "reject") om texten innehåller hälsopåståenden eller antyder effekt på kropp eller sinne (energi, testosteron, sömn, stress, fokus, libido, immunförsvar, prestation, återhämtning, viktnedgång, "naturlig boost" osv.), medicinska termer, före/efter, garantier, jämförelser med läkemedel, eller riktar sig till personliga egenskaper ("du som är över 40", "män med låg…"). Underkänn också om texten påstår fakta som inte finns i produktfakta (dos, styrka, innehåll, certifieringar), om språket inte är korrekt ${o.language ?? "svenska"}, om texten nämner Sverige eller att något är svenskt, eller om bilden innehåller text som strider mot samma regler.`,
     `Bedöm sedan: tydlighet, trovärdighet, att text och bild hänger ihop, och att annonsen troligen presterar i flödet. Ge en helhetspoäng 0–100.`,
     jsonFormat,
   ]

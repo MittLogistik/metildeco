@@ -347,3 +347,148 @@ export async function writeCatalogText(o: { products: Product[]; angle: string; 
   }
   return fallback();
 }
+
+/* ------------------------------ Kampanjannonser på marknadens språk ------------------------------ */
+
+/**
+ * Hälsopåståenden på marknadernas språk (en, de, fr, nl, fi, da, pl) och Sverige som ursprung.
+ * Grovt nät före granskningen; modellen instrueras redan att undvika allt detta.
+ */
+const bannedAnyLanguage: { re: RegExp; why: string }[] = [
+  { re: /\b(energy|energie|énergie|energia|energi|energiaa)\b/i, why: "energi" },
+  { re: /testosteron|hormon/i, why: "hormoner" },
+  { re: /\b(libido|potency|potenz|puissance sexuelle)\b/i, why: "libido" },
+  { re: /\b(sleep|schlaf\w*|sommeil|slaap|søvn|unta|unen|uni)\b/i, why: "sömn" },
+  { re: /\b(stress\w*|stres\w*|anxiety|angst|anxiété|ahdistus)\b/i, why: "stress" },
+  { re: /\b(focus|fokus|konzentration|concentration|concentratie|keskittym\w*|koncentracj\w*)\b/i, why: "fokus" },
+  { re: /\b(immun\w*|odporno\w*|vastustusky\w*)\b/i, why: "immunförsvar" },
+  { re: /\b(performance|leistung\w*|prestatie\w*|suoritusky\w*|wydajno\w*|ydeevne)\b/i, why: "prestation" },
+  { re: /\b(muscle\w*|muskel\w*|spier\w*|lihas\w*|mięś\w*|muskl\w*)\b/i, why: "muskler" },
+  { re: /\b(vitality|vitalität|vitalité|vitaliteit|vitalitet|elinvoima\w*|witalno\w*)\b/i, why: "vitalitet" },
+  { re: /\b(boost\w*|recovery|erholung|récupération|herstel|palautum\w*|regeneracj\w*|restitution)\b/i, why: "boost och återhämtning" },
+  { re: /\b(swed\w*|schwed\w*|suède|suédois\w*|zweed\w*|zweden|ruotsi\w*|sverige|svensk\w*|szwecj\w*|szwedzk\w*)\b/i, why: "Sverige som ursprung" },
+  { re: /\b(tehok\w*|effective\w*|effektiv\w*|wirksam\w*|efficac\w*|effectie\w*|skuteczn\w*|powerful|kraftvoll\w*|puissant\w*|krachtig\w*|voimakk\w*|potężn\w*)/i, why: "effekt (effektiv, kraftfull)" },
+  { re: /\b(third[- ]party tested|lab[- ]tested|laborgeprüft|certified|zertifiziert|certifié)\b/i, why: "tester och certifieringar" },
+];
+
+export type SaleBrief = {
+  /** Produkten från marknadens katalog: namn, fakta och priser på språket och i valutan. */
+  product: Product;
+  /** Språkets namn på engelska, t.ex. "Finnish". */
+  language: string;
+  /** Färdigformaterade fakta: kampanjpriset, ordinarie pris, slutdatum, frakt. */
+  facts: string[];
+  /** "price" = erbjudandet först, "product" = råvaran först och erbjudandet sist. */
+  angle: "price" | "product";
+  notes?: string[];
+  avoid?: string;
+};
+
+const saleSystem = (language: string) => `You are the copywriter for Metilde, a brand of botanical food supplements in capsules.
+You write Meta ads (Facebook and Instagram) for a time-limited sale. Write ONLY in ${language}, natural and idiomatic, as a native copywriter would. Never mix in Swedish or English words (except brand and product names).
+
+TONE: direct, confident, personal. Short sentences. Address the reader informally where natural in ${language}. Open with a hook that stops the scroll. Always end with a clear call to buy before the sale ends. Use 2–5 emojis in the primary text, placed naturally (e.g. as a short list), at most one in the headline. No hashtags. No all-caps words except "BLACK WEEK".
+
+FORBIDDEN – the ad is stopped if you break this:
+- Anything suggesting the product does something for the body or mind: energy, testosterone, hormones, libido, sleep, stress, mood, focus, memory, immunity, performance, recovery, muscles, weight, vitality, "boost". The label on the jar shows words like Energy/Performance/Vitality – never repeat them.
+- Medical words, before/after, comparisons with medicine, promises of results, addressing personal traits ("if you are over 40").
+- Numbers, prices, dates, test results, certifications or offers that are not in the facts you are given. Use the prices exactly as written.
+- Calling the product effective, powerful or potent in any language (e.g. tehokas, wirksam, efficace, effectief, skuteczny, effektiv) – describe what it contains, never what it does.
+- Mentioning Sweden or that anything is Swedish. Saying the products are tested, lab-tested or certified.
+- Inventing urgency beyond the real end date.
+
+WHAT YOU SELL ON: the sale (the exact discount, price and end date), the botanical raw material and extract strength per capsule as given, vegan capsule without fillers, one capsule a day, the shipping and return terms as given.
+
+Answer only with JSON: {"primaryText": "...", "headline": "...", "description": "..."}
+primaryText: 90–600 characters, line breaks welcome. headline: max 40 characters. description: max 40 characters.`;
+
+/**
+ * Kampanjtexter på andra språk än svenska skrivs av en starkare modell än de svenska
+ * (gpt-4o skriver stelt på finska och polska): OpenAI gpt-5.4 i första hand (AD_SALE_MODEL),
+ * annars Claude. Misslyckas anropet används samma väg som övriga texter.
+ */
+async function askSale(system: string, user: string): Promise<string> {
+  try {
+    if (process.env.OPENAI_API_KEY) {
+      const res = await fetch("https://api.openai.com/v1/chat/completions", {
+        method: "POST",
+        headers: { "content-type": "application/json", authorization: `Bearer ${process.env.OPENAI_API_KEY}` },
+        body: JSON.stringify({
+          model: process.env.AD_SALE_MODEL ?? "gpt-5.4",
+          reasoning_effort: "low",
+          max_completion_tokens: 4000,
+          response_format: { type: "json_object" },
+          messages: [
+            { role: "system", content: system },
+            { role: "user", content: user },
+          ],
+        }),
+      });
+      const data = (await res.json()) as { choices?: { message?: { content?: string | null } }[]; error?: { message?: string } };
+      if (!res.ok) throw new Error(`OpenAI: ${data.error?.message ?? res.status}`);
+      return data.choices?.[0]?.message?.content ?? "";
+    }
+    if (process.env.ANTHROPIC_API_KEY) {
+      const res = await fetch("https://api.anthropic.com/v1/messages", {
+        method: "POST",
+        headers: { "content-type": "application/json", "x-api-key": process.env.ANTHROPIC_API_KEY, "anthropic-version": "2023-06-01" },
+        body: JSON.stringify({ model: process.env.AD_SALE_MODEL ?? "claude-sonnet-5-5", max_tokens: 900, system, messages: [{ role: "user", content: user }] }),
+      });
+      const data = (await res.json()) as { content?: { text?: string }[]; error?: { message?: string } };
+      if (!res.ok) throw new Error(`Anthropic: ${data.error?.message ?? res.status}`);
+      return data.content?.map((c) => c.text ?? "").join("") ?? "";
+    }
+  } catch {
+    // faller tillbaka nedan
+  }
+  return askText(system, user);
+}
+
+/**
+ * Kampanjtext (t.ex. Black Week) på marknadens språk. Samma kontroller som de svenska
+ * annonserna plus en spärrlista som täcker marknadernas språk. Kastar aldrig: om AI:n inte
+ * håller returneras null och anroparen använder sin översatta mall.
+ */
+export async function writeSaleCopy(o: SaleBrief): Promise<AdCopy | null> {
+  if (!copyAiConfigured()) return null;
+  const p = o.product;
+  let brief = [
+    `Product: ${p.name}`,
+    `Short description (${o.language}): ${p.short}`,
+    p.bullets.length ? `Verified product facts – the only product facts you may use:\n- ${p.bullets.join("\n- ")}` : "",
+    `Verified sale facts and terms:\n- ${o.facts.join("\n- ")}`,
+    o.angle === "price"
+      ? "Angle: lead with the deal – the discount and the new price against the regular price – then one product fact, then the end date and a call to buy."
+      : "Angle: lead with the botanical raw material and the extract strength, then reveal the sale price and end date as the reason to buy now.",
+  ]
+    .filter(Boolean)
+    .join("\n");
+  if (o.avoid) brief = `${brief}\n\nAn earlier text was rejected by the reviewer because: "${o.avoid}". Avoid that completely.`;
+  for (let attempt = 0; attempt < 2; attempt++) {
+    try {
+      const raw = parse(await askSale(saleSystem(o.language), brief));
+      if (!raw) {
+        brief = `${brief}\n\nYour last answer was not valid JSON. Answer only with JSON.`;
+        continue;
+      }
+      const copy = { primaryText: clean(raw.primaryText, LIMITS.primaryMax), headline: clean(raw.headline, LIMITS.headlineMax), description: clean(raw.description, LIMITS.descriptionMax) };
+      let problem: string | null = null;
+      if (copy.primaryText.length < LIMITS.primaryMin) problem = `the primary text is too short (${copy.primaryText.length} characters, at least ${LIMITS.primaryMin}).`;
+      else if (!copy.headline) problem = "the headline is missing.";
+      else if (emojiCount(copy.primaryText) < 1) problem = "the primary text has no emojis.";
+      else if (emojiCount(copy.headline) > 1) problem = "the headline has more than one emoji.";
+      else {
+        const all = `${copy.primaryText}\n${copy.headline}\n${copy.description}`;
+        const hit = bannedAnyLanguage.find(({ re }) => re.test(all));
+        if (hit) problem = `the text contains a forbidden claim about ${hit.why} ("${all.match(hit.re)?.[0]}").`;
+      }
+      if (!problem) return { ...copy, description: copy.description || undefined, source: "ai" };
+      o.notes?.push(`${p.slug} ${o.angle}: omskrivning – ${problem}`);
+      brief = `${brief}\n\nYour last proposal was not approved: ${problem} Rewrite it without that, keep the selling tone and the emojis.`;
+    } catch (e) {
+      o.notes?.push(`${p.slug} ${o.angle}: AI-texten misslyckades (${e instanceof Error ? e.message : e}).`);
+      return null;
+    }
+  }
+  return null;
+}
