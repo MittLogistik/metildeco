@@ -6,7 +6,7 @@ import { Card } from "../_components/fields";
 
 export default async function AdminBundlesPage() {
   await requireAdmin();
-  const { allBundles, bundles } = await getCatalog();
+  const { allBundles, bundles } = await getCatalog(undefined, true);
   const visible = new Set(bundles.map((b) => b.slug));
   return (
     <div className="space-y-6">

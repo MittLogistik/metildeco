@@ -22,6 +22,8 @@ export type Product = {
   category: string;
   price: number;
   oldPrice: number | null;
+  /** Pris utan kampanj. Samma som price utanför kampanjer; prenumerationens följande leveranser räknas på det. */
+  regularPrice: number;
   rating: number;
   reviews: number;
   tags: string[];
@@ -121,6 +123,7 @@ export const productFromRow = (r: ProductRow, sekPrice?: { price: number | strin
     category: r.category,
     price,
     oldPrice,
+    regularPrice: price,
     rating: Number(r.rating),
     reviews: r.reviews,
     tags: r.tags ?? [],
@@ -194,6 +197,20 @@ export const tieredUnitPrice = (
 export const subscriptionUnitPrice = (price: number, discountPercent: number, currency = "SEK"): number =>
   roundPrice(price * (1 - discountPercent / 100), currency);
 
+/**
+ * Prenumerationens styckpris: första leveransen och de följande. Under en kampanj får första
+ * leveransen kampanjpriset när det är lägre; därefter gäller vanlig prenumerationsrabatt på
+ * ordinarie pris. Utanför kampanjer är de lika.
+ */
+export const subscriptionPrices = (
+  p: Pick<Product, "price" | "regularPrice">,
+  discountPercent: number,
+  currency = "SEK",
+): { first: number; recurring: number } => {
+  const recurring = subscriptionUnitPrice(p.regularPrice, discountPercent, currency);
+  return { first: Math.min(p.price, recurring), recurring };
+};
+
 /** Antal kapslar/tabletter enligt namnet, t.ex. "… | 60 kapslar" → 60 (även finska, danska och nederländska namn). */
 export const unitCount = (p: Pick<Product, "name">): number | null => {
   const m = p.name.match(/(\d+)\s*(kapslar|tabletter|kapselia|tablettia|kapsler|capsules|tabletten)/i);
@@ -226,6 +243,7 @@ export type SlimProduct = Pick<
   | "sku"
   | "name"
   | "price"
+  | "regularPrice"
   | "images"
   | "bg"
   | "tieredPricing"
@@ -245,6 +263,7 @@ export const slimProduct = (p: Product): SlimProduct => ({
   sku: p.sku,
   name: p.name,
   price: p.price,
+  regularPrice: p.regularPrice,
   images: p.images.slice(0, 1),
   bg: p.bg,
   tieredPricing: p.tieredPricing,

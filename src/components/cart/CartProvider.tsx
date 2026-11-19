@@ -2,7 +2,7 @@
 
 import { createContext, useCallback, useContext, useMemo, useState, useSyncExternalStore, type ReactNode } from "react";
 import { site } from "@/lib/site";
-import { offerGiftSlugs, subscriptionUnitPrice, tieredUnitPrice, type SlimProduct } from "@/lib/products";
+import { offerGiftSlugs, subscriptionPrices, tieredUnitPrice, type SlimProduct } from "@/lib/products";
 import type { SlimBundle } from "@/lib/bundles";
 import type { CatalogSnapshot } from "@/lib/catalog";
 import type { Currency } from "@/lib/i18n";
@@ -10,6 +10,8 @@ import { cheapestRate, shippingCost } from "@/lib/shipping";
 import { formatPrice } from "@/lib/format";
 import { useI18n } from "@/i18n/client";
 import { cart as cartMessages } from "@/i18n/messages/cart";
+import { blackWeek } from "@/i18n/messages/blackweek";
+import type { CampaignInfo } from "@/lib/campaign";
 import { track } from "@/lib/track";
 import { metaTrack } from "@/components/consent/MetaPixel";
 import { metaContentId } from "@/lib/consent";
@@ -24,6 +26,8 @@ export type ResolvedLine = CartLine & {
   unitPrice: number;
   /** Ordinarie styckpris innan rabatter. */
   listPrice: number;
+  /** Prenumeration under kampanj: styckpriset från andra leveransen. */
+  recurringPrice: number | null;
   lineTotal: number;
   discountLabel: string | null;
   freeShipping: boolean;
@@ -34,6 +38,8 @@ export type ResolvedLine = CartLine & {
 type CartState = {
   /** Valutan för aktuellt språk – alla belopp i korgen är i den. */
   currency: Currency;
+  /** Pågående kampanj (Black Week) – priserna i katalogen är då redan sänkta. */
+  campaign: CampaignInfo | null;
   lines: CartLine[];
   resolved: ResolvedLine[];
   count: number;
@@ -59,7 +65,7 @@ type CartState = {
 
 const CartContext = createContext<CartState | null>(null);
 
-type Labels = (typeof cartMessages)[keyof typeof cartMessages];
+type Labels = (typeof cartMessages)[keyof typeof cartMessages] & { campaignDiscount: (pct: number) => string };
 
 /**
  * Korgen i localStorage delas mellan /sv, /fi och /da. Raderna bär inga priser: allt räknas
@@ -69,14 +75,17 @@ const resolve = (line: CartLine, catalog: CatalogSnapshot, t: Labels): ResolvedL
   if (line.kind === "bundle") {
     const bundle = catalog.bundles.find((b) => b.slug === line.slug);
     if (!bundle) return null;
+    // Under kampanj jämförs paketet med sitt eget ordinarie pris, annars med delarna
+    const campaign = catalog.campaign;
     return {
       ...line,
       name: bundle.name,
       image: bundle.images[0] ?? "/media/placeholder.svg",
       unitPrice: bundle.price,
-      listPrice: bundle.value,
+      listPrice: campaign ? bundle.regularPrice : bundle.value,
+      recurringPrice: null,
       lineTotal: bundle.price * line.qty,
-      discountLabel: bundle.discount > 0 ? t.bundleDiscount(bundle.discount) : null,
+      discountLabel: campaign ? t.campaignDiscount(campaign.percent) : bundle.discount > 0 ? t.bundleDiscount(bundle.discount) : null,
       freeShipping: bundle.freeShipping,
       bundle,
     };
@@ -91,6 +100,7 @@ const resolve = (line: CartLine, catalog: CatalogSnapshot, t: Labels): ResolvedL
       image: product.images[0] ?? "/media/placeholder.svg",
       unitPrice: 0,
       listPrice: product.price,
+      recurringPrice: null,
       lineTotal: 0,
       discountLabel: t.giftValue(formatPrice(product.price, catalog.currency)),
       freeShipping: true,
@@ -98,10 +108,13 @@ const resolve = (line: CartLine, catalog: CatalogSnapshot, t: Labels): ResolvedL
     };
   }
   let unitPrice = product.price;
-  let discountLabel: string | null = null;
+  let recurringPrice: number | null = null;
+  let discountLabel: string | null = catalog.campaign ? t.campaignDiscount(catalog.campaign.percent) : null;
   if (line.plan === "sub") {
-    unitPrice = subscriptionUnitPrice(product.price, site.subscriptionDiscount, catalog.currency);
-    discountLabel = t.subDiscount(site.subscriptionDiscount);
+    const sub = subscriptionPrices(product, site.subscriptionDiscount, catalog.currency);
+    unitPrice = sub.first;
+    if (sub.first < sub.recurring) recurringPrice = sub.recurring;
+    else discountLabel = t.subDiscount(site.subscriptionDiscount);
   } else if (product.tieredPricing && line.qty >= 2) {
     unitPrice = tieredUnitPrice(product, line.qty, catalog.currency);
     const pct = line.qty >= 3 ? product.tier3Discount : product.tier2Discount;
@@ -112,7 +125,8 @@ const resolve = (line: CartLine, catalog: CatalogSnapshot, t: Labels): ResolvedL
     name: product.name,
     image: product.images[0] ?? "/media/placeholder.svg",
     unitPrice,
-    listPrice: product.price,
+    listPrice: product.regularPrice,
+    recurringPrice,
     lineTotal: unitPrice * line.qty,
     discountLabel,
     freeShipping: line.plan === "sub",
@@ -136,7 +150,7 @@ export function CartProvider({ catalog, children }: { catalog: CatalogSnapshot; 
   const lines = useSyncExternalStore(cartStore.subscribe, cartStore.getSnapshot, cartStore.getServerSnapshot);
   const [isOpen, setOpen] = useState(false);
   const { locale } = useI18n();
-  const t = cartMessages[locale];
+  const t = useMemo<Labels>(() => ({ ...cartMessages[locale], campaignDiscount: blackWeek[locale].cartLabel }), [locale]);
 
   const upsert = useCallback((line: CartLine) => {
     cartStore.update((prev) => {
@@ -231,6 +245,7 @@ export function CartProvider({ catalog, children }: { catalog: CatalogSnapshot; 
     const shipping = resolved.length === 0 || allFree ? 0 : shippingCost(rate, subtotal);
     return {
       currency: catalog.currency,
+      campaign: catalog.campaign,
       lines,
       resolved,
       count: resolved.reduce((s, l) => s + l.qty, 0),

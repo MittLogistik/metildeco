@@ -157,7 +157,7 @@ primaryText: 90–600 tecken, gärna radbrytningar. headline: högst 40 tecken. 
 const productBrief = (product: Product, hook: string, angle: AdAngle) =>
   [
     `Produkt: ${product.name}`,
-    `Pris: ${product.price} kr för ${[product.variant?.size, product.variant?.format].filter(Boolean).join(" ") || "en burk"}`,
+    `Pris: ${product.regularPrice} kr för ${[product.variant?.size, product.variant?.format].filter(Boolean).join(" ") || "en burk"}`,
     `Kort beskrivning: ${product.short}`,
     product.bullets.length ? `Verifierade fakta (bara dessa får användas):\n- ${product.bullets.join("\n- ")}` : "",
     `Faktamening att bygga på: ${hook}`,
@@ -267,7 +267,7 @@ export async function writeAdCopyFromImage(o: { product: Product; imageUrl: stri
   if (!copyAiConfigured()) return templateCopy(o.product, o.fallbackAngle, o.hook);
   let brief = [
     `Produkt: ${o.product.name}`,
-    `Pris: ${o.product.price} kr för ${[o.product.variant?.size, o.product.variant?.format].filter(Boolean).join(" ") || "en burk"}`,
+    `Pris: ${o.product.regularPrice} kr för ${[o.product.variant?.size, o.product.variant?.format].filter(Boolean).join(" ") || "en burk"}`,
     `Kort beskrivning: ${o.product.short}`,
     o.product.bullets.length ? `Verifierade fakta (bara dessa får användas):\n- ${o.product.bullets.join("\n- ")}` : "",
     `Faktamening att bygga på: ${o.hook}`,

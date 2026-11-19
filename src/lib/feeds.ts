@@ -1,6 +1,7 @@
 import "server-only";
 import { productContentFor } from "@/content/i18n";
 import { bundleInStock, type Bundle } from "./bundles";
+import type { Campaign } from "./campaign";
 import { getCatalog } from "./catalog";
 import { countriesOf, defaultLocale, type Locale } from "./i18n";
 import { imagesFor, isInStock, unitCount, type Product } from "./products";
@@ -32,7 +33,18 @@ const feedText: Record<Locale, { channel: string; contains: string; bundleType: 
   pl: { channel: "Ekstrakty roślinne i grzybowe w kapsułkach.", contains: "Zawiera", bundleType: "Zestaw" },
 };
 
-type Ctx = { locale: Locale; currency: string };
+/** sale = giltighetstid för kampanjpriser (Black Week), ISO 8601 "start/slut", annars null. */
+type Ctx = { locale: Locale; currency: string; sale: string | null };
+
+const saleWindow = (campaign: Campaign | null) => (campaign ? `${campaign.start}/${campaign.end}` : null);
+
+/** Rabatterat pris i feeden: ordinarie pris som g:price, kampanjpriset som g:sale_price med giltighetstid. */
+const salePrice = (regular: number, price: number, c: Ctx) =>
+  regular > price
+    ? `${tag("g:price", money(regular, c))}
+${tag("g:sale_price", money(price, c))}
+${c.sale ? tag("g:sale_price_effective_date", c.sale) : ""}`
+    : tag("g:price", money(price, c));
 
 const GOOGLE_CATEGORY = "Health & Beauty > Health Care > Fitness & Nutrition > Vitamins & Supplements";
 
@@ -101,8 +113,7 @@ ${tag("link", abs(routesOf(c.locale).product(p.slug)))}
 ${tag("g:image_link", images[0])}
 ${images.slice(1, 11).map((src) => tag("g:additional_image_link", src)).join("\n")}
 ${tag("g:availability", isInStock(p) ? "in_stock" : "out_of_stock")}
-${tag("g:price", money(onSale ? p.oldPrice! : p.price, c))}
-${onSale ? tag("g:sale_price", money(p.price, c)) : ""}
+${salePrice(onSale ? p.oldPrice! : p.price, p.price, c)}
 ${shipping(p.price, false, c)}
 ${tag("g:brand", p.brand)}
 ${tag("g:gtin", p.gtin)}
@@ -128,7 +139,7 @@ ${tag("link", abs(routesOf(c.locale).bundle(b.slug)))}
 ${tag("g:image_link", images[0])}
 ${images.slice(1, 11).map((src) => tag("g:additional_image_link", src)).join("\n")}
 ${tag("g:availability", bundleInStock(b) ? "in_stock" : "out_of_stock")}
-${tag("g:price", money(b.price, c))}
+${salePrice(b.regularPrice, b.price, c)}
 ${shipping(b.price, b.freeShipping, c)}
 ${tag("g:brand", "Metilde")}
 ${tag("g:identifier_exists", "no")}
@@ -143,8 +154,8 @@ ${tag("g:adult", "no")}
 };
 
 export async function buildGoogleFeed(locale: Locale = defaultLocale): Promise<string> {
-  const { products, bundles, currency } = await getCatalog(locale);
-  const c: Ctx = { locale, currency };
+  const { products, bundles, currency, campaign } = await getCatalog(locale);
+  const c: Ctx = { locale, currency, sale: saleWindow(campaign) };
   const items = [
     ...products.filter((p) => !p.feedExclusions.includes("google")).map((p) => productItem(p, c)),
     ...bundles.map((b) => bundleItem(b, c)),
@@ -180,8 +191,7 @@ ${tag("link", abs(routesOf(c.locale).product(p.slug)))}
 ${tag("g:image_link", images[0])}
 ${images.slice(1, 11).map((src) => tag("g:additional_image_link", src)).join("\n")}
 ${tag("g:availability", isInStock(p) ? "in stock" : "out of stock")}
-${tag("g:price", money(onSale ? p.oldPrice! : p.price, c))}
-${onSale ? tag("g:sale_price", money(p.price, c)) : ""}
+${salePrice(onSale ? p.oldPrice! : p.price, p.price, c)}
 ${tag("g:brand", p.brand)}
 ${tag("g:gtin", p.gtin)}
 ${tag("g:mpn", p.mpn)}
@@ -203,7 +213,7 @@ ${tag("link", abs(routesOf(c.locale).bundle(b.slug)))}
 ${tag("g:image_link", images[0])}
 ${images.slice(1, 11).map((src) => tag("g:additional_image_link", src)).join("\n")}
 ${tag("g:availability", bundleInStock(b) ? "in stock" : "out of stock")}
-${tag("g:price", money(b.price, c))}
+${salePrice(b.regularPrice, b.price, c)}
 ${tag("g:brand", "Metilde")}
 ${tag("g:condition", "new")}
 ${tag("g:fb_product_category", META_CATEGORY)}
@@ -213,8 +223,8 @@ ${tag("g:product_type", feedText[c.locale].bundleType)}
 };
 
 export async function buildMetaFeed(locale: Locale = defaultLocale): Promise<string> {
-  const { products, bundles, currency } = await getCatalog(locale);
-  const c: Ctx = { locale, currency };
+  const { products, bundles, currency, campaign } = await getCatalog(locale);
+  const c: Ctx = { locale, currency, sale: saleWindow(campaign) };
   const items = [
     ...products.filter((p) => !p.feedExclusions.includes("meta") && !p.feedExclusions.includes("facebook")).map((p) => metaProductItem(p, c)),
     ...bundles.map((b) => metaBundleItem(b, c)),

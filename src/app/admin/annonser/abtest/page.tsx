@@ -14,7 +14,7 @@ export default async function AbTestPage({ searchParams }: PageProps<"/admin/ann
   await requireAdmin();
   const sp = await searchParams;
   const days = Math.min(365, Math.max(1, Number(sp.dagar ?? 30) || 30));
-  const [settings, report, catalog] = await Promise.all([getExperimentSettings(), experimentReport(days), getCatalog()]);
+  const [settings, report, catalog] = await Promise.all([getExperimentSettings(), experimentReport(days), getCatalog(undefined, true)]);
   const withOffer = catalog.allProducts.filter((p) => p.offerEnabled);
   const [a, b] = report.variants;
   const rows: { label: string; a: string; b: string; hint?: string }[] = [

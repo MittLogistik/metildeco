@@ -151,3 +151,12 @@ quiz, presentkort, spåra order, mitt konto, samarbeten/jobba hos oss, fler spr�
 - Rapporter, statistik och kundintäkt räknas i SEK med orderns `exchange_rate_to_sek` (tabellen exchange_rates uppdateras inte automatiskt). Affiliatemoms: FI 13,5 %, DK 25 %, NL 9 %; DE 7, AT 10, FR 5,5, BE 6, LU 3, IE 23, PL 8 % (standardvärden, ej avstämda med revisor).
 - Paket- och produktsidornas `generateStaticParams` returnerar en platshållare (`saknas`, ger 404) när ett språk saknar varor. En tom lista för ett språk (svenska paket efter novel food-stängningen) gjorde att Next inte förrenderade några paketsidor alls – alla gav 404 på alla språk.
 - Novel food är öppet på de nya marknaderna (Albins beslut 2026-11-02, stängs per land via `CLOSED_IN`).
+
+## Kampanjer (Black Week)
+- `src/lib/campaign.ts`: tidsstyrd kampanj (`BLACK_WEEK`, 25 %, 2026-11-19 00:00 – 2026-11-30 23:59 CET). `getCatalog` sänker alla produkt- och paketpriser medan den pågår; ordinarie pris blir `oldPrice` (= lägsta pris senaste 30 dagarna, visas på produkt- och paketsidan). Före och efter är butiken som vanligt – inget att återställa. `CAMPAIGN_OFF=true` stänger av direkt.
+- `regularPrice` på produkt och paket = pris utan kampanj. Admin läser katalogen med `getCatalog(locale, true)` (ordinarie priser) så att formulär aldrig sparar ett kampanjpris; annonsskrivaren använder också `regularPrice`.
+- Inga andra rabatter under kampanjen: mängdrabatt och köperbjudande (variant B, A/B-testet pausas) stängs av i katalogen, kassan tar inte emot rabattkoder och påminnelsemejlen skickar ingen KORG10.
+- Prenumeration: första leveransen får kampanjpriset, därefter vanliga 15 % på ordinarie pris (`subscriptionPrices`). Stripe-priset är det återkommande; mellanskillnaden dras som en engångskupong (`firstDeliveryDiscount`, `duration: once`) på första fakturan.
+- Design: svart topprad med nedräkning (`components/campaign/CampaignBar`), svart banner överst på startsidan (`BlackWeekHero`, sidans h1), svarta märken (`Badge tone="campaign"`), kampanjpris i `text-sale`. Texter på alla språk i `src/i18n/messages/blackweek.ts`.
+- Feeds: `g:price` = ordinarie, `g:sale_price` + `g:sale_price_effective_date`. Cron `/api/cron/campaign` (var 10:e min) förnyar katalogen inom 30 min efter start/slut, så att statiska sidor inte visar kampanjpris när kassan tagit ordinarie.
+- Ny kampanj: lägg till i `campaigns` med nytt id och datum. Texterna i blackweek.ts är Black Week-specifika.

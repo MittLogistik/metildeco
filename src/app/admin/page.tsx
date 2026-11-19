@@ -135,7 +135,7 @@ export default async function AdminDashboard({ searchParams }: PageProps<"/admin
   const db = supabaseAdmin();
   const [latest, catalog, subs] = await Promise.all([
     db.from("orders").select("id,order_number,created_at,email,shipping_name,total,currency,status,kind").eq("environment", env).order("created_at", { ascending: false }).limit(6),
-    getCatalog(),
+    getCatalog(undefined, true),
     getSubscriptionOverview(env),
   ]);
   const orders = (latest.data ?? []) as OrderRow[];

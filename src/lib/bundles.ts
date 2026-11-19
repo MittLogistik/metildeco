@@ -14,7 +14,9 @@ export type Bundle = {
   short: string;
   description: string[];
   price: number;
-  /** Summan av ingående produkters ordinarie pris. */
+  /** Paketpris utan kampanj (samma som price utanför kampanjer). */
+  regularPrice: number;
+  /** Summan av ingående produkters pris. */
   value: number;
   discount: number;
   bg: string;
@@ -66,7 +68,7 @@ export function buildBundles(
   components: BundleComponentRow[],
   products: Product[],
   prices: Map<string, { price: number | string; old_price: number | string | null }> = new Map(),
-  { includeHidden = false, currency = "SEK" }: { includeHidden?: boolean; currency?: string } = {},
+  { includeHidden = false, currency = "SEK", sale }: { includeHidden?: boolean; currency?: string; sale?: (price: number) => number } = {},
 ): Bundle[] {
   const bySlug = new Map(products.map((p) => [p.slug, p]));
   const out: Bundle[] = [];
@@ -87,7 +89,9 @@ export function buildBundles(
     if ((!complete || items.length === 0) && !includeHidden) continue;
 
     const priceRow = prices.get(row.slug);
-    const price = priceRow ? Number(priceRow.price) : Number(row.price);
+    const regularPrice = priceRow ? Number(priceRow.price) : Number(row.price);
+    // Kampanj: paketet sänks lika mycket som produkterna, så jämförelsen med delarna håller
+    const price = sale ? sale(regularPrice) : regularPrice;
     const value = items.reduce((s, i) => s + i.product.price * i.qty, 0);
     if (price >= value && items.length > 0 && !includeHidden) {
       warn(`${row.slug} döljs: paketpriset ${price} ${currency} är inte lägre än delarna (${value} ${currency}).`);
@@ -100,6 +104,7 @@ export function buildBundles(
       short: row.short,
       description: row.description ?? [],
       price,
+      regularPrice,
       value,
       discount: value > 0 ? Math.max(0, Math.round((1 - price / value) * 100)) : 0,
       bg: row.bg,
@@ -119,7 +124,7 @@ export function buildBundles(
 /** Ett paket är köpbart när alla ingående produkter finns i lager. */
 export const bundleInStock = (b: Bundle): boolean => b.items.every((i) => !i.product.trackStock || i.product.stock >= i.qty);
 
-export type SlimBundle = Pick<Bundle, "slug" | "sku" | "name" | "price" | "value" | "discount" | "images" | "freeShipping"> & {
+export type SlimBundle = Pick<Bundle, "slug" | "sku" | "name" | "price" | "regularPrice" | "value" | "discount" | "images" | "freeShipping"> & {
   items: { slug: string; qty: number }[];
 };
 
@@ -128,6 +133,7 @@ export const slimBundle = (b: Bundle): SlimBundle => ({
   sku: b.sku,
   name: b.name,
   price: b.price,
+  regularPrice: b.regularPrice,
   value: b.value,
   discount: b.discount,
   images: b.images.slice(0, 1),

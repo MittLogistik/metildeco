@@ -11,7 +11,8 @@ import { clientValues, useClientValue } from "./clientStore";
 import { storedVariant } from "@/lib/experiment-client";
 import { formatPrice } from "@/lib/format";
 import { site } from "@/lib/site";
-import { subscriptionUnitPrice } from "@/lib/products";
+import { subscriptionPrices } from "@/lib/products";
+import { blackWeek } from "@/i18n/messages/blackweek";
 import { useI18n } from "@/i18n/client";
 import { checkout as checkoutMessages } from "@/i18n/messages/checkout";
 import { track } from "@/lib/track";
@@ -136,7 +137,7 @@ export function Checkout() {
 
   // Samma styckpris som korgen och servern räknar för prenumeration
   const subSavings = onceLines.reduce(
-    (s, l) => s + (l.listPrice - subscriptionUnitPrice(l.listPrice, site.subscriptionDiscount, cart.currency)) * l.qty,
+    (s, l) => s + (l.unitPrice - (l.product ? subscriptionPrices(l.product, site.subscriptionDiscount, cart.currency).first : l.unitPrice)) * l.qty,
     0,
   );
 
@@ -155,7 +156,7 @@ export function Checkout() {
             ))}
           </ul>
 
-          {onceLines.length > 0 ? (
+          {onceLines.length > 0 && subSavings > 0 ? (
             <div className="mt-6 rounded-card bg-primary-soft p-5">
               <h2 className="font-display text-lg font-medium">{t.convertTitle}</h2>
               <p className="mt-1 text-sm text-muted">
@@ -199,7 +200,11 @@ export function Checkout() {
             />
             <span className="mt-1 block text-xs text-muted">{t.emailHint}</span>
           </label>
-          {code ? (
+          {cart.campaign ? (
+            <p className="mt-3 rounded-xl bg-black px-3 py-2 text-sm text-white">
+              <strong className="font-semibold">{blackWeek[locale].cartLabel(cart.campaign.percent)}</strong> · {blackWeek[locale].terms}
+            </p>
+          ) : code ? (
             <p className="mt-3 rounded-xl bg-primary-soft px-3 py-2 text-sm">
               {t.codeBefore}
               <strong className="font-mono">{code}</strong>
@@ -221,7 +226,7 @@ export function Checkout() {
             <LockIcon size={14} className="mt-0.5 shrink-0" />
             <span>
               {t.stripeNote}
-              {code ? "" : t.codeThere}
+              {code || cart.campaign ? "" : t.codeThere}
             </span>
           </p>
           <PaymentMethods

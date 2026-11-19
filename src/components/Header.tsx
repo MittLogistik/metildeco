@@ -10,6 +10,7 @@ import { formatPrice } from "@/lib/format";
 import { hasPage, type RouteKey } from "@/lib/routes";
 import { freeShippingOver } from "@/lib/shipping";
 import { useCart } from "@/components/cart/CartProvider";
+import { CampaignBar } from "@/components/campaign/CampaignBar";
 import { CartIcon, CloseIcon, MenuIcon } from "@/components/icons";
 import { Container } from "@/components/ui";
 
@@ -29,13 +30,17 @@ export function Header() {
 
   return (
     <>
-      <div className="bg-primary text-primary-fg">
-        <Container className="flex min-h-9 items-center justify-center py-1.5 text-center text-xs font-medium tracking-wide">
-          <p>
-            {t.freeShipping(formatPrice(freeShippingOver(locale), market.currency))} <span className="mx-2 opacity-50">·</span> {t.sameDay}
-          </p>
-        </Container>
-      </div>
+      {cart.campaign ? (
+        <CampaignBar campaign={cart.campaign} />
+      ) : (
+        <div className="bg-primary text-primary-fg">
+          <Container className="flex min-h-9 items-center justify-center py-1.5 text-center text-xs font-medium tracking-wide">
+            <p>
+              {t.freeShipping(formatPrice(freeShippingOver(locale), market.currency))} <span className="mx-2 opacity-50">·</span> {t.sameDay}
+            </p>
+          </Container>
+        </div>
+      )}
 
       <header className="sticky top-0 z-40 border-b border-line bg-white/90 backdrop-blur">
         <Container className="flex h-16 items-center justify-between gap-4">

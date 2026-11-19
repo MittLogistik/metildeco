@@ -61,7 +61,7 @@ function ProductTable({ list }: { list: Product[] }) {
 
 export default async function AdminProductsPage() {
   await requireAdmin();
-  const { allProducts } = await getCatalog();
+  const { allProducts } = await getCatalog(undefined, true);
   const active = allProducts.filter((p) => p.isActive);
   const inactive = allProducts.filter((p) => !p.isActive);
 

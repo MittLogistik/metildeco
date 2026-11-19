@@ -4,7 +4,8 @@ import { useState } from "react";
 import { useCart, type Plan } from "./CartProvider";
 import { formatPrice } from "@/lib/format";
 import { site } from "@/lib/site";
-import { subscriptionUnitPrice, tieredUnitPrice, unitCount, type Product } from "@/lib/products";
+import { subscriptionPrices, tieredUnitPrice, unitCount, type Product } from "@/lib/products";
+import { blackWeek } from "@/i18n/messages/blackweek";
 import { useI18n } from "@/i18n/client";
 import { cart as cartMessages } from "@/i18n/messages/cart";
 
@@ -23,10 +24,14 @@ export function ProductBuyBox({ product, inStock }: { product: Product; inStock:
   const currency = cart.currency;
   const fmt = (n: number) => formatPrice(n, currency);
 
-  const subPrice = subscriptionUnitPrice(product.price, site.subscriptionDiscount, currency);
+  // Under kampanj: första leveransen till kampanjpris, sedan vanlig prenumerationsrabatt
+  const sub = subscriptionPrices(product, site.subscriptionDiscount, currency);
+  const subPrice = sub.first;
+  const { locale } = useI18n();
+  const bw = cart.campaign ? blackWeek[locale] : null;
   const unit = plan === "sub" ? subPrice : tieredUnitPrice(product, qty, currency);
   const total = unit * qty;
-  const listTotal = product.price * qty;
+  const listTotal = product.regularPrice * qty;
   const perPack = unitCount(product);
 
   const add = () => {
@@ -49,9 +54,9 @@ export function ProductBuyBox({ product, inStock }: { product: Product; inStock:
         <PlanOption
           active={plan === "sub"}
           onClick={() => setPlan("sub")}
-          title={t.subTitle(site.subscriptionDiscount)}
+          title={bw ? t.subTitle(cart.campaign!.percent) : t.subTitle(site.subscriptionDiscount)}
           price={fmt(subPrice)}
-          note={t.subNote}
+          note={bw && sub.first < sub.recurring ? bw.subThen(fmt(sub.recurring)) : t.subNote}
           badge={t.freeShipping}
           highlight
         />

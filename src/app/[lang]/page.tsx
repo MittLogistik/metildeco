@@ -13,6 +13,7 @@ import { site } from "@/lib/site";
 import { goalProductCount, goals } from "@/content/goals";
 import { ArticleCard } from "@/components/ArticleCard";
 import { BundleCard } from "@/components/BundleCard";
+import { BlackWeekHero } from "@/components/campaign/BlackWeekHero";
 import { ArrowRight, CheckIcon, StarIcon } from "@/components/icons";
 import { Newsletter } from "@/components/Newsletter";
 import { ProductCard } from "@/components/ProductCard";
@@ -32,7 +33,7 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function HomePage() {
   const { locale, market, r: routes } = await getI18n();
   const t = home[locale];
-  const { products, bundles } = await getCatalog(locale);
+  const { products, bundles, campaign } = await getCatalog(locale);
   // Mål, journalen och quiz finns bara på svenska
   const showGoals = hasPage("goals", locale);
   const showArticles = hasPage("articles", locale);
@@ -44,8 +45,13 @@ export default async function HomePage() {
   const latest = showArticles ? articlesFor(locale).slice(0, 3) : [];
   const ratingValue = rating ? new Intl.NumberFormat(market.intl, { minimumFractionDigits: 1, maximumFractionDigits: 1 }).format(rating.avg) : "";
 
+  // Under Black Week är kampanjbannern sidans rubrik och den vanliga heron kommer under
+  const HeroHeading = campaign ? "h2" : "h1";
+
   return (
     <>
+      {campaign ? <BlackWeekHero campaign={campaign} locale={locale} products={inStock.length ? inStock : products} hasBundles={bundles.length > 0} /> : null}
+
       {/* Hero */}
       <section className="bg-sand-soft">
         <Container className="grid gap-10 py-12 lg:grid-cols-2 lg:items-center lg:py-20">
@@ -57,9 +63,9 @@ export default async function HomePage() {
             ) : (
               <Eyebrow>{t.heroEyebrow}</Eyebrow>
             )}
-            <h1 className="mt-5 font-display text-4xl font-medium leading-[1.08] tracking-tight sm:text-5xl lg:text-6xl">
+            <HeroHeading className="mt-5 font-display text-4xl font-medium leading-[1.08] tracking-tight sm:text-5xl lg:text-6xl">
               {t.heroTitle} <span className="text-primary">{t.heroTitleAccent}</span>
-            </h1>
+            </HeroHeading>
             <p className="mt-6 text-lg leading-relaxed text-muted">
               {t.heroLead}
             </p>

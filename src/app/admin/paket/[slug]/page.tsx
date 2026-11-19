@@ -7,7 +7,7 @@ import { BundleForm } from "../BundleForm";
 export default async function EditBundlePage({ params }: PageProps<"/admin/paket/[slug]">) {
   await requireAdmin();
   const { slug } = await params;
-  const { allBundles, allProducts } = await getCatalog();
+  const { allBundles, allProducts } = await getCatalog(undefined, true);
   const bundle = allBundles.find((b) => b.slug === slug);
   if (!bundle) notFound();
   return (

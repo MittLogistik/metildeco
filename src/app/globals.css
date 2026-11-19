@@ -18,6 +18,8 @@
   --color-accent-soft: oklch(95% 0.03 60);
   --color-success: oklch(55% 0.13 150);
   --color-danger: oklch(57.7% 0.245 27.325);
+  /* Kampanjpris (Black Week) */
+  --color-sale: oklch(52% 0.2 27);
   --color-star: oklch(78% 0.16 80);
 
   --font-display: var(--font-outfit), ui-sans-serif, system-ui, sans-serif;

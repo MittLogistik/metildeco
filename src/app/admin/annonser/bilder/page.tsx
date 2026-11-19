@@ -23,7 +23,7 @@ export const maxDuration = 300;
 export default async function AdImagesPage({ searchParams }: PageProps<"/admin/annonser/bilder">) {
   await requireAdmin();
   const sp = await searchParams;
-  const catalog = await getCatalog();
+  const catalog = await getCatalog(undefined, true);
   const products = catalog.products.filter((p) => p.isActive);
   const slug = typeof sp.slug === "string" && products.some((p) => p.slug === sp.slug) ? sp.slug : (products[0]?.slug ?? "");
   const product = products.find((p) => p.slug === slug);

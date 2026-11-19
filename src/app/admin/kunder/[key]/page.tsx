@@ -14,7 +14,7 @@ const fmtDateTime = (iso: string) => new Date(iso).toLocaleString("sv-SE", { dat
 export default async function CustomerPage({ params }: PageProps<"/admin/kunder/[key]">) {
   await requireAdmin();
   const { key } = await params;
-  const [customer, catalog] = await Promise.all([getCustomer(decodeURIComponent(key)), getCatalog()]);
+  const [customer, catalog] = await Promise.all([getCustomer(decodeURIComponent(key)), getCatalog(undefined, true)]);
   if (!customer) notFound();
   const productName = (slug: string | null) => catalog.allProducts.find((p) => p.slug === slug)?.name ?? catalog.allBundles.find((b) => b.slug === slug)?.name ?? slug ?? "–";
   const { stats, address } = customer;

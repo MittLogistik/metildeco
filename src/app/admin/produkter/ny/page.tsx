@@ -5,7 +5,7 @@ import { ProductForm } from "../ProductForm";
 
 export default async function NewProductPage() {
   await requireAdmin();
-  const { allProducts } = await getCatalog();
+  const { allProducts } = await getCatalog(undefined, true);
   const giftCandidates = allProducts.map((g) => ({ slug: g.slug, name: g.name, price: g.price, stock: g.stock, trackStock: g.trackStock, isActive: g.isActive, image: g.images[0] ?? null }));
   return (
     <div className="space-y-6">

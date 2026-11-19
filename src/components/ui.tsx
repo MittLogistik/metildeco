@@ -87,10 +87,11 @@ export function Badge({
   tone = "neutral",
   children,
 }: {
-  tone?: "neutral" | "primary" | "accent" | "danger";
+  tone?: "neutral" | "primary" | "accent" | "danger" | "campaign";
   children: ReactNode;
 }) {
   const tones = {
+    campaign: "bg-black text-white",
     neutral: "bg-white/90 text-foreground border border-line",
     primary: "bg-primary text-primary-fg",
     accent: "bg-accent-soft text-accent",

@@ -7,7 +7,7 @@ import { ProductForm } from "../ProductForm";
 export default async function EditProductPage({ params }: PageProps<"/admin/produkter/[slug]">) {
   await requireAdmin();
   const { slug } = await params;
-  const { allProducts } = await getCatalog();
+  const { allProducts } = await getCatalog(undefined, true);
   const product = allProducts.find((p) => p.slug === slug);
   if (!product) notFound();
   const giftCandidates = allProducts.map((g) => ({ slug: g.slug, name: g.name, price: g.price, stock: g.stock, trackStock: g.trackStock, isActive: g.isActive, image: g.images[0] ?? null }));

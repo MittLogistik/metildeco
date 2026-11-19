@@ -4,7 +4,9 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { productContentFor } from "@/content/i18n";
 import { formatPrice } from "@/lib/format";
-import { getProduct, getProducts } from "@/lib/catalog";
+import { getCatalog, getProduct, getProducts } from "@/lib/catalog";
+import { blackWeek } from "@/i18n/messages/blackweek";
+import { InlineCountdown } from "@/components/campaign/Countdown";
 import { imagesFor, isInStock, isLowStock, relatedProducts } from "@/lib/products";
 import { countriesOf, isLocale, locales, type Locale } from "@/lib/i18n";
 import { cheapestRate, freeShippingOver } from "@/lib/shipping";
@@ -74,7 +76,10 @@ export default async function ProductPage({ params }: PageProps<"/[lang]/produkt
   const lowStock = isLowStock(product);
   const images = imagesFor(product);
   // Erbjudandet (variant B i A/B-testet): gåvor som finns i lager, och testets läge
-  const [experiment, allProducts] = await Promise.all([getExperimentSettings().catch(() => ({ mode: "off" as const, split: 50 })), getProducts(locale)]);
+  const [settings, allProducts, { campaign }] = await Promise.all([getExperimentSettings().catch(() => ({ mode: "off" as const, split: 50 })), getProducts(locale), getCatalog(locale)]);
+  // Under en kampanj pausas A/B-testet av köprutan (erbjudanderutan är avstängd och skulle snedvrida utfallet)
+  const experiment = campaign ? { mode: "off" as const, split: settings.split } : settings;
+  const bw = blackWeek[locale];
   const gifts = offerGiftSlugs(product)
     .map((s) => allProducts.find((p) => p.slug === s))
     .filter((g): g is NonNullable<typeof g> => Boolean(g && g.isActive && isInStock(g) && g.slug !== product.slug))
@@ -117,6 +122,7 @@ export default async function ProductPage({ params }: PageProps<"/[lang]/produkt
       url,
       price: product.price.toFixed(2),
       priceCurrency: currency,
+      ...(campaign ? { priceValidUntil: campaign.end.slice(0, 10) } : {}),
       itemCondition: "https://schema.org/NewCondition",
       availability: inStock ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
       seller: { "@type": "Organization", name: company.legalName },
@@ -182,11 +188,20 @@ export default async function ProductPage({ params }: PageProps<"/[lang]/produkt
               ))}
             </ul>
 
-            <div className="mt-6 flex items-baseline gap-3">
-              <p className="text-3xl font-semibold tabular-nums">{formatPrice(product.price, currency)}</p>
+            {campaign ? (
+              <p className="mt-6 inline-flex flex-wrap items-center gap-x-2 gap-y-1 rounded-full bg-black px-3.5 py-1.5 text-xs font-semibold text-white">
+                <span className="uppercase tracking-[0.16em]">{bw.name} {bw.badge(campaign.percent)}</span>
+                <span className="font-normal text-white/70">
+                  {bw.endsIn} <InlineCountdown end={campaign.end} />
+                </span>
+              </p>
+            ) : null}
+            <div className={`${campaign ? "mt-3" : "mt-6"} flex flex-wrap items-baseline gap-x-3 gap-y-1`}>
+              <p className={`text-3xl font-semibold tabular-nums ${campaign ? "text-sale" : ""}`}>{formatPrice(product.price, currency)}</p>
               {product.oldPrice ? <p className="text-lg text-muted line-through tabular-nums">{formatPrice(product.oldPrice, currency)}</p> : null}
               <p className="text-sm text-muted">{t.inclVat}</p>
             </div>
+            {campaign && product.oldPrice ? <p className="mt-1 text-xs text-muted">{bw.lowestPrice(formatPrice(product.oldPrice, currency))}</p> : null}
 
             <div className="mt-6">
               <BuyBoxSwitch product={product} inStock={inStock} gifts={gifts} mode={experiment.mode} split={experiment.split} />

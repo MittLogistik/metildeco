@@ -1,6 +1,7 @@
 import "server-only";
 import { createHmac, timingSafeEqual } from "node:crypto";
 import type Stripe from "stripe";
+import { activeCampaign } from "./campaign";
 import type { PricedLine } from "./checkout";
 import { sendAbandonedCartEmail } from "./email";
 import { publicBase } from "./media";
@@ -240,7 +241,8 @@ export async function sendReminder(cart: AbandonedCart, o: { force?: boolean } =
     await db.from("abandoned_carts").update({ status: "unsubscribed", next_reminder_at: null }).eq("id", cart.id);
     return { sent: false, reason: "Adressen har avsagt sig påminnelser." };
   }
-  const withCode = step >= DISCOUNT_FROM_STEP;
+  // Under en kampanj (Black Week) gäller inga rabattkoder i kassan – mejlet lovar då ingen kod
+  const withCode = step >= DISCOUNT_FROM_STEP && !activeCampaign();
   try {
     await sendAbandonedCartEmail({
       to: cart.email,

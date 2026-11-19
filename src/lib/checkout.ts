@@ -7,7 +7,7 @@ import type Stripe from "stripe";
 import { isChannel, type Channel } from "./attribution";
 import { getBundle, getProduct } from "./catalog";
 import { defaultLocale, isLocale, markets, type Locale } from "./i18n";
-import { isInStock, offerGiftSlugs, subscriptionUnitPrice, tieredUnitPrice } from "./products";
+import { isInStock, offerGiftSlugs, subscriptionPrices, tieredUnitPrice } from "./products";
 import { ratesFor, shippingCost } from "./shipping";
 import { site } from "./site";
 
@@ -40,7 +40,10 @@ export type CheckoutRequest = {
 
 export type PricedLine = CheckoutLine & {
   name: string;
+  /** Det kunden betalar nu per styck (för prenumeration: första leveransen). */
   unitPrice: number;
+  /** Prenumeration: styckpriset för följande leveranser. Högre än unitPrice under en kampanj. */
+  recurringPrice?: number;
   image: string | null;
   freeShipping: boolean;
 };
@@ -174,28 +177,37 @@ export async function priceLines(lines: CheckoutLine[], locale: Locale = default
       out.push({ ...line, qty: 1, name: product.name, unitPrice: 0, image: product.images[0] ?? null, freeShipping: true });
       continue;
     }
-    const unitPrice =
-      line.plan === "sub"
-        ? subscriptionUnitPrice(product.price, site.subscriptionDiscount, currency)
-        : tieredUnitPrice(product, line.qty, currency);
-    out.push({ ...line, name: product.name, unitPrice, image: product.images[0] ?? null, freeShipping: line.plan === "sub" });
+    if (line.plan === "sub") {
+      const { first, recurring } = subscriptionPrices(product, site.subscriptionDiscount, currency);
+      out.push({ ...line, name: product.name, unitPrice: first, recurringPrice: recurring, image: product.images[0] ?? null, freeShipping: true });
+      continue;
+    }
+    const unitPrice = tieredUnitPrice(product, line.qty, currency);
+    out.push({ ...line, name: product.name, unitPrice, image: product.images[0] ?? null, freeShipping: false });
   }
   return out;
 }
 
 export const subtotalOf = (priced: PricedLine[]) => priced.reduce((s, l) => s + l.unitPrice * l.qty, 0);
 
+/**
+ * Kampanjrabatten på prenumerationers första leverans. Stripe-priset är det återkommande
+ * (vanlig prenumerationsrabatt); mellanskillnaden dras som en engångskupong på första fakturan.
+ */
+export const firstDeliveryDiscount = (priced: PricedLine[]) =>
+  Math.round(priced.reduce((s, l) => s + Math.max(0, (l.recurringPrice ?? l.unitPrice) - l.unitPrice) * l.qty, 0) * 100) / 100;
+
 /** Belopp i minsta enheten (öre/cent). SEK, EUR och DKK har alla två decimaler. */
 export const minor = (amount: number) => Math.round(amount * 100);
 
-/** Bygger Stripe-raderna. Prenumerationsrader blir återkommande, resten engångsköp. */
+/** Bygger Stripe-raderna. Prenumerationsrader blir återkommande (till det återkommande priset), resten engångsköp. */
 export function buildLineItems(priced: PricedLine[], origin: string, locale: Locale = defaultLocale): Stripe.Checkout.SessionCreateParams.LineItem[] {
   const t = lineNames[locale];
   return priced.map((l) => ({
     quantity: l.qty,
     price_data: {
       currency: markets[locale].currency.toLowerCase(),
-      unit_amount: minor(l.unitPrice),
+      unit_amount: minor(l.recurringPrice ?? l.unitPrice),
       tax_behavior: "inclusive",
       product_data: {
         name: l.plan === "sub" ? t.sub(l.name, l.intervalDays ?? 30) : l.plan === "gift" ? t.gift(l.name) : l.name,

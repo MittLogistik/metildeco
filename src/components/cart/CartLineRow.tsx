@@ -5,7 +5,8 @@ import Link from "next/link";
 import { useCart, type ResolvedLine } from "./CartProvider";
 import { formatPrice } from "@/lib/format";
 import { site } from "@/lib/site";
-import { subscriptionUnitPrice } from "@/lib/products";
+import { subscriptionPrices } from "@/lib/products";
+import { blackWeek } from "@/i18n/messages/blackweek";
 import { useI18n } from "@/i18n/client";
 import { cart as cartMessages } from "@/i18n/messages/cart";
 import { MinusIcon, PlusIcon } from "@/components/icons";
@@ -17,7 +18,8 @@ export function CartLineRow({ line, onNavigate, compact = false }: { line: Resol
   const t = cartMessages[locale];
   const fmt = (n: number) => formatPrice(n, cart.currency);
   const isSub = line.plan === "sub";
-  const subUnit = line.product ? subscriptionUnitPrice(line.product.price, site.subscriptionDiscount, cart.currency) : null;
+  const subUnit = line.product ? subscriptionPrices(line.product, site.subscriptionDiscount, cart.currency).first : null;
+  const bw = cart.campaign ? blackWeek[locale] : null;
   const size = compact ? "h-20 w-20" : "h-24 w-24";
 
   if (line.plan === "gift") {
@@ -106,9 +108,13 @@ export function CartLineRow({ line, onNavigate, compact = false }: { line: Resol
             ) : (
               <p className="mt-1 text-xs text-muted">{t.subHint(fmt(subUnit))}</p>
             )}
+            {bw && line.unitPrice < line.listPrice ? (
+              <span className="mt-1.5 inline-block rounded-full bg-black px-2 py-0.5 text-[11px] font-semibold text-white">{line.discountLabel}</span>
+            ) : null}
+            {bw && isSub && line.recurringPrice ? <p className="mt-1 text-xs text-muted">{bw.subThen(fmt(line.recurringPrice))}</p> : null}
           </div>
         ) : line.discountLabel ? (
-          <span className="mt-1 inline-block rounded-full bg-primary-soft px-2 py-0.5 text-[11px] font-semibold text-primary">
+          <span className={`mt-1 inline-block rounded-full px-2 py-0.5 text-[11px] font-semibold ${bw ? "bg-black text-white" : "bg-primary-soft text-primary"}`}>
             {line.discountLabel}
           </span>
         ) : null}

@@ -16,7 +16,7 @@ type Result = AdCopy & { angleId: string; score: number | null; issues: string[]
 export default async function AdCopyPreviewPage({ searchParams }: PageProps<"/admin/annonser/texter">) {
   await requireAdmin();
   const sp = await searchParams;
-  const catalog = await getCatalog();
+  const catalog = await getCatalog(undefined, true);
   const products = catalog.products.filter((p) => p.isActive);
   const slug = typeof sp.slug === "string" ? sp.slug : "";
   const product = products.find((p) => p.slug === slug);

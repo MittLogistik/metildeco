@@ -5,6 +5,7 @@
     { "path": "/api/cron/orders-release", "schedule": "0 4 * * *" },
     { "path": "/api/cron/affiliate", "schedule": "*/10 * * * *" },
     { "path": "/api/cron/plocky", "schedule": "*/10 * * * *" },
-    { "path": "/api/cron/abandoned", "schedule": "*/15 * * * *" }
+    { "path": "/api/cron/abandoned", "schedule": "*/15 * * * *" },
+    { "path": "/api/cron/campaign", "schedule": "*/10 * * * *" }
   ]
 }

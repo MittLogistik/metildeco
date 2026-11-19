@@ -3,7 +3,9 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { bundleInStock } from "@/lib/bundles";
-import { getBundle, getBundles } from "@/lib/catalog";
+import { getBundle, getBundles, getCatalog } from "@/lib/catalog";
+import { blackWeek } from "@/i18n/messages/blackweek";
+import { InlineCountdown } from "@/components/campaign/Countdown";
 import { formatPrice } from "@/lib/format";
 import { primaryImage } from "@/lib/products";
 import { isLocale, locales, type Locale } from "@/lib/i18n";
@@ -56,6 +58,8 @@ export default async function BundlePage({ params }: PageProps<"/[lang]/paket/[s
   const currency = market.currency;
   const bundle = await getBundle(slug, locale);
   if (!bundle) notFound();
+  const { campaign } = await getCatalog(locale);
+  const bw = blackWeek[locale];
   const inStock = bundleInStock(bundle);
   const others = (await getBundles(locale)).filter((b) => b.slug !== slug).slice(0, 3);
   const url = `${site.url}${routes.bundle(slug)}`;
@@ -74,6 +78,7 @@ export default async function BundlePage({ params }: PageProps<"/[lang]/paket/[s
       url,
       price: bundle.price.toFixed(2),
       priceCurrency: currency,
+      ...(campaign ? { priceValidUntil: campaign.end.slice(0, 10) } : {}),
       itemCondition: "https://schema.org/NewCondition",
       availability: inStock ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
       seller: { "@type": "Organization", name: company.legalName },
@@ -110,6 +115,14 @@ export default async function BundlePage({ params }: PageProps<"/[lang]/paket/[s
               ))}
             </ul>
 
+            {campaign ? (
+              <p className="mt-6 inline-flex flex-wrap items-center gap-x-2 gap-y-1 rounded-full bg-black px-3.5 py-1.5 text-xs font-semibold text-white">
+                <span className="uppercase tracking-[0.16em]">{bw.name} {bw.badge(campaign.percent)}</span>
+                <span className="font-normal text-white/70">
+                  {bw.endsIn} <InlineCountdown end={campaign.end} />
+                </span>
+              </p>
+            ) : null}
             <dl className="mt-6 space-y-1.5 text-sm">
               <div className="flex justify-between text-muted">
                 <dt>{t.valueSeparately}</dt>
@@ -117,8 +130,12 @@ export default async function BundlePage({ params }: PageProps<"/[lang]/paket/[s
               </div>
               <div className="flex justify-between text-lg font-semibold">
                 <dt>{t.bundlePrice}</dt>
-                <dd className="tabular-nums">{formatPrice(bundle.price, currency)}</dd>
+                <dd className={`tabular-nums ${campaign ? "text-sale" : ""}`}>
+                  {campaign ? <span className="mr-2 text-sm font-normal text-muted line-through">{formatPrice(bundle.regularPrice, currency)}</span> : null}
+                  {formatPrice(bundle.price, currency)}
+                </dd>
               </div>
+              {campaign ? <p className="text-right text-xs text-muted">{bw.lowestPrice(formatPrice(bundle.regularPrice, currency))}</p> : null}
               <div className="flex justify-between text-success">
                 <dt>{t.youSave}</dt>
                 <dd className="tabular-nums">

@@ -63,7 +63,7 @@ export const maxDuration = 300;
 export default async function AdsPage() {
   await requireAdmin();
   const configured = meta.adsConfigured();
-  const catalog = await getCatalog();
+  const catalog = await getCatalog(undefined, true);
   const products = catalog.products.filter((p) => p.isActive);
   // Båda frågorna samtidigt – varje tur till databasen syns i laddtiden
   const [logRes, variantRes] = supabaseConfigured()

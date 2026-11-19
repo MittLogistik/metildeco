@@ -5,6 +5,7 @@ import { isInStock, primaryImage, type Product } from "@/lib/products";
 import { defaultLocale, markets, type Locale } from "@/lib/i18n";
 import { routesOf } from "@/lib/routes";
 import { catalog } from "@/i18n/messages/catalog";
+import { blackWeek } from "@/i18n/messages/blackweek";
 import { site } from "@/lib/site";
 import { Badge } from "@/components/ui";
 import { Stars } from "@/components/Stars";
@@ -17,9 +18,13 @@ export function ProductCard({ product, priority = false, locale = defaultLocale 
   const currency = markets[locale].currency;
   const inStock = isInStock(product);
   const off = percentOff(product.price, product.oldPrice);
+  // Kampanj (Black Week): katalogen har sänkt priset under det ordinarie
+  const onCampaign = product.price < product.regularPrice;
   const badge = !inStock
     ? { tone: "danger" as const, label: t.soldOut }
-    : off
+    : onCampaign && off
+      ? { tone: "campaign" as const, label: `${blackWeek[locale].name} ${blackWeek[locale].badge(off)}` }
+      : off
       ? { tone: "accent" as const, label: `−${off} %` }
       : product.tags.includes("Nyhet")
           ? { tone: "neutral" as const, label: t.isNew }
@@ -61,7 +66,7 @@ export function ProductCard({ product, priority = false, locale = defaultLocale 
         ) : null}
         <div className="mt-auto flex items-end justify-between gap-3 pt-3">
           <div>
-            <p className="text-base font-semibold tabular-nums">{formatPrice(product.price, currency)}</p>
+            <p className={`text-base font-semibold tabular-nums ${onCampaign ? "text-sale" : ""}`}>{formatPrice(product.price, currency)}</p>
             {product.oldPrice ? (
               <p className="text-xs text-muted line-through tabular-nums">{formatPrice(product.oldPrice, currency)}</p>
             ) : null}

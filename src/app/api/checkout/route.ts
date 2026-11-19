@@ -1,5 +1,6 @@
 import type Stripe from "stripe";
-import { buildLineItems, buildShippingOptions, minor, parseCheckoutRequest, priceLines, shippingLineName, subtotalOf } from "@/lib/checkout";
+import { activeCampaign } from "@/lib/campaign";
+import { buildLineItems, buildShippingOptions, firstDeliveryDiscount, minor, parseCheckoutRequest, priceLines, shippingLineName, subtotalOf } from "@/lib/checkout";
 import { countriesOf, markets } from "@/lib/i18n";
 import { routesOf } from "@/lib/routes";
 import { cheapestRate, shippingCost } from "@/lib/shipping";
@@ -39,9 +40,11 @@ export async function POST(request: Request) {
     const fbc = request.headers.get("cookie")?.match(/(?:^|; )_fbc=([^;]+)/)?.[1] ?? "";
     // Affiliateklicket fryses här, vid köpögonblicket, i stället för vid betalningen
     const click = payload.visitorId ? await latestClick(payload.visitorId).catch(() => null) : null;
+    const campaign = activeCampaign();
     const metadata = {
       consent,
       locale,
+      ...(campaign ? { campaign: campaign.id } : {}),
       ...(payload.variant ? { ab: payload.variant } : {}),
       fbp: fbp.slice(0, 100),
       fbc: fbc.slice(0, 200),
@@ -68,11 +71,30 @@ export async function POST(request: Request) {
       cancel_url: `${origin}${r.checkout}`,
       metadata,
     };
-    // En kod från en påminnelselänk läggs på direkt; annars får kunden skriva in en kod hos Stripe.
-    // Stripe tillåter inte båda samtidigt.
-    const promo = await promotionCodeId(payload.code);
-    if (promo) params.discounts = [{ promotion_code: promo }];
-    else params.allow_promotion_codes = true;
+    if (campaign) {
+      // Kampanj: priserna är redan sänkta och andra rabatter kombineras inte. Prenumerationer får
+      // kampanjpriset på första leveransen som en engångskupong (Stripe-priset är det återkommande).
+      params.after_expiration = { recovery: { enabled: true, allow_promotion_codes: false } };
+      const firstOff = firstDeliveryDiscount(priced);
+      if (firstOff > 0) {
+        const coupon = await stripe().coupons.create({
+          amount_off: minor(firstOff),
+          currency: market.currency.toLowerCase(),
+          duration: "once",
+          max_redemptions: 1,
+          redeem_by: Math.floor(Date.now() / 1000) + 25 * 3600,
+          name: campaign.id === "black-week-2026" ? "Black Week" : campaign.id,
+          metadata: { campaign: campaign.id },
+        });
+        params.discounts = [{ coupon: coupon.id }];
+      }
+    } else {
+      // En kod från en påminnelselänk läggs på direkt; annars får kunden skriva in en kod hos Stripe.
+      // Stripe tillåter inte båda samtidigt.
+      const promo = await promotionCodeId(payload.code);
+      if (promo) params.discounts = [{ promotion_code: promo }];
+      else params.allow_promotion_codes = true;
+    }
 
     if (hasSub) {
       // Stripe stöder inte fraktalternativ i subscription-läget. Prenumerationer är fraktfria;

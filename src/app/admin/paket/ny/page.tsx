@@ -5,7 +5,7 @@ import { BundleForm } from "../BundleForm";
 
 export default async function NewBundlePage() {
   await requireAdmin();
-  const { allProducts } = await getCatalog();
+  const { allProducts } = await getCatalog(undefined, true);
   return (
     <div className="space-y-6">
       <div>

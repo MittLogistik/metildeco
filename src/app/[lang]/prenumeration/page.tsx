@@ -29,9 +29,9 @@ export default async function SubscriptionPage() {
   const pct = site.subscriptionDiscount;
   const products = await getProducts(locale);
   const example = products.find((p) => p.slug === "tongkat-ali-elite") ?? products[0]!;
-  const subPrice = subscriptionUnitPrice(example.price, pct, currency);
+  const subPrice = subscriptionUnitPrice(example.regularPrice, pct, currency);
   // Leveranser per år med en förpackning per leverans och ett intervall som räcker hela förpackningen (60 kapslar = 60 dagar)
-  const yearly = roundPrice((example.price - subPrice) * 6, currency);
+  const yearly = roundPrice((example.regularPrice - subPrice) * 6, currency);
   const popular = products.filter(isInStock).slice(0, 4);
 
   return (
@@ -100,12 +100,12 @@ export default async function SubscriptionPage() {
             <dl className="mt-4 space-y-3 text-sm">
               <div className="flex justify-between">
                 <dt>{t.oneTime}</dt>
-                <dd className="tabular-nums">{t.perDelivery(formatPrice(example.price, currency))}</dd>
+                <dd className="tabular-nums">{t.perDelivery(formatPrice(example.regularPrice, currency))}</dd>
               </div>
               <div className="flex justify-between font-medium">
                 <dt>{t.subscriptionLabel}</dt>
                 <dd className="tabular-nums">
-                  <span className="mr-2 text-muted line-through">{formatPrice(example.price, currency)}</span>
+                  <span className="mr-2 text-muted line-through">{formatPrice(example.regularPrice, currency)}</span>
                   {t.perDelivery(formatPrice(subPrice, currency))}
                 </dd>
               </div>
