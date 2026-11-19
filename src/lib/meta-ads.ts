@@ -103,6 +103,26 @@ export const insightsRange = (objectId: string, since: string, until: string, le
     limit: 500,
   }).then((r) => r.data);
 
+export type CampaignInsight = {
+  campaign_id: string;
+  campaign_name: string;
+  spend: string;
+  impressions: string;
+  inline_link_clicks?: string;
+  inline_link_click_ctr?: string;
+  actions?: { action_type: string; value: string }[];
+  action_values?: { action_type: string; value: string }[];
+};
+
+/** Resultat per kampanj för hela kontot i ett anrop (adminöversikten). Datum i kontots tidszon. */
+export const accountCampaignInsights = (since: string, until: string) =>
+  call<Paged<CampaignInsight>>("GET", `${adAccount()}/insights`, {
+    level: "campaign",
+    time_range: { since, until },
+    fields: "campaign_id,campaign_name,spend,impressions,inline_link_clicks,inline_link_click_ctr,actions,action_values",
+    limit: 200,
+  }).then((r) => r.data ?? []);
+
 /** Summerar köp, intäkt och kostnad per rad till något läsbart. */
 export const summarize = (i: Insight) => {
   const n = (list: Insight["actions"], type: string) => Number(list?.find((a) => a.action_type === type)?.value ?? 0);

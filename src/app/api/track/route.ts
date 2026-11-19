@@ -1,4 +1,5 @@
 import { createHash } from "node:crypto";
+import { isChannel } from "@/lib/attribution";
 import { supabaseAdmin, supabaseConfigured } from "@/lib/supabase";
 
 /**
@@ -21,8 +22,10 @@ export async function POST(request: Request) {
   let experiment = "";
   let variant = "";
   let slug = "";
+  let src = "";
   try {
-    const body = (await request.json()) as { event?: unknown; experiment?: unknown; variant?: unknown; slug?: unknown };
+    const body = (await request.json()) as { event?: unknown; experiment?: unknown; variant?: unknown; slug?: unknown; src?: unknown };
+    src = isChannel(body.src) ? body.src : "";
     event = String(body.event ?? "");
     experiment = String(body.experiment ?? "").slice(0, 40);
     variant = String(body.variant ?? "").slice(0, 10);
@@ -41,7 +44,12 @@ export async function POST(request: Request) {
   const db = supabaseAdmin();
   try {
     if (event === "page_view") {
-      await db.rpc("track_unique_visitor", { _country: country, _visitor_hash: dailyHash(ip) });
+      const { data: isNew } = await db.rpc("track_unique_visitor", { _country: country, _visitor_hash: dailyHash(ip) });
+      // Källan räknas bara för dygnets första besök (landningen), som besökaren i övrigt
+      if (isNew === true && src) {
+        const { error } = await db.rpc("track_visitor_source", { _source: src });
+        if (error && !/does not exist|Could not find/i.test(error.message)) console.error("[track] källa", error.message);
+      }
       await db.rpc("track_page_view", { _country: country, _locale: "sv" });
     } else if (event !== "ab_view") {
       await db.rpc("track_cart_event", { _event: event, _locale: "sv", _country: country });

@@ -4,6 +4,7 @@ import { requireAdmin } from "@/lib/auth";
 import { formatPrice } from "@/lib/format";
 import { supabaseAdmin } from "@/lib/supabase";
 import { Card, StatusBadge, statusLabel } from "../_components/fields";
+import { SourceBadge } from "../_components/SourceBadge";
 
 type OrderRow = {
   currency: string;
@@ -92,6 +93,10 @@ export default async function OrdersPage({ searchParams }: PageProps<"/admin/ord
                       </Link>
                       {o.kind === "renewal" ? <span className="ml-1 text-xs text-muted">förnyelse</span> : o.has_subscription ? <span className="ml-1 text-xs text-muted">prenumeration</span> : null}
                       {o.environment === "sandbox" ? <span className="ml-1 rounded bg-sand px-1 text-[10px] uppercase text-muted">test</span> : null}
+                      {/* På mobil ligger källkolumnen utanför skärmen – visa källan direkt under ordernumret */}
+                      <span className="mt-1 block md:hidden">
+                        <SourceBadge source={o.source} kind={o.kind} compact />
+                      </span>
                     </td>
                     <td className="py-2 pr-3 whitespace-nowrap text-muted">
                       {new Date(o.created_at).toLocaleString("sv-SE", { dateStyle: "short", timeStyle: "short" })}
@@ -102,8 +107,9 @@ export default async function OrdersPage({ searchParams }: PageProps<"/admin/ord
                     </td>
                     <td className="py-2 pr-3">{o.shipping_city}</td>
                     <td className="py-2 pr-3">
-                      <span className="block whitespace-nowrap">{sourceLabel(o.source)}</span>
-                      {o.source_detail ? <span className="block max-w-48 truncate text-xs text-muted" title={o.source_detail}>{o.source_detail}</span> : null}
+                      <span className="block max-w-56">
+                        <SourceBadge source={o.source} detail={o.source_detail} kind={o.kind} />
+                      </span>
                     </td>
                     <td className="py-2 pr-3 text-right tabular-nums">{formatPrice(Number(o.total), o.currency)}</td>
                     <td className="py-2">

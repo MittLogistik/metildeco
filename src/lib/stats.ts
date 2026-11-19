@@ -64,6 +64,9 @@ const range = (period: Period) => {
   return { from: addDays(today, -(Number(period) - 1)), to: addDays(today, 1), granularity: "day" as const };
 };
 
+/** Periodens intervall – samma som översiktens diagram (lib/dashboard). */
+export const statsRange = (period: Period) => range(period);
+
 /** Nycklar för alla dagar (YYYY-MM-DD) eller timmar (ISO) i [from, to). */
 const listBuckets = (from: Date, to: Date, granularity: Granularity) => {
   const out: string[] = [];

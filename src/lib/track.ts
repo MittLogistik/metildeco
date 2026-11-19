@@ -1,3 +1,5 @@
+import { classifyLanding } from "./attribution";
+
 /** Skickar en statistikhändelse från webbläsaren. Misslyckas tyst. */
 export type TrackEvent = "page_view" | "add_to_cart" | "begin_checkout" | "ab_view";
 
@@ -17,7 +19,9 @@ export function track(event: TrackEvent, extra: { slug?: string; variant?: strin
   if (typeof window === "undefined") return;
   try {
     const v = extra.variant ?? variant();
-    const body = JSON.stringify({ event, ...(v ? { experiment: "buybox", variant: v } : {}), ...(extra.slug ? { slug: extra.slug } : {}) });
+    // Sidvisningens källa (annons, sök, socialt …): servern räknar den bara för dygnets första besök
+    const src = event === "page_view" ? (classifyLanding(new URL(window.location.href), document.referrer)?.ch ?? "direct") : null;
+    const body = JSON.stringify({ event, ...(v ? { experiment: "buybox", variant: v } : {}), ...(extra.slug ? { slug: extra.slug } : {}), ...(src ? { src } : {}) });
     if (navigator.sendBeacon) {
       navigator.sendBeacon("/api/track", new Blob([body], { type: "application/json" }));
     } else {

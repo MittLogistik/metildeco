@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ATTRIBUTION_DAYS, sourceLabel } from "@/lib/attribution";
+import { ATTRIBUTION_DAYS } from "@/lib/attribution";
 import { requireAdmin } from "@/lib/auth";
 import { customerHref, intervalLabel, subscriptionStatusLabel, type SubscriptionRecord } from "@/lib/customers";
 import { formatPrice } from "@/lib/format";
@@ -11,6 +11,7 @@ import { updateOrder } from "../../actions";
 import { resendToPlocky } from "../../plocky/actions";
 import { ActionForm, SubmitButton } from "../../_components/ActionForm";
 import { Card, Field, Input, orderStatuses, Select, StatusBadge, statusLabel } from "../../_components/fields";
+import { SourceBadge } from "../../_components/SourceBadge";
 
 const fmtDate = (iso: string | null | undefined) => (iso ? new Date(iso).toLocaleDateString("sv-SE", { dateStyle: "long" }) : "–");
 
@@ -50,6 +51,38 @@ export default async function OrderDetailPage({ params }: PageProps<"/admin/ordr
           {new Date(o.created_at).toLocaleString("sv-SE", { dateStyle: "long", timeStyle: "short" })}
           {o.kind === "renewal" ? " · prenumerationsförnyelse" : o.has_subscription ? ` · prenumeration ${intervalLabel(intervalDays)}` : ""}
         </p>
+        {/* Källan överst: varifrån kunden kom (senaste källan som inte var direkt, inom 30 dagar före köpet) */}
+        <div className="mt-4 flex flex-wrap items-start gap-x-6 gap-y-3 rounded-2xl border border-line bg-white px-4 py-3 text-sm">
+          <div className="min-w-0">
+            <p className="text-xs uppercase tracking-wider text-muted">Kom från</p>
+            <div className="mt-1">
+              <SourceBadge source={o.source} detail={o.source_detail} kind={o.kind} />
+            </div>
+          </div>
+          {o.first_source && o.first_source !== o.source && o.kind !== "renewal" ? (
+            <div>
+              <p className="text-xs uppercase tracking-wider text-muted">Första besöket</p>
+              <div className="mt-1">
+                <SourceBadge source={o.first_source} compact />
+              </div>
+            </div>
+          ) : null}
+          {o.affiliate_source ? (
+            <div>
+              <p className="text-xs uppercase tracking-wider text-muted">Affiliate</p>
+              <p className="mt-1">{o.affiliate_source}</p>
+            </div>
+          ) : null}
+          <div>
+            <p className="text-xs uppercase tracking-wider text-muted">Land · språk</p>
+            <p className="mt-1">
+              {o.shipping_country ?? "–"} · {o.locale ?? "sv"}
+            </p>
+          </div>
+          <p className="basis-full text-xs text-muted">
+            Senaste källan som inte var direkt, inom {ATTRIBUTION_DAYS} dagar före köpet. {o.created_at < "2026-10-06" ? "Ordrar före 6 oktober 2026 saknar källa." : ""}
+          </p>
+        </div>
       </div>
 
       {o.status === "scheduled" ? (
@@ -222,24 +255,6 @@ export default async function OrderDetailPage({ params }: PageProps<"/admin/ordr
               ) : null}
             </Card>
           ) : null}
-          <Card title="Källa">
-            <dl className="space-y-2 text-sm">
-              <div>
-                <dt className="text-xs uppercase tracking-wider text-muted">Kom från</dt>
-                <dd>
-                  {sourceLabel(o.source)}
-                  {o.source_detail ? <span className="block text-xs text-muted">{o.source_detail}</span> : null}
-                </dd>
-              </div>
-              {o.first_source && o.first_source !== o.source ? (
-                <div>
-                  <dt className="text-xs uppercase tracking-wider text-muted">Första besöket</dt>
-                  <dd>{sourceLabel(o.first_source)}</dd>
-                </div>
-              ) : null}
-            </dl>
-            <p className="mt-3 text-xs text-muted">Senaste källan som inte var direkt, inom {ATTRIBUTION_DAYS} dagar före köpet.</p>
-          </Card>
           <Card title="Stripe">
             <ul className="space-y-1 text-sm">
               {o.stripe_session_id ? (
