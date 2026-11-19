@@ -166,4 +166,5 @@ quiz, presentkort, spåra order, mitt konto, samarbeten/jobba hos oss, fler spr�
 - Texten skrivs på marknadens språk av `writeSaleCopy` (gpt-5.4 via `AD_SALE_MODEL`, gpt-4o skrev stel finska) med kampanjens riktiga priser; spärrlista på alla språk (`bannedAnyLanguage`, även "effektiv/tehokas" och Sverige). Reserv = mall av `blackweek.ts`.
 - Bilden: `src/lib/ad-sale-image.ts` (packshot på svart, rabatt och slutdatum på språket), renderas i Chrome och lagras i `ads/<kampanj-id>/<språk>/`.
 - Körs lokalt: `npx tsx --env-file=.env.local --import ./scripts/server-shim.mjs scripts/meta-sale.mts [fi,da,…] [--budget=10] [--products=a,b] [--images-only]`. `server-shim.mjs` gör servermoduler (server-only, next/cache) körbara i tsx.
+- Video: `scripts/meta-sale-video.mts <slug> "<mp4>" [språk] [--thumb=s]` – laddar upp en gång, väntar på Metas bearbetning, en annons per marknad i befintlig annonsgrupp.
 - Black Week 2026: 7 kampanjer (fi, da, nl, de, fr, en, pl), Ashwagandha + Pine Pollen (enda i lager som inte är novel food), 10 USD/dag var, skapade 2026-11-19.

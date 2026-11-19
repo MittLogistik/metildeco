@@ -387,6 +387,19 @@ export const uploadImage = async (url: string, name: string) => {
 
 export const uploadVideo = (fileUrl: string, name: string) => call<{ id: string }>("POST", `${adAccount()}/advideos`, { file_url: fileUrl, name });
 
+/** Väntar tills Meta bearbetat videon – annonser kan inte skapas innan dess. */
+export async function waitForVideo(videoId: string, timeoutMs = 600_000) {
+  const start = Date.now();
+  for (;;) {
+    const v = await call<{ status?: { video_status?: string } }>("GET", videoId, { fields: "status" });
+    const s = v.status?.video_status;
+    if (s === "ready") return;
+    if (s === "error") throw new Error(`Meta kunde inte bearbeta videon ${videoId}.`);
+    if (Date.now() - start > timeoutMs) throw new Error(`Videon ${videoId} blev inte klar i tid (status ${s}).`);
+    await new Promise((r) => setTimeout(r, 10_000));
+  }
+}
+
 /** Vad token får göra – används av adminpanelen för att visa status. */
 export const tokenInfo = () =>
   call<{ data: { scopes: string[]; type: string; is_valid: boolean; expires_at: number } }>("GET", "debug_token", { input_token: token() }).then((r) => r.data);

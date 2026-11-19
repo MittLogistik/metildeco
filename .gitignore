@@ -50,3 +50,4 @@ scripts/_*.mjs
 
 # Personliga Claude Code-inställningar
 .claude/settings.local.json
+.video-thumb.html
