@@ -92,8 +92,12 @@ export function GoogleTag() {
   const consent = useSyncExternalStore(subscribe, readConsent, () => null as Consent | null);
   const pathname = usePathname();
 
-  // Samtycke ändrat: uppdatera taggen (beviljat vid "Acceptera alla", annars nekat)
+  // Samtycke ändrat: uppdatera taggen (beviljat vid "Acceptera alla", annars nekat).
+  // null = serverns ögonblicksbild under hydreringen, inte ett val: då skickas ingenting. Annars
+  // gick "nekat" ut mellan ensureTag:s "beviljat" och det riktiga värdet, och ett köp som
+  // skickades just då (tacksidan) räknades som nekat och kopplades inte till annonsklicket.
   useEffect(() => {
+    if (consent === null) return;
     const gtag = ensureTag();
     if (!gtag) return;
     gtag("consent", "update", consent === "all" ? GRANTED : DENIED);
