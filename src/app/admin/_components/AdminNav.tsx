@@ -8,6 +8,7 @@ const nav = [
   { href: "/admin/ordrar", label: "Ordrar" },
   { href: "/admin/rapporter", label: "Rapporter" },
   { href: "/admin/kunder", label: "Kunder" },
+  { href: "/admin/kundtjanst", label: "Kundtjänst" },
   { href: "/admin/korgar", label: "Övergivna korgar" },
   { href: "/admin/produkter", label: "Produkter" },
   { href: "/admin/paket", label: "Paket" },

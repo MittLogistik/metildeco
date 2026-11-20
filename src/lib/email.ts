@@ -14,7 +14,7 @@ export const emailConfigured = () => {
 };
 
 /** Skickar e-post via Resend. Saknas nyckel loggas mejlet bara. */
-export async function sendEmail(to: string, subject: string, html: string, text: string, opts: { replyTo?: string } = {}) {
+export async function sendEmail(to: string, subject: string, html: string, text: string, opts: { replyTo?: string; headers?: Record<string, string> } = {}) {
   if (!emailConfigured()) {
     console.log(`[email] (ej skickat – RESEND_API_KEY saknas) till ${to}: ${subject}`);
     return;
@@ -22,7 +22,7 @@ export async function sendEmail(to: string, subject: string, html: string, text:
   const res = await fetch("https://api.resend.com/emails", {
     method: "POST",
     headers: { Authorization: `Bearer ${process.env.RESEND_API_KEY}`, "Content-Type": "application/json" },
-    body: JSON.stringify({ from: from(), to: [to], reply_to: opts.replyTo ?? company.email, subject, html, text }),
+    body: JSON.stringify({ from: from(), to: [to], reply_to: opts.replyTo ?? company.email, subject, html, text, ...(opts.headers ? { headers: opts.headers } : {}) }),
   });
   if (!res.ok) throw new Error(`Resend svarade ${res.status}: ${await res.text()}`);
 }

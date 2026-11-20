@@ -171,3 +171,8 @@ quiz, presentkort, spåra order, mitt konto, samarbeten/jobba hos oss, fler spr�
 - Körs lokalt: `npx tsx --env-file=.env.local --import ./scripts/server-shim.mjs scripts/meta-sale.mts [fi,da,…] [--budget=10] [--products=a,b] [--images-only]`. `server-shim.mjs` gör servermoduler (server-only, next/cache) körbara i tsx.
 - Video: `scripts/meta-sale-video.mts <slug> "<mp4>" [språk] [--thumb=s]` – laddar upp en gång, väntar på Metas bearbetning, en annons per marknad i befintlig annonsgrupp.
 - Black Week 2026: 7 kampanjer (fi, da, nl, de, fr, en, pl), 10 USD/dag var, skapade 2026-11-19. Bildannonser för allt i lager (Ashwagandha, Pine Pollen, Tongkat Ali Elite/Black, Fadogia, Blue Lotus; Ultra utelämnad, 3 i lager) + videon för Tongkat Ali Elite. Novel food annonseras på alla marknader utom sv (Albins beslut). `--add` lägger annonser i befintlig kampanj.
+
+## Kundtjänstboten Matilda (Grok)
+- Prompten: `docs/matilda-prompt.md`. Verktyg: `/api/matilda/{customer,subscription,email,escalate}`, spec `/api/matilda/openapi.json`. Inlogget = Bearer-nyckel `mtl_…` som skapas/byts/spärras på `/admin/kundtjanst`; bara sha256-hashen sparas (`support_agents`, `src/lib/support-agent.ts`).
+- Matilda ser bara den egna adressens ordrar/prenumerationer och får bara `pause`, `resume`, `cancel_period_end` (prenumerationen måste tillhöra adressen). Avsluta direkt, återbetalning och adressbyte eskaleras (`SUPPORT_ESCALATION_EMAIL`, annars support@). Högst 4 mejl per kund och timme.
+- Allt loggas i `support_log` – även adminens prenumerationsändringar (`adminSubscriptionCommand`) – och visas på `/admin/kundtjanst` med filter per kund. Behörigheterna (på/av, prenumerationer, mejl) styrs där.
