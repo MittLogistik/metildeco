@@ -90,7 +90,8 @@ export default async function ThankYouPage({ searchParams }: PageProps<"/[lang]/
     <Container className="py-12 sm:py-16">
       <ClearCart />
       {saved ? <MetaPurchase sessionId={session.id} value={saved.order.total} currency={currency} ids={metaIds} subscription={saved.order.has_subscription} /> : null}
-      {saved ? <GooglePurchase orderNumber={orderNumber} value={saved.order.total} currency={currency} email={email} /> : null}
+      {/* Google Ads: ordervärdet exkl. frakt (efter rabatt, inkl. moms) */}
+      {saved ? <GooglePurchase orderNumber={orderNumber} value={Math.round((saved.order.total - saved.order.shipping) * 100) / 100} currency={currency} email={email} /> : null}
       {saved ? <MicrosoftPurchase orderNumber={orderNumber} value={saved.order.total} currency={currency} /> : null}
       <div className="mx-auto max-w-2xl">
         <span className="inline-flex h-14 w-14 items-center justify-center rounded-full bg-primary-soft text-primary">

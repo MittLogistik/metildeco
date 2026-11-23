@@ -71,7 +71,8 @@ export function googleTrack(name: string, params: Record<string, unknown> = {}) 
  * omladdad tacksida inte räknas två gånger. Skickas för alla köp: med samtycke räknas den
  * direkt, utan samtycke som cookiefri signal som Google modellerar.
  * E-posten till förbättrade konverteringar (user_data) ges bara med samtycke; taggen hashar
- * den innan den lämnar webbläsaren. `currency` = orderns valuta (SEK, EUR, DKK) – värdet räknas aldrig om.
+ * den innan den lämnar webbläsaren. `value` = ordervärdet exkl. frakt, `currency` = orderns valuta
+ * (SEK, EUR, DKK, PLN) – värdet räknas aldrig om.
  */
 export function googlePurchase(orderNumber: string, value: number, email: string | null | undefined, currency: string) {
   const gtag = ensureTag();
