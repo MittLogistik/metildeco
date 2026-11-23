@@ -67,7 +67,9 @@ export async function POST(request: Request) {
       billing_address_collection: "auto",
       expires_at: Math.floor(Date.now() / 1000) + 24 * 3600,
       after_expiration: { recovery: { enabled: true, allow_promotion_codes: true } },
-      success_url: `${origin}${r.thanks}?session_id={CHECKOUT_SESSION_ID}`,
+      // Googles klickparametrar följer med till tacksidan (url_passthrough när cookies inte godkänts).
+      // {CHECKOUT_SESSION_ID} måste stå okodad, därför läggs de efter som färdig söksträng.
+      success_url: `${origin}${r.thanks}?session_id={CHECKOUT_SESSION_ID}${payload.clickParams.length ? `&${new URLSearchParams(payload.clickParams)}` : ""}`,
       cancel_url: `${origin}${r.checkout}`,
       metadata,
     };

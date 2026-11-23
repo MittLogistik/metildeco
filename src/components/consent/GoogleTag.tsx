@@ -1,7 +1,8 @@
 "use client";
 
-import { usePathname } from "next/navigation";
-import { useEffect, useSyncExternalStore } from "react";
+import { usePathname, useSearchParams } from "next/navigation";
+import { Suspense, useEffect, useSyncExternalStore } from "react";
+import { pickClickParams, withClickParams } from "@/lib/click-ids";
 import { readConsent, type Consent } from "@/lib/consent";
 
 declare global {
@@ -41,10 +42,11 @@ function ensureTag(): ((...args: unknown[]) => void) | null {
     void args;
   };
   window.gtag = gtag;
-  gtag("consent", "default", { ...DENIED, wait_for_update: 500 });
-  // Inga annons-id i länkar och ingen personanpassning utan samtycke
-  gtag("set", "ads_data_redaction", true);
+  // Gäller från första stund, före samtyckesvalet: annonsklicket följer med i adressen i stället för
+  // i en cookie, och annonsdata rensas så länge samtycke saknas
   gtag("set", "url_passthrough", true);
+  gtag("set", "ads_data_redaction", true);
+  gtag("consent", "default", { ...DENIED, wait_for_update: 500 });
   if (readConsent() === "all") gtag("consent", "update", GRANTED);
   gtag("js", new Date());
   gtag("config", TAG_ID, { send_page_view: false });
@@ -88,6 +90,35 @@ export function googlePurchase(orderNumber: string, value: number, email: string
   googleTrack("purchase", { transaction_id: orderNumber, value, currency });
 }
 
+/**
+ * Annonsklickets parametrar (gclid m.fl.) från landningsadressen. Läses när skriptet laddas, innan
+ * någon navigering hunnit ske, och hålls bara i minnet – aldrig i cookie eller localStorage.
+ */
+const landingClickParams: [string, string][] = typeof window === "undefined" ? [] : pickClickParams(window.location.search);
+
+/**
+ * url_passthrough dekorerar vanliga länkar, men Next.js navigerar med sin egen href (Link,
+ * router.push), så parametrarna föll bort vid första sidbytet. Så länge besökaren inte har
+ * godkänt cookies läggs de tillbaka i adressen efter varje navigering. Då kan taggen spara klicket
+ * när samtycket ges, och köpet på tacksidan kan kopplas cookiefritt. Med samtycke ligger klicket
+ * i Googles cookie och adressen lämnas orörd.
+ */
+function KeepClickParams({ consent }: { consent: Consent | null }) {
+  const pathname = usePathname();
+  const search = useSearchParams().toString();
+  useEffect(() => {
+    if (consent === "all" || landingClickParams.length === 0) return;
+    const next = withClickParams(new URL(window.location.href), landingClickParams);
+    // Next.js synkar routern med history.replaceState, sidan laddas inte om
+    if (next) window.history.replaceState(null, "", next.href);
+  }, [pathname, search, consent]);
+  return null;
+}
+
+/** Klickparametrarna i nuvarande adress, för kassans återkomstadress från Stripe. */
+export const currentClickParams = (): Record<string, string> =>
+  typeof window === "undefined" ? {} : Object.fromEntries(pickClickParams(window.location.search));
+
 /** Laddar Google-taggen, håller samtycket i synk och skickar page_view vid varje sidbyte. */
 export function GoogleTag() {
   const consent = useSyncExternalStore(subscribe, readConsent, () => null as Consent | null);
@@ -108,7 +139,12 @@ export function GoogleTag() {
     googleTrack("page_view", { page_path: pathname });
   }, [pathname]);
 
-  return null;
+  // useSearchParams kräver en Suspense-gräns för att sidorna ska kunna förrenderas statiskt
+  return TAG_ID ? (
+    <Suspense fallback={null}>
+      <KeepClickParams consent={consent} />
+    </Suspense>
+  ) : null;
 }
 
 /** Köp från tacksidan. Körs en gång per ordernummer i webbläsaren. */

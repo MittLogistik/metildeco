@@ -17,6 +17,7 @@ import { useI18n } from "@/i18n/client";
 import { checkout as checkoutMessages } from "@/i18n/messages/checkout";
 import { track } from "@/lib/track";
 import { metaTrack } from "@/components/consent/MetaPixel";
+import { currentClickParams } from "@/components/consent/GoogleTag";
 import { storedSource, visitorId } from "@/components/affiliate/ClickTracker";
 import { checkoutSource } from "@/lib/attribution";
 import { metaContentId } from "@/lib/consent";
@@ -123,6 +124,8 @@ export function Checkout() {
           email: email.trim().toLowerCase(),
           code: code || null,
           variant: storedVariant(),
+          // Annonsklicket i adressen (url_passthrough utan samtycke) följer med till tacksidan via Stripe
+          clickParams: currentClickParams(),
         }),
       });
       const data = (await res.json()) as { url?: string; error?: string };

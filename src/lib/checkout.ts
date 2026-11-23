@@ -5,6 +5,7 @@
  */
 import type Stripe from "stripe";
 import { isChannel, type Channel } from "./attribution";
+import { pickClickParams } from "./click-ids";
 import { getBundle, getProduct } from "./catalog";
 import { defaultLocale, isLocale, markets, type Locale } from "./i18n";
 import { isInStock, offerGiftSlugs, subscriptionPrices, tieredUnitPrice } from "./products";
@@ -36,6 +37,8 @@ export type CheckoutRequest = {
   source: { ch: Channel; d: string | null; first: Channel | null };
   /** Butikens språk = marknad (valuta, leveransland, fraktsätt). */
   locale: Locale;
+  /** Googles klickparametrar (gclid m.fl., lib/click-ids) som ska med i Stripes återkomstadress. */
+  clickParams: [string, string][];
 };
 
 export type PricedLine = CheckoutLine & {
@@ -76,7 +79,8 @@ export function parseCheckoutRequest(body: unknown): CheckoutRequest {
   const s = (b.source ?? {}) as Record<string, unknown>;
   const source = { ch: isChannel(s.ch) ? s.ch : "unknown", d: clean(s.d, 150) || null, first: isChannel(s.first) ? s.first : null } as CheckoutRequest["source"];
   const locale = isLocale(b.locale) ? b.locale : defaultLocale;
-  return { locale, lines, email: /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email) ? email : null, visitorId, code, variant, source };
+  const clickParams = b.clickParams && typeof b.clickParams === "object" ? pickClickParams(b.clickParams as Record<string, unknown>) : [];
+  return { locale, lines, email: /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email) ? email : null, visitorId, code, variant, source, clickParams };
 }
 
 /** Felmeddelanden som visas för kunden i kassan. */
